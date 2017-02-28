@@ -1,0 +1,113 @@
+LandisData  "Century Succession"
+
+Timestep  5
+
+SeedingAlgorithm  WardSeedDispersal
+
+InitialCommunities      "./initial-communities.txt"
+InitialCommunitiesMap   "./initial-communities.gis"
+
+ClimateConfigFile 	climate-generator-baseline.txt	
+
+CalibrateMode 	no
+
+WaterDecayFunction Ratio <<Linear or Ratio
+
+ProbEstablishAdjust 1
+AgeOnlyDisturbances:BiomassParameters  bio-reductions-standard.txt
+
+>>ANPPMapNames		century/ag_npp-{timestep}.gis
+>>ANPPMapFrequency	5
+>>ANEEMapNames		century/nee-{timestep}.gis
+>>ANEEMapFrequency	5
+>>SoilCarbonMapNames	century/soilC-{timestep}.gis
+>>SoilCarbonMapFrequency	5
+>>SoilNitrogenMapNames	century/soilN-{timestep}.gis
+>>SoilNitrogenMapFrequency	5
+>>TotalCMapNames		century/totalC-{timestep}.gis
+>>TotalCMapFrequency	5
+
+AvailableLightBiomass
+
+>> Shade	Percent Max Biomass
+>> Class	by Ecoregions
+>> ----------	--------------------	
+	        eco1   eco2 
+
+	1	15%    15%    
+	2	25%    25%    
+	3	50%    50%    
+	4	80%    80%    
+	5	95%    95%    
+
+LightEstablishmentTable
+>> Spp Shade	Probability
+>> Class	by Actual Shade
+>> ----------	--------------------	
+>>		0	1	2	3	4	5
+	1	1.0	0.1	0.0	0.0	0.0	0.0
+	2	1.0	1.0	0.1	0.05	0.0	0.0
+	3	1.0	1.0	1.0	0.1	0.05	0.0
+	4	1.0	1.0	1.0	1.0	0.1	0.05
+	5	0.1	0.5	1.0	1.0	1.0	1.0
+
+SpeciesParameters
+
+>> Species   Funct	N-fix?	GDD	GDD	Min	Max	Leaf	Epi-	Leaf	FRoot	Wood	CRoot	Leaf  FRoot Wood  CRoot Littr 	max	max
+>>	     ional	Y/N	Min	Max	Jan	Drought	Long	cormic	Lign%	Lign%	Lign%	Lign%	CN    CN    CN    CN    CN	ANPP	AGB
+>> 	     Type				Temp			re-
+>>           								sprout
+   abiebals   2		N	560	2386	-25	0.165	3.0	N	0.2	0.2	0.35	0.35	50   50    380   170   100 	150	2000	
+   acerrubr   1		N	1260	6600	-18	0.23	1.0	N	0.223	0.255	0.255	0.255	20    45    90    90    45 	150 	2000
+   acersacc   1		N	1222	3100 	-18	0.268	1.0	N	0.223	0.255	0.255	0.255	20    45    90    90    45 	150 	2000
+   betualle   1		N	1100	2500 	-18	0.200	1.0	N	0.223	0.255	0.255	0.255	20    45    90    90    45 	150 	2000
+   betupapy   4		N	484	2036  	-28	0.280	1.0	N	0.223	0.255	0.255	0.255	20    45    90    90    45 	150 	2000
+   fraxamer   1		N	1398	5993 	-12     0.280	1.0	N	0.223	0.255	0.255	0.255	20    45    90    90    45 	150 	2000
+   piceglau   2		N	280	1911  	-30	0.309	3.0	N	0.2	0.2	0.35	0.35	50   50    380   170   100	150 	2000
+   pinubank   2		N	830	2216  	-30	0.411	3.0	N	0.2	0.2	0.35	0.35	50   50    380   170   100 	150 	2000	
+   pinuresi   2		N	1100	2035 	-20	0.385	3.0	N	0.2	0.2	0.35	0.35	50   50    380   170   100 	150 	2000	
+   pinustro   2		N	1100	3165 	-20	0.310	3.0	N	0.2	0.2	0.35	0.35	50   50    380   170   100 	150 	2000	
+   poputrem   4		N	743	2461  	-30	0.267	1.0	N	0.223	0.255	0.255	0.255	20    45    90    90    45 	150 	2000
+   querelli   3		N	2000	2234	-15	0.28	1.0	N	0.175	0.23	0.23	0.23	30    48    500   333   50 	150 	2000	
+   querrubr   1		N	1100	4571	-17	0.225	1.0	N	0.175	0.23	0.23	0.23	30    48    500   333   50 	150 	2000	
+   thujocci   2		N	1000	2138	-20	0.35	4.0	N	0.2	0.2	0.35	0.35	50   50    380   170   100 	150 	2000		
+   tiliamer   1		N	1400	3137	-17	0.2	1.0	N	0.223	0.255	0.255	0.255	20    45    90    90    45 	150 	2000
+   tsugcana   2		N	1324	3800 	-18	0.180	3.0	N	0.2	0.2	0.35	0.35	50   50    380   170   100 	150 	2000		
+
+
+
+FunctionalGroupParameters  <<from tree.100									Age	Leaf
+>> Name	Index	PPDF1	PPDF2	PPDF3	PPDF4	FCFRAC	BTOLAI	KLAI	MAXLAI	PPRPTS2	PPRPTS3	Wood	Monthly	Mort	Drop
+>> 		T-Mean	T-Max	T-shape	T-shape	leaf						DecayR	WoodMortShape	Month	CRFrac	FRFrac
+SMAPLE 	1	20.0	32.0	0.2	8.0	0.5	0.00823	3000	20.0	1.0	0.8	0.4	0.003	10	9	0.1	0.1
+WPINE  	2	15.0	32.0	1.0	3.5	0.37	0.00823	3000	10.0	1.0	0.8	0.4	0.003	10	10	0.1	0.1
+HVFST	3	25.0	45.0	1.0	3.0	0.5	0.00823	2000	20.0	1.0	0.8	0.4	0.003	10	9	0.1	0.1
+ASPEN 	4	20.0	32.0	0.2	10.0	0.5	0.00823	3000	20.0	1.0	0.8	0.4	0.003	10	9	0.1	0.1
+>> Note:  The on-line Century guide and 
+>> default parameters suggest MaxLAI = 20.0
+
+InitialEcoregionParameters
+>> 	SOM1	SOM1	SOM1	SOM1	SOM2	SOM2	SOM3	SOM3	Minrl
+>> 	C	N	C	N	C	N	C	N	N
+>> 	surf	surf	soil	soil
+eco1	110	6	150	17	4500	145	1294.0	50	2.0
+eco2	110	6	150	17	4500	145	1294.0	50	2.0
+	
+EcoregionParameters
+>>	Soil	Percent	Percent	Field	Wilt	StormF	BaseF	Drain	Atmos	Atmos	Lat-	Decay   Decay   Decay	 Decay      Denitrif 
+>>	Depth	Clay	Sand	Cap	Point	Fract	Fract		N	N	itude	Rate    Rate    Rate	 Rate	    Slope  
+>>      cm					frac	frac		slope	inter		Surf    SOM1    SOM2	 SOM3
+eco1	100	0.069	0.591	0.2	0.1	0.4	0.4	0.75	0.05	0.05	44.0	0.01	0.05	0.2	0.0045	    0.01	 
+eco2	100	0.069	0.591	0.2	0.1	0.4	0.4	0.75	0.05	0.05	44.0	0.01	0.05	0.2	0.0045	    0.01
+
+
+FireReductionParameters
+>>	Severity	Wood	Litter
+>>	Fire		Reduct	Reduct
+	1		0.0	0.5
+	2		0.05	0.75
+	3		0.2	1.0
+	4		0.5	1.0
+	5		0.8	1.0
+
+   
