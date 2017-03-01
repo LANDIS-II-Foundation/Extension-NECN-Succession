@@ -489,7 +489,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetMaxANPP(species, maxANPP.Value);
 
                 ReadValue(maxBiomass, currentLine);
-                parameters.SetMaxBiomass(species, maxANPP.Value);
+                parameters.SetMaxBiomass(species, maxBiomass.Value);
 
                 CheckNoDataAfter(lastColumn, currentLine);
                 GetNextLine();

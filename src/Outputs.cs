@@ -514,6 +514,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (site.IsActive)
                         {
+                            //This is incorrect right now. Should be ppt-AET, not SOMTC calc
                             pixel.MapCode.Value = (int)((SiteVars.SOM1surface[site].Carbon + SiteVars.SOM1soil[site].Carbon + SiteVars.SOM2[site].Carbon + SiteVars.SOM3[site].Carbon));
                         }
                         else
