@@ -20,7 +20,7 @@ namespace Landis.Extension.Succession.NECN
     public class PlugIn
         : Landis.Library.Succession.ExtensionBase
     {
-        public static readonly string ExtensionName = "Century Succession";
+        public static readonly string ExtensionName = "NECN-H Succession";
         private static ICore modelCore;
         private IInputParameters parameters;
         public static double AtmosNslope;

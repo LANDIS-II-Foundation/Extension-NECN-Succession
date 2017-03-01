@@ -60,10 +60,10 @@ namespace Landis.Extension.Succession.NECN
                     int mapValue = (int) pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                            if (mapValue < 1 || mapValue > 200)
+                            if (mapValue < 1 || mapValue > 300)
                                 throw new InputValueException(mapValue.ToString(),
-                                                              "{0} is not between {1:0.0} and {2:0.0}",
-                                                              mapValue, 1, 200);
+                                                              "Soil depth value {0} is not between {1:0.0} and {2:0.0}",
+                                                              mapValue, 1, 300);
                         SiteVars.SoilDepth[site] = mapValue;
                     }
                 }
@@ -102,7 +102,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOil drainage value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1.0);
                         SiteVars.SoilDrain[site] = mapValue;
                     }
@@ -142,7 +142,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "Soil base flow value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1.0);
                         SiteVars.SoilBaseFlowFraction[site] = mapValue;
                     }
@@ -182,7 +182,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "Soil storm flow value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1.0);
                         SiteVars.SoilStormFlowFraction[site] = mapValue;
                     }
@@ -222,7 +222,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 0.5)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "Soil fild capacity value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 0.5);
                         SiteVars.SoilFieldCapacity[site] = mapValue;
                     }
@@ -262,7 +262,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "Soil field capacity value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1.0);
                         if (mapValue > SiteVars.SoilFieldCapacity[site])
                             throw new InputValueException(mapValue.ToString(),
@@ -306,7 +306,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "Soil percent sand value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1.0);
                         SiteVars.SoilPercentSand[site] = mapValue;
                     }
@@ -346,7 +346,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "Soil percent clay value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1.0);
                         SiteVars.SoilPercentClay[site] = mapValue;
                     }
@@ -372,7 +372,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 10000.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOM1surf C value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 10000.0);
                         SiteVars.SOM1surface[site].Carbon = mapValue;
                     }
@@ -392,7 +392,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 500.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOM1surf N value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 500.0);
                         SiteVars.SOM1surface[site].Nitrogen = mapValue;
                     }
@@ -412,7 +412,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 10000.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOM1C value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 10000.0);
                         SiteVars.SOM1soil[site].Carbon = mapValue;
                     }
@@ -432,7 +432,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 500.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOM1N value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 500.0);
                         SiteVars.SOM1soil[site].Nitrogen = mapValue;
                     }
@@ -451,7 +451,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 20000.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOM2C value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 20000.0);
                         SiteVars.SOM2[site].Carbon = mapValue;
                     }
@@ -471,7 +471,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1000.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOM2N value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1000.0);
                         SiteVars.SOM2[site].Nitrogen = mapValue;
                     }
@@ -490,7 +490,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 30000.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOM3C value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 20000.0);
                         SiteVars.SOM3[site].Carbon = mapValue;
                     }
@@ -510,7 +510,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1000.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SOm3N value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1000.0);
                         SiteVars.SOM3[site].Nitrogen = mapValue;
                     }
@@ -557,7 +557,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 50000.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SurfDeadWood value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 50000.0);
                         SiteVars.SurfaceDeadWood[site].Carbon = mapValue * 0.47;
                         SiteVars.SurfaceDeadWood[site].Nitrogen = mapValue * 0.47 / 200.0;  // 200 is a generic wood CN ratio
@@ -579,7 +579,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 50000.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is not between {1:0.0} and {2:0.0}",
+                                                          "SoilDeadWood value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 50000.0);
                         SiteVars.SoilDeadWood[site].Carbon = mapValue * 0.47;
                         SiteVars.SoilDeadWood[site].Nitrogen = mapValue * 0.47 / 200.0;  // 200 is a generic wood CN ratio
