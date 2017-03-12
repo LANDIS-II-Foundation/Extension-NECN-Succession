@@ -309,6 +309,29 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.TotalCMapFrequency = totalCMapFreq.Value;
 
             }
+
+            //InputVar<string> LAIMaps = new InputVar<string>("LAIMapNames");
+            //if (ReadOptionalVar(LAIMaps))
+            //{
+            //    PlugIn.LAIMapNames = LAIMaps.Value;
+
+            //    InputVar<int> LAIMapFreq = new InputVar<int>("LAICMapFrequency");
+            //    ReadVar(LAIMapFreq);
+            //    PlugIn.LAICMapFrequency = LAIMapFreq.Value;
+
+            //}
+
+            //InputVar<string> ShadeClassMaps = new InputVar<string>("ShadeClassMapNames");
+            //if (ReadOptionalVar(ShadeClassMaps))
+            //{
+            //    PlugIn.TotalCMapNames = ShadeClassMaps.Value;
+
+            //    InputVar<int> ShadeClassMapFreq = new InputVar<int>("ShadeClassMapFrequency");
+            //    ReadVar(ShadeClassMapFreq);
+            //    PlugIn.ShadeClassMapFrequency = ShadeClassMapFreq.Value;
+
+            //}
+
             //--------------------------
             //  MinRelativeBiomass table
 

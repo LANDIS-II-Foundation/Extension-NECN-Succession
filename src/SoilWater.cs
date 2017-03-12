@@ -45,6 +45,7 @@ namespace Landis.Extension.Succession.NECN
             double snow = 0.0;
             stormFlow = 0.0;
             double actualET = 0.0;
+            double annualPPT_AET;
             double remainingPET = 0.0;
             double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
             double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
@@ -213,6 +214,9 @@ namespace Landis.Extension.Succession.NECN
 
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
             availableWater = (availableWaterMax + availableWaterMin)/ 2.0;
+
+            //Calculate annual water budget, ppt-aet
+            annualPPT_AET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month] - actualET; //AMK: unsure of implementation here
                        
             //// Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;

@@ -88,6 +88,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlymineralN;
         private static ISiteVar<double> frassC;
         private static ISiteVar<double> lai;
+        private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. I'm coppying LAI implementation
         private static ISiteVar<int> dryDays;
                 
         public static ISiteVar<double> TotalWoodBiomass;
@@ -181,6 +182,7 @@ namespace Landis.Extension.Succession.NECN
             monthlymineralN     = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             frassC              = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             lai                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
@@ -314,6 +316,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.ResorbedN[site] = 0.0;
             SiteVars.FrassC[site] = 0.0;
             SiteVars.LAI[site] = 0.0;
+            SiteVars.annualPPT_AET[site] = 0.0;
             SiteVars.WoodMortality[site] = 0.0;
             //SiteVars.DryDays[site] = 0;
 
@@ -908,6 +911,23 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 lai = value;
+            }
+
+
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of Annual Water Budget (ppt - AET)
+        /// </summary>
+        public static ISiteVar<double> AnnualPPT_AET
+        {
+            get
+            {
+                return annualPPT_AET;
+            }
+            set
+            {
+                annualPPT_AET = value;
             }
 
 

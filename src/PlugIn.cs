@@ -47,6 +47,10 @@ namespace Landis.Extension.Succession.NECN
         public static int ANEEMapFrequency;
         public static string TotalCMapNames = null;
         public static int TotalCMapFrequency;
+        //public static int LAIMapNames = null;
+        //public static int LAIMapFrequency;
+        //public static int ShadeClassMapNames = null;
+        //public static int ShadeClassMapFrequency;
         public static int SuccessionTimeStep;
         public static double ProbEstablishAdjust;
 
@@ -92,7 +96,7 @@ namespace Landis.Extension.Succession.NECN
             SuccessionTimeStep    = Timestep;
             sufficientLight       = parameters.LightClassProbabilities;
             ProbEstablishAdjust = parameters.ProbEstablishAdjustment;
-            MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames);
+            MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); //,LAIMapNames, ShadeClassMapNames);
             //CohortBiomass.SpinupMortalityFraction = parameters.SpinupMortalityFraction;
             
             //Initialize climate.

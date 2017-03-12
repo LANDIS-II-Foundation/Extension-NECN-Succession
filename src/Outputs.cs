@@ -515,7 +515,8 @@ namespace Landis.Extension.Succession.NECN
                         if (site.IsActive)
                         {
                             //This is incorrect right now. Should be ppt-AET, not SOMTC calc
-                            pixel.MapCode.Value = (int)((SiteVars.SOM1surface[site].Carbon + SiteVars.SOM1soil[site].Carbon + SiteVars.SOM2[site].Carbon + SiteVars.SOM3[site].Carbon));
+                            //pixel.MapCode.Value = (int)((SiteVars.SOM1surface[site].Carbon + SiteVars.SOM1soil[site].Carbon + SiteVars.SOM2[site].Carbon + SiteVars.SOM3[site].Carbon));
+                            pixel.MapCode.Value = (int)((SiteVars.AnnualPPT_AET[site]));
                         }
                         else
                         {
@@ -642,6 +643,53 @@ namespace Landis.Extension.Succession.NECN
                         }
                     }
                 }
+
+                //if (PlugIn.LAIMapNames != null)// && (PlugIn.ModelCore.CurrentTime % LAIMapFrequency) == 0)
+                //{
+
+                //    string path5 = MapNames.ReplaceTemplateVars(PlugIn.LAIMapNames, PlugIn.ModelCore.CurrentTime);
+                //    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path5, PlugIn.ModelCore.Landscape.Dimensions))
+                //    {
+                //        IntPixel pixel = outputRaster.BufferPixel;
+                //        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                //        {
+                //            if (site.IsActive)
+                //            {
+                //                pixel.MapCode.Value = (short)(SiteVars.LAI[site]);
+                //            }
+                //            else
+                //            {
+                //                //  Inactive site
+                //                pixel.MapCode.Value = 0;
+                //            }
+                //            outputRaster.WriteBufferPixel();
+                //        }
+                //    }
+                //}
+
+
+                //if (PlugIn.ShadeClassMapNames != null)// && (PlugIn.ModelCore.CurrentTime % LAIMapFrequency) == 0)
+                //{
+
+                //    string path5 = MapNames.ReplaceTemplateVars(PlugIn.ShadeClassMapNames, PlugIn.ModelCore.CurrentTime);
+                //    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path5, PlugIn.ModelCore.Landscape.Dimensions))
+                //    {
+                //        IntPixel pixel = outputRaster.BufferPixel;
+                //        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                //        {
+                //            if (site.IsActive)
+                //            {
+                //                pixel.MapCode.Value = (short)(SiteVars.ShadeClass[site]); //Shade Class SiteCar doesn't exist. Just a placeholder
+                //            }
+                //            else
+                //            {
+                //                //  Inactive site
+                //                pixel.MapCode.Value = 0;
+                //            }
+                //            outputRaster.WriteBufferPixel();
+                //        }
+                //    }
+                //}
 
         }
         
