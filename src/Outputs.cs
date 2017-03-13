@@ -469,8 +469,11 @@ namespace Landis.Extension.Succession.NECN
         //Write log file for growth and limits
         public static void CreateCalibrateLogFile()
         {
-            string logFileName = "Century-calibrate-log.csv";
-            PlugIn.ModelCore.UI.WriteLine("   Opening Century calibrate log file \"{0}\" ...", logFileName);
+            string logFileName = "NECN-H-calibrate-log.csv";
+            PlugIn.ModelCore.UI.WriteLine("******************WARNING************************", logFileName);
+            PlugIn.ModelCore.UI.WriteLine("******YOU ARE CURRENTLY IN CALIBRATE MODE********", logFileName);
+            PlugIn.ModelCore.UI.WriteLine("*************************************************", logFileName);
+            PlugIn.ModelCore.UI.WriteLine("   Opening NECN-H calibrate log file \"{0}\" ...", logFileName);
             try
             {
                 CalibrateLog = new StreamWriter(logFileName);

@@ -266,7 +266,7 @@ namespace Landis.Extension.Succession.NECN
                                                           mapValue, 0.0, 1.0);
                         if (mapValue > SiteVars.SoilFieldCapacity[site])
                             throw new InputValueException(mapValue.ToString(),
-                                                          "{0} is greater than field capacity {1:0.0} at this site",
+                                                          "Wilting Point {0} is greater than field capacity {1:0.0} at this site",
                                                           mapValue, SiteVars.SoilFieldCapacity[site]);
                         SiteVars.SoilWiltingPoint[site] = mapValue;
                     }
