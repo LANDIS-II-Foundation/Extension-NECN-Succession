@@ -643,16 +643,17 @@ namespace Landis.Extension.Succession.NECN
             //      slope = (1.0-0.0)/(.8-intcpt)
             //      pprdwc = 1.0+slope*(x-.8)
 
-            //...New way:
+            //PPRPTS naming convention is imported from orginal Century model. Now replaced with 'MoistureCurve' to be more intuitive
+            //...New way (with updated naming convention):
 
-            double pprpts1 = OtherData.PPRPTS1;
-            double pprpts2 = FunctionalType.Table[SpeciesData.FuncType[species]].PPRPTS2;
-            double pprpts3 = FunctionalType.Table[SpeciesData.FuncType[species]].PPRPTS3;
+            double moisturecurve1 = OtherData.MoistureCurve1;
+            double moisturecurve2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
+            double moisturecurve3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
 
-            double intcpt = pprpts1 + (pprpts2 * waterContent);
-            double slope  = 1.0 / (pprpts3 - intcpt);
-            
-            double WaterLimit = 1.0 + slope * (Ratio_AvailWaterToPET - pprpts3);
+            double intcpt = moisturecurve1 + (moisturecurve2 * waterContent);
+            double slope = 1.0 / (moisturecurve3 - intcpt);
+
+            double WaterLimit = 1.0 + slope * (Ratio_AvailWaterToPET - moisturecurve3);
               
             if (WaterLimit > 1.0)  WaterLimit = 1.0;
             if (WaterLimit < 0.01) WaterLimit = 0.01;
@@ -687,10 +688,10 @@ namespace Landis.Extension.Succession.NECN
             //...Local variables
 
             double A1 = SiteVars.SoilTemperature[site];
-            double A2 = FunctionalType.Table[SpeciesData.FuncType[species]].PPDF1;
-            double A3 = FunctionalType.Table[SpeciesData.FuncType[species]].PPDF2;
-            double A4 = FunctionalType.Table[SpeciesData.FuncType[species]].PPDF3;
-            double A5 = FunctionalType.Table[SpeciesData.FuncType[species]].PPDF4;
+            double A2 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve1;
+            double A3 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve2;
+            double A4 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve3;
+            double A5 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve4;
 
             double frac = (A3-A1) / (A3-A2);
             double U1 = 0.0;

@@ -260,7 +260,7 @@ namespace Landis.Extension.Succession.NECN
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue < 0.0 || mapValue > 1.0)
+                        if (mapValue < 0.0 || mapValue > 0.75)
                             throw new InputValueException(mapValue.ToString(),
                                                           "Soil field capacity value {0} is not between {1:0.0} and {2:0.0}",
                                                           mapValue, 0.0, 1.0);

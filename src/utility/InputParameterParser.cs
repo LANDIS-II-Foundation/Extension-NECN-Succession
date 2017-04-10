@@ -526,10 +526,10 @@ namespace Landis.Extension.Succession.NECN
 
             InputVar<string> ftname = new InputVar<string>("Name");
             InputVar<int> ftindex = new InputVar<int>("Index (< 25)");
-            InputVar<double> ppdf1 = new InputVar<double>("PPDF(1)");
-            InputVar<double> ppdf2 = new InputVar<double>("PPDF(2)");
-            InputVar<double> ppdf3 = new InputVar<double>("PPDF(3)");
-            InputVar<double> ppdf4 = new InputVar<double>("PPDF(4)");
+            InputVar<double> tempcurve1 = new InputVar<double>("TempCurve(1)");
+            InputVar<double> tempcurve2 = new InputVar<double>("TempCurve(2)");
+            InputVar<double> tempcurve3 = new InputVar<double>("TempCurve(3)");
+            InputVar<double> tempcurve4 = new InputVar<double>("TempCurve(4)");
             InputVar<double> fcfleaf = new InputVar<double>("FCFRAC: Leaf");
             InputVar<double> btolai = new InputVar<double>("BTOLAI");
             InputVar<double> klai = new InputVar<double>("KLAI");
@@ -539,8 +539,8 @@ namespace Landis.Extension.Succession.NECN
             InputVar<double> mortCurveShapeParm = new InputVar<double>("Mortality Curve Shape Parameter");
             InputVar<int> leafNeedleDrop = new InputVar<int>("Leaf or Needle Drop Month");
 
-            InputVar<double> ppr2 = new InputVar<double>("PPRPTS2");
-            InputVar<double> ppr3 = new InputVar<double>("PPRPTS3");
+            InputVar<double> ppr2 = new InputVar<double>("MoistureCurve2");
+            InputVar<double> ppr3 = new InputVar<double>("MoistureCurve3");
             InputVar<double> coarseRootFraction = new InputVar<double>("CRootFrac");
             InputVar<double> fineRootFraction = new InputVar<double>("FRootFrac");
 
@@ -562,17 +562,17 @@ namespace Landis.Extension.Succession.NECN
                 FunctionalType funcTParms = new FunctionalType();
                 parameters.FunctionalTypes[ln] = funcTParms;
 
-                ReadValue(ppdf1, currentLine);
-                funcTParms.PPDF1 = ppdf1.Value;
+                ReadValue(tempcurve1, currentLine);
+                funcTParms.tempcurve1 = tempcurve1.Value;
 
-                ReadValue(ppdf2, currentLine);
-                funcTParms.PPDF2 = ppdf2.Value;
+                ReadValue(tempcurve2, currentLine);
+                funcTParms.tempcurve2 = tempcurve2.Value;
 
-                ReadValue(ppdf3, currentLine);
-                funcTParms.PPDF3 = ppdf3.Value;
+                ReadValue(tempcurve3, currentLine);
+                funcTParms.tempcurve3 = tempcurve3.Value;
 
-                ReadValue(ppdf4, currentLine);
-                funcTParms.PPDF4 = ppdf4.Value;
+                ReadValue(tempcurve4, currentLine);
+                funcTParms.tempcurve4 = tempcurve4.Value;
 
                 ReadValue(fcfleaf, currentLine);
                 funcTParms.FCFRACleaf = fcfleaf.Value;
@@ -587,10 +587,10 @@ namespace Landis.Extension.Succession.NECN
                 funcTParms.MAXLAI = maxlai.Value;
 
                 ReadValue(ppr2, currentLine);
-                funcTParms.PPRPTS2 = ppr2.Value;
+                funcTParms.MoistureCurve2 = ppr2.Value;
 
                 ReadValue(ppr3, currentLine);
-                funcTParms.PPRPTS3 = ppr3.Value;
+                funcTParms.MoistureCurve3 = ppr3.Value;
 
                 ReadValue(wdr, currentLine);
                 funcTParms.WoodDecayRate = wdr.Value;

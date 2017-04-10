@@ -11,16 +11,16 @@ namespace Landis.Extension.Succession.NECN
 {
     public interface IFunctionalType
     {
-        double PPDF1{get;set;}
-        double PPDF2{get;set;}
-        double PPDF3{get;set;}
-        double PPDF4{get;set;}
+        double TempCurve1{get;set;}
+        double TempCurve2 { get; set; }
+        double TempCurve3 { get; set; }
+        double TempCurve4 { get; set; }
         double FCFRACleaf{get;set;}
         double BTOLAI{get;set;}
         double KLAI{get;set;}
         double MAXLAI{get;set;}
-        double PPRPTS2 {get;set;}
-        double PPRPTS3 {get;set;}
+        double MoistureCurve2 {get;set;}
+        double MoistureCurve3 { get; set; }
         double MonthlyWoodMortality{get;set;}
         double WoodDecayRate{get;set;}
         double MortCurveShape{get;set;}
@@ -33,16 +33,16 @@ namespace Landis.Extension.Succession.NECN
     public class FunctionalType
     : IFunctionalType
     {
-        private double ppdf1;
-        private double ppdf2;
-        private double ppdf3;
-        private double ppdf4;
+        private double tempcurve1;
+        private double tempcurve2;
+        private double tempcurve3;
+        private double tempcurve4;
         private double fcfracLeaf;
         private double btolai;
         private double klai;
         private double maxlai;
-        private double pprpts2;
-        private double pprpts3;
+        private double moisturecurve2;
+        private double moisturecurve3;
         private double monthlyWoodMortality;
         private double woodDecayRate;
         private double mortCurveShape;
@@ -58,16 +58,16 @@ namespace Landis.Extension.Succession.NECN
         /// curve to simulate temperature effect on growth.
         /// Century Model Interface Help - Colorado State University, Fort Collins, CO  80523
         /// </summary>
-        public double PPDF1
+        public double TempCurve1
         {
             get {
-                return ppdf1;
+                return tempcurve1;
             }
             set {
                     if (value  < 10.0 || value  > 40.0)
                         throw new InputValueException(value.ToString(),
                             "Decay rate must be between 10 and 40.0");
-                ppdf1 = value;
+                    tempcurve1 = value;
             }
         }
         //---------------------------------------------------------------------
@@ -76,16 +76,16 @@ namespace Landis.Extension.Succession.NECN
         /// curve to simulate temperature effect on growth.
         /// Century Model Interface Help - Colorado State University, Fort Collins, CO  80523
         /// </summary>
-        public double PPDF2
+        public double TempCurve2
         {
             get {
-                return ppdf2;
+                return tempcurve2;
             }
             set {
                     if (value  < 20.0 || value  > 100.0)
                         throw new InputValueException(value.ToString(),
                             "Decay rate must be between 20 and 100.0");
-                ppdf2 = value;
+                    tempcurve2 = value;
             }
         }
         //---------------------------------------------------------------------
@@ -94,16 +94,16 @@ namespace Landis.Extension.Succession.NECN
         /// simulate temperature effect on growth.
         /// Century Model Interface Help - Colorado State University, Fort Collins, CO  80523
         /// </summary>
-        public double PPDF3
+        public double TempCurve3
         {
             get {
-                return ppdf3;
+                return tempcurve3;
             }
             set {
                     if (value  < 0.0 || value  > 5.0)
                         throw new InputValueException(value.ToString(),
                             "Decay rate must be between 0 and 5.0");
-                ppdf3 = value;
+                    tempcurve3 = value;
             }
         }
         //---------------------------------------------------------------------
@@ -112,16 +112,16 @@ namespace Landis.Extension.Succession.NECN
         /// curve to simulate temperature effect on growth.
         /// Century Model Interface Help - Colorado State University, Fort Collins, CO  80523
         /// </summary>
-        public double PPDF4
+        public double TempCurve4
         {
             get {
-                return ppdf4;
+                return tempcurve4;
             }
             set {
                     if (value  < 0.0 || value  > 10.0)
                         throw new InputValueException(value.ToString(),
                             "Decay rate must be between 0 and 10.0");
-                ppdf4 = value;
+                    tempcurve4 = value;
             }
         }
         //---------------------------------------------------------------------
@@ -194,25 +194,25 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         // 'PPRPTS(2)': The effect of water content on the intercept, allows the user to 
-        //              increase the value of the intercept and thereby increase the slope of the line.
-        public double PPRPTS2
+        //              increase the value of the intercept and thereby increase the slope of the line. MoistureCurve has replaced PPRPTS naming convention in NECN-H
+        public double MoistureCurve2
         {
             get {
-                return pprpts2;
+                return moisturecurve2;
             }
             set {
-                pprpts2 = value;
+                moisturecurve2 = value;
             }
         }
         //---------------------------------------------------------------------
         // 'PPRPTS(3)': The lowest ratio of available water to PET at which there is no restriction on production.
-        public double PPRPTS3
+        public double MoistureCurve3
         {
             get {
-                return pprpts3;
+                return moisturecurve3;
             }
             set {
-                pprpts3 = value;
+                moisturecurve3 = value;
             }
         }
         //---------------------------------------------------------------------

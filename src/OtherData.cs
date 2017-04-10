@@ -62,7 +62,7 @@ namespace Landis.Extension.Succession.NECN
         //              increase the value of the intercept and thereby increase the slope of the line.
         // 'PPRPTS(3)': The lowest ratio of available water to PET at which there is no restriction on production.
         // Values from ffix.100 file.
-        public const double PPRPTS1 = 0.0;
+        public const double MoistureCurve1 = 0.0;
         //public const double PPRPTS2 = 0.5; //1.0;  // NOW a functional group parameter
         //public const double PPRPTS3 = 0.5; //0.8;
 
