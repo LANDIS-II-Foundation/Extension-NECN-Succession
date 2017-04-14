@@ -563,16 +563,16 @@ namespace Landis.Extension.Succession.NECN
                 parameters.FunctionalTypes[ln] = funcTParms;
 
                 ReadValue(tempcurve1, currentLine);
-                funcTParms.tempcurve1 = tempcurve1.Value;
+                funcTParms.TempCurve1 = tempcurve1.Value;
 
                 ReadValue(tempcurve2, currentLine);
-                funcTParms.tempcurve2 = tempcurve2.Value;
+                funcTParms.TempCurve2 = tempcurve2.Value;
 
                 ReadValue(tempcurve3, currentLine);
-                funcTParms.tempcurve3 = tempcurve3.Value;
+                funcTParms.TempCurve3 = tempcurve3.Value;
 
                 ReadValue(tempcurve4, currentLine);
-                funcTParms.tempcurve4 = tempcurve4.Value;
+                funcTParms.TempCurve4 = tempcurve4.Value;
 
                 ReadValue(fcfleaf, currentLine);
                 funcTParms.FCFRACleaf = fcfleaf.Value;
