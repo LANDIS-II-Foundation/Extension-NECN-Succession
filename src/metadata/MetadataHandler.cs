@@ -20,7 +20,7 @@ namespace Landis.Extension.Succession.NECN
             string ANPPMapNames, 
             string ANEEMapNames, 
             string TotalCMapNames)
-            //string LAIMapNames)
+            //string LAIMapNames,
             //string ShadeClassMapNames)
         {
             ScenarioReplicationMetadata scenRep = new ScenarioReplicationMetadata() {
@@ -142,19 +142,19 @@ namespace Landis.Extension.Succession.NECN
                 };
                 Extension.OutputMetadatas.Add(mapOut_TotalC);
             }
-            //if (LAIMapNames != null) //These are new maps for testing and analysis purposes
-            //{
-            //    OutputMetadata mapOut_LAI = new OutputMetadata()
-            //    {
-            //        Type = OutputType.Map,
-            //        Name = "LAI",
-            //        FilePath = @"century\LAI-{timestep}.gis",  //century
-            //        Map_DataType = MapDataType.Continuous,
-            //       Map_Unit = FieldUnits.g_C_m2, //Not sure
-            //        Visualize = true,
-            //    };
-            //    Extension.OutputMetadatas.Add(mapOut_LAI);
-            //}
+//            if (LAImapnames != null) //These are new maps for testing and analysis purposes
+//            {
+//                OutputMetadata mapOut_LAI = new OutputMetadata()
+//                {
+//                    Type = OutputType.Map,
+//                    Name = "LAI",
+//                    FilePath = @"century\LAI-{timestep}.gis",  //century
+//                    Map_DataType = MapDataType.Continuous,
+//                   Map_Unit = FieldUnits.g_C_m2, //Not sure
+//                    Visualize = true,
+//                };
+//                Extension.OutputMetadatas.Add(mapOut_LAI);
+//            }
 //            if (ShadeClassmapnames != null)
 //            {
 //                OutputMetadata mapOut_ShadeClass = new OutputMetadata()
