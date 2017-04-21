@@ -310,14 +310,14 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            //InputVar<string> laiMaps = new InputVar<string>("LAIMapNames");
-            //if (ReadOptionalVar(laiMaps))
+            //InputVar<string> LAIMaps = new InputVar<string>("LAIMapNames");
+            //if (ReadOptionalVar(LAIMaps))
             //{
-            //    PlugIn.LAIMapNames = laiMaps.Value;
+            //    PlugIn.LAIMapNames = LAIMaps.Value;
 
-            //    InputVar<int> laiMapFreq = new InputVar<int>("LAICMapFrequency");
-            //    ReadVar(laiMapFreq);
-            //    PlugIn.LAIMapFrequency = laiMapFreq.Value;
+            //    InputVar<int> LAIMapFreq = new InputVar<int>("LAICMapFrequency");
+            //    ReadVar(LAIMapFreq);
+            //    PlugIn.LAICMapFrequency = LAIMapFreq.Value;
 
             //}
 

@@ -47,7 +47,7 @@ namespace Landis.Extension.Succession.NECN
         public static int ANEEMapFrequency;
         public static string TotalCMapNames = null;
         public static int TotalCMapFrequency;
-        //public static int LAIMapNames = null; AMK: Do I need these since I am just kinda jamming the LAI maps in similar to the new H20 maps?
+        //public static int LAIMapNames = null;
         //public static int LAIMapFrequency;
         //public static int ShadeClassMapNames = null;
         //public static int ShadeClassMapFrequency;
@@ -96,7 +96,7 @@ namespace Landis.Extension.Succession.NECN
             SuccessionTimeStep    = Timestep;
             sufficientLight       = parameters.LightClassProbabilities;
             ProbEstablishAdjust = parameters.ProbEstablishAdjustment;
-            MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); //, LAIMapNames, ShadeClassMapNames);
+            MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); //,LAIMapNames, ShadeClassMapNames);
             //CohortBiomass.SpinupMortalityFraction = parameters.SpinupMortalityFraction;
             
             //Initialize climate.
