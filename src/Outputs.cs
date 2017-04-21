@@ -513,31 +513,26 @@ namespace Landis.Extension.Succession.NECN
         public static void WriteMaps()
         {
 
-            //if (PlugIn.SoilCarbonMapNames != null)// && (PlugIn.ModelCore.CurrentTime % SoilCarbonMapFrequency) == 0)
-            //{
-                string pathH2O = MapNames.ReplaceTemplateVars("Annual-water-budget-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathH2O, PlugIn.ModelCore.Landscape.Dimensions))
+            string pathH2O = MapNames.ReplaceTemplateVars("Annual-water-budget-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathH2O, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
-                    IntPixel pixel = outputRaster.BufferPixel;
-                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    if (site.IsActive)
                     {
-                        if (site.IsActive)
-                        {
-                            //This is incorrect right now. Should be ppt-AET, not SOMTC calc
-                            //pixel.MapCode.Value = (int)((SiteVars.SOM1surface[site].Carbon + SiteVars.SOM1soil[site].Carbon + SiteVars.SOM2[site].Carbon + SiteVars.SOM3[site].Carbon));
-                            pixel.MapCode.Value = (int)((SiteVars.AnnualPPT_AET[site]));
-                        }
-                        else
-                        {
-                            //  Inactive site
-                            pixel.MapCode.Value = 0;
-                        }
-                        outputRaster.WriteBufferPixel();
+                        pixel.MapCode.Value = (int)(SiteVars.AnnualPPT_AET[site]);
                     }
-                //}
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
             }
             
-            if (PlugIn.SoilCarbonMapNames != null)// && (PlugIn.ModelCore.CurrentTime % SoilCarbonMapFrequency) == 0)
+            if (PlugIn.SoilCarbonMapNames != null)
                 {
                     string path = MapNames.ReplaceTemplateVars(PlugIn.SoilCarbonMapNames, PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path, PlugIn.ModelCore.Landscape.Dimensions))
@@ -559,7 +554,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
 
-                if (PlugIn.SoilNitrogenMapNames != null)// && (PlugIn.ModelCore.CurrentTime % SoilNitrogenMapFrequency) == 0)
+                if (PlugIn.SoilNitrogenMapNames != null)
                 {
                     string path2 = MapNames.ReplaceTemplateVars(PlugIn.SoilNitrogenMapNames, PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path2, PlugIn.ModelCore.Landscape.Dimensions))
@@ -581,7 +576,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
 
-                if (PlugIn.ANPPMapNames != null)// && (PlugIn.ModelCore.CurrentTime % ANPPMapFrequency) == 0)
+                if (PlugIn.ANPPMapNames != null)
                 {
                     string path3 = MapNames.ReplaceTemplateVars(PlugIn.ANPPMapNames, PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path3, PlugIn.ModelCore.Landscape.Dimensions))
@@ -602,7 +597,7 @@ namespace Landis.Extension.Succession.NECN
                         }
                     }
                 }
-                if (PlugIn.ANEEMapNames != null)// && (PlugIn.ModelCore.CurrentTime % ANEEMapFrequency) == 0)
+                if (PlugIn.ANEEMapNames != null)
                 {
 
                     string path4 = MapNames.ReplaceTemplateVars(PlugIn.ANEEMapNames, PlugIn.ModelCore.CurrentTime);
@@ -624,7 +619,7 @@ namespace Landis.Extension.Succession.NECN
                         }
                     }
                 }
-                if (PlugIn.TotalCMapNames != null)// && (PlugIn.ModelCore.CurrentTime % TotalCMapFrequency) == 0)
+                if (PlugIn.TotalCMapNames != null)
                 {
 
                     string path5 = MapNames.ReplaceTemplateVars(PlugIn.TotalCMapNames, PlugIn.ModelCore.CurrentTime);
