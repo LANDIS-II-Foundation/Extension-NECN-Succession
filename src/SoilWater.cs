@@ -45,6 +45,7 @@ namespace Landis.Extension.Succession.NECN
             double snow = 0.0;
             stormFlow = 0.0;
             double actualET = 0.0;
+            double annualPPT_AET;
             double remainingPET = 0.0;
             double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
             double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
@@ -118,7 +119,7 @@ namespace Landis.Extension.Succession.NECN
             availableWaterMax = soilWaterContent;
             
             //...Evaporate water from the snow pack (rewritten by Pulliam 9/94)
-            //...Coefficient 0.87 relates to heat of fusion for ice vs. liquid water
+                  //...Coefficient 0.87 relates to heat of fusion for ice vs. liquid water
             if (liquidSnowpack > 0.0)
             {
                 //...Calculate cm of snow that remaining pet energy can evaporate:
@@ -214,13 +215,14 @@ namespace Landis.Extension.Succession.NECN
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
             availableWater = (availableWaterMax + availableWaterMin)/ 2.0;
 
-            // Compute the ratio of precipitation to PET
+            //Calculate annual water budget, ppt-aet
+            annualPPT_AET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month] - actualET; //AMK: unsure of implementation here
+                       
+            //// Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;
             if (pet > 0.0) ratioPrecipPET = availableWater / pet;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
             //SiteVars.NumberDryDays[site] = numberDryDays; //Calculated above using method below.
-            //Calculate annual water budget, ppt-aet
-            SiteVars.AnnualPPT_AET[site] = H2Oinputs - actualET;
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
