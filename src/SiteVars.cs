@@ -316,7 +316,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.ResorbedN[site] = 0.0;
             SiteVars.FrassC[site] = 0.0;
             SiteVars.LAI[site] = 0.0;
-            SiteVars.annualPPT_AET[site] = 0.0;
+            SiteVars.AnnualPPT_AET[site] = 0.0;
             SiteVars.WoodMortality[site] = 0.0;
             //SiteVars.DryDays[site] = 0;
 
