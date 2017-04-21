@@ -656,25 +656,33 @@ namespace Landis.Extension.Succession.NECN
                 //if (PlugIn.LAIMapNames != null)// && (PlugIn.ModelCore.CurrentTime % LAIMapFrequency) == 0)
                 //{
 
-                //    string path5 = MapNames.ReplaceTemplateVars(PlugIn.LAIMapNames, PlugIn.ModelCore.CurrentTime);
-                //    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path5, PlugIn.ModelCore.Landscape.Dimensions))
+                //    string path6 = MapNames.ReplaceTemplateVars(PlugIn.LAIMapNames, PlugIn.ModelCore.CurrentTime);
+                //    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path6, PlugIn.ModelCore.Landscape.Dimensions))
                 //    {
                 //        IntPixel pixel = outputRaster.BufferPixel;
                 //        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 //        {
-                //            if (site.IsActive)
-                //            {
-                //                pixel.MapCode.Value = (short)(SiteVars.LAI[site]);
-                //            }
-                //            else
-                //            {
-                //                //  Inactive site
-                //                pixel.MapCode.Value = 0;
-                //            }
-                //            outputRaster.WriteBufferPixel();
-                //        }
-                //    }
-                //}
+                        //if (PlugIn.SoilCarbonMapNames != null)// && (PlugIn.ModelCore.CurrentTime % SoilCarbonMapFrequency) == 0)
+            //{
+                string pathLAI = MapNames.ReplaceTemplateVars("LAI-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathLAI, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                            if (site.IsActive)
+                            {
+                                pixel.MapCode.Value = (int)(SiteVars.LAI[site]);
+                            }
+                            else
+                            {
+                                //  Inactive site
+                                pixel.MapCode.Value = 0;
+                            }
+                            outputRaster.WriteBufferPixel();
+                        }
+                    //}
+                }
 
 
                 //if (PlugIn.ShadeClassMapNames != null)// && (PlugIn.ModelCore.CurrentTime % LAIMapFrequency) == 0)
