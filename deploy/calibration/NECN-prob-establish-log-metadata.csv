@@ -1,0 +1,8 @@
+Time,Year (note year 0 are conditions before simulations begin and should not be included in any analysis)
+ Ecoregion,A homogenous area of the landscape in regards to soils and climate
+Species,The species or functional group for which the probability of establishment is being calculated.
+ TempMult,"Temperature multiplier, derived from Botkin's 1972 parabolic curve.  Value determined by minimum/maximum Growing Degree Days."
+ MinJanTempMult,Minimum January Temperature multiplier.  Derived from LINKAGES.  Determined by Min January Temp.
+ SoilMoistureMult,Soil moisture multiplier derived from LINKAGES.  Determined by drought tolerance.
+OtherAdjustMult,"Other extensions can also adjust Pest.  If so, the values (but not the source) will be listed here."
+ ProbEst,"The minimum of all multipliers.  The probability of establishment is calculated N times, where N is the succession timestep.  The average of these N probabilities is used."

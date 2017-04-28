@@ -1,0 +1,36 @@
+1,Year,Year (note year 0 are conditions before simulations begin and should not be included in any analysis)
+2, Month,Month of the year.
+3, EcoregionIndex,A homogenous area of the landscape in regards to soils and climate
+4, SpeciesName,The species or functional group for which the probability of establishment is being calculated.
+5, CohortAge,Age of the cohort (year)
+6, CohortWoodB,Woody biomass (g B m-2)
+7, CohortLeafB,Leaf biomass (g B m-2)
+8, MortalityAGEwood,Mortality of cohort wood due to age (g B m-2)
+9, MortalityAGEleaf,Mortality of cohort leaf biomass due to age (g B m-2)
+10, MortalityBIOwood,Mortality of cohort wood due to stand development (g B m-2)
+11, MortalityBIOleaf,Mortality of cohort leaf biomass due to stand development (g B m-2)
+12,Available water (cm),
+13,LAI,Leaf area index (m2 leaves m-2 ground)
+14, mineralNalloc,Mineral N allocated to the cohort (g N m-2)
+15, resorbedNalloc,Mineral N resorbed by the cohort (g N m-2)
+16, limitLAI,LAI multiplier to maximum NPP.
+17, limitH20,Soil moisture multiplier to maximum NPP.
+18, limitT,Temperature multiplier to maximum NPP.
+19, limitCapacity,Capacity - maximum biomass - multiplier to NPP.
+20, limitN,Nitrogen multiplier to maximum NPP.
+21, maxNPP,Maximum NPP (g m-2 month-1)
+22, Bmax,Maximum biomass (g B m-2)
+23, Bsite,Current site biomass (g B m-2)
+24, Bcohort,Current cohort biomass (g B m-2)
+25, soilTemp,Soil temperature (degree C)
+26, actualWoodNPP,Actual cohort wood NPP (g B m-2 month-1)
+27, actualLeafNPP,Actual cohort leaf NPP (g B m-2 month-1)
+28,NPPwood,Cohort wood NPP (g C m-2 month-1)
+29,NPPleaves,Cohort leaf NPP (g C m-2 month-1)
+30, resorbedNused,Amount of resorbed N used by the cohort (g N m-2)
+31, mineralNused,Amount of mineral N used by the cohort (g N m-2)
+32, Ndemand,Cohort N demand (g N m-2)
+33, deltaWood,Change in cohort wood biomass (g B m-2)
+34, deltaLeaf,Change in cohort leaf biomass (g B m-2)
+35, totalMortalityWood,Total cohort wood mortality (g B m-2)
+36, totalMortalityLeaf,Total cohort leaf mortality (g B m-2)
