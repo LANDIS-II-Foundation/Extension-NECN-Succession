@@ -217,7 +217,8 @@ namespace Landis.Extension.Succession.NECN
             double ratioPrecipPET = 0.0;
             if (pet > 0.0) ratioPrecipPET = availableWater / pet;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
-            SiteVars.AnnualPPT_AET[site] = H2Oinputs - actualET; 
+            SiteVars.AnnualPPT_AET[site] = H2Oinputs - actualET;
+            SiteVars.AnnualSoilMoisture[site] = actualET/pet;
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     

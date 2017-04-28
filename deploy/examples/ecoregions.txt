@@ -1,0 +1,8 @@
+LandisData  Ecoregions
+
+>>         Map
+>> Active  Code  Name   Description
+>> ------  ----  -----  -----------
+      yes    1   climate1   "Mesic soils"
+      yes    2   climate2   "Sandy outwash plain"
+      yes    3   climate3   "Mesic soils"
