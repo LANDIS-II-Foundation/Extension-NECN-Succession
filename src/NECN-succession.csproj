@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>necn_hydro_succession</RootNamespace>
-    <AssemblyName>Landis.Extension.Succession.NECN_Hydro</AssemblyName>
+    <AssemblyName>Landis.Extension.Succession.NECN</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

@@ -5,6 +5,5 @@ Version      0.5
 Type         succession
 Assembly     Landis.Extension.Succession.NECN
 Class        Landis.Extension.Succession.NECN.PlugIn
-Description  "Succession with complete Carbon and Nitrogen Cycling and improved hydrology"
-UserGuide    "LANDIS-II Net Ecosystem CN Succession v4.1 User Guide.pdf"
+Description  "Succession with complete Carbon and Nitrogen cycling and hydrology"
 CoreVersion  6.0

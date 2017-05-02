@@ -16,7 +16,7 @@
 [Files]
 ; This .dll IS the extension (ie, the extension's assembly)
 ; NB: Do not put a version number in the file name of this .dll
-Source: ..\..\src\bin\Debug\Landis.Extension.Succession.NECN_Hydro.dll; DestDir: {#ExtDir}; Flags: replacesameversion
+Source: ..\..\src\bin\Debug\Landis.Extension.Succession.NECN.dll; DestDir: {#ExtDir}; Flags: replacesameversion
 
 
 ; Requisite auxiliary libraries
@@ -35,8 +35,6 @@ Source: ..\..\src\bin\Debug\Landis.Library.Succession.dll; DestDir: {#ExtDir}; F
 ;User Guides are no longer shipped with installer
 ;Source: docs\LANDIS-II Net Ecosystem CN Succession v4.1 User Guide.pdf; DestDir: {#AppDir}\docs
 ;Source: docs\LANDIS-II Climate Library v1.0 User Guide.pdf; DestDir: {#AppDir}\docs
-
-
 
 ;Complete example for testing
 Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\NECN-Hydro Succession
