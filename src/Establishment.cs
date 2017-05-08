@@ -10,7 +10,7 @@ using System;
 using System.IO;
 using Landis.Library.Climate;
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     public class Establishment
     {
@@ -25,8 +25,8 @@ namespace Landis.Extension.Succession.NECN
 
         public static void InitializeLogFile()
         {
-            string logFileName   = "NECN-H-prob-establish-log.csv"; 
-            PlugIn.ModelCore.UI.WriteLine("   Opening a NECN-H log file \"{0}\" ...", logFileName);
+            string logFileName   = "NECN_Hydro-prob-establish-log.csv"; 
+            PlugIn.ModelCore.UI.WriteLine("   Opening a NECN_Hydro log file \"{0}\" ...", logFileName);
             try {
                 log = Landis.Data.CreateTextFile(logFileName);
             }

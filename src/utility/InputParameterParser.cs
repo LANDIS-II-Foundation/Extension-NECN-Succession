@@ -6,7 +6,7 @@ using Edu.Wisc.Forest.Flel.Util;
 using Landis.Library.Succession;
 using System.Collections.Generic;
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     /// <summary>
     /// A parser that reads biomass succession parameters from text input.

@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     /// <summary>
     /// A helper class.

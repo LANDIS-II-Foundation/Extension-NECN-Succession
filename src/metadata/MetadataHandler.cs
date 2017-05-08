@@ -7,7 +7,7 @@ using Landis.Library.Metadata;
 using Landis.Core;
 using Edu.Wisc.Forest.Flel.Util;
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     public class MetadataHandler
     {
@@ -30,7 +30,7 @@ namespace Landis.Extension.Succession.NECN
             };
 
             Extension = new ExtensionMetadata(mCore){
-                Name = "NECN-H-Succession",
+                Name = "NECN_Hydro-Succession",
                 TimeInterval = timestep, 
                 ScenarioReplicationMetadata = scenRep
             };
@@ -39,9 +39,9 @@ namespace Landis.Extension.Succession.NECN
             //          table outputs:   
             //---------------------------------------
 
-            Outputs.primaryLog = new MetadataTable<PrimaryLog>("NECN-H-succession-log.csv");
-            Outputs.primaryLogShort = new MetadataTable<PrimaryLogShort>("NECN-H-succession-log-short.csv");
-            Outputs.monthlyLog = new MetadataTable<MonthlyLog>("NECN-H-succession-monthly-log.csv");
+            Outputs.primaryLog = new MetadataTable<PrimaryLog>("NECN_Hydro-succession-log.csv");
+            Outputs.primaryLogShort = new MetadataTable<PrimaryLogShort>("NECN_Hydro-succession-log-short.csv");
+            Outputs.monthlyLog = new MetadataTable<MonthlyLog>("NECN_Hydro-succession-monthly-log.csv");
 
             OutputMetadata tblOut_monthly = new OutputMetadata()
             {
@@ -83,7 +83,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     Type = OutputType.Map,
                     Name = "Aboveground Net Primary Production",
-                    FilePath = @"NECN_H\AG_NPP-{timestep}.img",  //century
+                    FilePath = @"NECN_Hydro\AG_NPP-{timestep}.img",  //century
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,
@@ -97,7 +97,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     Type = OutputType.Map,
                     Name = "Net Ecosystem Exchange",
-                    FilePath = @"NECN_H\NEE-{timestep}.img",  //century
+                    FilePath = @"NECN_Hydro\NEE-{timestep}.img",  //century
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,
@@ -110,7 +110,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     Type = OutputType.Map,
                     Name = "Soil Organic Carbon",
-                    FilePath = @"NECN_H\SOC-{timestep}.img",  //century
+                    FilePath = @"NECN_Hydro\SOC-{timestep}.img",  //century
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,
@@ -123,7 +123,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     Type = OutputType.Map,
                     Name = "Soil Organic Nitrogen",
-                    FilePath = @"NECN_H\SON-{timestep}.img",  //century
+                    FilePath = @"NECN_Hydro\SON-{timestep}.img",  //century
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_N_m2,
                     Visualize = true,
@@ -136,7 +136,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     Type = OutputType.Map,
                     Name = "Total Carbon",
-                    FilePath = @"NECN_H\TotalC-{timestep}.img",  //century
+                    FilePath = @"NECN_Hydro\TotalC-{timestep}.img",  //century
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,

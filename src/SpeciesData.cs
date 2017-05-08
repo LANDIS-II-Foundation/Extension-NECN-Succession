@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
 
     //public interface ISpeciesData : Landis.Core.ISpecies

@@ -7,7 +7,7 @@ using Landis.Library.LeafBiomassCohorts;
 using System.Collections.Generic;
 using Landis.Library.Climate;
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     /// <summary>
     /// Utility methods.

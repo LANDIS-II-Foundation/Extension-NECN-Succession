@@ -4,7 +4,7 @@
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.Library.LeafBiomassCohorts;  
 
-namespace Landis.Extension.Succession.NECN.AgeOnlyDisturbances
+namespace Landis.Extension.Succession.NECN_Hydro.AgeOnlyDisturbances
 {
     /// <summary>
     /// The event handlers when no biomass parameters have been provided by

@@ -5,7 +5,7 @@ using Edu.Wisc.Forest.Flel.Util;
 using System;
 using Landis.Core;
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     public class OtherData
     {

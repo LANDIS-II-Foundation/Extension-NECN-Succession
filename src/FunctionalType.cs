@@ -7,7 +7,7 @@ using Landis.Core;
 using System.Collections.Generic;
 
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     public interface IFunctionalType
     {
@@ -194,7 +194,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         // 'PPRPTS(2)': The effect of water content on the intercept, allows the user to 
-        //              increase the value of the intercept and thereby increase the slope of the line. MoistureCurve has replaced PPRPTS naming convention in NECN-H
+        //              increase the value of the intercept and thereby increase the slope of the line. MoistureCurve has replaced PPRPTS naming convention in NECN_Hydro
         public double MoistureCurve2
         {
             get {

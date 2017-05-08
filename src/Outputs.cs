@@ -15,7 +15,7 @@ using System.Collections;
 
 
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     public class Outputs
     {
@@ -475,11 +475,11 @@ namespace Landis.Extension.Succession.NECN
         //Write log file for growth and limits
         public static void CreateCalibrateLogFile()
         {
-            string logFileName = "NECN-H-calibrate-log.csv";
+            string logFileName = "NECN_Hydro-calibrate-log.csv";
             PlugIn.ModelCore.UI.WriteLine("******************WARNING************************", logFileName);
             PlugIn.ModelCore.UI.WriteLine("******YOU ARE CURRENTLY IN CALIBRATE MODE********", logFileName);
             PlugIn.ModelCore.UI.WriteLine("*************************************************", logFileName);
-            PlugIn.ModelCore.UI.WriteLine("   Opening NECN-H calibrate log file \"{0}\" ...", logFileName);
+            PlugIn.ModelCore.UI.WriteLine("   Opening NECN_Hydro calibrate log file \"{0}\" ...", logFileName);
             try
             {
                 CalibrateLog = new StreamWriter(logFileName);

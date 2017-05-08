@@ -7,7 +7,7 @@ using System.IO;
 using Landis.Core;
 using Landis.SpatialModeling;
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     /// <summary>
     /// </summary>

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using Landis.Library.LeafBiomassCohorts;
 using System;
 
-namespace Landis.Extension.Succession.NECN
+namespace Landis.Extension.Succession.NECN_Hydro
 {
     /// <summary>
     /// Calculations for an individual cohort's biomass.

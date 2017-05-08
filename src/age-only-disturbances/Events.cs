@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 using Landis.Library.LeafBiomassCohorts;  
 
-namespace Landis.Extension.Succession.NECN.AgeOnlyDisturbances
+namespace Landis.Extension.Succession.NECN_Hydro.AgeOnlyDisturbances
 {
     /// <summary>
     /// The handlers for various type of events related to age-only

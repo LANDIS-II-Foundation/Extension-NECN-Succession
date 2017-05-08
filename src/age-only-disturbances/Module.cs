@@ -3,7 +3,7 @@
 
 using Landis.Library.LeafBiomassCohorts;  
 
-namespace Landis.Extension.Succession.NECN.AgeOnlyDisturbances
+namespace Landis.Extension.Succession.NECN_Hydro.AgeOnlyDisturbances
 {
     /// <summary>
     /// The public interface for the module that handles age-only disturbances.

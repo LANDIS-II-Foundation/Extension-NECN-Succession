@@ -3,7 +3,7 @@
 
 using Landis.Core;
 
-namespace Landis.Extension.Succession.NECN.AgeOnlyDisturbances
+namespace Landis.Extension.Succession.NECN_Hydro.AgeOnlyDisturbances
 {
     /// <summary>
     /// A collection of biomass parameters for age-only disturbances.

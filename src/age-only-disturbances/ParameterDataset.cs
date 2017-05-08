@@ -3,7 +3,7 @@
 //  License:  Available at  
 //  http://www.landis-ii.org/developers/LANDIS-IISourceCodeLicenseAgreement.pdf
 
-namespace Landis.Extension.Succession.NECN.AgeOnlyDisturbances
+namespace Landis.Extension.Succession.NECN_Hydro.AgeOnlyDisturbances
 {
     /// <summary>
     /// A collection of biomass parameters for age-only disturbances.
