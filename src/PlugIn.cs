@@ -47,8 +47,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static int ANEEMapFrequency;
         public static string TotalCMapNames = null;
         public static int TotalCMapFrequency;
-        //public static int LAIMapNames = null;
-        //public static int LAIMapFrequency;
         //public static int ShadeClassMapNames = null;
         //public static int ShadeClassMapFrequency;
         public static int SuccessionTimeStep;
