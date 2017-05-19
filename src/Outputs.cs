@@ -154,7 +154,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     //PlugIn.ModelCore.UI.WriteLine("SHWC Index = {0}", swhc_index);
                     //PlugIn.ModelCore.UI.WriteLine("SHWC = {0}", swhc);
 
-                    // TO DO: ADD SWHC LOOP  <- AMK: was this implemented already? 
+                    // TO DO: ADD SWHC LOOP  
                     avgAnnualPPT[ecoregion.Index] = 0.0;
                     avgJJAtemp[ecoregion.Index] = 0.0;
 
@@ -537,7 +537,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 //}
             }
             
-            if (PlugIn.SoilCarbonMapNames != null)// && (PlugIn.ModelCore.CurrentTime % SoilCarbonMapFrequency) == 0)
+            if (PlugIn.SoilCarbonMapNames != null)
                 {
                     string path = MapNames.ReplaceTemplateVars(PlugIn.SoilCarbonMapNames, PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path, PlugIn.ModelCore.Landscape.Dimensions))
@@ -559,7 +559,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     }
                 }
 
-                if (PlugIn.SoilNitrogenMapNames != null)// && (PlugIn.ModelCore.CurrentTime % SoilNitrogenMapFrequency) == 0)
+                if (PlugIn.SoilNitrogenMapNames != null)
                 {
                     string path2 = MapNames.ReplaceTemplateVars(PlugIn.SoilNitrogenMapNames, PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path2, PlugIn.ModelCore.Landscape.Dimensions))
@@ -581,7 +581,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     }
                 }
 
-                if (PlugIn.ANPPMapNames != null)// && (PlugIn.ModelCore.CurrentTime % ANPPMapFrequency) == 0)
+                if (PlugIn.ANPPMapNames != null)
                 {
                     string path3 = MapNames.ReplaceTemplateVars(PlugIn.ANPPMapNames, PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path3, PlugIn.ModelCore.Landscape.Dimensions))
@@ -602,7 +602,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                         }
                     }
                 }
-                if (PlugIn.ANEEMapNames != null)// && (PlugIn.ModelCore.CurrentTime % ANEEMapFrequency) == 0)
+                if (PlugIn.ANEEMapNames != null)
                 {
 
                     string path4 = MapNames.ReplaceTemplateVars(PlugIn.ANEEMapNames, PlugIn.ModelCore.CurrentTime);
@@ -624,7 +624,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                         }
                     }
                 }
-                if (PlugIn.TotalCMapNames != null) // && (PlugIn.ModelCore.CurrentTime % TotalCMapFrequency) == 0)
+                if (PlugIn.TotalCMapNames != null) 
                 {
 
                     string path5 = MapNames.ReplaceTemplateVars(PlugIn.TotalCMapNames, PlugIn.ModelCore.CurrentTime);
@@ -672,16 +672,16 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     }
                     
                 }
-
-                string pathSoilMoisture = MapNames.ReplaceTemplateVars("SoilMoisture-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathSoilMoisture, PlugIn.ModelCore.Landscape.Dimensions))
+                
+                string pathavailablewater = MapNames.ReplaceTemplateVars("AvailableWater-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathavailablewater, PlugIn.ModelCore.Landscape.Dimensions))
                 {
                     IntPixel pixel = outputRaster.BufferPixel;
                     foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                     {
                         if (site.IsActive)
                         {
-                            pixel.MapCode.Value = (int)((SiteVars.AnnualSoilMoisture[site]));
+                            pixel.MapCode.Value = (int)((SiteVars.AvailableWater[site]));
                         }
                         else
                         {

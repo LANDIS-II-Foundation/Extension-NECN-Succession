@@ -89,7 +89,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         private static ISiteVar<double> frassC;
         private static ISiteVar<double> lai;
         private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. I'm coppying LAI implementation
-        private static ISiteVar<double> annualSoilMoisture; //Annual soil moisture calculation, defined as pet- aet
+        private static ISiteVar<double> annualSoilMoisture; //Annual soil moisture calculation, defined as pet - aet
         private static ISiteVar<int> dryDays;
                 
         public static ISiteVar<double> TotalWoodBiomass;
