@@ -386,7 +386,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// Add a new cohort to a site.
+        /// Add a new cohort to a site following reproduction or planting.  Does not include initial communities.
         /// This is a Delegate method to base succession.
         /// </summary>
 
