@@ -363,6 +363,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         }
 
+        //---------------------------------------------------------------------
+        // This is the SIMULATION year that a cohort was born (not its age).
+        // The number can be negative if the cohort was added with the initial community.
+        //---------------------------------------------------------------------
         private static int GetAddYear(ICohort cohort)
         {
             int currentYear = PlugIn.ModelCore.CurrentTime;
