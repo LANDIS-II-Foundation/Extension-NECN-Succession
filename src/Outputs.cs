@@ -68,7 +68,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static void WritePrimaryLogFile(int CurrentTime)
         {
 
-            PlugIn.SWHC_List.Sort();
+            //PlugIn.SWHC_List.Sort();
             //int soil_count = PlugIn.SWHC_List.Count;
             //PlugIn.ModelCore.UI.WriteLine("soil count = {0}", soil_count);
 

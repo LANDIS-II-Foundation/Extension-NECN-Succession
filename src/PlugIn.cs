@@ -155,8 +155,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
             
             if (parameters.CalibrateMode)
                 Outputs.CreateCalibrateLogFile();
-            Outputs.WritePrimaryLogFile(0);
-            Outputs.WriteShortPrimaryLogFile(0);
             Establishment.InitializeLogFile();
 
             B_MAX = 0;
@@ -165,6 +163,12 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 if (SpeciesData.Max_Biomass[species] > B_MAX)
                     B_MAX = SpeciesData.Max_Biomass[species];
             }
+
+            foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
+                Century.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
+
+            Outputs.WritePrimaryLogFile(0);
+            Outputs.WriteShortPrimaryLogFile(0);
 
             
         }

@@ -62,7 +62,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         private static ISiteVar<double> soilTemperature;
         private static ISiteVar<double> anaerobicEffect;
         
-        // Annual accumulators
+        // Annual accumulators for reporting purposes.
         private static ISiteVar<double> grossMineralization;
         private static ISiteVar<double> ag_nppC;
         private static ISiteVar<double> bg_nppC;

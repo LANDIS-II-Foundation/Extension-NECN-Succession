@@ -42,7 +42,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                 if (ecoregion.Active)
                 {
-                    Climate.GenerateEcoregionClimateData(ecoregion, 0, PlugIn.Latitude); //, FieldCapacity[ecoregion], WiltingPoint[ecoregion]);
+                    Climate.GenerateEcoregionClimateData(ecoregion, 0, PlugIn.Latitude); 
                     SetSingleAnnualClimate(ecoregion, 0, Climate.Phase.SpinUp_Climate);  // Some placeholder data to get things started.
                 }
             }

@@ -162,7 +162,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         }
 
         //---------------------------------------------------------------------
-        private static void ComputeTotalCohortCN(ActiveSite site, ISiteCohorts cohorts)
+        public static void ComputeTotalCohortCN(ActiveSite site, ISiteCohorts cohorts)
         {
             SiteVars.CohortLeafC[site] = 0;
             SiteVars.CohortFRootC[site] = 0;
