@@ -173,6 +173,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     if (Double.IsNaN(relativeNallocation) || Double.IsNaN(Nallocation) || Double.IsNaN(NAllocTotal))
                     {
                         PlugIn.ModelCore.UI.WriteLine("  N ALLOCATION CALCULATION = NaN!  ");
+                        PlugIn.ModelCore.UI.WriteLine("  Site_Row={0:0}, Site_Column={1:0}.", site.Location.Row, site.Location.Column);
                         PlugIn.ModelCore.UI.WriteLine("  Nallocation={0:0.00}, NAllocTotal={1:0.00}, relativeNallocation={2:0.00}.", Nallocation, NAllocTotal, relativeNallocation);
                         PlugIn.ModelCore.UI.WriteLine("  Wood={0:0.00}, Leaf={1:0.00}.", cohort.WoodBiomass, cohort.LeafBiomass);
                     }                    
