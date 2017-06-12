@@ -210,6 +210,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     if (Double.IsNaN(Nallocation) || Double.IsNaN(Nfraction) || Double.IsNaN(availableN))
                     {
                         PlugIn.ModelCore.UI.WriteLine("  LIMIT N CALCULATION = NaN!  ");
+                        PlugIn.ModelCore.UI.WriteLine("  Site_Row={0:0}, Site_Column={1:0}.", site.Location.Row, site.Location.Column);
                         PlugIn.ModelCore.UI.WriteLine("  Nallocation={0:0.00}, Nfraction={1:0.00}, availableN={2:0.00}.", Nallocation, Nfraction, availableN);
                     }
 
