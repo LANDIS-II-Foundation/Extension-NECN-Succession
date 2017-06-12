@@ -261,8 +261,14 @@ namespace Landis.Extension.Succession.NECN_Hydro
                                                ICommunity initialCommunity)
         {
             int swhc = (int)((SiteVars.SoilFieldCapacity[site] - SiteVars.SoilWiltingPoint[site]) * SiteVars.SoilDepth[site]);
+            //if (!PlugIn.SWHC_List.Contains(swhc))
+            //    PlugIn.SWHC_List.Add(swhc);
+
             if (!PlugIn.SWHC_List.Contains(swhc))
+            {
                 PlugIn.SWHC_List.Add(swhc);
+                PlugIn.SWHC_List.Sort();
+            }
             //PlugIn.ModelCore.UI.WriteLine("SWHC = {0}", swhc);
 
             InitialBiomass initialBiomass = InitialBiomass.Compute(site, initialCommunity);
