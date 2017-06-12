@@ -224,27 +224,14 @@ namespace Landis.Extension.Succession.NECN_Hydro
             if (!ecoregion.Active)
                 return 0;
 
-            //double B_MAX = (double) ClimateRegionData.B_MAX[ecoregion];
-
-            //double oldBiomass = (double) Library.LeafBiomassCohorts.Cohorts.ComputeNonYoungBiomass(SiteVars.Cohorts[site]);
-
-            //int lastMortality = SiteVars.PrevYearMortality[site];
-            //double B_ACT = Math.Min(B_MAX - lastMortality, oldBiomass);
-
-            //  Relative living biomass (ratio of actual to maximum site
-            //  biomass).
-            //double B_AM = B_ACT / B_MAX;
-
             for (byte shade = 5; shade >= 1; shade--)
             {
-                if(PlugIn.ShadeLAI[shade] <=0 ) //ClimateRegionData.ShadeBiomass[shade][ecoregion] <= 0)
+                if(PlugIn.ShadeLAI[shade] <=0 ) 
                 {
                     string mesg = string.Format("Maximum LAI has not been defined for shade class {0}", shade);
                     throw new System.ApplicationException(mesg);
                 }
-                //PlugIn.ModelCore.UI.WriteLine("Shade Calculation:  lastMort={0:0.0}, B_MAX={1}, oldB={2}, B_ACT={3}, shade={4}.", lastMortality, B_MAX,oldBiomass,B_ACT,shade);
                 if (SiteVars.LAI[site] >= PlugIn.ShadeLAI[shade])
-                    //B_AM >= ClimateRegionData.ShadeBiomass[shade][ecoregion])
                 {
                     finalShade = shade;
                     break;

@@ -18,14 +18,13 @@ namespace Landis.Extension.Succession.NECN_Hydro
         //Nested dictionary of species,cohort
         public static Dictionary<int, Dictionary<int,double>> CohortMineralNfraction;  //calculated once per year
         public static Dictionary<int, Dictionary<int, double>> CohortMineralNallocation;  //calculated monthly
-        //public static Dictionary<int, Dictionary<int, double>> CohortResorbedNallocation;
 
         //---------------------------------------------------------------------
         // Method for retrieving the available resorbed N for each cohort.
         // Return amount of resorbed N in g N m-2.
         public static double GetResorbedNallocation(ICohort cohort, ActiveSite site)
         {
-            int cohortAddYear = GetAddYear(cohort); //currentYear - (cohort.Age - Century.Year) + (CohortBiomass.centuryMonth == 11 ? 1 : 0);
+            int cohortAddYear = GetAddYear(cohort); 
             //PlugIn.ModelCore.UI.WriteLine("GETResorbedNallocation: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Century.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
             double resorbedNallocation = 0.0;
             Dictionary<int, double> cohortDict;
@@ -124,7 +123,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     //double Nallocation = Roots.CalculateFineRoot(cohort.LeafBiomass); 
                     double Nallocation = 1- Math.Exp((-Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass)*0.02));
 
-                    if (Nallocation <= 0.0) //PlugIn.ModelCore.CurrentTime == 0)
+                    if (Nallocation <= 0.0) 
                         Nallocation = Math.Max(Nallocation, cohort.WoodBiomass * 0.01);
                     
                     NAllocTotal += Nallocation;
@@ -133,20 +132,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                     if (CohortMineralNfraction.ContainsKey(cohort.Species.Index))
                     {
-
-                        //CohortMineralNfraction[cohort.Species.Index].Add(cohortAddYear, Nallocation);
-                        
-                        // option 1: regardless of whether cohortAddYear already exists, create (or replace) the new value
-                        //CohortMineralNfraction[cohort.Species.Index][cohortAddYear] = Nallocation;
-                        // end of option 1
-
-                        // option 2: if the cohortAddYear already exists, add the new value to the existing one
-                        //double currentNallocation;
-                        //CohortMineralNfraction[cohort.Species.Index].TryGetValue(cohortAddYear, out currentNallocation);        // currentNallocation will be set to 0.0 if the cohortAddYear key does not exist
-
-                        //CohortMineralNfraction[cohort.Species.Index][cohortAddYear] = currentNallocation + Nallocation;
-                        // end of option 2
-                        //if key is already present, then don't trigger an error.
                         if (!CohortMineralNfraction[cohort.Species.Index].ContainsKey(cohortAddYear))
                            CohortMineralNfraction[cohort.Species.Index][cohortAddYear] = Nallocation;
                     }
@@ -219,21 +204,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                     if (CohortMineralNallocation.ContainsKey(cohort.Species.Index))
                     {
-                        // original code that throws an exception for a key conflict for cohortAddYear
-                        //CohortMineralNallocation[cohort.Species.Index].Add(cohortAddYear, Nallocation);
-                        // end of original code
-
-                        // new code 1 that retrieves any existing value before adding Nallocation
-                        //double currentNgets;
-                        //CohortMineralNallocation[cohort.Species.Index].TryGetValue(cohortAddYear, out currentNgets);        // currentNallocation will be set to 0.0 if the cohortAddYear key does not exist
-
-                        //CohortMineralNallocation[cohort.Species.Index][cohortAddYear] = currentNgets + Nallocation;
-                        // end of new code 1
-
-                        // new code 2 that ignores the new Nallocation if a key for cohortAddYear already exists
                         if (!CohortMineralNallocation[cohort.Species.Index].ContainsKey(cohortAddYear))
                             CohortMineralNallocation[cohort.Species.Index][cohortAddYear] = Nallocation;
-                        // end of new code 2
                     }
                     else
                     {

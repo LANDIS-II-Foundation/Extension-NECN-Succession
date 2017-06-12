@@ -173,7 +173,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             ReadVar(deadSurfMapName);
             parameters.InitialDeadSurfaceMapName = deadSurfMapName.Value;
 
-            InputVar<string> deadSoilMapName = new InputVar<string>("InitialDeadWoodSoilMapName");
+            InputVar<string> deadSoilMapName = new InputVar<string>("InitialDeadCoarseRootsMapName");
             ReadVar(deadSoilMapName);
             parameters.InitialDeadSoilMapName = deadSoilMapName.Value;
 
@@ -182,12 +182,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 parameters.CalibrateMode = calimode.Value;
             else
                 parameters.CalibrateMode = false;
-
-            //InputVar<double> spinMort = new InputVar<double>("SpinupMortalityFraction");
-            //if (ReadOptionalVar(spinMort))
-            //    parameters.SpinupMortalityFraction = spinMort.Value;
-            //else
-            //    parameters.SpinupMortalityFraction = 0.0;
 
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
@@ -232,28 +226,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
             InputVar<double> drsom3 = new InputVar<double>("DecayRateSOM3");
             ReadVar(drsom3);
             parameters.SetDecayRateSOM3(drsom3.Value);
-
-            //InputVar<string> soilCarbonMaps = new InputVar<string>("SoilCarbonMapNames");
-            //if (ReadOptionalVar(soilCarbonMaps))
-            //{
-            //    PlugIn.SoilCarbonMapNames = soilCarbonMaps.Value;
-
-            //    InputVar<int> soilCarbonMapFreq = new InputVar<int>("SoilCarbonMapFrequency");
-            //    ReadVar(soilCarbonMapFreq);
-            //    PlugIn.SoilCarbonMapFrequency = soilCarbonMapFreq.Value;
-
-            //}
-
-            //InputVar<string> soilNitrogenMaps = new InputVar<string>("SoilNitrogenMapNames");
-            //if (ReadOptionalVar(soilNitrogenMaps))
-            //{
-            //    PlugIn.SoilNitrogenMapNames = soilNitrogenMaps.Value;
-
-            //    InputVar<int> soilNitrogenMapFreq = new InputVar<int>("SoilNitrogenMapFrequency");
-            //    ReadVar(soilNitrogenMapFreq);
-            //    PlugIn.SoilNitrogenMapFrequency = soilNitrogenMapFreq.Value;
-
-            //}
 
             InputVar<string> anppMaps = new InputVar<string>("ANPPMapNames");
             if (ReadOptionalVar(anppMaps))
@@ -310,27 +282,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
             }
 
-            //InputVar<string> LAIMaps = new InputVar<string>("LAIMapNames");
-            //if (ReadOptionalVar(LAIMaps))
-            //{
-            //    PlugIn.LAIMapNames = LAIMaps.Value;
-
-            //    InputVar<int> LAIMapFreq = new InputVar<int>("LAICMapFrequency");
-            //    ReadVar(LAIMapFreq);
-            //    PlugIn.LAICMapFrequency = LAIMapFreq.Value;
-
-            //}
-
-            //InputVar<string> ShadeClassMaps = new InputVar<string>("ShadeClassMapNames");
-            //if (ReadOptionalVar(ShadeClassMaps))
-            //{
-            //    PlugIn.TotalCMapNames = ShadeClassMaps.Value;
-
-            //    InputVar<int> ShadeClassMapFreq = new InputVar<int>("ShadeClassMapFrequency");
-            //    ReadVar(ShadeClassMapFreq);
-            //    PlugIn.ShadeClassMapFrequency = ShadeClassMapFreq.Value;
-
-            //}
 
             //--------------------------
             //  MinRelativeBiomass table
