@@ -98,6 +98,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static ISiteVar<double> WoodMortality;
         public static ISiteVar<string> HarvestPrescriptionName;
         public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
+        public static ISiteVar<double> FineFuels;
 
         
         //---------------------------------------------------------------------
@@ -186,13 +187,16 @@ namespace Landis.Extension.Succession.NECN_Hydro
             annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             annualSoilMoisture  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
+            FineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
             PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
             PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.AgeCohorts");
             PlugIn.ModelCore.RegisterSiteVar(biomassCohortsSiteVar, "Succession.BiomassCohorts");
-            
+            PlugIn.ModelCore.RegisterSiteVar(FineFuels, "Succession.FineFuels");
+
+
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
                 surfaceDeadWood[site]       = new Layer(LayerName.Wood, LayerType.Surface);

@@ -1,9 +1,0 @@
-LandisData   Extension
-
-Name         "NECN-H Succession"
-Version      0.5
-Type         succession
-Assembly     Landis.Extension.Succession.NECN
-Class        Landis.Extension.Succession.NECN.PlugIn
-Description  "Succession with complete Carbon and Nitrogen cycling and hydrology"
-CoreVersion  6.0

@@ -1,6 +1,6 @@
-#define PackageName      "NECN-Hydro Succession"
-#define PackageNameLong  "NECN-Hydro Succession Extension"
-#define Version          "0.5"
+#define PackageName      "NECN_Hydro Succession"
+#define PackageNameLong  "NECN_Hydro Succession Extension"
+#define Version          "0.6"
 #define ReleaseType      "official"
 #define ReleaseNumber    "0.0"
 #define CoreVersion      "6.0"
@@ -16,7 +16,7 @@
 [Files]
 ; This .dll IS the extension (ie, the extension's assembly)
 ; NB: Do not put a version number in the file name of this .dll
-Source: ..\..\src\bin\Debug\Landis.Extension.Succession.NECN.dll; DestDir: {#ExtDir}; Flags: replacesameversion
+Source: ..\..\src\bin\Debug\Landis.Extension.Succession.NECN_Hydro.dll; DestDir: {#ExtDir}; Flags: replacesameversion
 
 
 ; Requisite auxiliary libraries
@@ -37,31 +37,28 @@ Source: ..\..\src\bin\Debug\Landis.Library.Succession.dll; DestDir: {#ExtDir}; F
 ;Source: docs\LANDIS-II Climate Library v1.0 User Guide.pdf; DestDir: {#AppDir}\docs
 
 ;Complete example for testing
-Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\NECN-Hydro Succession
-Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\NECN-Hydro Succession
-Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\NECN-Hydro Succession
-Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\NECN-Hydro Succession
-Source: ..\examples\*.img; DestDir: {#AppDir}\examples\NECN-Hydro Succession
+Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+Source: ..\examples\*.img; DestDir: {#AppDir}\examples\NECN_Hydro Succession
 
 
 ;Supporting files
-Source: ..\calibration\*.csv; DestDir: {#AppDir}\examples\NECN-Hydro-succession\calibration
+Source: ..\calibration\*.csv; DestDir: {#AppDir}\examples\NECN_Hydro-succession\calibration
 
 
 ;LANDIS-II identifies the extension with the info in this .txt file
 ; NB. New releases must modify the name of this file and the info in it
-#define InfoTxt "NECN-H Succession 0.5.txt"
+#define InfoTxt "NECN_Hydro Succession 0.6.txt"
 Source: {#InfoTxt}; DestDir: {#LandisPlugInDir}
 
-
-;;[InstallDelete]
-;;Type: files; Name: "{#AppDir}\bin\Landis.Library.Climate.dll"
 
 [Run]
 ;; Run plug-in admin tool to add an entry for the plug-in
 #define PlugInAdminTool  CoreBinDir + "\Landis.PlugIns.Admin.exe"
 
-Filename: {#PlugInAdminTool}; Parameters: "remove ""NECN-Hydro Succession"" "; WorkingDir: {#LandisPlugInDir}
+Filename: {#PlugInAdminTool}; Parameters: "remove ""NECN_Hydro Succession"" "; WorkingDir: {#LandisPlugInDir}
 Filename: {#PlugInAdminTool}; Parameters: "add ""{#InfoTxt}"" "; WorkingDir: {#LandisPlugInDir}
 
 [UninstallRun]

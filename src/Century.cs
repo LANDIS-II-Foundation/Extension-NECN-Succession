@@ -34,7 +34,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                 Year = y + 1;
                 
-                //if (PlugIn.ModelCore.CurrentTime > 0 && Climate.Future_MonthlyData.ContainsKey(PlugIn.FutureClimateBaseYear + y + PlugIn.ModelCore.CurrentTime- years))
                 if (Climate.Future_MonthlyData.ContainsKey(PlugIn.FutureClimateBaseYear + y + PlugIn.ModelCore.CurrentTime - years))
                     ClimateRegionData.AnnualWeather[ecoregion] = Climate.Future_MonthlyData[PlugIn.FutureClimateBaseYear + y - years + PlugIn.ModelCore.CurrentTime][ecoregion.Index];
 
@@ -109,12 +108,12 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     WoodLayer.Decompose(site);
                     LitterLayer.Decompose(site);
                     SoilLayer.Decompose(site);
-                   
-                    //...Volatilization loss as a function of the mineral N which
-                    //     remains after uptake by plants.  ML added a correction factor for wetlands since their denitrification rate is double that of wetlands
-                    //based on a review paper by Seitziner 2006.
 
-                    double volatilize = (SiteVars.MineralN[site] * PlugIn.DenitrificationRate); //ClimateRegionData.Denitrif[ecoregion]); // monthly value
+                    // Volatilization loss as a function of the mineral N which remains after uptake by plants.  
+                    // ML added a correction factor for wetlands since their denitrification rate is double that of wetlands
+                    // based on a review paper by Seitziner 2006.
+
+                    double volatilize = (SiteVars.MineralN[site] * PlugIn.DenitrificationRate); 
 
                     //PlugIn.ModelCore.UI.WriteLine("BeforeVol.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
 
@@ -127,6 +126,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyAGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyBGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] += SiteVars.SourceSink[site].Carbon;
+                    SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
 
                 }
             }
