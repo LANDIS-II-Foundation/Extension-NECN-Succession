@@ -37,15 +37,15 @@ Source: ..\..\src\bin\Debug\Landis.Library.Succession.dll; DestDir: {#ExtDir}; F
 ;Source: docs\LANDIS-II Climate Library v1.0 User Guide.pdf; DestDir: {#AppDir}\docs
 
 ;Complete example for testing
-Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\NECN_Hydro Succession
-Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\NECN_Hydro Succession
-Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\NECN_Hydro Succession
-Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\NECN_Hydro Succession
-Source: ..\examples\*.img; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+; Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+; Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+; Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+; Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\NECN_Hydro Succession
+; Source: ..\examples\*.img; DestDir: {#AppDir}\examples\NECN_Hydro Succession
 
 
 ;Supporting files
-Source: ..\calibration\*.csv; DestDir: {#AppDir}\examples\NECN_Hydro-succession\calibration
+; Source: ..\calibration\*.csv; DestDir: {#AppDir}\examples\NECN_Hydro-succession\calibration
 
 
 ;LANDIS-II identifies the extension with the info in this .txt file

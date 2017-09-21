@@ -98,7 +98,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static ISiteVar<double> WoodMortality;
         public static ISiteVar<string> HarvestPrescriptionName;
         public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
-        public static ISiteVar<double> FineFuels;
+        public static ISiteVar<double> fineFuels;
 
         
         //---------------------------------------------------------------------
@@ -111,7 +111,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<Library.LeafBiomassCohorts.SiteCohorts>();
             biomassCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.BiomassCohorts.ISiteCohorts>.Wrap(cohorts);
             baseCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.AgeOnlyCohorts.ISiteCohorts>.Wrap(cohorts);
-        
+            fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             
             // Dead biomass:
@@ -187,14 +188,13 @@ namespace Landis.Extension.Succession.NECN_Hydro
             annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             annualSoilMoisture  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-            FineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
             PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
             PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.AgeCohorts");
             PlugIn.ModelCore.RegisterSiteVar(biomassCohortsSiteVar, "Succession.BiomassCohorts");
-            PlugIn.ModelCore.RegisterSiteVar(FineFuels, "Succession.FineFuels");
+            PlugIn.ModelCore.RegisterSiteVar(SiteVars.FineFuels, "Succession.FineFuels");
 
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -470,6 +470,22 @@ namespace Landis.Extension.Succession.NECN_Hydro
         {
             get {
                 return stream;
+            }
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> FineFuels
+        {
+            get
+            {
+                return fineFuels;
+            }
+            set
+            {
+                fineFuels = value;
             }
         }
         //---------------------------------------------------------------------
