@@ -198,6 +198,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 actualET = 0.0;
             AET = actualET;
 
+            //PlugIn.ModelCore.UI.WriteLine("AET {0} = ", AET);
+
             //Subtract transpiration from soil water content
             soilWaterContent -= actualET;
 
