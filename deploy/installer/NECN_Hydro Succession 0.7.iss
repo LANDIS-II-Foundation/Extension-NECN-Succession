@@ -50,7 +50,7 @@ Source: ..\..\src\bin\Debug\Landis.Library.Succession-vAGB-Input.dll; DestDir: {
 
 ;LANDIS-II identifies the extension with the info in this .txt file
 ; NB. New releases must modify the name of this file and the info in it
-#define InfoTxt "NECN_Hydro Succession 0.6.txt"
+#define InfoTxt "NECN_Hydro Succession 0.7.txt"
 Source: {#InfoTxt}; DestDir: {#LandisPlugInDir}
 
 

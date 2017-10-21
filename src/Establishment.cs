@@ -16,11 +16,11 @@ namespace Landis.Extension.Succession.NECN_Hydro
     {
 
         private static StreamWriter log;
-        private static double[, ,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count, PlugIn.SWHC_List.Count];
-        private static double[, ,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count, PlugIn.SWHC_List.Count];
-        private static double[, ,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count, PlugIn.SWHC_List.Count];
-        private static double[, ,] avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count, PlugIn.SWHC_List.Count];
-        private static int[,] Climate_SWHC_Count = new int[PlugIn.ModelCore.Ecoregions.Count, PlugIn.SWHC_List.Count];
+        private static double[,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
+        private static double[,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
+        private static double[,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
+        private static double[,] avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
+        //private static int[,] Climate_SWHC_Count = new int[PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
 
 
         public static void InitializeLogFile()
@@ -42,8 +42,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static double Calculate(ISpecies species, ActiveSite site)//, int years)
         {
             IEcoregion climateRegion = PlugIn.ModelCore.Ecoregion[site];
-            int swhc = (int)((SiteVars.SoilFieldCapacity[site] - SiteVars.SoilWiltingPoint[site]) * SiteVars.SoilDepth[site]);
-            int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc);
+            //int swhc = (int)((SiteVars.SoilFieldCapacity[site] - SiteVars.SoilWiltingPoint[site]) * SiteVars.SoilDepth[site]);
+            //int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc);
 
             double tempMultiplier = 0.0;
             double soilMultiplier = 0.0;
@@ -70,11 +70,11 @@ namespace Landis.Extension.Succession.NECN_Hydro
             establishProbability += minMultiplier;
             establishProbability *= PlugIn.ProbEstablishAdjust;
 
-            avgSoilMoisturelimit[species.Index, climateRegion.Index, swhc_index] += soilMultiplier;
-            avgMATlimit[species.Index, climateRegion.Index, swhc_index] += tempMultiplier;
-            avgJanuaryTlimit[species.Index, climateRegion.Index, swhc_index] += minJanTempMultiplier;
-            avgPest[species.Index, climateRegion.Index, swhc_index] += establishProbability;
-            Climate_SWHC_Count[climateRegion.Index, swhc_index]++;
+            avgSoilMoisturelimit[species.Index, climateRegion.Index] += soilMultiplier;
+            avgMATlimit[species.Index, climateRegion.Index] += tempMultiplier;
+            avgJanuaryTlimit[species.Index, climateRegion.Index] += minJanTempMultiplier;
+            avgPest[species.Index, climateRegion.Index] += establishProbability;
+            //Climate_SWHC_Count[climateRegion.Index]++;
 
             //if (establishProbability > 0.0)
             //    PlugIn.ModelCore.UI.WriteLine("Spp={0}, Pest={1:0.000}: tM={2:0.0}, sM={3:0.0}, jM={4:0.0}", species.Name, establishProbability, tempMultiplier, soilMultiplier, minJanTempMultiplier);
@@ -90,15 +90,15 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     if (!ecoregion.Active || ClimateRegionData.ActiveSiteCount[ecoregion] < 1)
                         continue;
 
-                    foreach (int swhc in PlugIn.SWHC_List)
-                    {
-                        int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc);
-                        log.Write("{0}, {1}, {2},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name, swhc);
-                        log.Write("{0:0.00},", (avgMATlimit[species.Index, ecoregion.Index, swhc_index] / (double)Climate_SWHC_Count[ecoregion.Index, swhc_index]));
-                        log.Write("{0:0.00},", (avgJanuaryTlimit[species.Index, ecoregion.Index, swhc_index] / (double)Climate_SWHC_Count[ecoregion.Index, swhc_index]));
-                        log.Write("{0:0.00},", (avgSoilMoisturelimit[species.Index, ecoregion.Index, swhc_index] / (double)Climate_SWHC_Count[ecoregion.Index, swhc_index]));
-                        log.WriteLine("{0:0.00}", (avgPest[species.Index, ecoregion.Index, swhc_index] / (double)Climate_SWHC_Count[ecoregion.Index, swhc_index]));
-                    }
+                    //foreach (int swhc in PlugIn.SWHC_List)
+                    //{
+                    //    int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc);
+                        log.Write("{0}, {1}, {2},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name);
+                        log.Write("{0:0.00},", (avgMATlimit[species.Index, ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]));
+                        log.Write("{0:0.00},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]));
+                        log.Write("{0:0.00},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]));
+                        log.WriteLine("{0:0.00}", (avgPest[species.Index, ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]));
+                    //}
                 }
             }
 
