@@ -220,10 +220,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue < 0.05 || mapValue > 0.75)
+                        if (mapValue < 0.01 || mapValue > 0.75)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "Soil fild capacity value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
-                                                          mapValue, 0.05, 0.75, site.Location.Row, site.Location.Column);
+                                                          "Soil field capacity value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0.01, 0.75, site.Location.Row, site.Location.Column);
                         SiteVars.SoilFieldCapacity[site] = mapValue;
                     }
                 }
