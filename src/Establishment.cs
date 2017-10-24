@@ -36,7 +36,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             }
             
             log.AutoFlush = true;
-            log.WriteLine("Time, Species, ClimateRegion, SWHC, AvgTempMult, AvgMinJanTempMult, AvgSoilMoistureMult, AvgProbEst");
+            log.WriteLine("Time, Species, ClimateRegion, AvgTempMult, AvgMinJanTempMult, AvgSoilMoistureMult, AvgProbEst");
         }
 
         public static double Calculate(ISpecies species, ActiveSite site)//, int years)
