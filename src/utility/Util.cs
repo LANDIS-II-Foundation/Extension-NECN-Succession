@@ -220,10 +220,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue < 0.01 || mapValue > 0.75)
+                        if (mapValue < 0.0001 || mapValue > 0.75)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "Soil field capacity value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
-                                                          mapValue, 0.01, 0.75, site.Location.Row, site.Location.Column);
+                                                          "Soil field capacity value {0} is not between {1:0.0} and {2:0.00}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0.00001, 0.75, site.Location.Row, site.Location.Column);
                         SiteVars.SoilFieldCapacity[site] = mapValue;
                     }
                 }
@@ -260,10 +260,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue < 0.01 || mapValue > 0.75)
+                        if (mapValue < 0.0 || mapValue > 0.75)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "Soil wilting point value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
-                                                          mapValue, 0.01, 0.75, site.Location.Row, site.Location.Column);
+                                                          "Soil wilting point value {0} is not between {1:0.0} and {2:0.00}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0.0, 0.75, site.Location.Row, site.Location.Column);
                         if (mapValue > SiteVars.SoilFieldCapacity[site])
                             throw new InputValueException(mapValue.ToString(),
                                                           "Wilting Point {0} is greater than field capacity {1:0.0}.  Site_Row={3:0}, Site_Column={4:0}",
