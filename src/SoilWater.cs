@@ -17,6 +17,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
     public class SoilWater
     {
+        private static double Precipitation;
         private static double H2Oinputs;
         private static double tave;
         private static double tmax;
@@ -60,6 +61,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
             H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; //rain + irract in cm;
+            Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; //rain + irract in cm;
             //PlugIn.ModelCore.UI.WriteLine("SoilWater. WaterInputs={0:0.00}, .", H2Oinputs);
             tave = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
             //PlugIn.ModelCore.UI.WriteLine("SoilWater. AvgTemp={0:0.00}, .", tave);
@@ -219,7 +221,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             double ratioPrecipPET = 0.0;
             if (pet > 0.0) ratioPrecipPET = availableWater / pet;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
-            SiteVars.AnnualPPT_AET[site] += H2Oinputs - actualET;
+            SiteVars.AnnualPPT_AET[site] += Precipitation - actualET;
             SiteVars.AnnualSoilMoisture[site] = pet - actualET;
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
