@@ -923,7 +923,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
                                           InputValue<double> newValue)
         {
             Debug.Assert(species != null);
-            woodCN[species] = CheckBiomassParm(newValue, 5.0, 600.0);
+            //woodCN[species] = CheckBiomassParm(newValue, 5.0, 600.0);
+            woodCN[species] = CheckBiomassParm(newValue, 5.0, 900.0);
         }
         //---------------------------------------------------------------------
 
