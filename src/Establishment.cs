@@ -16,11 +16,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
     {
 
         private static StreamWriter log;
-        private static double[,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
-        private static double[,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
-        private static double[,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
-        private static double[,] avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
-        //private static int[,] Climate_SWHC_Count = new int[PlugIn.ModelCore.Ecoregions.Count]; //, PlugIn.SWHC_List.Count];
+        private static double[,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
+        private static double[,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
+        private static double[,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
+        private static double[,] avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
 
 
         public static void InitializeLogFile()
@@ -42,15 +41,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static double Calculate(ISpecies species, ActiveSite site)//, int years)
         {
             IEcoregion climateRegion = PlugIn.ModelCore.Ecoregion[site];
-            //int swhc = (int)((SiteVars.SoilFieldCapacity[site] - SiteVars.SoilWiltingPoint[site]) * SiteVars.SoilDepth[site]);
-            //int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc);
 
             double tempMultiplier = 0.0;
             double soilMultiplier = 0.0;
             double minJanTempMultiplier = 0.0;
-            //if (!ecoregion.Active || ClimateRegionData.ActiveSiteCount[ecoregion] < 1)
-            //    continue;
-
             double establishProbability = 0.0;
 
             AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[climateRegion];
@@ -74,10 +68,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             avgMATlimit[species.Index, climateRegion.Index] += tempMultiplier;
             avgJanuaryTlimit[species.Index, climateRegion.Index] += minJanTempMultiplier;
             avgPest[species.Index, climateRegion.Index] += establishProbability;
-            //Climate_SWHC_Count[climateRegion.Index]++;
 
-            //if (establishProbability > 0.0)
-            //    PlugIn.ModelCore.UI.WriteLine("Spp={0}, Pest={1:0.000}: tM={2:0.0}, sM={3:0.0}, jM={4:0.0}", species.Name, establishProbability, tempMultiplier, soilMultiplier, minJanTempMultiplier);
             return establishProbability;
         }
 
@@ -90,105 +81,25 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     if (!ecoregion.Active || ClimateRegionData.ActiveSiteCount[ecoregion] < 1)
                         continue;
 
-                    //foreach (int swhc in PlugIn.SWHC_List)
-                    //{
-                    //    int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc);
                         log.Write("{0}, {1}, {2},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name);
                         log.Write("{0:0.00},", (avgMATlimit[species.Index, ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]));
                         log.Write("{0:0.00},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]));
                         log.Write("{0:0.00},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]));
                         log.WriteLine("{0:0.00}", (avgPest[species.Index, ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]));
-                    //}
                 }
             }
 
-        }
+        avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
 
 
-        //---------------------------------------------------------------------
-        // Note:  If the succession time step is > 0, then an average Pest is calculated,
-        // based on each ecoregion-climate year.  The average is used because establishment 
-        // determines reproductive success, which occurs only once for the given successional
-        // time step.
-        // Note:  If one of the three multipliers dominates, 
-        // expect to see Pest highly correlated with that multiplier.
-        //public static Species.AuxParm<Ecoregions.AuxParm<double>>  GenerateNewEstablishProbabilities(int years)
-        //{
-        //    Species.AuxParm<Ecoregions.AuxParm<double>> EstablishProbability;
-        //    EstablishProbability = CreateSpeciesEcoregionParm<double>(PlugIn.ModelCore.Species, PlugIn.ModelCore.Ecoregions);
+    }
 
-        //    double[,] avgTempMultiplier = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
-        //    double[,] avgSoilMultiplier = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
-        //    double[,] avgMinJanTempMultiplier = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
-            
-        //    for (int y = 0; y < years; ++y) 
-        //    {
-        //        foreach(IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions) 
-        //        {
-        //            if(!ecoregion.Active || ClimateRegionData.ActiveSiteCount[ecoregion] < 1)
-        //                continue;
 
-        //            int actualYear = PlugIn.ModelCore.TimeSinceStart + y;
-
-        //            //AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[ecoregion]; //[y];
-        //            //new AnnualClimate_Monthly(ecoregion, actualYear, ClimateRegionData.Latitude[ecoregion], Climate.Phase.Future_Climate, actualYear);
-        //            AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[ecoregion]; 
-                
-        //            if(ecoClimate == null)
-        //                throw new System.ApplicationException("Error in Establishment: CLIMATE NULL.");
-                    
-                
-        //            double ecoDryDays = CalculateSoilMoisture(ecoClimate, ecoregion, y);
-                
-        //            foreach(ISpecies species in PlugIn.ModelCore.Species)
-        //            {
-        //                double tempMultiplier = BotkinDegreeDayMultiplier(ecoClimate, species);
-        //                double soilMultiplier = SoilMoistureMultiplier(ecoClimate, species, ecoDryDays);
-        //                double minJanTempMultiplier = MinJanuaryTempModifier(ecoClimate, species);
-                    
-        //                // Liebig's Law of the Minimum is applied to the four multipliers for each year:
-        //                double minMultiplier = System.Math.Min(tempMultiplier, soilMultiplier);
-        //                minMultiplier = System.Math.Min(minJanTempMultiplier, minMultiplier);
-                        
-        //                EstablishProbability[species][ecoregion] += minMultiplier;
-                        
-        //                avgTempMultiplier[species.Index, ecoregion.Index] += tempMultiplier;
-        //                avgSoilMultiplier[species.Index, ecoregion.Index] += soilMultiplier;
-        //                avgMinJanTempMultiplier[species.Index, ecoregion.Index] += minJanTempMultiplier;
-        //            }
-        //        }            
-        //    }
-            
-
-        //    foreach(IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions) 
-        //    {
-        //        foreach(ISpecies species in PlugIn.ModelCore.Species)
-        //        {
-        //            EstablishProbability[species][ecoregion] /= (double) years;
-        //            EstablishProbability[species][ecoregion] *= PlugIn.ProbEstablishAdjust;
-                    
-        //            if(PlugIn.ModelCore.CurrentTime > 0 && ClimateRegionData.ActiveSiteCount[ecoregion] > 0)
-        //            {
-        //                avgTempMultiplier[species.Index, ecoregion.Index] /= (double) years;
-        //                avgSoilMultiplier[species.Index, ecoregion.Index] /= (double) years;
-        //                avgMinJanTempMultiplier[species.Index, ecoregion.Index] /= (double) years;
-
-        //                log.Write("{0}, {1}, {2},", PlugIn.ModelCore.CurrentTime, ecoregion.Name, species.Name);
-        //                log.Write("{0:0.00},", avgTempMultiplier[species.Index, ecoregion.Index]);
-        //                log.Write("{0:0.00},", avgMinJanTempMultiplier[species.Index, ecoregion.Index]);
-        //                log.Write("{0:0.00},", avgSoilMultiplier[species.Index, ecoregion.Index]);
-        //                log.Write("{0:0.00},", PlugIn.ProbEstablishAdjust);
-        //                log.WriteLine("{0:0.00}", EstablishProbability[species][ecoregion]);
-        //            }
-        //        }
-        //    }     
-                        
-        //    return EstablishProbability;
-
-        //}
-        
-        //---------------------------------------------------------------------------
-        private static double SoilMoistureMultiplier(AnnualClimate weather, ISpecies species, double dryDays)
+    //---------------------------------------------------------------------------
+    private static double SoilMoistureMultiplier(AnnualClimate weather, ISpecies species, double dryDays)
 
         {
             double sppAllowableDrought = SpeciesData.MaxDrought[species];
