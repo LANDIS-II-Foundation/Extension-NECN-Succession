@@ -1,4 +1,3 @@
-//  Copyright 2007-2016 Portland State University
 //  Author: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
@@ -22,16 +21,16 @@ namespace Landis.Extension.Succession.NECN_Hydro
     {
         public static readonly string ExtensionName = "NECN_Hydro Succession";
         private static ICore modelCore;
-        private IInputParameters parameters;
-        public static double AtmosNslope;
-        public static double AtmosNintercept;
-        public static double Latitude;
-        public static double DenitrificationRate;
-        public static double DecayRateSurf;
-        public static double DecayRateSOM1;
-        public static double DecayRateSOM2;
-        public static double DecayRateSOM3;
-        public static List<int> SWHC_List = new List<int>(0);
+        public static IInputParameters Parameters;
+        //public static double AtmosNslope;
+        //public static double AtmosNintercept;
+        //public static double Latitude;
+        //public static double DenitrificationRate;
+        //public static double DecayRateSurf;
+        //public static double DecayRateSOM1;
+        //public static double DecayRateSOM2;
+        //public static double DecayRateSOM3;
+        //public static List<int> SWHC_List = new List<int>(0);
         //public static int[] SWHC_Count;
         public static double[] ShadeLAI;
         public static double AnnualWaterBalance;
@@ -70,7 +69,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             modelCore = mCore;
             SiteVars.Initialize();
             InputParametersParser parser = new InputParametersParser();
-            parameters = Landis.Data.Load<IInputParameters>(dataFile, parser);
+            Parameters = Landis.Data.Load<IInputParameters>(dataFile, parser);
 
         }
 
@@ -90,50 +89,50 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public override void Initialize()
         {
             PlugIn.ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
-            Timestep              = parameters.Timestep;
+            Timestep              = Parameters.Timestep;
             SuccessionTimeStep    = Timestep;
-            sufficientLight       = parameters.LightClassProbabilities;
-            ProbEstablishAdjust = parameters.ProbEstablishAdjustment;
+            sufficientLight       = Parameters.LightClassProbabilities;
+            ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
             MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); //,LAIMapNames, ShadeClassMapNames);
             //CohortBiomass.SpinupMortalityFraction = parameters.SpinupMortalityFraction;
             
             //Initialize climate.
-            Climate.Initialize(parameters.ClimateConfigFile, false, modelCore);
+            Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
             FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
             
-            ClimateRegionData.Initialize(parameters);
-            SpeciesData.Initialize(parameters);
-            Util.ReadSoilDepthMap(parameters.SoilDepthMapName);
-            Util.ReadSoilDrainMap(parameters.SoilDrainMapName);
-            Util.ReadSoilBaseFlowMap(parameters.SoilBaseFlowMapName);
-            Util.ReadSoilStormFlowMap(parameters.SoilStormFlowMapName);
-            Util.ReadFieldCapacityMap(parameters.SoilFieldCapacityMapName);
-            Util.ReadWiltingPointMap(parameters.SoilWiltingPointMapName);
-            Util.ReadPercentSandMap(parameters.SoilPercentSandMapName);
-            Util.ReadPercentClayMap(parameters.SoilPercentClayMapName);
-            Util.ReadSoilCNMaps(parameters.InitialSOM1CSurfaceMapName, 
-                parameters.InitialSOM1NSurfaceMapName,
-                parameters.InitialSOM1CSoilMapName,
-                parameters.InitialSOM1NSoilMapName,
-                parameters.InitialSOM2CMapName,
-                parameters.InitialSOM2NMapName,
-                parameters.InitialSOM3CMapName,
-                parameters.InitialSOM3NMapName);
-            Util.ReadDeadWoodMaps(parameters.InitialDeadSurfaceMapName, parameters.InitialDeadSoilMapName);
+            ClimateRegionData.Initialize(Parameters);
+            SpeciesData.Initialize(Parameters);
+            Util.ReadSoilDepthMap(Parameters.SoilDepthMapName);
+            Util.ReadSoilDrainMap(Parameters.SoilDrainMapName);
+            Util.ReadSoilBaseFlowMap(Parameters.SoilBaseFlowMapName);
+            Util.ReadSoilStormFlowMap(Parameters.SoilStormFlowMapName);
+            Util.ReadFieldCapacityMap(Parameters.SoilFieldCapacityMapName);
+            Util.ReadWiltingPointMap(Parameters.SoilWiltingPointMapName);
+            Util.ReadPercentSandMap(Parameters.SoilPercentSandMapName);
+            Util.ReadPercentClayMap(Parameters.SoilPercentClayMapName);
+            Util.ReadSoilCNMaps(Parameters.InitialSOM1CSurfaceMapName, 
+                Parameters.InitialSOM1NSurfaceMapName,
+                Parameters.InitialSOM1CSoilMapName,
+                Parameters.InitialSOM1NSoilMapName,
+                Parameters.InitialSOM2CMapName,
+                Parameters.InitialSOM2NMapName,
+                Parameters.InitialSOM3CMapName,
+                Parameters.InitialSOM3NMapName);
+            Util.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
 
-            AtmosNslope = parameters.AtmosNslope;
-            AtmosNintercept = parameters.AtmosNintercept;
-            Latitude = parameters.Latitude;
-            DenitrificationRate = parameters.Denitrif;
-            DecayRateSurf = parameters.DecayRateSurf;
-            DecayRateSOM1 = parameters.DecayRateSOM1;
-            DecayRateSOM2 = parameters.DecayRateSOM2;
-            DecayRateSOM3 = parameters.DecayRateSOM3;
+            //AtmosNslope = parameters.AtmosNslope;
+            //AtmosNintercept = parameters.AtmosNintercept;
+            //Latitude = parameters.Latitude;
+            //DenitrificationRate = parameters.Denitrif;
+            //DecayRateSurf = parameters.DecayRateSurf;
+            //DecayRateSOM1 = parameters.DecayRateSOM1;
+            //DecayRateSOM2 = parameters.DecayRateSOM2;
+            //DecayRateSOM3 = parameters.DecayRateSOM3;
 
-            ShadeLAI = parameters.MaximumShadeLAI; //.MinRelativeBiomass;
-            OtherData.Initialize(parameters);
-            FunctionalType.Initialize(parameters);
-            FireEffects.Initialize(parameters);
+            ShadeLAI = Parameters.MaximumShadeLAI; //.MinRelativeBiomass;
+            OtherData.Initialize(Parameters);
+            FunctionalType.Initialize(Parameters);
+            FireEffects.Initialize(Parameters);
 
             //  Cohorts must be created before the base class is initialized
             //  because the base class' reproduction module uses the core's
@@ -145,15 +144,15 @@ namespace Landis.Extension.Succession.NECN_Hydro
             Reproduction.Establish = Establish;
             Reproduction.AddNewCohort = AddNewCohort;
             Reproduction.MaturePresent = MaturePresent;
-            base.Initialize(modelCore, parameters.SeedAlgorithm);
+            base.Initialize(modelCore, Parameters.SeedAlgorithm);
             Landis.Library.LeafBiomassCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
             Landis.Library.BiomassCohorts.Cohort.DeathEvent += CohortDied;
-            AgeOnlyDisturbances.Module.Initialize(parameters.AgeOnlyDisturbanceParms);
+            AgeOnlyDisturbances.Module.Initialize(Parameters.AgeOnlyDisturbanceParms);
 
             //InitialBiomass.Initialize(Timestep);
-            InitializeSites(parameters.InitialCommunities, parameters.InitialCommunitiesMap, modelCore); 
+            InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore); 
             
-            if (parameters.CalibrateMode)
+            if (Parameters.CalibrateMode)
                 Outputs.CreateCalibrateLogFile();
             Establishment.InitializeLogFile();
 
@@ -165,7 +164,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             }
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
-                Century.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
+                Main.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
 
             Outputs.WritePrimaryLogFile(0);
             Outputs.WriteShortPrimaryLogFile(0);
@@ -247,19 +246,9 @@ namespace Landis.Extension.Succession.NECN_Hydro
         protected override void InitializeSite(ActiveSite site,
                                                ICommunity initialCommunity)
         {
-            //int swhc = (int)((SiteVars.SoilFieldCapacity[site] - SiteVars.SoilWiltingPoint[site]) * SiteVars.SoilDepth[site]);
-            ////if (!PlugIn.SWHC_List.Contains(swhc))
-            ////    PlugIn.SWHC_List.Add(swhc);
-
-            //if (!PlugIn.SWHC_List.Contains(swhc))
-            //{
-            //    PlugIn.SWHC_List.Add(swhc);
-            //    PlugIn.SWHC_List.Sort();
-            //}
-            //PlugIn.ModelCore.UI.WriteLine("SWHC = {0}", swhc);
 
             InitialBiomass initialBiomass = InitialBiomass.Compute(site, initialCommunity);
-            SiteVars.MineralN[site] = parameters.InitialMineralN;
+            SiteVars.MineralN[site] = Parameters.InitialMineralN;
         }
 
 
@@ -341,7 +330,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                                            ushort     years,
                                            int?       successionTimestep)
         {
-            Century.Run(site, years, successionTimestep.HasValue);
+            Main.Run(site, years, successionTimestep.HasValue);
 
         }
         //---------------------------------------------------------------------

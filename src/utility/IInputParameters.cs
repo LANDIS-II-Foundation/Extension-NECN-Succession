@@ -36,12 +36,11 @@ namespace Landis.Extension.Succession.NECN_Hydro
         string InitialDeadSurfaceMapName { get; set; }
         string InitialDeadSoilMapName { get; set; }
 
-
-        //double SpinupMortalityFraction { get; set; }
         bool CalibrateMode { get; set; }
         WaterType WType {get;set;}
         double ProbEstablishAdjustment { get; set; }
         double[] MaximumShadeLAI { get; }
+        bool SmokeModelOutputs { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -69,14 +68,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
             get;
             set;
         }
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// The maximum relative biomass for each shade class.
-        /// </summary>
-        //Ecoregions.AuxParm<Percentage>[] MinRelativeBiomass
-        //{
-        //    get;
-        //}
 
         //---------------------------------------------------------------------
 
@@ -117,7 +108,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         double DecayRateSOM1 { get; }
         double DecayRateSOM2 { get; }
         double DecayRateSOM3 { get; }
-        double Denitrif { get; }
+        double DenitrificationRate { get; }
         double InitialMineralN { get; }
         
 

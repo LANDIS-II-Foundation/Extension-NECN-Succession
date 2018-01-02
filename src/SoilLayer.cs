@@ -1,4 +1,3 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
 //  Author: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
@@ -37,7 +36,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 //Compute total C flow out of surface microbes.
                 double totalCflow = som1c_surface
                     * SiteVars.DecayFactor[site]
-                    * PlugIn.DecayRateSurf //ClimateRegionData.DecayRateSurf[ecoregion]
+                    * PlugIn.Parameters.DecayRateSurf //ClimateRegionData.DecayRateSurf[ecoregion]
                     * OtherData.MonthAdjust
                     * OtherData.LitterParameters[(int)LayerType.Surface].DecayRateMicrobes;
                     
@@ -87,7 +86,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 double totalCflow = som1c_soil 
                             * SiteVars.DecayFactor[site]
                             * OtherData.LitterParameters[(int) LayerType.Soil].DecayRateMicrobes
-                            * PlugIn.DecayRateSOM1 // ClimateRegionData.DecayRateSOM1[ecoregion]
+                            * PlugIn.Parameters.DecayRateSOM1 // ClimateRegionData.DecayRateSOM1[ecoregion]
                              * textureEffect
                              * anerb
                              * OtherData.MonthAdjust;
@@ -151,7 +150,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                         SiteVars.Stream[site].Nitrogen += orgflow;
                         //PlugIn.ModelCore.UI.WriteLine("DON Leaching. ratioCN_SOM1soil={0:0.00}, DON={1:0.00}.", ratioCN_SOM1soil, orgflow);
 
-                        SiteVars.MonthlyStreamN[site][Century.Month] += orgflow;
+                        SiteVars.MonthlyStreamN[site][Main.Month] += orgflow;
 
                         //PlugIn.ModelCore.UI.WriteLine("DON Leaching. totalNLeach={0:0.0}, MineralN={1:0.00}", totalNleached, SiteVars.MineralN[site]);         
 
@@ -188,7 +187,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 // Compute total C flow out of SOM2C
                 double totalCflow = som2c 
                                 * SiteVars.DecayFactor[site] 
-                                * PlugIn.DecayRateSOM2 //ClimateRegionData.DecayRateSOM2[ecoregion]
+                                * PlugIn.Parameters.DecayRateSOM2 
                                 * anerb //impact of soil anaerobic conditions
                                 * OtherData.MonthAdjust;
                 //PlugIn.ModelCore.UI.WriteLine("som2c={0:0.00}, decayFactor={1:0.00}, decayRateSOM2={2:0.00}, anerb={3:0.00}, monthAdj={4:0.00}", som2c, SiteVars.DecayFactor[site], ClimateRegionData.DecayRateSOM2[ecoregion], anerb, OtherData.MonthAdjust);
@@ -258,7 +257,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 //Compute total C flow out of SOM3C
                 double totalCflow = som3c
                                 * SiteVars.DecayFactor[site]
-                                * PlugIn.DecayRateSOM3 //ClimateRegionData.DecayRateSOM3[ecoregion]
+                                * PlugIn.Parameters.DecayRateSOM3 //ClimateRegionData.DecayRateSOM3[ecoregion]
                                 * anerb 
                                 * OtherData.MonthAdjust;
 

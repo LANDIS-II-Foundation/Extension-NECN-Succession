@@ -116,7 +116,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 double actualFrassC = inputFrassN * (double) OtherData.CNratiofrass;  // the difference between input and actual is C lost to insect metabolism
                 double actualFrassBiomass = actualFrassC / 0.47;
 
-                //PlugIn.ModelCore.UI.WriteLine("AddFrass.Month={0:0}, inputfrassN={1:0.000}, inputfrassbiomass={2:0.00}, actualfrassbiomass={3:0.00} ", Century.Month, inputFrassN, inputFrassBiomass, actualFrassBiomass);
+                //PlugIn.ModelCore.UI.WriteLine("AddFrass.Month={0:0}, inputfrassN={1:0.000}, inputfrassbiomass={2:0.00}, actualfrassbiomass={3:0.00} ", Main.Month, inputFrassN, inputFrassBiomass, actualFrassBiomass);
 
                 SiteVars.FrassC[site] += actualFrassC;
  

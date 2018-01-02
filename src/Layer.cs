@@ -1,4 +1,3 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
 //  Author: Robert Scheller, Melissa Lucash
 
 using Edu.Wisc.Forest.Flel.Util;
@@ -518,7 +517,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             this.TransferCarbon(SiteVars.SourceSink[site], co2loss);
 
             //Add lost CO2 to monthly heterotrophic respiration
-            SiteVars.MonthlyResp[site][Century.Month] += co2loss;
+            SiteVars.MonthlyResp[site][Main.Month] += co2loss;
 
             this.Nitrogen -= mineralNFlow;
             SiteVars.MineralN[site] += mineralNFlow;

@@ -95,7 +95,7 @@
     <Compile Include="metadata\PrimaryLogShort.cs" />
     <Compile Include="metadata\PrimaryLog.cs" />
     <Compile Include="utility\BaseCohortsSiteVar.cs" />
-    <Compile Include="Century.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="CohortBiomass.cs" />
     <Compile Include="ClimateRegionData.cs" />
     <Compile Include="Establishment.cs" />

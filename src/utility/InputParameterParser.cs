@@ -183,6 +183,12 @@ namespace Landis.Extension.Succession.NECN_Hydro
             else
                 parameters.CalibrateMode = false;
 
+            InputVar<bool> smokemode = new InputVar<bool>("SmokeModelOutputs");
+            if (ReadOptionalVar(smokemode))
+                parameters.SmokeModelOutputs = smokemode.Value;
+            else
+                parameters.SmokeModelOutputs = false;
+
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
             parameters.WType = WParse(wt.Value);

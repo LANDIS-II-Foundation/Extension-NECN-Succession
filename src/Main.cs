@@ -1,5 +1,4 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
-//  Author: Robert Scheller, Melissa Lucash
+//  Authors: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
 using Landis.SpatialModeling;
@@ -12,7 +11,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
     /// <summary>
     /// Utility methods.
     /// </summary>
-    public class Century
+    public class Main
     {
         public static int Year;
         public static int Month;
@@ -70,17 +69,17 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     SiteVars.MonthlyResp[site][Month] = 0.0;
                     SiteVars.MonthlyStreamN[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
-                    SiteVars.TotalWoodBiomass[site] = Century.ComputeWoodBiomass((ActiveSite) site);
+                    SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);
                     //SiteVars.LAI[site] = Century.ComputeLAI((ActiveSite)site);
                                    
-                    double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Century.Month];
+                    double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month];
 
                     double monthlyNdeposition;
-                    if  (PlugIn.AtmosNintercept !=-1 && PlugIn.AtmosNslope !=-1)
-                        monthlyNdeposition = PlugIn.AtmosNintercept + (PlugIn.AtmosNslope * ppt);
+                    if  (PlugIn.Parameters.AtmosNintercept !=-1 && PlugIn.Parameters.AtmosNslope !=-1)
+                        monthlyNdeposition = PlugIn.Parameters.AtmosNintercept + (PlugIn.Parameters.AtmosNslope * ppt);
                     else 
                     {
-                        monthlyNdeposition = ClimateRegionData.AnnualWeather[ecoregion].MonthlyNDeposition[Century.Month];
+                        monthlyNdeposition = ClimateRegionData.AnnualWeather[ecoregion].MonthlyNDeposition[Main.Month];
                     }
 
                     if (monthlyNdeposition < 0)
@@ -113,7 +112,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     // ML added a correction factor for wetlands since their denitrification rate is double that of wetlands
                     // based on a review paper by Seitziner 2006.
 
-                    double volatilize = (SiteVars.MineralN[site] * PlugIn.DenitrificationRate); 
+                    double volatilize = (SiteVars.MineralN[site] * PlugIn.Parameters.DenitrificationRate); 
 
                     //PlugIn.ModelCore.UI.WriteLine("BeforeVol.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
 
@@ -149,6 +148,18 @@ namespace Landis.Extension.Succession.NECN_Hydro
             return total;
         }
 
+        //---------------------------------------------------------------------
+
+        public static int ComputeNeedleBiomass(ISiteCohorts cohorts)
+        {
+            int total = 0;
+            if (cohorts != null)
+                foreach (ISpeciesCohorts speciesCohorts in cohorts)
+                    foreach (ICohort cohort in speciesCohorts)
+                        total += (int)(cohort.LeafBiomass);
+            //total += ComputeBiomass(speciesCohorts);
+            return total;
+        }
         //---------------------------------------------------------------------
 
         public static double ComputeWoodBiomass(ActiveSite site)

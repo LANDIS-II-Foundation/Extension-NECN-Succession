@@ -1,4 +1,3 @@
-//  Copyright 2007-2016 Portland State University
 //  Author: Robert Scheller
 
 //using Landis.Cohorts;
@@ -41,7 +40,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             {
                 avgNEEc += SiteVars.AnnualNEE[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;
                 avgSOMtc += GetOrganicCarbon(site) / PlugIn.ModelCore.Landscape.ActiveSiteCount; 
-                avgAGB += (double) Century.ComputeLivingBiomass(SiteVars.Cohorts[site]) / PlugIn.ModelCore.Landscape.ActiveSiteCount; 
+                avgAGB += (double) Main.ComputeLivingBiomass(SiteVars.Cohorts[site]) / PlugIn.ModelCore.Landscape.ActiveSiteCount; 
                 avgAGNPPtc += SiteVars.AGNPPcarbon[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;
                 avgMineralN += SiteVars.MineralN[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;
                 avgDeadWoodC += SiteVars.SurfaceDeadWood[site].Carbon / PlugIn.ModelCore.Landscape.ActiveSiteCount;
@@ -67,10 +66,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         //---------------------------------------------------------------------
         public static void WritePrimaryLogFile(int CurrentTime)
         {
-
-            //PlugIn.SWHC_List.Sort();
-            //int soil_count = PlugIn.SWHC_List.Count;
-            //PlugIn.ModelCore.UI.WriteLine("soil count = {0}", soil_count);
 
             double[] avgAnnualPPT = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avgJJAtemp = new double[PlugIn.ModelCore.Ecoregions.Count];
@@ -144,17 +139,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             double[] avgfrassC = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avglai = new double[PlugIn.ModelCore.Ecoregions.Count];
 
-            //int swhc_cnt = 0;
-
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
-                //foreach (int swhc in PlugIn.SWHC_List)
-                //{
-                    //int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc); 
-                    //PlugIn.ModelCore.UI.WriteLine("SHWC Index = {0}", swhc_index);
-                    //PlugIn.ModelCore.UI.WriteLine("SHWC = {0}", swhc);
-
-                    // TO DO: ADD SWHC LOOP  
                     avgAnnualPPT[ecoregion.Index] = 0.0;
                     avgJJAtemp[ecoregion.Index] = 0.0;
 
@@ -225,24 +211,16 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     avgTotalSoilN[ecoregion.Index] = 0.0;
                     avgNvol[ecoregion.Index] = 0.0;
                     avgfrassC[ecoregion.Index] = 0.0;
-                    //swhc_cnt++;
-                //}
             }
 
-
-            //int[,] Climate_SWHC_Count = new int[PlugIn.ModelCore.Ecoregions.Count, PlugIn.SWHC_List.Count];
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
                 IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-                //int swhc = (int)((SiteVars.SoilFieldCapacity[site] - SiteVars.SoilWiltingPoint[site]) * SiteVars.SoilDepth[site]);
-                //int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc);
-
-                //Climate_SWHC_Count[ecoregion.Index]++;
 
                 avgNEEc[ecoregion.Index] += SiteVars.AnnualNEE[site];
                 avgSOMtc[ecoregion.Index] += GetOrganicCarbon(site);
-                avgAGB[ecoregion.Index] += Century.ComputeLivingBiomass(SiteVars.Cohorts[site]);
+                avgAGB[ecoregion.Index] += Main.ComputeLivingBiomass(SiteVars.Cohorts[site]);
 
                 avgAGNPPtc[ecoregion.Index] += SiteVars.AGNPPcarbon[site];
                 avgBGNPPtc[ecoregion.Index] += SiteVars.BGNPPcarbon[site];
@@ -321,14 +299,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 pl.ClimateRegionName =    ecoregion.Name;
                 pl.ClimateRegionIndex = ecoregion.Index;
                 
- 
-
-                //foreach (int swhc in PlugIn.SWHC_List)
-                //{
-                //    int swhc_index = PlugIn.SWHC_List.BinarySearch(swhc);
-
-
-                    //pl.SoilWaterHoldingCapacity = swhc;
                 pl.NumSites = ClimateRegionData.ActiveSiteCount[ecoregion]; //Climate_SWHC_Count[ecoregion.Index]; // ClimateRegionData.ActiveSiteCount[ecoregion];
 
                     pl.NEEC = (avgNEEc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
@@ -513,8 +483,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static void WriteMaps()
         {
 
-            //if (PlugIn.SoilCarbonMapNames != null)// && (PlugIn.ModelCore.CurrentTime % SoilCarbonMapFrequency) == 0)
-            //{
                 string pathH2O = MapNames.ReplaceTemplateVars(@"NECN_Hydro\Annual-water-budget-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                 using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathH2O, PlugIn.ModelCore.Landscape.Dimensions))
                 {
@@ -617,9 +585,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                             outputRaster.WriteBufferPixel();
                         }
                     }
-                //}
-                //if (PlugIn.TotalCMapNames != null) 
-                //{
 
                     string path5 = MapNames.ReplaceTemplateVars(@"NECN_Hydro\TotalC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path5, PlugIn.ModelCore.Landscape.Dimensions))
@@ -687,30 +652,68 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                 }
 
+            if (PlugIn.Parameters.SmokeModelOutputs)
+            {
+                string pathNeedles = MapNames.ReplaceTemplateVars(@"NECN_Hydro\ConiferNeedleBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathNeedles, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = (int)(Main.ComputeNeedleBiomass(SiteVars.Cohorts[site]));
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
 
-                //if (PlugIn.ShadeClassMapNames != null)// && (PlugIn.ModelCore.CurrentTime % LAIMapFrequency) == 0)
-                //{
+                string pathDWD = MapNames.ReplaceTemplateVars(@"NECN_Hydro\DeadWoodBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDWD, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = (int)SiteVars.SurfaceDeadWood[site].Carbon * 2;
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
 
-                //    string path5 = MapNames.ReplaceTemplateVars(PlugIn.ShadeClassMapNames, PlugIn.ModelCore.CurrentTime);
-                //    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path5, PlugIn.ModelCore.Landscape.Dimensions))
-                //    {
-                //        IntPixel pixel = outputRaster.BufferPixel;
-                //        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
-                //        {
-                //            if (site.IsActive)
-                //            {
-                //                pixel.MapCode.Value = (short)(SiteVars.ShadeClass[site]); //Shade Class SiteCar doesn't exist. Just a placeholder
-                //            }
-                //            else
-                //            {
-                //                //  Inactive site
-                //                pixel.MapCode.Value = 0;
-                //            }
-                //            outputRaster.WriteBufferPixel();
-                //        }
-                //    }
-                //}
+                string pathLitter = MapNames.ReplaceTemplateVars(@"NECN_Hydro\SurfaceLitterBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathLitter, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = (int)(SiteVars.SOM1surface[site].Carbon + SiteVars.SurfaceStructural[site].Carbon +
+                    SiteVars.SurfaceMetabolic[site].Carbon) * 2;
+;
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
 
+            }
         }
         
         //---------------------------------------------------------------------
@@ -772,11 +775,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         {
             double totalC = 
                     
-                    //SiteVars.SurfaceStructural[site].Carbon
-                    //+ SiteVars.SoilStructural[site].Carbon
-                    //+ SiteVars.SurfaceMetabolic[site].Carbon
-                    //+ SiteVars.SoilMetabolic[site].Carbon
-
                     SiteVars.SOM1surface[site].Carbon
                     + SiteVars.SOM1soil[site].Carbon
                     + SiteVars.SOM2[site].Carbon

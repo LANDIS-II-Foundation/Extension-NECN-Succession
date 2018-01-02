@@ -1,5 +1,4 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
-//  Author: Robert Scheller, Melissa Lucash, Melissa Lucash
+//  Author: Robert Scheller, Melissa Lucash
 
 using System.Collections.Generic;
 using System.IO;
@@ -36,7 +35,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             //     Rewritten by Bill Pulliam - 9/94
             //     Rewritten by Melissa Lucash- 11/2014
 
-            //PlugIn.ModelCore.UI.WriteLine("month={0}.", Century.Month);
+            //PlugIn.ModelCore.UI.WriteLine("month={0}.", Main.Month);
         
             //...Initialize Local Variables
             double addToSoil = 0.0;
@@ -488,7 +487,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             //PlugIn.ModelCore.UI.WriteLine("AfterSoilWaterLeaching. totalNLeach={0:0.0}, MineralN={1:0.00}", totalNleached, SiteVars.MineralN[site]);         
 
             SiteVars.Stream[site].Nitrogen += totalNleached;
-            SiteVars.MonthlyStreamN[site][Century.Month] += totalNleached;
+            SiteVars.MonthlyStreamN[site][Main.Month] += totalNleached;
             //PlugIn.ModelCore.UI.WriteLine("AfterSoilWaterLeaching. totalNLeach={0:0.0}, MineralN={1:0.00}", totalNleached, SiteVars.MineralN[site]);        
 
             return;

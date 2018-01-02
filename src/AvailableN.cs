@@ -1,6 +1,4 @@
-
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
-//  Author: Robert Scheller, Melissa Lucash, Melissa Lucash
+//  Author: Robert Scheller, Melissa Lucash
 
 using Edu.Wisc.Forest.Flel.Util;
 using System.Collections.Generic;
@@ -25,14 +23,14 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static double GetResorbedNallocation(ICohort cohort, ActiveSite site)
         {
             int cohortAddYear = GetAddYear(cohort); 
-            //PlugIn.ModelCore.UI.WriteLine("GETResorbedNallocation: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Century.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
+            //PlugIn.ModelCore.UI.WriteLine("GETResorbedNallocation: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Main.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
             double resorbedNallocation = 0.0;
             Dictionary<int, double> cohortDict;
             
             if (SiteVars.CohortResorbedNallocation[site].TryGetValue(cohort.Species.Index, out cohortDict))
                 cohortDict.TryGetValue(cohortAddYear, out resorbedNallocation);
 
-            //PlugIn.ModelCore.UI.WriteLine("GETResorbedNallocation: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Century.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
+            //PlugIn.ModelCore.UI.WriteLine("GETResorbedNallocation: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Main.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
 
             return resorbedNallocation;
         }
@@ -43,7 +41,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static void SetResorbedNallocation(ICohort cohort, double resorbedNallocation, ActiveSite site)
         {
             int cohortAddYear = GetAddYear(cohort); 
-            //PlugIn.ModelCore.UI.WriteLine("SETResorbedNallocation: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Century.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
+            //PlugIn.ModelCore.UI.WriteLine("SETResorbedNallocation: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Main.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
             Dictionary<int, double> cohortDict;
             double oldResorbedNallocation;
 
@@ -117,7 +115,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 foreach (ICohort cohort in speciesCohorts)
                 {
                     int cohortAddYear = GetAddYear(cohort); 
-                    //PlugIn.ModelCore.UI.WriteLine("CALCMineralNfraction: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Century.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
+                    //PlugIn.ModelCore.UI.WriteLine("CALCMineralNfraction: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Main.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
                     
                     //Nallocation is a measure of how much N a cohort can gather relative to other cohorts
                     //double Nallocation = Roots.CalculateFineRoot(cohort.LeafBiomass); 
@@ -181,7 +179,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 foreach (ICohort cohort in speciesCohorts)
                 {
                     int cohortAddYear = GetAddYear(cohort); 
-                    if (Century.MonthCnt == 11) 
+                    if (Main.MonthCnt == 11) 
                         cohortAddYear--;
                     
                     double Nfraction = 0.05;  //even a new cohort gets a little love
@@ -298,7 +296,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
             // Use resorbed N first and only if it is spring time unless you are evergreen.  
             double leafLongevity = SpeciesData.LeafLongevity[cohort.Species];
-            if ((leafLongevity <= 1.0 && Century.Month > 2 && Century.Month < 6) || leafLongevity > 1.0)
+            if ((leafLongevity <= 1.0 && Main.Month > 2 && Main.Month < 6) || leafLongevity > 1.0)
             {
             double resorbedNallocation = Math.Max(0.0, AvailableN.GetResorbedNallocation(cohort, site));            
 
@@ -344,8 +342,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
         private static int GetAddYear(ICohort cohort)
         {
             int currentYear = PlugIn.ModelCore.CurrentTime;
-            int cohortAddYear = currentYear - (cohort.Age - Century.Year);
-            if (Century.MonthCnt == 11)
+            int cohortAddYear = currentYear - (cohort.Age - Main.Year);
+            if (Main.MonthCnt == 11)
                 cohortAddYear++; 
             return cohortAddYear;
         }

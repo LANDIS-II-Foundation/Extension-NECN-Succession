@@ -1,4 +1,3 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
 //  Author: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
@@ -43,7 +42,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         private string initialDeadSoilMapName;
 
         private bool calibrateMode;
-        //private double spinupMortalityFraction;
+        private bool smokeModelOutputs;
         public WaterType wtype;
         public double probEstablishAdjust;
         private double atmosNslope;
@@ -85,16 +84,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         private Species.AuxParm<int> maxBiomass;
         
         private List<ISufficientLight> sufficientLight;
-
-        //private Ecoregions.AuxParm<Percentage>[] minRelativeBiomass;
-        //private Ecoregions.AuxParm<double> initSOM1surfC;
-        //private Ecoregions.AuxParm<double> initSOM1surfN;
-        //private Ecoregions.AuxParm<double> initSOM1soilC;
-        //private Ecoregions.AuxParm<double> initSOM1soilN;
-        //private Ecoregions.AuxParm<double> initSOM2C;
-        //private Ecoregions.AuxParm<double> initSOM2N;
-        //private Ecoregions.AuxParm<double> initSOM3C;
-        //private Ecoregions.AuxParm<double> initSOM3N;
 
 
         //---------------------------------------------------------------------
@@ -214,7 +203,22 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 calibrateMode = value;
             }
         }
-        
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// </summary>
+        public bool SmokeModelOutputs
+        {
+            get
+            {
+                return smokeModelOutputs;
+            }
+            set
+            {
+                smokeModelOutputs = value;
+            }
+        }
+
         //---------------------------------------------------------------------
         /// <summary>
         /// Determines whether moisture effects on decomposition follow a linear or ratio calculation.
@@ -477,7 +481,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             }
         }
         //-----------------------------------------------
-        public double Denitrif
+        public double DenitrificationRate
         {
             get
             {

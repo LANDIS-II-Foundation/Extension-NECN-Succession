@@ -1,4 +1,3 @@
-//  Copyright 2007-2016 Portland State University
 //  Author: Robert Scheller
 
 using Landis.Core;
@@ -254,7 +253,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 {
 
                     potentialET = 1.6 * (System.Math.Pow((tempFac / tempEfficiency), aExponentET)) * 
-                            AnnualClimate.LatitudeCorrection(i, PlugIn.Latitude); //ClimateRegionData.Latitude[ecoregion]);
+                            AnnualClimate.LatitudeCorrection(i, PlugIn.Parameters.Latitude); //ClimateRegionData.Latitude[ecoregion]);
                 } 
                 else 
                 {

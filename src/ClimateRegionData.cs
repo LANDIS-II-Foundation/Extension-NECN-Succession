@@ -1,4 +1,3 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
 //  Author: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
@@ -42,7 +41,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                 if (ecoregion.Active)
                 {
-                    Climate.GenerateEcoregionClimateData(ecoregion, 0, PlugIn.Latitude); 
+                    Climate.GenerateEcoregionClimateData(ecoregion, 0, PlugIn.Parameters.Latitude); 
                     SetSingleAnnualClimate(ecoregion, 0, Climate.Phase.SpinUp_Climate);  // Some placeholder data to get things started.
                 }
             }
