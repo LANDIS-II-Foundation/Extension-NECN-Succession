@@ -47,7 +47,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2_yr1, Desc = "Age Mortality Biomass", Format = "0.0")]
         public double AgeMortality { get; set; }
         
-        //log.Write("MineralN, TotalN, GrossMineralization, ");
         [DataFieldAttribute(Unit = FieldUnits.g_N_m2, Desc = "Mineral N", Format = "0.00")]
         public double MineralN { get; set; }
         
@@ -57,7 +56,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         [DataFieldAttribute(Unit = FieldUnits.g_N_m2, Desc = "Gross Mineralization", Format = "0.0")]
         public double GrossMineralization { get; set; }
 
-        //log.Write("C:LeafFRoot, C:WoodCRoot, C:DeadWood, C:DeadCRoot, ");
         [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Leaf C", Format = "0.0")]
         public double C_Leaf { get; set; }
 

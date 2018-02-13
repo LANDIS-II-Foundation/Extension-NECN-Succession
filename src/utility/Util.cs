@@ -557,6 +557,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
                                                           mapValue, 0.0, 50000.0, site.Location.Row, site.Location.Column);
                         SiteVars.SurfaceDeadWood[site].Carbon = mapValue * 0.47;
                         SiteVars.SurfaceDeadWood[site].Nitrogen = mapValue * 0.47 / 200.0;  // 200 is a generic wood CN ratio
+                        SiteVars.SoilStructural[site].Carbon = SiteVars.SurfaceDeadWood[site].Carbon * 0.85 * PlugIn.Parameters.InitialFineFuels;
+                        SiteVars.SoilStructural[site].Nitrogen = SiteVars.SoilStructural[site].Carbon / OtherData.StructuralCN;
+                        SiteVars.SoilMetabolic[site].Carbon = SiteVars.SurfaceDeadWood[site].Carbon * 0.15 * PlugIn.Parameters.InitialFineFuels;
+                        SiteVars.SoilMetabolic[site].Nitrogen = SiteVars.SoilMetabolic[site].Carbon / 10;  // a generic metabolic CN ratio
 
                     }
                 }

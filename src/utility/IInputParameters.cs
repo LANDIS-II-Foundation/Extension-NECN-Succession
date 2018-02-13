@@ -110,6 +110,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         double DecayRateSOM3 { get; }
         double DenitrificationRate { get; }
         double InitialMineralN { get; }
+        double InitialFineFuels { get; }
         
 
         //---------------------------------------------------------------------

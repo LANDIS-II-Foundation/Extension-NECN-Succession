@@ -22,16 +22,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static readonly string ExtensionName = "NECN_Hydro Succession";
         private static ICore modelCore;
         public static IInputParameters Parameters;
-        //public static double AtmosNslope;
-        //public static double AtmosNintercept;
-        //public static double Latitude;
-        //public static double DenitrificationRate;
-        //public static double DecayRateSurf;
-        //public static double DecayRateSOM1;
-        //public static double DecayRateSOM2;
-        //public static double DecayRateSOM3;
-        //public static List<int> SWHC_List = new List<int>(0);
-        //public static int[] SWHC_Count;
         public static double[] ShadeLAI;
         public static double AnnualWaterBalance;
 
@@ -149,7 +139,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
             Landis.Library.BiomassCohorts.Cohort.DeathEvent += CohortDied;
             AgeOnlyDisturbances.Module.Initialize(Parameters.AgeOnlyDisturbanceParms);
 
-            //InitialBiomass.Initialize(Timestep);
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore); 
             
             if (Parameters.CalibrateMode)

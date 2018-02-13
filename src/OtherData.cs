@@ -31,10 +31,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public const double FractionSOM2toCO2 = 0.55;
         public const double FractionSOM3toCO2 = 0.55;
 
-        //> Base DecayRate SOM2 (DEC5) and SOM3 (DEC4)
-        //public const double DecayRateSOM2 = 0.2;  // ffix.100 = 0.2  Now an input parameter
-        //public const double DecayRateSOM3 = 0.0045;  // Now an input parameter
-
         public const double StructuralCN = 200;  // (RCESTR)
 
         // ANIMPT - Slope term used to vary the impact of soil anaerobic conditions on

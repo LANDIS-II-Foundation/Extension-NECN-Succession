@@ -1,6 +1,6 @@
 #define PackageName      "NECN_Hydro Succession"
 #define PackageNameLong  "NECN_Hydro Succession Extension"
-#define Version          "0.9.3"
+#define Version          "0.9.4"
 #define ReleaseType      "official"
 #define ReleaseNumber    "0.0"
 #define CoreVersion      "6.0"

@@ -55,8 +55,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
         private double decayRateSOM3;
         private double[] maximumShadeLAI;
         private double initMineralN;
+        private double initFineFuels;
 
-        //private IEcoregionDataset ecoregionDataset;
         private ISpeciesDataset speciesDataset;
         
         private FunctionalTypeTable functionalTypes;
@@ -159,21 +159,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 communitiesMap = value;
             }
         }
-        //---------------------------------------------------------------------
-
-        //public double SpinupMortalityFraction
-        //{
-        //    get
-        //    {
-        //        return spinupMortalityFraction;
-        //    }
-        //    set
-        //    {
-        //        if (value < 0.0 || value > 0.5)
-        //            throw new InputValueException(value.ToString(), "SpinupMortalityFraction must be > 0.0 and < 0.5");
-        //        spinupMortalityFraction = value;
-        //    }
-        //}
 
         //---------------------------------------------------------------------
         public string ClimateConfigFile
@@ -488,19 +473,9 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 return denitrif;
             }
         }
-
-        
-        //---------------------------------------------------------------------
-        //public Ecoregions.AuxParm<double> InitialSOM1surfC { get { return initSOM1surfC; } }
-        //public Ecoregions.AuxParm<double> InitialSOM1surfN { get { return initSOM1surfN; } }
-        //public Ecoregions.AuxParm<double> InitialSOM1soilC { get { return initSOM1soilC; } }
-        //public Ecoregions.AuxParm<double> InitialSOM1soilN { get { return initSOM1soilN; } }
-        //public Ecoregions.AuxParm<double> InitialSOM2C { get { return initSOM2C; } }
-        //public Ecoregions.AuxParm<double> InitialSOM2N { get { return initSOM2N; } }
-        //public Ecoregions.AuxParm<double> InitialSOM3C { get { return initSOM3C; } }
-        //public Ecoregions.AuxParm<double> InitialSOM3N { get { return initSOM3N; } }
         public double InitialMineralN { get { return initMineralN; } }
-        
+        public double InitialFineFuels { get { return initFineFuels; } }
+
         //---------------------------------------------------------------------
 
         public string AgeOnlyDisturbanceParms
@@ -1013,61 +988,16 @@ namespace Landis.Extension.Succession.NECN_Hydro
             denitrif = CheckBiomassParm(newValue, 0.0, 1.0);
         }
 
-       
-        //---------------------------------------------------------------------
-        //public void SetInitSOM1surfC(IEcoregion ecoregion, InputValue<double> newValue)
-        //{
-        //    Debug.Assert(ecoregion != null);
-        //    initSOM1surfC[ecoregion] = CheckBiomassParm(newValue, 0.0, 10000.0);
-        //}
-        //---------------------------------------------------------------------
-        //public void SetInitSOM1surfN(IEcoregion ecoregion, InputValue<double> newValue)
-        //{
-        //    Debug.Assert(ecoregion != null);
-        //    initSOM1surfN[ecoregion] = CheckBiomassParm(newValue, 0.0, 500.0);
-        //}
-        //---------------------------------------------------------------------
-        //public void SetInitSOM1soilC(IEcoregion ecoregion, InputValue<double> newValue)
-        //{
-        //    Debug.Assert(ecoregion != null);
-        //    initSOM1soilC[ecoregion] = CheckBiomassParm(newValue, 0.0, 10000.0);
-        //}
-        ////---------------------------------------------------------------------
-        //public void SetInitSOM1soilN(IEcoregion ecoregion, InputValue<double> newValue)
-        //{
-        //    Debug.Assert(ecoregion != null);
-        //    initSOM1soilN[ecoregion] = CheckBiomassParm(newValue, 0.0, 500.0);
-        //}
-        //---------------------------------------------------------------------
-        //public void SetInitSOM2C(IEcoregion ecoregion, InputValue<double> newValue)
-        //{
-        //    Debug.Assert(ecoregion != null);
-        //    initSOM2C[ecoregion] = CheckBiomassParm(newValue, 0.0, 20000.0);
-        //}
-        ////---------------------------------------------------------------------
-        //public void SetInitSOM2N(IEcoregion ecoregion, InputValue<double> newValue)
-        //{
-        //    Debug.Assert(ecoregion != null);
-        //    initSOM2N[ecoregion] = CheckBiomassParm(newValue, 0.0, 1000.0);
-        //}
-        //---------------------------------------------------------------------
-        //public void SetInitSOM3C(IEcoregion ecoregion, InputValue<double> newValue)
-        //{
-        //    Debug.Assert(ecoregion != null);
-        //    initSOM3C[ecoregion] = CheckBiomassParm(newValue, 0.0, 25000.0);
-        //}
-        ////---------------------------------------------------------------------
-        //public void SetInitSOM3N(IEcoregion ecoregion, InputValue<double> newValue)
-        //{
-        //    Debug.Assert(ecoregion != null);
-        //    initSOM3N[ecoregion] = CheckBiomassParm(newValue, 0.0, 1000.0);
-        //}
         //---------------------------------------------------------------------
         public void SetInitMineralN(InputValue<double> newValue)
         {
             initMineralN = CheckBiomassParm(newValue, 0.0, 5000.0);
         }
         //---------------------------------------------------------------------
+        public void SetInitFineFuels(InputValue<double> newValue)
+        {
+            initFineFuels = CheckBiomassParm(newValue, 0.0, 1.0);
+        }
         //---------------------------------------------------------------------
 
         public InputParameters(//IEcoregionDataset ecoregionDataset,
