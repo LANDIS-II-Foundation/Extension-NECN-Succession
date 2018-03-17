@@ -110,15 +110,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 Parameters.InitialSOM3NMapName);
             Util.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
 
-            //AtmosNslope = parameters.AtmosNslope;
-            //AtmosNintercept = parameters.AtmosNintercept;
-            //Latitude = parameters.Latitude;
-            //DenitrificationRate = parameters.Denitrif;
-            //DecayRateSurf = parameters.DecayRateSurf;
-            //DecayRateSOM1 = parameters.DecayRateSOM1;
-            //DecayRateSOM2 = parameters.DecayRateSOM2;
-            //DecayRateSOM3 = parameters.DecayRateSOM3;
-
             ShadeLAI = Parameters.MaximumShadeLAI; //.MinRelativeBiomass;
             OtherData.Initialize(Parameters);
             FunctionalType.Initialize(Parameters);
@@ -136,7 +127,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             Reproduction.MaturePresent = MaturePresent;
             base.Initialize(modelCore, Parameters.SeedAlgorithm);
             Landis.Library.LeafBiomassCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
-            Landis.Library.BiomassCohorts.Cohort.DeathEvent += CohortDied;
+            Landis.Library.LeafBiomassCohorts.Cohort.DeathEvent += CohortDied;
             AgeOnlyDisturbances.Module.Initialize(Parameters.AgeOnlyDisturbanceParms);
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore); 
@@ -275,6 +266,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             return;
         }
         //---------------------------------------------------------------------
+        // Not just sleeve mortality... true mortality
 
         public void CohortDied(object         sender,
                                Landis.Library.BiomassCohorts.DeathEventArgs eventArgs)
@@ -310,6 +302,13 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     Landis.Library.Succession.Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
                 else
                     Landis.Library.Succession.Reproduction.CheckForResprouting(eventArgs.Cohort, site);
+
+                ForestFloor.AddWoodLitter(wood, cohort.Species, eventArgs.Site);
+                ForestFloor.AddFoliageLitter(foliar, cohort.Species, eventArgs.Site);
+
+                Roots.AddCoarseRootLitter(wood, cohort, cohort.Species, eventArgs.Site);
+                Roots.AddFineRootLitter(foliar, cohort, cohort.Species, eventArgs.Site);
+
             }
         }
 

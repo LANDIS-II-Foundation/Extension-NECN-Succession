@@ -20,8 +20,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
     public class InitialBiomass
     {
         private ISiteCohorts cohorts;
-        
-        
+
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -29,21 +29,19 @@ namespace Landis.Extension.Succession.NECN_Hydro
         /// </summary>
         public ISiteCohorts Cohorts
         {
-            get {
+            get
+            {
                 return cohorts;
             }
         }
-        
-        
+
+
         //---------------------------------------------------------------------
 
         private InitialBiomass(ISiteCohorts cohorts)
-                
-
-                
         {
             this.cohorts = cohorts;
-            
+
         }
 
 
@@ -92,28 +90,59 @@ namespace Landis.Extension.Succession.NECN_Hydro
             }
 
             InitialBiomass initialBiomass;
-            ISiteCohorts cohorts = MakeBiomassCohorts(initialCommunity, site);
+
+            List<Landis.Library.LeafBiomassCohorts.ICohort> sortedAgeCohorts = SortCohorts(initialCommunity.Cohorts);
+
+            ISiteCohorts cohorts = MakeBiomassCohorts(sortedAgeCohorts, site);
             initialBiomass = new InitialBiomass(cohorts);
 
             return initialBiomass;
         }
 
         //---------------------------------------------------------------------
-        public static ISiteCohorts MakeBiomassCohorts(ICommunity initComm, ActiveSite site)
+        public static ISiteCohorts MakeBiomassCohorts(List<Landis.Library.LeafBiomassCohorts.ICohort> sortedCohorts, ActiveSite site)
         {
+
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
             SiteVars.Cohorts[site] = new Library.LeafBiomassCohorts.SiteCohorts();
 
-            foreach(ISpeciesCohorts cohorts in initComm.Cohorts)
+            foreach (ICohort cohort in sortedCohorts)
             {
-                foreach(ICohort cohort in cohorts)
-                    SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Age, cohort.WoodBiomass, cohort.LeafBiomass);                
+                //foreach(ICohort cohort in cohorts)
+                SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Age, cohort.WoodBiomass, cohort.LeafBiomass);
             }
             return SiteVars.Cohorts[site];
         }
 
-        //---------------------------------------------------------------------
 
+        public static List<Landis.Library.LeafBiomassCohorts.ICohort> SortCohorts(List<Landis.Library.LeafBiomassCohorts.ISpeciesCohorts> sppCohorts)
+        {
+            List<Landis.Library.LeafBiomassCohorts.ICohort> cohorts = new List<Landis.Library.LeafBiomassCohorts.ICohort>();
+            foreach (Landis.Library.LeafBiomassCohorts.ISpeciesCohorts speciesCohorts in sppCohorts)
+            {
+                foreach (Landis.Library.LeafBiomassCohorts.ICohort cohort in speciesCohorts)
+                {
+                    cohorts.Add(cohort);
+                    //PlugIn.ModelCore.UI.WriteLine("ADDED:  {0} {1}.", cohort.Species.Name, cohort.Age);
+                }
+            }
+            cohorts.Sort(WhichIsOlderCohort);
+            return cohorts;
+        }
+
+        private static int WhichIsOlderCohort(ICohort x, ICohort y)
+        {
+            return WhichIsOlder(x.Age, y.Age);
+        }
+
+        private static int WhichIsOlder(ushort x, ushort y)
+        {
+            return y - x;
+        }
     }
 }
+    
+        //---------------------------------------------------------------------
+
+    
