@@ -18,8 +18,11 @@ namespace Landis.Extension.Succession.NECN_Hydro
     public class HarvestReductions
     {
         private string prescription;
-        private double woodReduction;
-        private double litterReduction;
+        private double coarseLitterReduction;
+        private double fineLitterReduction;
+        private double somReduction;
+        private double cohortWoodReduction;
+        private double cohortLeafReduction;
 
         public string PrescriptionName
         {
@@ -33,37 +36,86 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     prescription = value;
             }
         }
-
-        public double WoodReduction
+        public double CoarseLitterReduction
         {
-            get {
-                return woodReduction;
+            get
+            {
+                return coarseLitterReduction;
             }
-            set {
+            set
+            {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Wood reduction due to fire must be between 0 and 1.0");
-                woodReduction = value;
+                    throw new InputValueException(value.ToString(), "Coarse litter reduction due to fire must be between 0 and 1.0");
+                coarseLitterReduction = value;
             }
 
         }
-        public double LitterReduction
+        public double FineLitterReduction
         {
-            get {
-                return litterReduction;
+            get
+            {
+                return fineLitterReduction;
             }
-            set {
+            set
+            {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Litter reduction due to fire must be between 0 and 1.0");
-                litterReduction = value;
+                    throw new InputValueException(value.ToString(), "Fine litter reduction due to fire must be between 0 and 1.0");
+                fineLitterReduction = value;
             }
 
         }
+        public double CohortWoodReduction
+        {
+            get
+            {
+                return cohortWoodReduction;
+            }
+            set
+            {
+                if (value < 0.0 || value > 1.0)
+                    throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
+                cohortWoodReduction = value;
+            }
+
+        }
+        public double CohortLeafReduction
+        {
+            get
+            {
+                return cohortLeafReduction;
+            }
+            set
+            {
+                if (value < 0.0 || value > 1.0)
+                    throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
+                cohortLeafReduction = value;
+            }
+
+        }
+        public double SOMReduction
+        {
+            get
+            {
+                return somReduction;
+            }
+            set
+            {
+                if (value < 0.0 || value > 1.0)
+                    throw new InputValueException(value.ToString(), "Soil Organic Matter (SOM) reduction due to fire must be between 0 and 1.0");
+                somReduction = value;
+            }
+
+        }
+
         //---------------------------------------------------------------------
         public HarvestReductions()
         {
             this.prescription = "";
-            this.WoodReduction = 0.0;
-            this.LitterReduction = 0.0;
+            this.CoarseLitterReduction = 0.0;
+            this.FineLitterReduction = 0.0;
+            this.CohortLeafReduction = 0.0;
+            this.CohortWoodReduction = 0.0;
+            this.SOMReduction = 0.0;
         }
     }
 
@@ -89,8 +141,38 @@ namespace Landis.Extension.Succession.NECN_Hydro
             ReductionsTable = parameters.HarvestReductionsTable;
         }
 
-        //---------------------------------------------------------------------
+        public static double GetCohortWoodRemoval(ActiveSite site)
+        {
 
+            double woodRemoval = 1.0;  // Default is 100% removal
+            foreach (HarvestReductions prescription in ReductionsTable)
+            {
+                if (SiteVars.HarvestPrescriptionName != null && SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
+                {
+                    woodRemoval = prescription.CohortWoodReduction;
+                }
+            }
+
+            return woodRemoval;
+
+        }
+
+        public static double GetCohortLeafRemoval(ActiveSite site)
+        {
+            double leafRemoval = 0.0;  // Default is 0% removal
+            foreach (HarvestReductions prescription in ReductionsTable)
+            {
+                if (SiteVars.HarvestPrescriptionName != null && SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
+                {
+                    leafRemoval = prescription.CohortLeafReduction;
+                }
+            }
+
+            return leafRemoval;
+
+        }
+
+        //---------------------------------------------------------------------
         /// <summary>
         /// Computes fire effects on litter, coarse woody debris, mineral soil, and charcoal.
         ///   No effects on soil organic matter (negligible according to Johnson et al. 2001).
@@ -101,14 +183,17 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
             double litterLossMultiplier = 0.0;
             double woodLossMultiplier = 0.0;
+            double som_Multiplier = 0.0;
 
             bool found = false;
             foreach (HarvestReductions prescription in ReductionsTable)
             {
                 if (SiteVars.HarvestPrescriptionName != null && SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
-                    litterLossMultiplier = prescription.LitterReduction;
-                    woodLossMultiplier = prescription.WoodReduction;
+                    litterLossMultiplier = prescription.FineLitterReduction;
+                    woodLossMultiplier = prescription.CoarseLitterReduction;
+                    som_Multiplier = prescription.SOMReduction;
+
                     found = true;
                 }
             }
@@ -144,9 +229,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
             SiteVars.FireNEfflux[site] += nitrogenLoss;
 
             // Surface dead wood
-
-            //double woodLossMultiplier = ReductionsTable[severity].WoodReduction;
-
             carbonLoss   = SiteVars.SurfaceDeadWood[site].Carbon * woodLossMultiplier;
             nitrogenLoss = SiteVars.SurfaceDeadWood[site].Nitrogen * woodLossMultiplier;
             summaryNLoss += nitrogenLoss;
@@ -159,6 +241,20 @@ namespace Landis.Extension.Succession.NECN_Hydro
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
             SiteVars.FireNEfflux[site] += nitrogenLoss;
 
+            // Soil Organic Matter
+            carbonLoss = SiteVars.SOM1surface[site].Carbon * som_Multiplier;
+            nitrogenLoss = SiteVars.SOM1surface[site].Nitrogen * som_Multiplier;
+            summaryNLoss += nitrogenLoss;
+
+            SiteVars.SOM1surface[site].Carbon -= carbonLoss;
+            SiteVars.SourceSink[site].Carbon += carbonLoss;
+            SiteVars.FireCEfflux[site] += carbonLoss;
+
+            SiteVars.SOM1surface[site].Nitrogen -= nitrogenLoss;
+            SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
+            SiteVars.FireNEfflux[site] += nitrogenLoss;
+
+            // Transfer 1% to mineral N.
             SiteVars.MineralN[site] += summaryNLoss * 0.01;
 
         }

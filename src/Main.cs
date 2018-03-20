@@ -40,8 +40,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                 SiteVars.ResetAnnualValues(site);
 
-                if(y == 0 && SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-                    FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
+                //if(y == 0 && SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
+                //    FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
 
                 // Next, Grow and Decompose each month
                 int[] months = new int[12]{6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};

@@ -574,8 +574,9 @@ namespace Landis.Extension.Succession.NECN_Hydro
             ReadName(Names.FireReductionParameters);
 
             InputVar<int> frindex = new InputVar<int>("Fire Severity Index MUST = 1-5");
-            InputVar<double> wred = new InputVar<double>("Wood Reduction");
-            InputVar<double> lred = new InputVar<double>("Litter Reduction");
+            InputVar<double> wred = new InputVar<double>("Coarse Litter Reduction");
+            InputVar<double> lred = new InputVar<double>("Fine Litter Reduction");
+            InputVar<double> som_red = new InputVar<double>("SOM Reduction");
 
             while (! AtEndOfInput && CurrentName != Names.HarvestReductionParameters && CurrentName != Names.AgeOnlyDisturbanceParms)
             {
@@ -594,24 +595,30 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 parameters.FireReductionsTable[ln] = inputFireReduction;
 
                 ReadValue(wred, currentLine);
-                inputFireReduction.WoodReduction = wred.Value;
+                inputFireReduction.CoarseLitterReduction = wred.Value;
 
                 ReadValue(lred, currentLine);
-                inputFireReduction.LitterReduction = lred.Value;
+                inputFireReduction.FineLitterReduction = lred.Value;
 
-                CheckNoDataAfter("the " + lred.Name + " column", currentLine);
+                ReadValue(som_red, currentLine);
+                inputFireReduction.SOMReduction = som_red.Value;
+
+                CheckNoDataAfter("the " + som_red.Name + " column", currentLine);
 
                 GetNextLine();
             }
 
             //--------- Read In Harvest Reductions Table ---------------------------
             InputVar<string> hreds = new InputVar<string>("HarvestReductions");
-            ReadOptionalName(Names.HarvestReductionParameters);
+            ReadName(Names.HarvestReductionParameters);
             {
                 PlugIn.ModelCore.UI.WriteLine("   Begin reading HARVEST REDUCTION parameters.");
                 InputVar<string> prescriptionName = new InputVar<string>("Prescription");
-                InputVar<double> wred_pr = new InputVar<double>("Wood Reduction");
-                InputVar<double> lred_pr = new InputVar<double>("Litter Reduction");
+                InputVar<double> wred_pr = new InputVar<double>("Coarse Litter Reduction");
+                InputVar<double> lred_pr = new InputVar<double>("Fine Litter Reduction");
+                InputVar<double> som_red_pr = new InputVar<double>("SOM Reduction");
+                InputVar<double> cohortw_red_pr = new InputVar<double>("Cohort Wood Removal");
+                InputVar<double> cohortl_red_pr = new InputVar<double>("Cohort Leaf Removal");
 
                 List<string> prescriptionNames = new List<string>();
 
@@ -626,10 +633,19 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     harvReduction.PrescriptionName = prescriptionName.Value;
 
                     ReadValue(wred_pr, currentLine);
-                    harvReduction.WoodReduction = wred.Value;
+                    harvReduction.CoarseLitterReduction = wred_pr.Value;
 
                     ReadValue(lred_pr, currentLine);
-                    harvReduction.LitterReduction = lred.Value;
+                    harvReduction.FineLitterReduction = lred_pr.Value;
+
+                    ReadValue(som_red_pr, currentLine);
+                    harvReduction.SOMReduction = som_red_pr.Value;
+
+                    ReadValue(cohortw_red_pr, currentLine);
+                    harvReduction.CohortWoodReduction = cohortw_red_pr.Value;
+
+                    ReadValue(cohortl_red_pr, currentLine);
+                    harvReduction.CohortLeafReduction = cohortl_red_pr.Value;
 
                     GetNextLine();
                 }

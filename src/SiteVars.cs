@@ -97,6 +97,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static ISiteVar<byte> FireSeverity;
         public static ISiteVar<double> WoodMortality;
         public static ISiteVar<string> HarvestPrescriptionName;
+        public static ISiteVar<int> HarvestTime;
         public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
         public static ISiteVar<double> fineFuels;
 
@@ -188,6 +189,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             annualSoilMoisture  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
+            HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 

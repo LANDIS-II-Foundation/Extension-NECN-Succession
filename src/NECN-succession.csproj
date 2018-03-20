@@ -78,14 +78,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="age-only-disturbances\DatasetParser.cs" />
-    <Compile Include="age-only-disturbances\Events.cs" />
-    <Compile Include="age-only-disturbances\IParameterDataset.cs" />
-    <Compile Include="age-only-disturbances\Module.cs" />
-    <Compile Include="age-only-disturbances\NoParameters.cs" />
-    <Compile Include="age-only-disturbances\ParameterDataset.cs" />
-    <Compile Include="age-only-disturbances\PercentageTable.cs" />
-    <Compile Include="age-only-disturbances\PoolPercentages.cs" />
     <Compile Include="AvailableN.cs" />
     <Compile Include="HarvestEffects.cs" />
     <Compile Include="LitterType.cs">
@@ -134,7 +126,8 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>call $(SolutionDir)\install-libs.cmd</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

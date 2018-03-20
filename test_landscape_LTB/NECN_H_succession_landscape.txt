@@ -100,12 +100,17 @@ HVFST	3		25.0	45.0	1.0		3.0			0.5		0.00823	2000	20.0	1.0		0.8		0.4		0.003	10		9	
 ASPEN 	4		20.0	32.0	0.2		10.0		0.5		0.00823	3000	20.0	1.0		0.8		0.4		0.003	10		9		0.1		0.1
 
 FireReductionParameters
->>	Severity	Wood	Litter
->>	Fire		Reduct	Reduct
-	1			0.0		0.5
-	2			0.05	0.75
-	3			0.2		1.0
-	4			0.5		1.0
-	5			0.8		1.0
+>>	Severity	WoodLitter	Litter	SOM
+>>	Fire		Reduct		Reduct	Reduction
+	1		0.0		0.5	0.5
+	2		0.05		0.75	0.5
+	3		0.2		1.0	0.5
+	4		0.5		1.0	0.5
+	5		0.8		1.0	0.5
+
+HarvestReductionParameters
+>>	Name		WoodLitter	Litter	SOM		CohortWood	CohortLeaf
+>>			Reduct		Reduct	Reduction	Removal		Removal
+	Clearcut	0.0		0.01	0.02		0.85		0.15
 
    

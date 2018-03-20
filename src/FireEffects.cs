@@ -17,38 +17,86 @@ namespace Landis.Extension.Succession.NECN_Hydro
     /// </summary>
     public class FireReductions
     {
-        private double woodReduction;
-        private double litterReduction;
+        private double coarseLitterReduction;
+        private double fineLitterReduction;
+        private double somReduction;
+        //private double cohortWoodReduction;
+        //private double cohortLeafReduction;
         
-        public double WoodReduction
+        public double CoarseLitterReduction
         {
             get {
-                return woodReduction; 
+                return coarseLitterReduction; 
             }
             set {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Wood reduction due to fire must be between 0 and 1.0");
-                woodReduction = value;
+                    throw new InputValueException(value.ToString(), "Coarse litter reduction due to fire must be between 0 and 1.0");
+                coarseLitterReduction = value;
             }
                
         }
-        public double LitterReduction
+        public double FineLitterReduction
         {
             get {
-                return litterReduction; 
+                return fineLitterReduction; 
             }
             set {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Litter reduction due to fire must be between 0 and 1.0");
-                litterReduction = value;
+                    throw new InputValueException(value.ToString(), "Fine litter reduction due to fire must be between 0 and 1.0");
+                fineLitterReduction = value;
             }
                
+        }
+        //public double CohortWoodReduction
+        //{
+        //    get
+        //    {
+        //        return cohortWoodReduction;
+        //    }
+        //    set
+        //    {
+        //        if (value < 0.0 || value > 1.0)
+        //            throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
+        //        cohortWoodReduction = value;
+        //    }
+
+        //}
+        //public double CohortLeafReduction
+        //{
+        //    get
+        //    {
+        //        return cohortLeafReduction;
+        //    }
+        //    set
+        //    {
+        //        if (value < 0.0 || value > 1.0)
+        //            throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
+        //        cohortLeafReduction = value;
+        //    }
+
+        //}
+        public double SOMReduction
+        {
+            get
+            {
+                return somReduction;
+            }
+            set
+            {
+                if (value < 0.0 || value > 1.0)
+                    throw new InputValueException(value.ToString(), "Soil Organic Matter (SOM) reduction due to fire must be between 0 and 1.0");
+                somReduction = value;
+            }
+
         }
         //---------------------------------------------------------------------
         public FireReductions()
         {
-            this.WoodReduction = 0.0; 
-            this.LitterReduction = 0.0;
+            this.CoarseLitterReduction = 0.0; 
+            this.FineLitterReduction = 0.0;
+            //this.CohortLeafReduction = 0.0;
+            //this.CohortWoodReduction = 0.0;
+            this.SOMReduction = 0.0;
         }
     }
     
@@ -84,12 +132,12 @@ namespace Landis.Extension.Succession.NECN_Hydro
         {
             //PlugIn.ModelCore.UI.WriteLine("   Calculating fire induced layer reductions...");
         
-            double litterLossMultiplier = ReductionsTable[severity].LitterReduction;
+            //double litterLossMultiplier = ReductionsTable[severity].FineLitterReduction;
             
             // Structural litter first
             
-            double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * litterLossMultiplier;
-            double nitrogenLoss = SiteVars.SurfaceStructural[site].Nitrogen * litterLossMultiplier;
+            double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * ReductionsTable[severity].FineLitterReduction;
+            double nitrogenLoss = SiteVars.SurfaceStructural[site].Nitrogen * ReductionsTable[severity].FineLitterReduction;
             double summaryNLoss = nitrogenLoss;
             
             SiteVars.SurfaceStructural[site].Carbon -= carbonLoss;
@@ -102,8 +150,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             
             // Metabolic litter
 
-            carbonLoss = SiteVars.SurfaceMetabolic[site].Carbon * litterLossMultiplier;
-            nitrogenLoss = SiteVars.SurfaceMetabolic[site].Nitrogen * litterLossMultiplier;
+            carbonLoss = SiteVars.SurfaceMetabolic[site].Carbon * ReductionsTable[severity].FineLitterReduction;
+            nitrogenLoss = SiteVars.SurfaceMetabolic[site].Nitrogen * ReductionsTable[severity].FineLitterReduction;
             summaryNLoss += nitrogenLoss;
             
             SiteVars.SurfaceMetabolic[site].Carbon  -= carbonLoss;
@@ -116,7 +164,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             
             // Surface dead wood
 
-            double woodLossMultiplier = ReductionsTable[severity].WoodReduction;
+            double woodLossMultiplier = ReductionsTable[severity].CoarseLitterReduction;
             
             carbonLoss   = SiteVars.SurfaceDeadWood[site].Carbon * woodLossMultiplier;
             nitrogenLoss = SiteVars.SurfaceDeadWood[site].Nitrogen * woodLossMultiplier;
@@ -130,12 +178,28 @@ namespace Landis.Extension.Succession.NECN_Hydro
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
             SiteVars.FireNEfflux[site] += nitrogenLoss;
 
-            //SiteVars.MineralN[site] += summaryNLoss * 0.01;  Need to substract N loss from Mineral N pool. -ML
-            SiteVars.MineralN[site] -= summaryNLoss * 0.01;
+            // Soil Organic Matter
+            double SOM_Multiplier = ReductionsTable[severity].SOMReduction;
+
+            carbonLoss = SiteVars.SOM1surface[site].Carbon * SOM_Multiplier;
+            nitrogenLoss = SiteVars.SOM1surface[site].Nitrogen * SOM_Multiplier;
+            summaryNLoss += nitrogenLoss;
+
+            SiteVars.SOM1surface[site].Carbon -= carbonLoss;
+            SiteVars.SourceSink[site].Carbon += carbonLoss;
+            SiteVars.FireCEfflux[site] += carbonLoss;
+
+            SiteVars.SOM1surface[site].Nitrogen -= nitrogenLoss;
+            SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
+            SiteVars.FireNEfflux[site] += nitrogenLoss;
+
+            // Transfer 1% to mineral N.
+            SiteVars.MineralN[site] += summaryNLoss * 0.01;
+            
 
         }
         //---------------------------------------------------------------------
-        
+
         // Crown scorching is when a cohort loses its foliage but is not killed.
         public static double CrownScorching(ICohort cohort, byte siteSeverity)
         {
