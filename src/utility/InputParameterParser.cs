@@ -620,13 +620,13 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 InputVar<double> cohortl_red_pr = new InputVar<double>("Cohort Leaf Removal");
 
                 List<string> prescriptionNames = new List<string>();
-                HarvestReductions harvReduction = new HarvestReductions();
-                parameters.HarvestReductionsTable.Add(harvReduction);
 
                 while (!AtEndOfInput)// && CurrentName) != Names.AgeOnlyDisturbanceParms)
                 {
 
                     StringReader currentLine = new StringReader(CurrentLine);
+                    HarvestReductions harvReduction = new HarvestReductions();
+                    parameters.HarvestReductionsTable.Add(harvReduction);
 
                     ReadValue(prescriptionName, currentLine);
                     harvReduction.PrescriptionName = prescriptionName.Value;
