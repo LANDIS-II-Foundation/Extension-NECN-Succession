@@ -145,9 +145,12 @@ namespace Landis.Extension.Succession.NECN_Hydro
         {
 
             double woodRemoval = 1.0;  // Default is 100% removal
-            foreach (HarvestReductions prescription in ReductionsTable)
+            if (SiteVars.HarvestPrescriptionName == null)
+                return woodRemoval;
+
+            foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
-                if (SiteVars.HarvestPrescriptionName != null && SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
+                if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
                     woodRemoval = prescription.CohortWoodReduction;
                 }
@@ -160,9 +163,12 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static double GetCohortLeafRemoval(ActiveSite site)
         {
             double leafRemoval = 0.0;  // Default is 0% removal
-            foreach (HarvestReductions prescription in ReductionsTable)
+            if (SiteVars.HarvestPrescriptionName == null)
+                return leafRemoval;
+
+            foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
-                if (SiteVars.HarvestPrescriptionName != null && SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
+                if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
                     leafRemoval = prescription.CohortLeafReduction;
                 }
