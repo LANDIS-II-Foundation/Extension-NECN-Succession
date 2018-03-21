@@ -115,14 +115,14 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         //---------------------------------------------------------------------
 
-        /// <summary>
-        /// Path to the file with the biomass parameters for age-only
-        /// disturbances.
-        /// </summary>
-        string AgeOnlyDisturbanceParms
-        {
-            get;set;
-        }
+        ///// <summary>
+        ///// Path to the file with the biomass parameters for age-only
+        ///// disturbances.
+        ///// </summary>
+        //string AgeOnlyDisturbanceParms
+        //{
+        //    get;set;
+        //}
 
         
     }

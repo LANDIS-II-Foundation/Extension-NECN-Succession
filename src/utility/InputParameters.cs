@@ -21,7 +21,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         private string climateConfigFile;
         private string initCommunities;
         private string communitiesMap;
-        private string ageOnlyDisturbanceParms;
+        //private string ageOnlyDisturbanceParms;
         private string soilDepthMapName;
         private string soilDrainMapName;
         private string soilBaseFlowMapName;
@@ -478,18 +478,18 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         //---------------------------------------------------------------------
 
-        public string AgeOnlyDisturbanceParms
-        {
-            get {
-                return ageOnlyDisturbanceParms;
-            }
-            set {
-                string path = value;
-                if (path.Trim(null).Length == 0)
-                    throw new InputValueException(path,"\"{0}\" is not a valid path.",path);
-                ageOnlyDisturbanceParms = value;
-            }
-        }
+        //public string AgeOnlyDisturbanceParms
+        //{
+        //    get {
+        //        return ageOnlyDisturbanceParms;
+        //    }
+        //    set {
+        //        string path = value;
+        //        if (path.Trim(null).Length == 0)
+        //            throw new InputValueException(path,"\"{0}\" is not a valid path.",path);
+        //        ageOnlyDisturbanceParms = value;
+        //    }
+        //}
 
         //---------------------------------------------------------------------
         public string SoilDepthMapName

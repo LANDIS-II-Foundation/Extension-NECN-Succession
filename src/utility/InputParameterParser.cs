@@ -35,7 +35,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             public const string FunctionalGroupParameters = "FunctionalGroupParameters";
             public const string FireReductionParameters = "FireReductionParameters";
             public const string HarvestReductionParameters = "HarvestReductionParameters";
-            public const string AgeOnlyDisturbanceParms = "AgeOnlyDisturbances:BiomassParameters";
+            //public const string AgeOnlyDisturbanceParms = "AgeOnlyDisturbances:BiomassParameters";
         }
 
         //---------------------------------------------------------------------
@@ -100,9 +100,9 @@ namespace Landis.Extension.Succession.NECN_Hydro
             ReadVar(climateConfigFile);
             parameters.ClimateConfigFile = climateConfigFile.Value;
 
-            InputVar<string> ageOnlyDisturbanceParms = new InputVar<string>("AgeOnlyDisturbances:BiomassParameters");
-            ReadVar(ageOnlyDisturbanceParms);
-            parameters.AgeOnlyDisturbanceParms = ageOnlyDisturbanceParms.Value;
+            //InputVar<string> ageOnlyDisturbanceParms = new InputVar<string>("AgeOnlyDisturbances:BiomassParameters");
+            //ReadVar(ageOnlyDisturbanceParms);
+            //parameters.AgeOnlyDisturbanceParms = ageOnlyDisturbanceParms.Value;
 
             InputVar<string> soilDepthMapName = new InputVar<string>("SoilDepthMapName");
             ReadVar(soilDepthMapName);
@@ -511,7 +511,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                                               ftindex.Value.String, numFunctionalTypes-1);
 
 
-                //IEditableFunctionalType funcTParms = new EditableFunctionalType();
                 FunctionalType funcTParms = new FunctionalType();
                 parameters.FunctionalTypes[ln] = funcTParms;
 
@@ -578,7 +577,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             InputVar<double> lred = new InputVar<double>("Fine Litter Reduction");
             InputVar<double> som_red = new InputVar<double>("SOM Reduction");
 
-            while (! AtEndOfInput && CurrentName != Names.HarvestReductionParameters && CurrentName != Names.AgeOnlyDisturbanceParms)
+            while (! AtEndOfInput && CurrentName != Names.HarvestReductionParameters)// && CurrentName != Names.AgeOnlyDisturbanceParms)
             {
                 StringReader currentLine = new StringReader(CurrentLine);
 
@@ -621,11 +620,11 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 InputVar<double> cohortl_red_pr = new InputVar<double>("Cohort Leaf Removal");
 
                 List<string> prescriptionNames = new List<string>();
+                HarvestReductions harvReduction = new HarvestReductions();
+                parameters.HarvestReductionsTable.Add(harvReduction);
 
-                while (!AtEndOfInput && CurrentName != Names.AgeOnlyDisturbanceParms)
+                while (!AtEndOfInput)// && CurrentName) != Names.AgeOnlyDisturbanceParms)
                 {
-                    HarvestReductions harvReduction = new HarvestReductions();
-                    parameters.HarvestReductionsTable.Add(harvReduction);
 
                     StringReader currentLine = new StringReader(CurrentLine);
 
