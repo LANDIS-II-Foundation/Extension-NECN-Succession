@@ -114,6 +114,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             OtherData.Initialize(Parameters);
             FunctionalType.Initialize(Parameters);
             FireEffects.Initialize(Parameters);
+            HarvestEffects.Initialize(Parameters);
 
             //  Cohorts must be created before the base class is initialized
             //  because the base class' reproduction module uses the core's

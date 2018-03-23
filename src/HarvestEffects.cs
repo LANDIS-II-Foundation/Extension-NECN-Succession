@@ -134,7 +134,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         }
 
 
-        //---------------------------------------------------------------------
+        ////---------------------------------------------------------------------
 
         public static void Initialize(IInputParameters parameters)
         {
@@ -148,7 +148,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             if (SiteVars.HarvestPrescriptionName == null)
                 return woodRemoval;
 
-            foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
+            foreach (HarvestReductions prescription in ReductionsTable)
             {
                 if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
@@ -166,7 +166,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             if (SiteVars.HarvestPrescriptionName == null)
                 return leafRemoval;
 
-            foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
+            foreach (HarvestReductions prescription in ReductionsTable)
             {
                 if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
