@@ -256,6 +256,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
             if (disturbanceType.IsMemberOf("disturbance:harvest"))
             {
+                SiteVars.HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
+
                 woodInput -= woodInput * (float) HarvestEffects.GetCohortWoodRemoval(site);
                 foliarInput -= foliarInput * (float) HarvestEffects.GetCohortLeafRemoval(site);
             }
@@ -269,6 +271,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             // Although there isn't currently a partial-mortality fire extension, there could be in the future.
             if (disturbanceType.IsMemberOf("disturbance:fire"))
             {
+                SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
                 if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
                     FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
             }
@@ -308,11 +311,13 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 if (disturbanceType.IsMemberOf("disturbance:fire"))
                 {
                     Landis.Library.Succession.Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
+                    SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
                 }
                 else
                 {
                     if (disturbanceType.IsMemberOf("disturbance:harvest"))
                     {
+                        SiteVars.HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
                         wood -= wood * HarvestEffects.GetCohortWoodRemoval(site);
                         foliar -= foliar * HarvestEffects.GetCohortLeafRemoval(site);
                     }
