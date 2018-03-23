@@ -237,8 +237,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             FireSeverity        = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
 
-            //if(FireSeverity == null)
-            //    throw new System.ApplicationException("TEST Error: Fire Severity NOT Initialized.");
+            if(HarvestPrescriptionName == null)
+                throw new System.ApplicationException("TEST Error: Harvest Prescription Names NOT Initialized.");
         }
 
         //---------------------------------------------------------------------
