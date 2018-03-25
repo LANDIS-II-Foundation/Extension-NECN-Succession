@@ -301,8 +301,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
             double foliar = (double) cohort.LeafBiomass;
             double wood = (double) cohort.WoodBiomass;
 
-            //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, biomass={2}, foliage={3}.", cohort.Species.Name, cohort.Age, cohort.Biomass, foliar);
-
             if (disturbanceType != null)
             {
                 //PlugIn.ModelCore.UI.WriteLine("DISTURBANCE EVENT: Cohort Died: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, eventArgs.DisturbanceType);
@@ -325,6 +323,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 }
             }
 
+            //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
             ForestFloor.AddWoodLitter(wood, cohort.Species, eventArgs.Site);
             ForestFloor.AddFoliageLitter(foliar, cohort.Species, eventArgs.Site);
 

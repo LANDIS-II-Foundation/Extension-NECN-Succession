@@ -312,10 +312,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     pl.TotalN = (avgTotalN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     pl.GrossMineralization = (avgGrossMin[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     pl.TotalNdep = (ClimateRegionData.AnnualNDeposition[ecoregion] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    pl.C_Leaf = (avgCohortLeafC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    pl.C_FRoot = (avgCohortFRootC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    pl.C_Wood = (avgCohortWoodC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    pl.C_CRoot = (avgCohortCRootC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    pl.C_LiveLeaf = (avgCohortLeafC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    pl.C_LiveFRoot = (avgCohortFRootC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    pl.C_LiveWood = (avgCohortWoodC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    pl.C_LiveCRoot = (avgCohortCRootC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     pl.C_DeadWood = (avgWoodC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     pl.C_DeadCRoot = (avgCRootC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     pl.C_DeadLeaf_Struc = (avgSurfStrucC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
@@ -681,7 +681,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     {
                         if (site.IsActive)
                         {
-                            pixel.MapCode.Value = (int)SiteVars.SurfaceDeadWood[site].Carbon * 2;
+                            pixel.MapCode.Value = (int) (SiteVars.SurfaceDeadWood[site].Carbon * 2.0);
                         }
                         else
                         {
@@ -700,8 +700,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     {
                         if (site.IsActive)
                         {
-                            pixel.MapCode.Value = (int)(SiteVars.SOM1surface[site].Carbon + SiteVars.SurfaceStructural[site].Carbon +
-                    SiteVars.SurfaceMetabolic[site].Carbon) * 2;
+                            pixel.MapCode.Value = (int)((SiteVars.SOM1surface[site].Carbon + SiteVars.SurfaceStructural[site].Carbon +
+                    SiteVars.SurfaceMetabolic[site].Carbon) * 2.0);
 ;
                         }
                         else

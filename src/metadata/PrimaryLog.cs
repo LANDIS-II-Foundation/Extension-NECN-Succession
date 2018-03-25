@@ -56,17 +56,17 @@ namespace Landis.Extension.Succession.NECN_Hydro
         [DataFieldAttribute(Unit = FieldUnits.g_N_m2, Desc = "Gross Mineralization", Format = "0.0")]
         public double GrossMineralization { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Leaf C", Format = "0.0")]
-        public double C_Leaf { get; set; }
+        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Live Leaf C", Format = "0.0")]
+        public double C_LiveLeaf { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Fine Root C", Format = "0.0")]
-        public double C_FRoot { get; set; }
+        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Live Fine Root C", Format = "0.0")]
+        public double C_LiveFRoot { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Wood C", Format = "0.0")]
-        public double C_Wood { get; set; }
+        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Live Wood C", Format = "0.0")]
+        public double C_LiveWood { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Coarse Root C", Format = "0.0")]
-        public double C_CRoot { get; set; }
+        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Live Coarse Root C", Format = "0.0")]
+        public double C_LiveCRoot { get; set; }
 
         [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Dead Wood C", Format = "0.0")]
         public double C_DeadWood { get; set; }
