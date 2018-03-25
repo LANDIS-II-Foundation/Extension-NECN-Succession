@@ -1,7 +1,7 @@
 LandisData  "Base Harvest"
 
 
-Timestep    10
+Timestep    1
 
 
 
@@ -33,8 +33,8 @@ Prescription MaxAgeClearcut
     HarvestImplementations
 >>	Mgmt Area	Prescription		Harvest Area	BeginTime	EndTime
 >> 	---------   	------------   		------------   	---------- 	--------
-	1		MaxAgeClearcut			5%	0		100
-	2		MaxAgeClearcut			10%	0		100
+	1		MaxAgeClearcut			5%	0		4
+	2		MaxAgeClearcut			10%	0		4
 
 
 	

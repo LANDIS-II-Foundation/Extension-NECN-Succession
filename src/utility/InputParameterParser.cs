@@ -610,7 +610,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             //--------- Read In Harvest Reductions Table ---------------------------
             InputVar<string> hreds = new InputVar<string>("HarvestReductions");
             ReadName(Names.HarvestReductionParameters);
-            {
+           // {
                 PlugIn.ModelCore.UI.WriteLine("   Begin reading HARVEST REDUCTION parameters.");
                 InputVar<string> prescriptionName = new InputVar<string>("Prescription");
                 InputVar<double> wred_pr = new InputVar<double>("Coarse Litter Reduction");
@@ -619,9 +619,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 InputVar<double> cohortw_red_pr = new InputVar<double>("Cohort Wood Removal");
                 InputVar<double> cohortl_red_pr = new InputVar<double>("Cohort Leaf Removal");
 
-                List<string> prescriptionNames = new List<string>();
+                //List<string> prescriptionNames = new List<string>();
+                //parameters.HarvestReductionsTable = new List<HarvestReductions>(); 
 
-                while (!AtEndOfInput)// && CurrentName) != Names.AgeOnlyDisturbanceParms)
+                while (!AtEndOfInput)
                 {
 
                     StringReader currentLine = new StringReader(CurrentLine);
@@ -648,7 +649,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                     GetNextLine();
                 }
-            }
+          //  }
 
 
             return parameters; 

@@ -1000,12 +1000,9 @@ namespace Landis.Extension.Succession.NECN_Hydro
         }
         //---------------------------------------------------------------------
 
-        public InputParameters(//IEcoregionDataset ecoregionDataset,
-                                  ISpeciesDataset    speciesDataset,
-                                  int litterCnt, int functionalCnt)
+        public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
         {
             this.speciesDataset = speciesDataset;
-            //this.ecoregionDataset = ecoregionDataset;
 
             functionalTypes = new FunctionalTypeTable(functionalCnt);
             fireReductionsTable = new FireReductions[6];

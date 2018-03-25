@@ -121,25 +121,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
     public class HarvestEffects
     {
-        public static List<HarvestReductions> ReductionsTable;
-
-        public HarvestEffects()
-        {
-            ReductionsTable = new List<HarvestReductions>();  
-
-            //for(int i=0; i <= numberOfSeverities; i++)
-            //{
-            //    ReductionsTable[i] = new HarvestReductions();
-            //}
-        }
-
-
-        ////---------------------------------------------------------------------
-
-        public static void Initialize(IInputParameters parameters)
-        {
-            ReductionsTable = parameters.HarvestReductionsTable;
-        }
 
         public static double GetCohortWoodRemoval(ActiveSite site)
         {
@@ -148,8 +129,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
             if (SiteVars.HarvestPrescriptionName == null)
                 return woodRemoval;
 
-            foreach (HarvestReductions prescription in ReductionsTable)
+            foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
+                //PlugIn.ModelCore.UI.WriteLine("   PrescriptionName={0}, Site={1}.", prescription.PrescriptionName, site);
+
                 if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
                     woodRemoval = prescription.CohortWoodReduction;
@@ -166,7 +149,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             if (SiteVars.HarvestPrescriptionName == null)
                 return leafRemoval;
 
-            foreach (HarvestReductions prescription in ReductionsTable)
+            foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
                 if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
@@ -185,14 +168,14 @@ namespace Landis.Extension.Succession.NECN_Hydro
         /// </summary>
         public static void ReduceLayers(string prescriptionName, Site site)
         {
-            PlugIn.ModelCore.UI.WriteLine("   Calculating harvest induced layer reductions...");
+            //PlugIn.ModelCore.UI.WriteLine("   Calculating harvest induced layer reductions...");
 
             double litterLossMultiplier = 0.0;
             double woodLossMultiplier = 0.0;
             double som_Multiplier = 0.0;
 
             bool found = false;
-            foreach (HarvestReductions prescription in ReductionsTable)
+            foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
                 if (SiteVars.HarvestPrescriptionName != null && SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
