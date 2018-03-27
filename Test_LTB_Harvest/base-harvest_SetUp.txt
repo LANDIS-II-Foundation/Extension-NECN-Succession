@@ -1,7 +1,7 @@
 LandisData  "Base Harvest"
 
 
-Timestep    1
+Timestep    2
 
 
 
@@ -23,7 +23,7 @@ Prescription MaxAgeClearcut
     StandRanking 	MaxCohortAge
     SiteSelection 	Complete
     CohortsRemoved 	ClearCut
-
+>>    Plant PinuJeff
 
 
 >> ----------------------------------

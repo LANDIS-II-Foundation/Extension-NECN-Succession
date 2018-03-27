@@ -110,7 +110,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 Parameters.InitialSOM3NMapName);
             Util.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
 
-            ShadeLAI = Parameters.MaximumShadeLAI; //.MinRelativeBiomass;
+            ShadeLAI = Parameters.MaximumShadeLAI; 
             OtherData.Initialize(Parameters);
             FunctionalType.Initialize(Parameters);
             FireEffects.Initialize(Parameters);
@@ -127,6 +127,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             Reproduction.AddNewCohort = AddNewCohort;
             Reproduction.MaturePresent = MaturePresent;
             base.Initialize(modelCore, Parameters.SeedAlgorithm);
+
+            // Delegate mortalityroutines:
             Landis.Library.LeafBiomassCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
             Landis.Library.LeafBiomassCohorts.Cohort.DeathEvent += CohortTotalMortality;
             //Landis.Library.LeafBiomassCohorts.Cohort.AgeOnlyDeathEvent += CohortTotalMortality;
