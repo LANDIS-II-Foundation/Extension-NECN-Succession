@@ -289,7 +289,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             return;
         }
         //---------------------------------------------------------------------
-        // Not just sleeve mortality... true mortality
+        // Total mortality, including from disturbance or senescence.
 
         public void CohortTotalMortality(object sender, Landis.Library.BiomassCohorts.DeathEventArgs eventArgs)
         {
@@ -330,8 +330,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             ForestFloor.AddFoliageLitter(foliar, cohort.Species, eventArgs.Site);
 
             // Assume that ALL dead root biomass stays on site.
-            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
-            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, wood), cohort, cohort.Species, eventArgs.Site);
+            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, foliar), cohort, cohort.Species, eventArgs.Site);
 
             if (disturbanceType.IsMemberOf("disturbance:fire"))
             {
