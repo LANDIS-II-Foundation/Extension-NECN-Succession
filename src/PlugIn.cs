@@ -84,7 +84,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
             sufficientLight       = Parameters.LightClassProbabilities;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
             MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); //,LAIMapNames, ShadeClassMapNames);
-            //CohortBiomass.SpinupMortalityFraction = parameters.SpinupMortalityFraction;
             
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
