@@ -19,37 +19,37 @@ namespace Landis.Extension.Succession.NECN_Hydro
         /// Converts a table indexed by species and ecoregion into a
         /// 2-dimensional array.
         /// </summary>
-        public static T[,] ToArray<T>(Species.AuxParm<Ecoregions.AuxParm<T>> table)
-        {
-            T[,] array = new T[PlugIn.ModelCore.Ecoregions.Count, PlugIn.ModelCore.Species.Count];
-            foreach (ISpecies species in PlugIn.ModelCore.Species) {
-                foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions) {
-                    array[ecoregion.Index, species.Index] = table[species][ecoregion];
-                }
-            }
-            return array;
-        }
+        //public static T[,] ToArray<T>(Species.AuxParm<Ecoregions.AuxParm<T>> table)
+        //{
+        //    T[,] array = new T[PlugIn.ModelCore.Ecoregions.Count, PlugIn.ModelCore.Species.Count];
+        //    foreach (ISpecies species in PlugIn.ModelCore.Species) {
+        //        foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions) {
+        //            array[ecoregion.Index, species.Index] = table[species][ecoregion];
+        //        }
+        //    }
+        //    return array;
+        //}
         //---------------------------------------------------------------------
 
         public static void ReadSoilDepthMap(string path)
         {
-            IInputRaster<DoublePixel> map;
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
 
-            try
-            {
-                map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //try
+            //{
+            //    map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    string mesg = string.Format("Error: The file {0} does not exist", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
-            {
-                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            //{
+            //    string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
             using (map)
             {
@@ -73,23 +73,23 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         public static void ReadSoilDrainMap(string path)
         {
-            IInputRaster<DoublePixel> map;
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
 
-            try
-            {
-                map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //try
+            //{
+            //    map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    string mesg = string.Format("Error: The file {0} does not exist", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
-            {
-                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            //{
+            //    string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
             using (map)
             {
@@ -113,23 +113,23 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         public static void ReadSoilBaseFlowMap(string path)
         {
-            IInputRaster<DoublePixel> map;
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
 
-            try
-            {
-                map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //try
+            //{
+            //    map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    string mesg = string.Format("Error: The file {0} does not exist", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
-            {
-                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            //{
+            //    string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
             using (map)
             {
@@ -153,23 +153,23 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         public static void ReadSoilStormFlowMap(string path)
         {
-            IInputRaster<DoublePixel> map;
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
 
-            try
-            {
-                map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //try
+            //{
+            //    map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    string mesg = string.Format("Error: The file {0} does not exist", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
-            {
-                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            //{
+            //    string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
             using (map)
             {
@@ -193,23 +193,23 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         public static void ReadFieldCapacityMap(string path)
         {
-            IInputRaster<DoublePixel> map;
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path); 
 
-            try
-            {
-                map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //try
+            //{
+            //    map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    string mesg = string.Format("Error: The file {0} does not exist", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
-            {
-                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            //{
+            //    string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
             using (map)
             {
@@ -233,23 +233,23 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         public static void ReadWiltingPointMap(string path)
         {
-            IInputRaster<DoublePixel> map;
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path); 
 
-            try
-            {
-                map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //try
+            //{
+            //    map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    string mesg = string.Format("Error: The file {0} does not exist", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
-            {
-                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            //{
+            //    string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
             using (map)
             {
@@ -277,23 +277,23 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         public static void ReadPercentSandMap(string path)
         {
-            IInputRaster<DoublePixel> map;
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path); 
 
-            try
-            {
-                map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //try
+            //{
+            //    map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    string mesg = string.Format("Error: The file {0} does not exist", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
-            {
-                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            //{
+            //    string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
             using (map)
             {
@@ -317,23 +317,23 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         public static void ReadPercentClayMap(string path)
         {
-            IInputRaster<DoublePixel> map;
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
 
-            try
-            {
-                map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //try
+            //{
+            //    map = PlugIn.ModelCore.OpenRaster<DoublePixel>(path);
+            //}
+            //catch (FileNotFoundException)
+            //{
+            //    string mesg = string.Format("Error: The file {0} does not exist", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
-            {
-                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
-                throw new System.ApplicationException(mesg);
-            }
+            //if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            //{
+            //    string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
             using (map)
             {
@@ -516,6 +516,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
         //---------------------------------------------------------------------
         private static IInputRaster<DoublePixel> MakeDoubleMap(string path)
         {
+            PlugIn.ModelCore.UI.WriteLine("  Read in data from {0}", path);
+
             IInputRaster<DoublePixel> map;
 
             try
