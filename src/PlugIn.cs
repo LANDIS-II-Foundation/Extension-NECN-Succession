@@ -332,14 +332,17 @@ namespace Landis.Extension.Succession.NECN_Hydro
             Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, wood), cohort, cohort.Species, eventArgs.Site);
             Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, foliar), cohort, cohort.Species, eventArgs.Site);
 
-            if (disturbanceType.IsMemberOf("disturbance:fire"))
+            if (disturbanceType != null)
             {
-                if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-                    FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
-            }
-            if (disturbanceType.IsMemberOf("disturbance:harvest"))
-            {
-                HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
+                if (disturbanceType.IsMemberOf("disturbance:fire"))
+                {
+                    if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
+                        FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
+                }
+                if (disturbanceType.IsMemberOf("disturbance:harvest"))
+                {
+                    HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
+                }
             }
             return;
         }
