@@ -1,0 +1,32 @@
+LandisData   "Initial Communities"
+
+>>Old jackpine oak 
+MapCode  0
+	abiebals   20 (1000) 40 (1000) 50 (1000)
+	acerrubr   20 (1000) 50 (1000)
+	pinuresi   20 (1000) 50 (1000)
+	poputrem   20 (1000) 30 (1000) 40 (1000) 50 (1000) 60 (1000) 80 (1000) 90 (1000)
+	querrubr   30 (1000) 50 (1000)
+
+>> young jackpine oak
+MapCode  1
+	poputrem   20 (1000) 50 (1000)
+	querrubr   20 (1000) 30 (1000) 40 (1000) 50 (1000) 60 (1000)
+
+MapCode 2
+
+MapCode 3
+	fraxamer  30 (1000) 40 (1000) 50 (1000) 60 (1000) 70 (1000) 80 (1000)
+	acerrubr  110 (1000)
+	pinustro   80 (1000) 130 (1000) 150 (1000) 170 (1000)
+	betualle   20 (1000) 50 (1000)
+	thujocci   20 (1000) 50 (1000)
+
+MapCode 4
+
+MapCode 5
+ 
+MapCode 6
+
+MapCode 7
+

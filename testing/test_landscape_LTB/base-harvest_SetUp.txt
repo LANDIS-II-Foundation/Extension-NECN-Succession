@@ -1,0 +1,49 @@
+LandisData  "Base Harvest"
+
+
+Timestep    10
+
+
+
+>>-------------------------
+>> HARVEST MAPS
+>>---------------------------
+
+ManagementAreas 	./base-harvest_Management.gis
+Stands     		./base-harvest_Stand.gis
+
+
+>> -------------------------
+>> HARVEST PRESCRIPTIONS
+>> -------------------------
+
+
+>>---- PRESCRIPTION_1 ---------------------------------------
+Prescription MaxAgeClearcut
+    StandRanking 	MaxCohortAge
+    SiteSelection 	Complete
+    CohortsRemoved 	ClearCut
+
+
+
+>> ----------------------------------
+>> HARVEST IMPLEMENTATION 
+>> ---------------------------------
+
+    HarvestImplementations
+>>	Mgmt Area	Prescription		Harvest Area	BeginTime	EndTime
+>> 	---------   	------------   		------------   	---------- 	--------
+	1		MaxAgeClearcut			5%	0		100
+	2		MaxAgeClearcut			10%	0		100
+
+
+	
+>> ------------
+>> OUTPUTS
+>> ----------
+
+PrescriptionMaps    harvest/base-harvest-prescripts-{timestep}.img
+EventLog            harvest/base-harvest-event-log.csv
+SummaryLog	    harvest/base-harvest-summary-log.csv
+
+
