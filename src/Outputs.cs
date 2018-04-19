@@ -537,24 +537,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     outputRaster.WriteBufferPixel();
                 }
             }
-            //path = MapNames.ReplaceTemplateVars(@"NECN\Surface-Carbon-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-            //using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path, PlugIn.ModelCore.Landscape.Dimensions))
-            //{
-            //    IntPixel pixel = outputRaster.BufferPixel;
-            //    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
-            //    {
-            //        if (site.IsActive)
-            //        {
-            //            pixel.MapCode.Value = (int)((SiteVars.SOM1surface[site].Carbon + SiteVars.SOM1soil[site].Carbon + SiteVars.SOM2[site].Carbon + SiteVars.SOM3[site].Carbon));
-            //        }
-            //        else
-            //        {
-            //            //  Inactive site
-            //            pixel.MapCode.Value = 0;
-            //        }
-            //        outputRaster.WriteBufferPixel();
-            //    }
-            //}
 
             string path2 = MapNames.ReplaceTemplateVars(@"NECN\SoilN-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path2, PlugIn.ModelCore.Landscape.Dimensions))
@@ -709,8 +691,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     {
                         if (site.IsActive)
                         {
-                            pixel.MapCode.Value = (int)((SiteVars.SOM1surface[site].Carbon + SiteVars.SurfaceStructural[site].Carbon +
-                    SiteVars.SurfaceMetabolic[site].Carbon) * 2.0);
+                            pixel.MapCode.Value = (int)((SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0);
 ;
                         }
                         else
@@ -722,6 +703,25 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     }
                 }
 
+                string pathDuff = MapNames.ReplaceTemplateVars(@"NECN\SurfaceDuffBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDuff, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = (int)(SiteVars.SOM1surface[site].Carbon * 2.0);
+                            ;
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
             }
         }
         
