@@ -125,7 +125,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-<PropertyGroup>
+  <PropertyGroup>
     <PreBuildEvent>call $(SolutionDir)\install-libs.cmd</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

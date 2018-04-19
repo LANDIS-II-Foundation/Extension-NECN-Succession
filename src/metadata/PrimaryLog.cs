@@ -19,8 +19,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
         [DataFieldAttribute(Desc = "Climate Region Index")]
         public int ClimateRegionIndex { set; get; }
 
-        [DataFieldAttribute(Desc = "Soil Water Holding Capacity")]
-        public int SoilWaterHoldingCapacity { set; get; }
+        //[DataFieldAttribute(Desc = "Soil Water Holding Capacity")]
+        //public int SoilWaterHoldingCapacity { set; get; }
 
         [DataFieldAttribute(Unit = FieldUnits.Count, Desc = "Number of Sites")]
         public int NumSites { set; get; }
