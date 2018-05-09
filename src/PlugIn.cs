@@ -264,19 +264,17 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                 SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
 
-                // Largewood = > 3" diameter; small-wood = < 3".  Fractions from Alec K.
-                double largeWoodBurned = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction * 0.65;
-                double smallWoodBurned = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction * 0.35;
-                SiteVars.FlamingConsumption[site] = smallWoodBurned;
-                SiteVars.SmolderConsumption[site] = largeWoodBurned;
-                SiteVars.FlamingConsumption[site] += foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
-
                 if (!Disturbed[site]) // this is the first cohort killed/damaged
                 {
                     if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
                         FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
+                    SiteVars.SmolderConsumption[site] = 0.0;
+                    SiteVars.FlamingConsumption[site] = 0.0;
+
                 }
 
+                SiteVars.SmolderConsumption[site] += woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
+                SiteVars.FlamingConsumption[site] += foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
                 woodInput -= woodInput * (float) FireEffects.ReductionsTable[(int) SiteVars.FireSeverity[site]].CoarseLitterReduction;
                 foliarInput -= foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
             }
@@ -318,21 +316,20 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
                     Landis.Library.Succession.Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
 
-                    // Largewood = > 3" diameter; small-wood = < 3".  Fractions from Alec K.
-                    double largeWoodBurned = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction * 0.65;
-                    double smallWoodBurned = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction * 0.35;
-                    SiteVars.FlamingConsumption[site] = smallWoodBurned;
-                    SiteVars.SmolderConsumption[site] = largeWoodBurned;
-                    SiteVars.FlamingConsumption[site] += foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
-
                     if (!Disturbed[site])  // the first cohort killed/damaged
                     {
                         if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
                             FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
+                        SiteVars.SmolderConsumption[site] = 0.0;
+                        SiteVars.FlamingConsumption[site] = 0.0;
+
                     }
 
+                    SiteVars.SmolderConsumption[site] += woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
+                    SiteVars.FlamingConsumption[site] += foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
                     woodInput -= woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
                     foliarInput -= foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
+
                 }
                 else
                 {
