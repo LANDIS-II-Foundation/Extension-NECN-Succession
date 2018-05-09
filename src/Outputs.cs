@@ -712,7 +712,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                         if (site.IsActive)
                         {
                             pixel.MapCode.Value = (int)(SiteVars.SOM1surface[site].Carbon * 2.0);
-                            ;
                         }
                         else
                         {

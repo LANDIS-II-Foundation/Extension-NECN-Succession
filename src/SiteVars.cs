@@ -100,8 +100,10 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public static ISiteVar<int> HarvestTime;
         public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
         public static ISiteVar<double> fineFuels;
+        public static ISiteVar<double> SmolderConsumption;
+        public static ISiteVar<double> FlamingConsumption;
 
-        
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -197,6 +199,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.AgeCohorts");
             PlugIn.ModelCore.RegisterSiteVar(biomassCohortsSiteVar, "Succession.BiomassCohorts");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.FineFuels, "Succession.FineFuels");
+            PlugIn.ModelCore.RegisterSiteVar(SiteVars.SmolderConsumption, "Succession.SmolderConsumption");
+            PlugIn.ModelCore.RegisterSiteVar(SiteVars.FlamingConsumption, "Succession.FlamingConsumption");
 
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)

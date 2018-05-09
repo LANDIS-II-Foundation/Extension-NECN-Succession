@@ -610,46 +610,43 @@ namespace Landis.Extension.Succession.NECN_Hydro
             //--------- Read In Harvest Reductions Table ---------------------------
             InputVar<string> hreds = new InputVar<string>("HarvestReductions");
             ReadName(Names.HarvestReductionParameters);
-           // {
-                PlugIn.ModelCore.UI.WriteLine("   Begin reading HARVEST REDUCTION parameters.");
-                InputVar<string> prescriptionName = new InputVar<string>("Prescription");
-                InputVar<double> wred_pr = new InputVar<double>("Coarse Litter Reduction");
-                InputVar<double> lred_pr = new InputVar<double>("Fine Litter Reduction");
-                InputVar<double> som_red_pr = new InputVar<double>("SOM Reduction");
-                InputVar<double> cohortw_red_pr = new InputVar<double>("Cohort Wood Removal");
-                InputVar<double> cohortl_red_pr = new InputVar<double>("Cohort Leaf Removal");
+            PlugIn.ModelCore.UI.WriteLine("   Begin reading HARVEST REDUCTION parameters.");
 
-                //List<string> prescriptionNames = new List<string>();
-                //parameters.HarvestReductionsTable = new List<HarvestReductions>(); 
+            InputVar<string> prescriptionName = new InputVar<string>("Prescription");
+            InputVar<double> wred_pr = new InputVar<double>("Coarse Litter Reduction");
+            InputVar<double> lred_pr = new InputVar<double>("Fine Litter Reduction");
+            InputVar<double> som_red_pr = new InputVar<double>("SOM Reduction");
+            InputVar<double> cohortw_red_pr = new InputVar<double>("Cohort Wood Removal");
+            InputVar<double> cohortl_red_pr = new InputVar<double>("Cohort Leaf Removal");
 
-                while (!AtEndOfInput)
-                {
 
-                    StringReader currentLine = new StringReader(CurrentLine);
-                    HarvestReductions harvReduction = new HarvestReductions();
-                    parameters.HarvestReductionsTable.Add(harvReduction);
+            while (!AtEndOfInput)
+            {
 
-                    ReadValue(prescriptionName, currentLine);
-                    harvReduction.PrescriptionName = prescriptionName.Value;
+                StringReader currentLine = new StringReader(CurrentLine);
+                HarvestReductions harvReduction = new HarvestReductions();
+                parameters.HarvestReductionsTable.Add(harvReduction);
 
-                    ReadValue(wred_pr, currentLine);
-                    harvReduction.CoarseLitterReduction = wred_pr.Value;
+                ReadValue(prescriptionName, currentLine);
+                harvReduction.PrescriptionName = prescriptionName.Value;
 
-                    ReadValue(lred_pr, currentLine);
-                    harvReduction.FineLitterReduction = lred_pr.Value;
+                ReadValue(wred_pr, currentLine);
+                harvReduction.CoarseLitterReduction = wred_pr.Value;
 
-                    ReadValue(som_red_pr, currentLine);
-                    harvReduction.SOMReduction = som_red_pr.Value;
+                ReadValue(lred_pr, currentLine);
+                harvReduction.FineLitterReduction = lred_pr.Value;
 
-                    ReadValue(cohortw_red_pr, currentLine);
-                    harvReduction.CohortWoodReduction = cohortw_red_pr.Value;
+                ReadValue(som_red_pr, currentLine);
+                harvReduction.SOMReduction = som_red_pr.Value;
 
-                    ReadValue(cohortl_red_pr, currentLine);
-                    harvReduction.CohortLeafReduction = cohortl_red_pr.Value;
+                ReadValue(cohortw_red_pr, currentLine);
+                harvReduction.CohortWoodReduction = cohortw_red_pr.Value;
 
-                    GetNextLine();
-                }
-          //  }
+                ReadValue(cohortl_red_pr, currentLine);
+                harvReduction.CohortLeafReduction = cohortl_red_pr.Value;
+
+                GetNextLine();
+            }
 
 
             return parameters; 

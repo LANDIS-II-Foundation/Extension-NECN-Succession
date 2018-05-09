@@ -130,10 +130,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
         /// </summary>
         public static void ReduceLayers(byte severity, Site site)
         {
-            //PlugIn.ModelCore.UI.WriteLine("   Calculating fire induced layer reductions...");
+            // PlugIn.ModelCore.UI.WriteLine("   Calculating fire induced layer reductions. FineLitter={0}, Wood={1}, Duff={2}.", ReductionsTable[severity].FineLitterReduction, ReductionsTable[severity].CoarseLitterReduction, ReductionsTable[severity].SOMReduction);
         
-            //double litterLossMultiplier = ReductionsTable[severity].FineLitterReduction;
-            
             // Structural litter first
             
             double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * ReductionsTable[severity].FineLitterReduction;
@@ -147,6 +145,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             SiteVars.SurfaceStructural[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
             SiteVars.FireNEfflux[site] += nitrogenLoss;
+            SiteVars.FlamingConsumption[site] += carbonLoss * 2.0;
             
             // Metabolic litter
 
@@ -161,7 +160,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             SiteVars.SurfaceMetabolic[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
             SiteVars.FireNEfflux[site] += nitrogenLoss;
-            
+            SiteVars.FlamingConsumption[site] += carbonLoss * 2.0;
+
             // Surface dead wood
 
             double woodLossMultiplier = ReductionsTable[severity].CoarseLitterReduction;
@@ -177,8 +177,12 @@ namespace Landis.Extension.Succession.NECN_Hydro
             SiteVars.SurfaceDeadWood[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
             SiteVars.FireNEfflux[site] += nitrogenLoss;
+            SiteVars.FlamingConsumption[site] += carbonLoss * 2.0 * 0.35;  // 0.35 = Small wood FRACTION FROM ALEC
+            SiteVars.SmolderConsumption[site] += carbonLoss * 2.0 * 0.65;  // 0.65 = Large wood FRACTION FROM ALEC
 
-            // Soil Organic Matter
+
+            // Surficial Soil Organic Matter (the 'Duff' layer)
+
             double SOM_Multiplier = ReductionsTable[severity].SOMReduction;
 
             carbonLoss = SiteVars.SOM1surface[site].Carbon * SOM_Multiplier;
@@ -192,6 +196,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             SiteVars.SOM1surface[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
             SiteVars.FireNEfflux[site] += nitrogenLoss;
+            SiteVars.SmolderConsumption[site] += carbonLoss * 2.0;  
 
             // Transfer 1% to mineral N.
             SiteVars.MineralN[site] += summaryNLoss * 0.01;
