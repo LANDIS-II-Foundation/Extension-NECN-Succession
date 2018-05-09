@@ -262,6 +262,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             if (disturbanceType.IsMemberOf("disturbance:fire"))
             {
 
+                SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
+
                 // Largewood = > 3" diameter; small-wood = < 3".  Fractions from Alec K.
                 double largeWoodBurned = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction * 0.65;
                 double smallWoodBurned = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction * 0.35;
@@ -269,7 +271,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 SiteVars.SmolderConsumption[site] = largeWoodBurned;
                 SiteVars.FlamingConsumption[site] += foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
 
-                SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
                 if (!Disturbed[site]) // this is the first cohort killed/damaged
                 {
                     if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
@@ -314,6 +315,9 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                 if (disturbanceType.IsMemberOf("disturbance:fire"))
                 {
+                    SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
+                    Landis.Library.Succession.Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
+
                     // Largewood = > 3" diameter; small-wood = < 3".  Fractions from Alec K.
                     double largeWoodBurned = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction * 0.65;
                     double smallWoodBurned = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction * 0.35;
@@ -321,8 +325,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
                     SiteVars.SmolderConsumption[site] = largeWoodBurned;
                     SiteVars.FlamingConsumption[site] += foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
 
-                    SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
-                    Landis.Library.Succession.Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
                     if (!Disturbed[site])  // the first cohort killed/damaged
                     {
                         if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
