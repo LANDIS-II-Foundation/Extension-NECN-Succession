@@ -190,6 +190,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             lai                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             annualSoilMoisture  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SmolderConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            FlamingConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); 
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
             HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
 
