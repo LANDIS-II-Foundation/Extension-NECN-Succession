@@ -238,7 +238,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         // This method does not trigger reproduction
         public void CohortPartialMortality(object sender, Landis.Library.BiomassCohorts.PartialDeathEventArgs eventArgs)
         {
-            //PlugIn.ModelCore.UI.WriteLine("Cohort Partial Mortality");
+            PlugIn.ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
 
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
             ActiveSite site = eventArgs.Site;
@@ -266,17 +266,20 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                 if (!Disturbed[site]) // this is the first cohort killed/damaged
                 {
-                    if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-                        FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
                     SiteVars.SmolderConsumption[site] = 0.0;
                     SiteVars.FlamingConsumption[site] = 0.0;
+                    if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
+                        FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
 
                 }
 
-                SiteVars.SmolderConsumption[site] += woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
-                SiteVars.FlamingConsumption[site] += foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
-                woodInput -= woodInput * (float) FireEffects.ReductionsTable[(int) SiteVars.FireSeverity[site]].CoarseLitterReduction;
-                foliarInput -= foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
+                double woodFireConsumption = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
+                double foliarFireConsumption = foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
+
+                SiteVars.SmolderConsumption[site] += woodFireConsumption;
+                SiteVars.FlamingConsumption[site] += foliarFireConsumption;
+                woodInput -= (float) woodFireConsumption;
+                foliarInput -= (float) foliarFireConsumption;
             }
 
             ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
@@ -298,7 +301,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         public void CohortTotalMortality(object sender, Landis.Library.BiomassCohorts.DeathEventArgs eventArgs)
         {
 
-            //PlugIn.ModelCore.UI.WriteLine("Cohort Total Mortality");
+            //PlugIn.ModelCore.UI.WriteLine("Cohort Total Mortality: {0}", eventArgs.Site);
 
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
             ActiveSite site = eventArgs.Site;
@@ -318,18 +321,20 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                     if (!Disturbed[site])  // the first cohort killed/damaged
                     {
-                        if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-                            FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
                         SiteVars.SmolderConsumption[site] = 0.0;
                         SiteVars.FlamingConsumption[site] = 0.0;
+                        if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
+                            FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
 
                     }
 
-                    SiteVars.SmolderConsumption[site] += woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
-                    SiteVars.FlamingConsumption[site] += foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
-                    woodInput -= woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
-                    foliarInput -= foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
+                    double woodFireConsumption = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
+                    double foliarFireConsumption = foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
 
+                    SiteVars.SmolderConsumption[site] += woodFireConsumption;
+                    SiteVars.FlamingConsumption[site] += foliarFireConsumption;
+                    woodInput -= (float)woodFireConsumption;
+                    foliarInput -= (float)foliarFireConsumption;
                 }
                 else
                 {
