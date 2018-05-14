@@ -86,7 +86,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
             FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
-            
+
             ClimateRegionData.Initialize(Parameters);
             SpeciesData.Initialize(Parameters);
             Util.ReadSoilDepthMap(Parameters.SoilDepthMapName);
@@ -124,7 +124,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             Reproduction.MaturePresent = MaturePresent;
             base.Initialize(modelCore, Parameters.SeedAlgorithm);
 
-            // Delegate mortalityroutines:
+            // Delegate mortality routines:
             Landis.Library.LeafBiomassCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
             Landis.Library.LeafBiomassCohorts.Cohort.DeathEvent += CohortTotalMortality;
             //Landis.Library.LeafBiomassCohorts.Cohort.AgeOnlyDeathEvent += CohortTotalMortality;
@@ -132,8 +132,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
             //AgeOnlyDisturbances.Module.Initialize(Parameters.AgeOnlyDisturbanceParms);
 
 
-            InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore); 
-            
+            InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
+
             if (Parameters.CalibrateMode)
                 Outputs.CreateCalibrateLogFile();
             Establishment.InitializeLogFile();
@@ -238,7 +238,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
         // This method does not trigger reproduction
         public void CohortPartialMortality(object sender, Landis.Library.BiomassCohorts.PartialDeathEventArgs eventArgs)
         {
-            PlugIn.ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
+            //PlugIn.ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
 
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
             ActiveSite site = eventArgs.Site;

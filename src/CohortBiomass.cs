@@ -1,4 +1,4 @@
- //  Author: Robert Scheller, Melissa Lucash
+ //  Authors: Robert Scheller, Melissa Lucash
 
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.Core;
@@ -24,7 +24,6 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
         //  Ecoregion where the cohort's site is located
         private IEcoregion ecoregion;
-        //public static double SpinupMortalityFraction;
         private double defoliation;
         private double defoliatedLeafBiomass;
 
