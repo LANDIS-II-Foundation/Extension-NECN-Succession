@@ -9,7 +9,7 @@ using Landis.Library.LeafBiomassCohorts;
 using System.Collections.Generic;
 using System;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     /// <summary>
     /// The pools of dead biomass for the landscape's sites.

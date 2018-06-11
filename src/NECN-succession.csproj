@@ -8,8 +8,8 @@
     <ProjectGuid>{651E102F-6FC1-4DB8-B384-3178E409AF2D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>necn_hydro_succession</RootNamespace>
-    <AssemblyName>Landis.Extension.Succession.NECN_Hydro</AssemblyName>
+    <RootNamespace>necn_succession</RootNamespace>
+    <AssemblyName>Landis.Extension.Succession.NECN</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

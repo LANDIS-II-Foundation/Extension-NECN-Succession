@@ -7,7 +7,7 @@ using Landis.Library.Metadata;
 using Landis.Core;
 using Edu.Wisc.Forest.Flel.Util;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     public class MetadataHandler
     {
@@ -30,7 +30,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
             };
 
             Extension = new ExtensionMetadata(mCore){
-                Name = "NECN_Hydro-Succession",
+                Name = "NECN-Succession",
                 TimeInterval = timestep, 
                 ScenarioReplicationMetadata = scenRep
             };
@@ -83,7 +83,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
                 {
                     Type = OutputType.Map,
                     Name = "Aboveground Net Primary Production",
-                    FilePath = @"NECN_Hydro\AG_NPP-{timestep}.img",  //century
+                    FilePath = @"NECN\AG_NPP-{timestep}.img",  //century
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,

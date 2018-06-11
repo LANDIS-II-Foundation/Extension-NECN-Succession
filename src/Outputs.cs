@@ -13,7 +13,7 @@ using System.Collections;
 
 
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     public class Outputs
     {
@@ -419,8 +419,8 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
                     ml.Time = PlugIn.ModelCore.CurrentTime;
                     ml.Month = month + 1;
-                    ml.EcoregionName = ecoregion.Name;
-                    ml.EcoregionIndex = ecoregion.Index;
+                    ml.ClimateRegionName = ecoregion.Name;
+                    ml.ClimateRegionIndex = ecoregion.Index;
 
                     ml.NumSites = Convert.ToInt32(ClimateRegionData.ActiveSiteCount[ecoregion]);
 
@@ -442,11 +442,11 @@ namespace Landis.Extension.Succession.NECN_Hydro
         //Write log file for growth and limits
         public static void CreateCalibrateLogFile()
         {
-            string logFileName = "NECN_Hydro-calibrate-log.csv";
+            string logFileName = "NECN-calibrate-log.csv";
             PlugIn.ModelCore.UI.WriteLine("******************WARNING************************", logFileName);
             PlugIn.ModelCore.UI.WriteLine("******YOU ARE CURRENTLY IN CALIBRATE MODE********", logFileName);
             PlugIn.ModelCore.UI.WriteLine("*************************************************", logFileName);
-            PlugIn.ModelCore.UI.WriteLine("   Opening NECN_Hydro calibrate log file \"{0}\" ...", logFileName);
+            PlugIn.ModelCore.UI.WriteLine("   Opening NECN calibrate log file \"{0}\" ...", logFileName);
             try
             {
                 CalibrateLog = new StreamWriter(logFileName);
@@ -459,7 +459,7 @@ namespace Landis.Extension.Succession.NECN_Hydro
 
             CalibrateLog.AutoFlush = true;
 
-            CalibrateLog.Write("Year, Month, EcoregionIndex, SpeciesName, CohortAge, CohortWoodB, CohortLeafB, ");  // from ComputeChange
+            CalibrateLog.Write("Year, Month, ClimateRegionIndex, SpeciesName, CohortAge, CohortWoodB, CohortLeafB, ");  // from ComputeChange
             CalibrateLog.Write("MortalityAGEwood, MortalityAGEleaf, ");  // from ComputeAgeMortality
             CalibrateLog.Write("MortalityBIOwood, MortalityBIOleaf, ");  // from ComputeGrowthMortality
             CalibrateLog.Write("availableWater,");  //from Water_limit

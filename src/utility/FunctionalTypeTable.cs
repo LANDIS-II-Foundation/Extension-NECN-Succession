@@ -6,7 +6,7 @@
 using Edu.Wisc.Forest.Flel.Util;
 
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     /// <summary>
     /// Definition of a Litter Type.

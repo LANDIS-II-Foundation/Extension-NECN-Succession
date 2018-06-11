@@ -14,12 +14,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     public class PlugIn
         : Landis.Library.Succession.ExtensionBase
     {
-        public static readonly string ExtensionName = "NECN_Hydro Succession";
+        public static readonly string ExtensionName = "NECN Succession";
         private static ICore modelCore;
         public static IInputParameters Parameters;
         public static double[] ShadeLAI;

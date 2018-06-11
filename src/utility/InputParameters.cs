@@ -7,7 +7,7 @@ using Landis.Library.Succession;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     /// <summary>
     /// The parameters for biomass succession.

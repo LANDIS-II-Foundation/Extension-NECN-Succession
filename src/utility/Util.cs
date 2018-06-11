@@ -7,7 +7,7 @@ using Landis.Library.LeafBiomassCohorts;
 using Edu.Wisc.Forest.Flel.Util;
 using System.IO;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     /// <summary>
     /// Utility methods.

@@ -8,7 +8,7 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Library.Climate;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
 
     public enum WaterType { Linear, Ratio }

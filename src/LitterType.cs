@@ -7,7 +7,7 @@ using Landis.Library.LeafBiomassCohorts;
 using System.Collections.Generic;
 
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     public class LitterType
     {

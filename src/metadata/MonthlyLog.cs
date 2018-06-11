@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Landis.Library.Metadata;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     public class MonthlyLog
     {
@@ -14,11 +14,11 @@ namespace Landis.Extension.Succession.NECN_Hydro
         [DataFieldAttribute(Unit = FieldUnits.Month, Desc = "Simulation Month")]
         public int Month { set; get; }
 
-        [DataFieldAttribute(Desc = "Ecoregion Name")]
-        public string EcoregionName { set; get; }
+        [DataFieldAttribute(Desc = "Climate Region Name")]
+        public string ClimateRegionName { set; get; }
 
-        [DataFieldAttribute(Desc = "Ecoregion Index")]
-        public int EcoregionIndex { set; get; }
+        [DataFieldAttribute(Desc = "Climate Region Index")]
+        public int ClimateRegionIndex { set; get; }
 
         [DataFieldAttribute(Unit = FieldUnits.Count, Desc = "Number of Sites")]
         public int NumSites { set; get; }

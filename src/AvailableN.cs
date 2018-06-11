@@ -7,7 +7,7 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Library.LeafBiomassCohorts;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     /// <summary>
     /// </summary>

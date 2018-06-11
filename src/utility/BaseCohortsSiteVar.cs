@@ -2,7 +2,7 @@
 using BiomassCohorts = Landis.Library.LeafBiomassCohorts;
 using Landis.SpatialModeling;
 
-namespace Landis.Extension.Succession.NECN_Hydro
+namespace Landis.Extension.Succession.NECN
 {
     /// <summary>
     /// Wraps a biomass-cohorts site variable and provides access to it as a
