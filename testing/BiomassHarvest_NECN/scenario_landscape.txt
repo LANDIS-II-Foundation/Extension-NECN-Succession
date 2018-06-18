@@ -15,6 +15,7 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 
 
 
+
 >> NOTE:  This example assumes that you have downloaded and installed 
 >> the correpsonding extensions.  These extensions are currently packaged
 >> together as a package.
@@ -28,16 +29,16 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 
 
 
+
 >> Disturbance Extensions   Initialization File
 
 >> ----------------------   -------------------
 	
 "Biomass Harvest"	biomass-harvest_SetUp_s2e1.txt
 
->>	"SCRAPPLE"              SCRAPPLE_BAU.txt
-
 
 >>   DisturbancesRandomOrder  yes  << optional parameter; default = no
+
 
 
 
@@ -45,11 +46,10 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 
 >> ----------------         -------------------
 
->>"Output Cohort Stats"    cohort-stats.output.txt
-
 >>   "Output Reclass"	    reclass.output.txt
 	
 "Output Biomass"	    output-biomass.txt
+
 
 
 
