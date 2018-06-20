@@ -25,7 +25,7 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 
 >> --------------------     -------------------
   
-"NECN_Hydro Succession"     NECN_LTBvalues_landscape.txt
+"NECN Succession"     NECN_LTBvalues_landscape.txt
 
 
 
@@ -34,8 +34,9 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 
 >> ----------------------   -------------------
 	
-"Biomass Harvest"	biomass-harvest_SetUp_s2e1.txt
+>>"Biomass Harvest"	biomass-harvest_SetUp_s2e1.txt
 
+"SCRAPPLE"		SCRAPPLE_BAU.txt
 
 >>   DisturbancesRandomOrder  yes  << optional parameter; default = no
 

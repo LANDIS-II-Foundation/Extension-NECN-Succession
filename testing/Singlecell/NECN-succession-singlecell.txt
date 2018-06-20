@@ -1,4 +1,4 @@
-LandisData	"NECN_Hydro Succession"
+LandisData	"NECN Succession"
 
 Timestep  1
 

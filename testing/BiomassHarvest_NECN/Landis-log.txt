@@ -1,0 +1,229 @@
+2018-06-20 08:35:39,870 - LANDIS-II 6.2 (beta release 1)
+2018-06-20 08:35:39,881 - 
+2018-06-20 08:35:40,011 - Loading scenario from file "scenario_landscape.txt" ...
+2018-06-20 08:35:40,079 - Initialized random number generator with seed = 2,709,470,021
+2018-06-20 08:35:40,079 - Loading species data from file "species_LTB.txt" ...
+2018-06-20 08:35:40,103 - Loading ecoregions from file "./ecoregions.txt" ...
+2018-06-20 08:35:40,122 - Initializing landscape from ecoregions map "./ecoregions.gis" ...
+2018-06-20 08:35:40,139 - Cell length = 100 m, cell area = 1 ha
+2018-06-20 08:35:40,140 - Map dimensions: 99 rows by 99 columns = 9,801 cells
+2018-06-20 08:35:40,148 - Sites: 9,801 active (100.0 %), 0 inactive (0.0 %)
+2018-06-20 08:35:40,160 - Loading NECN Succession extension ...
+2018-06-20 08:35:40,183 -    Registering Data:  Succession.LeafBiomassCohorts.
+2018-06-20 08:35:40,184 -    Registering Data:  Succession.AgeCohorts.
+2018-06-20 08:35:40,184 -    Registering Data:  Succession.BiomassCohorts.
+2018-06-20 08:35:40,184 -    Registering Data:  Succession.FineFuels.
+2018-06-20 08:35:40,184 -    Registering Data:  Succession.SmolderConsumption.
+2018-06-20 08:35:40,184 -    Registering Data:  Succession.FlamingConsumption.
+2018-06-20 08:35:40,249 -    Begin parsing FUNCTIONAL GROUP table.
+2018-06-20 08:35:40,252 -    Begin reading FIRE REDUCTION parameters.
+2018-06-20 08:35:40,253 -    Begin reading HARVEST REDUCTION parameters.
+2018-06-20 08:35:40,260 - Initializing NECN Succession ...
+2018-06-20 08:35:40,358 -    Loading weather data ...
+2018-06-20 08:41:35,146 -   Read in data from random110.img
+2018-06-20 08:41:35,168 -   Read in data from constantpoint75.img
+2018-06-20 08:41:35,182 -   Read in data from constantpoint4.img
+2018-06-20 08:41:35,195 -   Read in data from constantpoint4.img
+2018-06-20 08:41:35,198 -   Read in data from random_point1_point2.img
+2018-06-20 08:41:35,212 -   Read in data from random_point05_point099.img
+2018-06-20 08:41:35,226 -   Read in data from random_point01_point5.img
+2018-06-20 08:41:35,241 -   Read in data from random_point01_point5.img
+2018-06-20 08:41:35,250 -   Read in data from random110.img
+2018-06-20 08:41:35,255 -   Read in data from random6.img
+2018-06-20 08:41:35,268 -   Read in data from random110.img
+2018-06-20 08:41:35,271 -   Read in data from random9.img
+2018-06-20 08:41:35,283 -   Read in data from random4500.img
+2018-06-20 08:41:35,296 -   Read in data from random145.img
+2018-06-20 08:41:35,309 -   Read in data from random1294.img
+2018-06-20 08:41:35,322 -   Read in data from random50.img
+2018-06-20 08:41:35,338 -   Read in data from random110.img
+2018-06-20 08:41:35,343 -   Read in data from random50.img
+2018-06-20 08:41:35,348 -    Registering Data:  TimeOfLastSuccession.
+2018-06-20 08:41:35,349 -    Registering Data:  Shade.
+2018-06-20 08:41:35,351 -    Creating Dispersal Neighborhood List.
+2018-06-20 08:41:35,351 -    Dispersal:  NeighborRadius=5050, CellLength=100, numCellRadius=50
+2018-06-20 08:41:35,359 -    Loading initial communities from file "./initial-communities_LTB.txt" ...
+2018-06-20 08:41:35,384 -    Reading initial communities map "./initial-communities.gis" ...
+2018-06-20 08:41:35,470 -    Opening a NECN log file "NECN-prob-establish-log.csv" ...
+2018-06-20 08:41:35,626 - Loading SCRAPPLE extension ...
+2018-06-20 08:41:35,661 -    Registering Data:  Fire.Severity.
+2018-06-20 08:41:35,662 -    Registering Data:  Fire.TimeOfLastEvent.
+2018-06-20 08:41:35,676 -    Loading Slope data...
+2018-06-20 08:41:35,685 -    Loading Azimuth data...
+2018-06-20 08:41:35,705 -     Ladder fuel species: AbieConc
+2018-06-20 08:41:35,706 -     Ladder fuel species: AbieMagn
+2018-06-20 08:41:35,706 -     Ladder fuel species: PinuJeff
+2018-06-20 08:41:35,706 -     Ladder fuel species: PinuCont
+2018-06-20 08:41:35,708 -    Loading Dead Wood Map data...
+2018-06-20 08:41:35,709 -    Loading Fire mortality data...
+2018-06-20 08:41:35,710 -    Fire mortality data for severity class 1:
+2018-06-20 08:41:35,711 -       PinuJeff : 40 : 0.45
+2018-06-20 08:41:35,711 -       PinuJeff : 80 : 0.1
+2018-06-20 08:41:35,711 -       PinuJeff : 500 : 0.05
+2018-06-20 08:41:35,712 -       PinuLamb : 40 : 0.45
+2018-06-20 08:41:35,712 -       PinuLamb : 80 : 0.1
+2018-06-20 08:41:35,712 -       PinuLamb : 500 : 0.05
+2018-06-20 08:41:35,712 -       CaloDecu : 40 : 0.5
+2018-06-20 08:41:35,713 -       CaloDecu : 80 : 0.15
+2018-06-20 08:41:35,713 -       CaloDecu : 500 : 0.1
+2018-06-20 08:41:35,713 -       AbieConc : 40 : 0.6
+2018-06-20 08:41:35,714 -       AbieConc : 80 : 0.15
+2018-06-20 08:41:35,716 -       AbieConc : 450 : 0.05
+2018-06-20 08:41:35,717 -       AbieMagn : 40 : 0.6
+2018-06-20 08:41:35,717 -       AbieMagn : 80 : 0.15
+2018-06-20 08:41:35,717 -       AbieMagn : 500 : 0.05
+2018-06-20 08:41:35,718 -       PinuCont : 30 : 0.6
+2018-06-20 08:41:35,718 -       PinuCont : 70 : 0.35
+2018-06-20 08:41:35,718 -       PinuCont : 250 : 0.25
+2018-06-20 08:41:35,718 -       PinuMont : 40 : 0.55
+2018-06-20 08:41:35,719 -       PinuMont : 80 : 0.15
+2018-06-20 08:41:35,719 -       PinuMont : 550 : 0.1
+2018-06-20 08:41:35,719 -       TsugMert : 30 : 0.6
+2018-06-20 08:41:35,720 -       TsugMert : 70 : 0.2
+2018-06-20 08:41:35,720 -       TsugMert : 800 : 0.1
+2018-06-20 08:41:35,720 -       PinuAlbi : 30 : 0.65
+2018-06-20 08:41:35,721 -       PinuAlbi : 70 : 0.3
+2018-06-20 08:41:35,721 -       PinuAlbi : 900 : 0.1
+2018-06-20 08:41:35,721 -       PopuTrem : 30 : 0.5
+2018-06-20 08:41:35,721 -       PopuTrem : 70 : 0.3
+2018-06-20 08:41:35,721 -       PopuTrem : 175 : 0.1
+2018-06-20 08:41:35,722 -       NonnResp : 10 : 0.6
+2018-06-20 08:41:35,722 -       NonnResp : 40 : 0.7
+2018-06-20 08:41:35,722 -       NonnResp : 80 : 0.8
+2018-06-20 08:41:35,722 -       NonnSeed : 10 : 0.6
+2018-06-20 08:41:35,722 -       NonnSeed : 40 : 0.7
+2018-06-20 08:41:35,723 -       NonnSeed : 80 : 0.8
+2018-06-20 08:41:35,723 -       FixnResp : 10 : 0.6
+2018-06-20 08:41:35,723 -       FixnResp : 40 : 0.7
+2018-06-20 08:41:35,723 -       FixnResp : 80 : 0.8
+2018-06-20 08:41:35,723 -       FixnSeed : 10 : 0.6
+2018-06-20 08:41:35,726 -       FixnSeed : 40 : 0.7
+2018-06-20 08:41:35,726 -       FixnSeed : 80 : 0.8
+2018-06-20 08:41:35,726 -    Fire mortality data for severity class 2:
+2018-06-20 08:41:35,726 -       PinuJeff : 40 : 0.6
+2018-06-20 08:41:35,727 -       PinuJeff : 80 : 0.25
+2018-06-20 08:41:35,727 -       PinuJeff : 500 : 0.15
+2018-06-20 08:41:35,727 -       PinuLamb : 40 : 0.7
+2018-06-20 08:41:35,727 -       PinuLamb : 80 : 0.2
+2018-06-20 08:41:35,728 -       PinuLamb : 500 : 0.1
+2018-06-20 08:41:35,728 -       CaloDecu : 40 : 0.75
+2018-06-20 08:41:35,728 -       CaloDecu : 80 : 0.2
+2018-06-20 08:41:35,729 -       CaloDecu : 500 : 0.1
+2018-06-20 08:41:35,729 -       AbieConc : 40 : 0.8
+2018-06-20 08:41:35,729 -       AbieConc : 80 : 0.4
+2018-06-20 08:41:35,730 -       AbieConc : 450 : 0.2
+2018-06-20 08:41:35,730 -       AbieMagn : 40 : 0.8
+2018-06-20 08:41:35,730 -       AbieMagn : 80 : 0.25
+2018-06-20 08:41:35,731 -       AbieMagn : 500 : 0.1
+2018-06-20 08:41:35,731 -       PinuCont : 30 : 0.85
+2018-06-20 08:41:35,732 -       PinuCont : 70 : 0.7
+2018-06-20 08:41:35,732 -       PinuCont : 250 : 0.6
+2018-06-20 08:41:35,732 -       PinuMont : 40 : 0.77
+2018-06-20 08:41:35,732 -       PinuMont : 80 : 0.3
+2018-06-20 08:41:35,733 -       PinuMont : 550 : 0.25
+2018-06-20 08:41:35,733 -       TsugMert : 30 : 0.8
+2018-06-20 08:41:35,733 -       TsugMert : 70 : 0.5
+2018-06-20 08:41:35,733 -       TsugMert : 800 : 0.3
+2018-06-20 08:41:35,733 -       PinuAlbi : 30 : 0.8
+2018-06-20 08:41:35,734 -       PinuAlbi : 70 : 0.5
+2018-06-20 08:41:35,736 -       PinuAlbi : 900 : 0.4
+2018-06-20 08:41:35,736 -       PopuTrem : 30 : 0.9
+2018-06-20 08:41:35,736 -       PopuTrem : 70 : 0.7
+2018-06-20 08:41:35,736 -       PopuTrem : 175 : 0.6
+2018-06-20 08:41:35,736 -       NonnResp : 10 : 0.9
+2018-06-20 08:41:35,737 -       NonnResp : 40 : 0.9
+2018-06-20 08:41:35,737 -       NonnResp : 80 : 0.9
+2018-06-20 08:41:35,737 -       NonnSeed : 10 : 0.9
+2018-06-20 08:41:35,737 -       NonnSeed : 40 : 0.9
+2018-06-20 08:41:35,738 -       NonnSeed : 80 : 0.9
+2018-06-20 08:41:35,738 -       FixnResp : 10 : 0.9
+2018-06-20 08:41:35,738 -       FixnResp : 40 : 0.9
+2018-06-20 08:41:35,738 -       FixnResp : 80 : 0.9
+2018-06-20 08:41:35,738 -       FixnSeed : 10 : 0.9
+2018-06-20 08:41:35,739 -       FixnSeed : 40 : 0.9
+2018-06-20 08:41:35,739 -       FixnSeed : 80 : 0.9
+2018-06-20 08:41:35,739 -    Fire mortality data for severity class 3:
+2018-06-20 08:41:35,739 -       PinuJeff : 40 : 0.9
+2018-06-20 08:41:35,739 -       PinuJeff : 80 : 0.8
+2018-06-20 08:41:35,740 -       PinuJeff : 500 : 0.7
+2018-06-20 08:41:35,740 -       PinuLamb : 40 : 0.9
+2018-06-20 08:41:35,740 -       PinuLamb : 80 : 0.8
+2018-06-20 08:41:35,740 -       PinuLamb : 500 : 0.6
+2018-06-20 08:41:35,740 -       CaloDecu : 40 : 0.9
+2018-06-20 08:41:35,741 -       CaloDecu : 80 : 0.7
+2018-06-20 08:41:35,741 -       CaloDecu : 500 : 0.5
+2018-06-20 08:41:35,741 -       AbieConc : 40 : 0.99
+2018-06-20 08:41:35,741 -       AbieConc : 80 : 0.75
+2018-06-20 08:41:35,742 -       AbieConc : 450 : 0.8
+2018-06-20 08:41:35,742 -       AbieMagn : 40 : 0.99
+2018-06-20 08:41:35,742 -       AbieMagn : 80 : 0.75
+2018-06-20 08:41:35,742 -       AbieMagn : 500 : 0.8
+2018-06-20 08:41:35,742 -       PinuCont : 30 : 0.99
+2018-06-20 08:41:35,742 -       PinuCont : 70 : 0.95
+2018-06-20 08:41:35,743 -       PinuCont : 250 : 0.9
+2018-06-20 08:41:35,743 -       PinuMont : 40 : 0.9
+2018-06-20 08:41:35,743 -       PinuMont : 80 : 0.75
+2018-06-20 08:41:35,743 -       PinuMont : 550 : 0.6
+2018-06-20 08:41:35,744 -       TsugMert : 30 : 0.9
+2018-06-20 08:41:35,744 -       TsugMert : 70 : 0.75
+2018-06-20 08:41:35,744 -       TsugMert : 800 : 0.6
+2018-06-20 08:41:35,745 -       PinuAlbi : 30 : 0.97
+2018-06-20 08:41:35,748 -       PinuAlbi : 70 : 0.8
+2018-06-20 08:41:35,748 -       PinuAlbi : 900 : 0.7
+2018-06-20 08:41:35,748 -       PopuTrem : 30 : 0.99
+2018-06-20 08:41:35,749 -       PopuTrem : 70 : 0.95
+2018-06-20 08:41:35,749 -       PopuTrem : 175 : 0.9
+2018-06-20 08:41:35,749 -       NonnResp : 10 : 0.9
+2018-06-20 08:41:35,750 -       NonnResp : 40 : 0.9
+2018-06-20 08:41:35,750 -       NonnResp : 80 : 0.99
+2018-06-20 08:41:35,750 -       NonnSeed : 10 : 0.9
+2018-06-20 08:41:35,750 -       NonnSeed : 40 : 0.9
+2018-06-20 08:41:35,750 -       NonnSeed : 80 : 0.99
+2018-06-20 08:41:35,751 -       FixnResp : 10 : 0.9
+2018-06-20 08:41:35,751 -       FixnResp : 40 : 0.9
+2018-06-20 08:41:35,751 -       FixnResp : 80 : 0.99
+2018-06-20 08:41:35,751 -       FixnSeed : 10 : 0.9
+2018-06-20 08:41:35,752 -       FixnSeed : 40 : 0.9
+2018-06-20 08:41:35,752 -       FixnSeed : 80 : 0.99
+2018-06-20 08:41:35,752 - Loading Output Biomass extension ...
+2018-06-20 08:41:35,779 -    Initializing Fire...
+2018-06-20 08:41:35,862 -    Generating summary table...
+2018-06-20 08:41:35,877 - Running Output Biomass ...
+2018-06-20 08:41:35,879 -    Writing total biomass map to biomass/TotalBiomass-0.img ...
+2018-06-20 08:41:35,986 -    Writing PinuJeff biomass map to biomass/PinuJeff-0.img ...
+2018-06-20 08:41:36,000 -    Writing PinuLamb biomass map to biomass/PinuLamb-0.img ...
+2018-06-20 08:41:36,017 -    Writing CaloDecu biomass map to biomass/CaloDecu-0.img ...
+2018-06-20 08:41:36,036 -    Writing AbieConc biomass map to biomass/AbieConc-0.img ...
+2018-06-20 08:41:36,055 -    Writing AbieMagn biomass map to biomass/AbieMagn-0.img ...
+2018-06-20 08:41:36,070 -    Writing PinuCont biomass map to biomass/PinuCont-0.img ...
+2018-06-20 08:41:36,086 -    Writing PinuMont biomass map to biomass/PinuMont-0.img ...
+2018-06-20 08:41:36,102 -    Writing TsugMert biomass map to biomass/TsugMert-0.img ...
+2018-06-20 08:41:36,119 -    Writing PinuAlbi biomass map to biomass/PinuAlbi-0.img ...
+2018-06-20 08:41:36,133 -    Writing PopuTrem biomass map to biomass/PopuTrem-0.img ...
+2018-06-20 08:41:36,146 -    Writing NonnResp biomass map to biomass/NonnResp-0.img ...
+2018-06-20 08:41:36,160 -    Writing NonnSeed biomass map to biomass/NonnSeed-0.img ...
+2018-06-20 08:41:36,174 -    Writing FixnResp biomass map to biomass/FixnResp-0.img ...
+2018-06-20 08:41:36,191 -    Writing FixnSeed biomass map to biomass/FixnSeed-0.img ...
+2018-06-20 08:41:36,206 - Current time: 1
+2018-06-20 08:41:36,207 - Running NECN Succession ...
+2018-06-20 08:41:45,508 - Running SCRAPPLE ...
+2018-06-20 08:41:45,514 -    Processing landscape for Fire events ...
+2018-06-20 08:41:52,252 - Done running extension
+2018-06-20 08:41:52,252 - Running Output Biomass ...
+2018-06-20 08:41:52,253 -    Writing total biomass map to biomass/TotalBiomass-1.img ...
+2018-06-20 08:41:52,325 -    Writing PinuJeff biomass map to biomass/PinuJeff-1.img ...
+2018-06-20 08:41:52,339 -    Writing PinuLamb biomass map to biomass/PinuLamb-1.img ...
+2018-06-20 08:41:52,358 -    Writing CaloDecu biomass map to biomass/CaloDecu-1.img ...
+2018-06-20 08:41:52,373 -    Writing AbieConc biomass map to biomass/AbieConc-1.img ...
+2018-06-20 08:41:52,394 -    Writing AbieMagn biomass map to biomass/AbieMagn-1.img ...
+2018-06-20 08:41:52,409 -    Writing PinuCont biomass map to biomass/PinuCont-1.img ...
+2018-06-20 08:41:52,425 -    Writing PinuMont biomass map to biomass/PinuMont-1.img ...
+2018-06-20 08:41:52,438 -    Writing TsugMert biomass map to biomass/TsugMert-1.img ...
+2018-06-20 08:41:52,452 -    Writing PinuAlbi biomass map to biomass/PinuAlbi-1.img ...
+2018-06-20 08:41:52,466 -    Writing PopuTrem biomass map to biomass/PopuTrem-1.img ...
+2018-06-20 08:41:52,486 -    Writing NonnResp biomass map to biomass/NonnResp-1.img ...
+2018-06-20 08:41:52,504 -    Writing NonnSeed biomass map to biomass/NonnSeed-1.img ...
+2018-06-20 08:41:52,518 -    Writing FixnResp biomass map to biomass/FixnResp-1.img ...
+2018-06-20 08:41:52,533 -    Writing FixnSeed biomass map to biomass/FixnSeed-1.img ...
+2018-06-20 08:41:52,548 - Current time: 2
+2018-06-20 08:41:52,549 - Running NECN Succession ...

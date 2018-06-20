@@ -1,26 +1,28 @@
 LandisData  Scenario
 
-Duration  20
+Duration  5
 
 Species   species_LTB.txt
 
 Ecoregions      ./ecoregions.txt
-EcoregionsMap   ./singlecell_3.img
+EcoregionsMap   ./ecoregions.gis
 
-CellLength  100 << meters, 100 x 100 m = 1 ha
+CellLength  100 << meters, 100 x 100 m = 1 hectare
 
 
 >> NOTE:  This example assumes that you have downloaded and installed 
->> the correpsonding extensions.  
+>> the correpsonding extensions.  These extensions are currently packaged
+>> together as a package.
 
 >> Succession Extension     Initialization File
 >> --------------------     -------------------
-   "NECN Succession"     NECN-succession-singlecell.txt
+  "NECN Succession"     NECN_LTBvalues_landscape.txt
 
 
 >> Disturbance Extensions   Initialization File
 >> ----------------------   -------------------
->>   "Base Fire"		    base-fire_v2.txt
+       "Base Harvest"			base-harvest_SetUp.txt
+	"SCRAPPLE"              scrapple_SetUp_s1e01.txt
 
 >>   DisturbancesRandomOrder  yes  << optional parameter; default = no
 
@@ -29,6 +31,7 @@ CellLength  100 << meters, 100 x 100 m = 1 ha
 >> ----------------         -------------------
 >>   "Output Cohort Stats"    cohort-stats.output.txt
 >>   "Output Reclass"	    reclass.output.txt
+>>"Output Biomass"	    output-biomass.txt
 
 
 >>RandomNumberSeed  4,357  << optional parameter; default = the seed is
