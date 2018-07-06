@@ -177,7 +177,7 @@ namespace Landis.Extension.Succession.NECN
             bool found = false;
             foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
-                if (SiteVars.HarvestPrescriptionName != null && SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
+                if (SiteVars.HarvestPrescriptionName != null && prescriptionName.Trim() == prescription.PrescriptionName.Trim())
                 {
                     litterLossMultiplier = prescription.FineLitterReduction;
                     woodLossMultiplier = prescription.CoarseLitterReduction;
@@ -186,7 +186,11 @@ namespace Landis.Extension.Succession.NECN
                     found = true;
                 }
             }
-            if (!found) return;
+            if (!found)
+            {
+                PlugIn.ModelCore.UI.WriteLine("   Prescription {0} not found in the NECN Harvest Effects Table", prescriptionName);
+                return;
+            }
 
 
             // Structural litter first
@@ -197,11 +201,11 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.SurfaceStructural[site].Carbon -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
-            SiteVars.FireCEfflux[site]               += carbonLoss;
+            //SiteVars.FireCEfflux[site]               += carbonLoss;
 
             SiteVars.SurfaceStructural[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
-            SiteVars.FireNEfflux[site] += nitrogenLoss;
+            //SiteVars.FireNEfflux[site] += nitrogenLoss;
 
             // Metabolic litter
 
@@ -211,11 +215,11 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.SurfaceMetabolic[site].Carbon  -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
-            SiteVars.FireCEfflux[site]               += carbonLoss;
+            //SiteVars.FireCEfflux[site]               += carbonLoss;
 
             SiteVars.SurfaceMetabolic[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
-            SiteVars.FireNEfflux[site] += nitrogenLoss;
+            //SiteVars.FireNEfflux[site] += nitrogenLoss;
 
             // Surface dead wood
             carbonLoss   = SiteVars.SurfaceDeadWood[site].Carbon * woodLossMultiplier;
@@ -224,11 +228,11 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.SurfaceDeadWood[site].Carbon   -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
-            SiteVars.FireCEfflux[site]               += carbonLoss;
+            //SiteVars.FireCEfflux[site]               += carbonLoss;
 
             SiteVars.SurfaceDeadWood[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
-            SiteVars.FireNEfflux[site] += nitrogenLoss;
+            //SiteVars.FireNEfflux[site] += nitrogenLoss;
 
             // Soil Organic Matter
             carbonLoss = SiteVars.SOM1surface[site].Carbon * som_Multiplier;
@@ -237,14 +241,11 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.SOM1surface[site].Carbon -= carbonLoss;
             SiteVars.SourceSink[site].Carbon += carbonLoss;
-            SiteVars.FireCEfflux[site] += carbonLoss;
+            //SiteVars.FireCEfflux[site] += carbonLoss;
 
             SiteVars.SOM1surface[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
-            SiteVars.FireNEfflux[site] += nitrogenLoss;
-
-            // Transfer 1% to mineral N.
-            SiteVars.MineralN[site] += summaryNLoss * 0.01;
+            //SiteVars.FireNEfflux[site] += nitrogenLoss;
 
         }
 

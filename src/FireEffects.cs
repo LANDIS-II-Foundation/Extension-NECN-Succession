@@ -131,11 +131,13 @@ namespace Landis.Extension.Succession.NECN
         public static void ReduceLayers(byte severity, Site site)
         {
             // PlugIn.ModelCore.UI.WriteLine("   Calculating fire induced layer reductions. FineLitter={0}, Wood={1}, Duff={2}.", ReductionsTable[severity].FineLitterReduction, ReductionsTable[severity].CoarseLitterReduction, ReductionsTable[severity].SOMReduction);
-        
+
             // Structural litter first
-            
-            double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * ReductionsTable[severity].FineLitterReduction;
-            double nitrogenLoss = SiteVars.SurfaceStructural[site].Nitrogen * ReductionsTable[severity].FineLitterReduction;
+            double fineLitterReduction = ReductionsTable[severity].FineLitterReduction;
+
+
+            double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * fineLitterReduction;
+            double nitrogenLoss = SiteVars.SurfaceStructural[site].Nitrogen * fineLitterReduction;
             double summaryNLoss = nitrogenLoss;
             
             SiteVars.SurfaceStructural[site].Carbon -= carbonLoss;
@@ -149,8 +151,8 @@ namespace Landis.Extension.Succession.NECN
             
             // Metabolic litter
 
-            carbonLoss = SiteVars.SurfaceMetabolic[site].Carbon * ReductionsTable[severity].FineLitterReduction;
-            nitrogenLoss = SiteVars.SurfaceMetabolic[site].Nitrogen * ReductionsTable[severity].FineLitterReduction;
+            carbonLoss = SiteVars.SurfaceMetabolic[site].Carbon * fineLitterReduction;
+            nitrogenLoss = SiteVars.SurfaceMetabolic[site].Nitrogen * fineLitterReduction;
             summaryNLoss += nitrogenLoss;
             
             SiteVars.SurfaceMetabolic[site].Carbon  -= carbonLoss;
