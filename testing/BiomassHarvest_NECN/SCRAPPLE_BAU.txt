@@ -23,7 +23,7 @@ AccidentalIgnitionsB0  -8.5
 AccidentalIgnitionsB1  0.03
 
 >> A generic parameter, determines the fine-fuel scale from 0-1.0
-MaximumFineFuels 500.0
+MaximumFineFuels 15.0
 
 >> Prescribed Fire Parameters
 MaximumRxWindSpeed 8.0

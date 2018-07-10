@@ -45,7 +45,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// Name
+        /// Layer Name
         /// </summary>
         public LayerName Name
         {
@@ -76,7 +76,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Nitrogen
+        /// Carbon
         /// </summary>
         public double Carbon
         {

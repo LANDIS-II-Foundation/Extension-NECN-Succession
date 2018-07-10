@@ -24,23 +24,9 @@ Prescription MaxAgeClearcut
 
 >>Test
 Prescription PatchCutting
-    StandRanking		MaxCohortAge
-    MinimumAge  		60
-    StandAdjacency		10
-    AdjacencyType 		StandAge
-    AdjacencyNeighborSetAside	10
-	
-		ForestTypeTable 
-
-	>> InclusionRule	AgeRAnge	PecentCells	Species
-	>> -------------	---------	-----------	--------
-
-	>>Forbidden		1-1000		30		PopuTrem		
-
-
-    SiteSelection 	Complete <<CompleteStandSpread  1  1
-	
-	
+    StandRanking	MaxCohortAge
+    MinimumAge  	60
+    SiteSelection 	Complete 
 	MinTimeSinceDamage	20
 
     CohortsRemoved SpeciesList 

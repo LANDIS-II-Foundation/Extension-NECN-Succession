@@ -168,7 +168,7 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public static void ReduceLayers(string prescriptionName, Site site)
         {
-            //PlugIn.ModelCore.UI.WriteLine("   Calculating harvest induced layer reductions...");
+            PlugIn.ModelCore.UI.WriteLine("   Calculating harvest induced layer reductions...");
 
             double litterLossMultiplier = 0.0;
             double woodLossMultiplier = 0.0;
@@ -191,6 +191,7 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.ModelCore.UI.WriteLine("   Prescription {0} not found in the NECN Harvest Effects Table", prescriptionName);
                 return;
             }
+            PlugIn.ModelCore.UI.WriteLine("   LitterLoss={0:0.00}, woodLoss={1:0.00}, SOM_loss={2:0.00}, SITE={3}", litterLossMultiplier, woodLossMultiplier, som_Multiplier, site);
 
 
             // Structural litter first
@@ -235,6 +236,8 @@ namespace Landis.Extension.Succession.NECN
             //SiteVars.FireNEfflux[site] += nitrogenLoss;
 
             // Soil Organic Matter
+            //PlugIn.ModelCore.UI.WriteLine("   SOM1.C BEFORE = {0}", SiteVars.SOM1surface[site].Carbon);
+
             carbonLoss = SiteVars.SOM1surface[site].Carbon * som_Multiplier;
             nitrogenLoss = SiteVars.SOM1surface[site].Nitrogen * som_Multiplier;
             summaryNLoss += nitrogenLoss;
@@ -245,7 +248,7 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.SOM1surface[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
-            //SiteVars.FireNEfflux[site] += nitrogenLoss;
+            //PlugIn.ModelCore.UI.WriteLine("   SOM1.C AFTER = {0}", SiteVars.SOM1surface[site].Carbon);
 
         }
 
