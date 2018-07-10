@@ -285,8 +285,8 @@ namespace Landis.Extension.Succession.NECN
             ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
             ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
 
-            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, woodInput), cohort, cohort.Species, site);  
-            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, foliarInput), cohort, cohort.Species, site);
+            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);  
+            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
 
             //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
             //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", cohortReductions.Foliar, cohortReductions.Wood);
@@ -359,8 +359,8 @@ namespace Landis.Extension.Succession.NECN
             ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, eventArgs.Site);
 
             // Assume that ALL dead root biomass stays on site.
-            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, woodInput), cohort, cohort.Species, eventArgs.Site);
-            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, foliarInput), cohort, cohort.Species, eventArgs.Site);
+            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
+            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
 
             if (disturbanceType != null)
                 Disturbed[site] = true;

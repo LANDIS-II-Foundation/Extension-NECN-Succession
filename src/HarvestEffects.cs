@@ -163,8 +163,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// Computes fire effects on litter, coarse woody debris, mineral soil, and charcoal.
-        ///   No effects on soil organic matter (negligible according to Johnson et al. 2001).
+        /// Computes fire effects on litter, coarse woody debris, duff layer.
         /// </summary>
         public static void ReduceLayers(string prescriptionName, Site site)
         {
@@ -191,64 +190,52 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.ModelCore.UI.WriteLine("   Prescription {0} not found in the NECN Harvest Effects Table", prescriptionName);
                 return;
             }
-            PlugIn.ModelCore.UI.WriteLine("   LitterLoss={0:0.00}, woodLoss={1:0.00}, SOM_loss={2:0.00}, SITE={3}", litterLossMultiplier, woodLossMultiplier, som_Multiplier, site);
+            //PlugIn.ModelCore.UI.WriteLine("   LitterLoss={0:0.00}, woodLoss={1:0.00}, SOM_loss={2:0.00}, SITE={3}", litterLossMultiplier, woodLossMultiplier, som_Multiplier, site);
 
+            SiteVars.HarvestTime[site] = PlugIn.ModelCore.CurrentTime;
 
-            // Structural litter first
+            // Structural litter
 
             double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * litterLossMultiplier;
             double nitrogenLoss = SiteVars.SurfaceStructural[site].Nitrogen * litterLossMultiplier;
-            double summaryNLoss = nitrogenLoss;
 
             SiteVars.SurfaceStructural[site].Carbon -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
-            //SiteVars.FireCEfflux[site]               += carbonLoss;
 
             SiteVars.SurfaceStructural[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
-            //SiteVars.FireNEfflux[site] += nitrogenLoss;
 
             // Metabolic litter
 
             carbonLoss = SiteVars.SurfaceMetabolic[site].Carbon * litterLossMultiplier;
             nitrogenLoss = SiteVars.SurfaceMetabolic[site].Nitrogen * litterLossMultiplier;
-            summaryNLoss += nitrogenLoss;
 
             SiteVars.SurfaceMetabolic[site].Carbon  -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
-            //SiteVars.FireCEfflux[site]               += carbonLoss;
 
             SiteVars.SurfaceMetabolic[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
-            //SiteVars.FireNEfflux[site] += nitrogenLoss;
 
             // Surface dead wood
             carbonLoss   = SiteVars.SurfaceDeadWood[site].Carbon * woodLossMultiplier;
             nitrogenLoss = SiteVars.SurfaceDeadWood[site].Nitrogen * woodLossMultiplier;
-            summaryNLoss += nitrogenLoss;
 
             SiteVars.SurfaceDeadWood[site].Carbon   -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
-            //SiteVars.FireCEfflux[site]               += carbonLoss;
 
             SiteVars.SurfaceDeadWood[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
-            //SiteVars.FireNEfflux[site] += nitrogenLoss;
 
-            // Soil Organic Matter
-            //PlugIn.ModelCore.UI.WriteLine("   SOM1.C BEFORE = {0}", SiteVars.SOM1surface[site].Carbon);
+            // Soil Organic Matter (Duff)
 
             carbonLoss = SiteVars.SOM1surface[site].Carbon * som_Multiplier;
             nitrogenLoss = SiteVars.SOM1surface[site].Nitrogen * som_Multiplier;
-            summaryNLoss += nitrogenLoss;
 
             SiteVars.SOM1surface[site].Carbon -= carbonLoss;
             SiteVars.SourceSink[site].Carbon += carbonLoss;
-            //SiteVars.FireCEfflux[site] += carbonLoss;
 
             SiteVars.SOM1surface[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
-            //PlugIn.ModelCore.UI.WriteLine("   SOM1.C AFTER = {0}", SiteVars.SOM1surface[site].Carbon);
 
         }
 

@@ -193,7 +193,8 @@ namespace Landis.Extension.Succession.NECN
             SmolderConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FlamingConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); 
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-            HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
+            //HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
+            HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
@@ -242,6 +243,7 @@ namespace Landis.Extension.Succession.NECN
         {
             FireSeverity        = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
+            HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
 
             //if(HarvestPrescriptionName == null)
             //    throw new System.ApplicationException("TEST Error: Harvest Prescription Names NOT Initialized.");
