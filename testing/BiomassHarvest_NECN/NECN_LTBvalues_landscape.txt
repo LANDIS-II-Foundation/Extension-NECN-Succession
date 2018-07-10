@@ -110,8 +110,8 @@ FireReductionParameters
 HarvestReductionParameters
 >>	Name		WoodLitter	Litter	SOM		CohortWood	CohortLeaf
 >>			Reduct		Reduct	Reduction	Removal		Removal
-	MaxAgeClearcut	0.5		0.15	0.2		0.85		0.15
-	PatchCutting	0.5		0.1	1.0		0.85		0.15
+	MaxAgeClearcut	0.5		0.15	0.2		0.8		0.15
+	PatchCutting	1.0		1.0	1.0		1.0		1.0
 
 
    

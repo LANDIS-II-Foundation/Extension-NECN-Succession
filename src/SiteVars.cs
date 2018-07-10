@@ -483,7 +483,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Water loss
+        /// Fine Fuels biomass
         /// </summary>
         public static ISiteVar<double> FineFuels
         {
