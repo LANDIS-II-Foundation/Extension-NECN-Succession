@@ -192,8 +192,6 @@ namespace Landis.Extension.Succession.NECN
             }
             //PlugIn.ModelCore.UI.WriteLine("   LitterLoss={0:0.00}, woodLoss={1:0.00}, SOM_loss={2:0.00}, SITE={3}", litterLossMultiplier, woodLossMultiplier, som_Multiplier, site);
 
-            SiteVars.HarvestTime[site] = PlugIn.ModelCore.CurrentTime;
-
             // Structural litter
 
             double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * litterLossMultiplier;
