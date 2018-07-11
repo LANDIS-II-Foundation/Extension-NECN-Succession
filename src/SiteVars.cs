@@ -243,7 +243,7 @@ namespace Landis.Extension.Succession.NECN
         {
             FireSeverity        = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-            HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
+            //HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
 
             //if(HarvestPrescriptionName == null)
             //    throw new System.ApplicationException("TEST Error: Harvest Prescription Names NOT Initialized.");

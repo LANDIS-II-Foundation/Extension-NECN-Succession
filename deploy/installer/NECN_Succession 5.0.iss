@@ -1,6 +1,6 @@
 #define PackageName      "NECN Succession"
 #define PackageNameLong  "NECN Succession Extension"
-#define Version          "5.0"
+#define Version          "5.0.1"
 #define ReleaseType      "official"
 #define ReleaseNumber    "0.0"
 #define CoreVersion      "6.0"
