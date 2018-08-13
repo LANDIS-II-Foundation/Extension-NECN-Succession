@@ -352,7 +352,6 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         public void TransferCarbon(Layer destination, double netCFlow)
         {
-
             if (netCFlow < 0)
             {
                 //PlugIn.ModelCore.UI.WriteLine("NEGATIVE C FLOW!  Source: {0},{1}; Destination: {2},{3}.", this.Name, this.Type, destination.Name, destination.Type);
@@ -360,10 +359,11 @@ namespace Landis.Extension.Succession.NECN
 
             if (netCFlow > this.Carbon)
                 netCFlow = this.Carbon;
-                //PlugIn.ModelCore.UI.WriteLine("C FLOW EXCEEDS SOURCE!  Source: {0},{1}; Destination: {2},{3}.", this.Name, this.Type, destination.Name, destination.Type);
+            //PlugIn.ModelCore.UI.WriteLine("C FLOW EXCEEDS SOURCE!  Source: {0},{1}; Destination: {2},{3}.", this.Name, this.Type, destination.Name, destination.Type);
 
-            this.Carbon -= netCFlow;
-            destination.Carbon += netCFlow;
+            //round these to avoid unexpected behavior
+            this.Carbon = Math.Round(this.Carbon - netCFlow);
+            destination.Carbon = Math.Round(destination.Carbon + netCFlow);
 
         }
 

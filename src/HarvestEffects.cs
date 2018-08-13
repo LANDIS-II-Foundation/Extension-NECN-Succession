@@ -194,8 +194,8 @@ namespace Landis.Extension.Succession.NECN
 
             // Structural litter
 
-            double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * litterLossMultiplier;
-            double nitrogenLoss = SiteVars.SurfaceStructural[site].Nitrogen * litterLossMultiplier;
+            double carbonLoss = Math.Round(SiteVars.SurfaceStructural[site].Carbon * litterLossMultiplier, 2);
+            double nitrogenLoss = Math.Round(SiteVars.SurfaceStructural[site].Nitrogen * litterLossMultiplier, 2);
 
             SiteVars.SurfaceStructural[site].Carbon -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
@@ -205,8 +205,8 @@ namespace Landis.Extension.Succession.NECN
 
             // Metabolic litter
 
-            carbonLoss = SiteVars.SurfaceMetabolic[site].Carbon * litterLossMultiplier;
-            nitrogenLoss = SiteVars.SurfaceMetabolic[site].Nitrogen * litterLossMultiplier;
+            carbonLoss = Math.Round(SiteVars.SurfaceMetabolic[site].Carbon * litterLossMultiplier, 2);
+            nitrogenLoss = Math.Round(SiteVars.SurfaceMetabolic[site].Nitrogen * litterLossMultiplier, 2);
 
             SiteVars.SurfaceMetabolic[site].Carbon  -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
@@ -215,8 +215,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
 
             // Surface dead wood
-            carbonLoss   = SiteVars.SurfaceDeadWood[site].Carbon * woodLossMultiplier;
-            nitrogenLoss = SiteVars.SurfaceDeadWood[site].Nitrogen * woodLossMultiplier;
+            carbonLoss   = Math.Round(SiteVars.SurfaceDeadWood[site].Carbon * woodLossMultiplier, 2);
+            nitrogenLoss = Math.Round(SiteVars.SurfaceDeadWood[site].Nitrogen * woodLossMultiplier, 2);
 
             SiteVars.SurfaceDeadWood[site].Carbon   -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
@@ -226,8 +226,8 @@ namespace Landis.Extension.Succession.NECN
 
             // Soil Organic Matter (Duff)
 
-            carbonLoss = SiteVars.SOM1surface[site].Carbon * som_Multiplier;
-            nitrogenLoss = SiteVars.SOM1surface[site].Nitrogen * som_Multiplier;
+            carbonLoss = Math.Round(SiteVars.SOM1surface[site].Carbon * som_Multiplier, 2);
+            nitrogenLoss = Math.Round(SiteVars.SOM1surface[site].Nitrogen * som_Multiplier, 2);
 
             SiteVars.SOM1surface[site].Carbon -= carbonLoss;
             SiteVars.SourceSink[site].Carbon += carbonLoss;
