@@ -585,7 +585,7 @@ namespace Landis.Extension.Succession.NECN
                 int ln = (int) frindex.Value.Actual;
 
                 if(ln < 1 || ln > 5)
-                    throw new InputValueException(ftindex.Value.String,
+                    throw new InputValueException(frindex.Value.String,
                                               "The fire severity index:  {0} must be 1-5,",
                                               frindex.Value.String);
 

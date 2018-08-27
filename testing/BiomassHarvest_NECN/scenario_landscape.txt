@@ -33,9 +33,8 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 >> Disturbance Extensions   Initialization File
 
 >> ----------------------   -------------------
-	
-"Biomass Harvest"	biomass-harvest_SetUp_s2e1.txt
 
+"Biomass Harvest"	biomass-harvest_SetUp_s2e1.txt
 "SCRAPPLE"		SCRAPPLE_BAU.txt
 
 >>   DisturbancesRandomOrder  yes  << optional parameter; default = no
