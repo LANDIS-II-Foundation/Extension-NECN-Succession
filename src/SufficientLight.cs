@@ -1,9 +1,6 @@
-//  Copyright 2009 Conservation Biology Institute
 //  Authors:  Robert M. Scheller
-//  License:  Available at  
-//  http://www.landis-ii.org/developers/LANDIS-IISourceCodeLicenseAgreement.pdf
 
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -39,24 +36,7 @@ namespace Landis.Extension.Succession.NECN
         public SufficientLight()
         {
         }
-        //---------------------------------------------------------------------
 
-/*        public SufficientLight(byte   shadeClass,
-                        double probabilityLight0,
-                        double probabilityLight1,
-                        double probabilityLight2,
-                        double probabilityLight3,
-                        double probabilityLight4,
-                        double probabilityLight5)
-        {
-            this.shadeClass = shadeClass;
-            this.probabilityLight0 = probabilityLight0;
-            this.probabilityLight1 = probabilityLight1;
-            this.probabilityLight2 = probabilityLight2;
-            this.probabilityLight3 = probabilityLight3;
-            this.probabilityLight4 = probabilityLight4;
-            this.probabilityLight5 = probabilityLight5;
-        }*/
         //---------------------------------------------------------------------
 
         /// <summary>

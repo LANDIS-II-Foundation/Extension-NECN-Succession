@@ -1,6 +1,6 @@
  //  Authors: Robert Scheller, Melissa Lucash
 
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using Landis.Core;
 using Landis.SpatialModeling;
 using System.Collections.Generic;

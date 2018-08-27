@@ -1,6 +1,6 @@
 //  Author: Robert Scheller, Melissa Lucash
 
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using System;
 using System.Threading;
 using Landis.Core;
@@ -484,9 +484,6 @@ namespace Landis.Extension.Succession.NECN
 
         public void Respiration(double co2loss, ActiveSite site)
         {
-        //lock(site){
-        // Copyright 1993 Colorado State University
-        // All Rights Reserved
         // Compute flows associated with microbial respiration.
 
         // Input:
@@ -543,9 +540,6 @@ namespace Landis.Extension.Succession.NECN
         public bool DecomposePossible(double ratioCNnew, double mineralN)
         {
 
-            //Copyright 1993 Colorado State University
-            //All Rights Reserved
-            //logical function candec(nelem,aminrl,tca,elstva,nlr,lyr,rcenew)
             //c...Determine if decomposition can occur.
 
             bool canDecompose = true;
@@ -575,9 +569,6 @@ namespace Landis.Extension.Succession.NECN
 
         public void AdjustLignin(double inputC, double inputFracLignin)
         {
-            // Copyright 1993 Colorado State University
-            // All Rights Reserved
-
             //c...Adjust the fraction of lignin in structural C when new material
             //c...  is added.
 

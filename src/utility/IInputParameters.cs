@@ -1,8 +1,8 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
 //  Author: Robert Scheller, Melissa Lucash
 
 using Landis.Library.Succession;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
+using Landis.Library.Parameters;
 using System.Collections.Generic;
 
 namespace Landis.Extension.Succession.NECN
@@ -81,25 +81,25 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        Species.AuxParm<int> SppFunctionalType{get;}
-        Species.AuxParm<bool> NFixer{get;}
-        Species.AuxParm<int> GDDmin{get;}
-        Species.AuxParm<int> GDDmax{get;}
-        Species.AuxParm<int> MinJanTemp{get;}
-        Species.AuxParm<double> MaxDrought{get;}
-        Species.AuxParm<double> LeafLongevity {get;}
-        Species.AuxParm<bool> Epicormic {get;}
-        Species.AuxParm<double> LeafLignin {get;}
-        Species.AuxParm<double> WoodLignin {get;}
-        Species.AuxParm<double> CoarseRootLignin {get;}
-        Species.AuxParm<double> FineRootLignin {get;}
-        Species.AuxParm<double> LeafCN {get;}
-        Species.AuxParm<double> WoodCN {get;}
-        Species.AuxParm<double> CoarseRootCN {get;}
-        Species.AuxParm<double> FoliageLitterCN {get;}
-        Species.AuxParm<double> FineRootCN {get;}
-        Species.AuxParm<int> MaxANPP { get; }
-        Species.AuxParm<int> MaxBiomass { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> SppFunctionalType{get;}
+        Landis.Library.Parameters.Species.AuxParm<bool> NFixer{get;}
+        Landis.Library.Parameters.Species.AuxParm<int> GDDmin{get;}
+        Landis.Library.Parameters.Species.AuxParm<int> GDDmax{get;}
+        Landis.Library.Parameters.Species.AuxParm<int> MinJanTemp{get;}
+        Landis.Library.Parameters.Species.AuxParm<double> MaxDrought{get;}
+        Landis.Library.Parameters.Species.AuxParm<double> LeafLongevity {get;}
+        Landis.Library.Parameters.Species.AuxParm<bool> Epicormic {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> LeafLignin {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> WoodLignin {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> CoarseRootLignin {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> FineRootLignin {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> LeafCN {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> WoodCN {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> CoarseRootCN {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> FoliageLitterCN {get;}
+        Landis.Library.Parameters.Species.AuxParm<double> FineRootCN {get;}
+        Landis.Library.Parameters.Species.AuxParm<int> MaxANPP { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> MaxBiomass { get; }
 
         double AtmosNslope {get;}
         double AtmosNintercept {get;}

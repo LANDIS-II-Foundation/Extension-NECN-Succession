@@ -2,9 +2,10 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using Landis.Library.Succession;
 using Landis.Library.Climate;
+using Landis.Library.Parameters;
 
 using System.Collections.Generic;
 using System;
@@ -16,25 +17,25 @@ namespace Landis.Extension.Succession.NECN
 
     public class SpeciesData // : ISpeciesData
     {
-        public static Species.AuxParm<int> FuncType;
-        public static Species.AuxParm<bool> NFixer;
-        public static Species.AuxParm<int> GDDmin;
-        public static Species.AuxParm<int> GDDmax;
-        public static Species.AuxParm<int> MinJanTemp;
-        public static Species.AuxParm<double> MaxDrought;
-        public static Species.AuxParm<double> LeafLongevity;
-        public static Species.AuxParm<bool> Epicormic;
-        public static Species.AuxParm<double> LeafLignin;
-        public static Species.AuxParm<double> WoodLignin;
-        public static Species.AuxParm<double> CoarseRootLignin;
-        public static Species.AuxParm<double> FineRootLignin;
-        public static Species.AuxParm<double> LeafCN;
-        public static Species.AuxParm<double> WoodCN;
-        public static Species.AuxParm<double> CoarseRootCN;
-        public static Species.AuxParm<double> LeafLitterCN;
-        public static Species.AuxParm<double> FineRootCN;
-        public static Species.AuxParm<int> Max_ANPP;
-        public static Species.AuxParm<int> Max_Biomass;
+        public static Landis.Library.Parameters.Species.AuxParm<int> FuncType;
+        public static Landis.Library.Parameters.Species.AuxParm<bool> NFixer;
+        public static Landis.Library.Parameters.Species.AuxParm<int> GDDmin;
+        public static Landis.Library.Parameters.Species.AuxParm<int> GDDmax;
+        public static Landis.Library.Parameters.Species.AuxParm<int> MinJanTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MaxDrought;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LeafLongevity;
+        public static Landis.Library.Parameters.Species.AuxParm<bool> Epicormic;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LeafLignin;
+        public static Landis.Library.Parameters.Species.AuxParm<double> WoodLignin;
+        public static Landis.Library.Parameters.Species.AuxParm<double> CoarseRootLignin;
+        public static Landis.Library.Parameters.Species.AuxParm<double> FineRootLignin;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LeafCN;
+        public static Landis.Library.Parameters.Species.AuxParm<double> WoodCN;
+        public static Landis.Library.Parameters.Species.AuxParm<double> CoarseRootCN;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LeafLitterCN;
+        public static Landis.Library.Parameters.Species.AuxParm<double> FineRootCN;
+        public static Landis.Library.Parameters.Species.AuxParm<int> Max_ANPP;
+        public static Landis.Library.Parameters.Species.AuxParm<int> Max_Biomass;
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)

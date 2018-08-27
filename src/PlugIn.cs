@@ -2,7 +2,7 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 
 using Landis.Library.InitialCommunities;
 using Landis.Library.Succession;
@@ -127,9 +127,6 @@ namespace Landis.Extension.Succession.NECN
             // Delegate mortality routines:
             Landis.Library.LeafBiomassCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
             Landis.Library.LeafBiomassCohorts.Cohort.DeathEvent += CohortTotalMortality;
-            //Landis.Library.LeafBiomassCohorts.Cohort.AgeOnlyDeathEvent += CohortTotalMortality;
-            //Landis.Library.LeafBiomassCohorts.SiteCohorts.AgeOnlyDisturbanceEvent += SiteDisturbed;
-            //AgeOnlyDisturbances.Module.Initialize(Parameters.AgeOnlyDisturbanceParms);
 
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
@@ -162,7 +159,7 @@ namespace Landis.Extension.Succession.NECN
             if (PlugIn.ModelCore.CurrentTime > 0)
                     SiteVars.InitializeDisturbances();
 
-            ClimateRegionData.AnnualNDeposition = new Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
+            ClimateRegionData.AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
 
             //base.RunReproductionFirst();
 

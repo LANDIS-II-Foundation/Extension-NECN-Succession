@@ -2,7 +2,7 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using Landis.Library.Succession;
 
 using System;

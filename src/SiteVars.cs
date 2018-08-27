@@ -1,9 +1,8 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
 //  Author: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using Landis.Library.Succession;
 using Landis.Library.LeafBiomassCohorts;  
 using System.Collections.Generic;

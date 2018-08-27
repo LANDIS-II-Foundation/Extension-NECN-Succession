@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Landis.Library.Metadata;
 using Landis.Core;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 
 namespace Landis.Extension.Succession.NECN
 {

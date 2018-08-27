@@ -2,7 +2,7 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using Landis.Library.Succession;
 using Landis.Library.Climate;
 using System.Collections.Generic;
@@ -15,19 +15,19 @@ namespace Landis.Extension.Succession.NECN
     public class ClimateRegionData
     {
 
-        public static Ecoregions.AuxParm<int> ActiveSiteCount;
-        public static Ecoregions.AuxParm<double> AnnualNDeposition;    
-        public static Ecoregions.AuxParm<double[]> MonthlyNDeposition; 
-        public static Ecoregions.AuxParm<AnnualClimate_Monthly> AnnualWeather;
+        public static Landis.Library.Parameters.Ecoregions.AuxParm<int> ActiveSiteCount;
+        public static Landis.Library.Parameters.Ecoregions.AuxParm<double> AnnualNDeposition;    
+        public static Landis.Library.Parameters.Ecoregions.AuxParm<double[]> MonthlyNDeposition; 
+        public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly> AnnualWeather;
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
         {
-            ActiveSiteCount = new Ecoregions.AuxParm<int>(PlugIn.ModelCore.Ecoregions);
-            AnnualWeather = new Ecoregions.AuxParm<AnnualClimate_Monthly>(PlugIn.ModelCore.Ecoregions);
-            MonthlyNDeposition = new Ecoregions.AuxParm<double[]>(PlugIn.ModelCore.Ecoregions);
+            ActiveSiteCount = new Landis.Library.Parameters.Ecoregions.AuxParm<int>(PlugIn.ModelCore.Ecoregions);
+            AnnualWeather = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly>(PlugIn.ModelCore.Ecoregions);
+            MonthlyNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double[]>(PlugIn.ModelCore.Ecoregions);
 
-            AnnualNDeposition = new Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
+            AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
             
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {

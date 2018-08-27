@@ -2,8 +2,9 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using Landis.Library.Succession;
+using Landis.Library.Parameters;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -63,25 +64,25 @@ namespace Landis.Extension.Succession.NECN
         private FireReductions[] fireReductionsTable;
         private List<HarvestReductions> harvestReductionsTable;
         
-        private Species.AuxParm<int> sppFunctionalType;
-        private Species.AuxParm<bool> nFixer;
-        private Species.AuxParm<int> gddMin;
-        private Species.AuxParm<int> gddMax;
-        private Species.AuxParm<int> minJanTemp;
-        private Species.AuxParm<double> maxDrought;
-        private Species.AuxParm<double> leafLongevity;
-        private Species.AuxParm<bool> epicormic;
-        private Species.AuxParm<double> leafLignin;
-        private Species.AuxParm<double> woodLignin;
-        private Species.AuxParm<double> coarseRootLignin;
-        private Species.AuxParm<double> fineRootLignin;
-        private Species.AuxParm<double> leafCN;
-        private Species.AuxParm<double> woodCN;
-        private Species.AuxParm<double> coarseRootCN;
-        private Species.AuxParm<double> foliageLitterCN;
-        private Species.AuxParm<double> fineRootCN;
-        private Species.AuxParm<int> maxANPP;
-        private Species.AuxParm<int> maxBiomass;
+        private Landis.Library.Parameters.Species.AuxParm<int> sppFunctionalType;
+        private Landis.Library.Parameters.Species.AuxParm<bool> nFixer;
+        private Landis.Library.Parameters.Species.AuxParm<int> gddMin;
+        private Landis.Library.Parameters.Species.AuxParm<int> gddMax;
+        private Landis.Library.Parameters.Species.AuxParm<int> minJanTemp;
+        private Landis.Library.Parameters.Species.AuxParm<double> maxDrought;
+        private Landis.Library.Parameters.Species.AuxParm<double> leafLongevity;
+        private Landis.Library.Parameters.Species.AuxParm<bool> epicormic;
+        private Landis.Library.Parameters.Species.AuxParm<double> leafLignin;
+        private Landis.Library.Parameters.Species.AuxParm<double> woodLignin;
+        private Landis.Library.Parameters.Species.AuxParm<double> coarseRootLignin;
+        private Landis.Library.Parameters.Species.AuxParm<double> fineRootLignin;
+        private Landis.Library.Parameters.Species.AuxParm<double> leafCN;
+        private Landis.Library.Parameters.Species.AuxParm<double> woodCN;
+        private Landis.Library.Parameters.Species.AuxParm<double> coarseRootCN;
+        private Landis.Library.Parameters.Species.AuxParm<double> foliageLitterCN;
+        private Landis.Library.Parameters.Species.AuxParm<double> fineRootCN;
+        private Landis.Library.Parameters.Species.AuxParm<int> maxANPP;
+        private Landis.Library.Parameters.Species.AuxParm<int> maxBiomass;
         
         private List<ISufficientLight> sufficientLight;
 
@@ -304,18 +305,18 @@ namespace Landis.Extension.Succession.NECN
  
         //---------------------------------------------------------------------
 
-        public Species.AuxParm<int>     SppFunctionalType {get {return sppFunctionalType;}}
-        public Species.AuxParm<bool>     NFixer { get {return nFixer;}}
-        public Species.AuxParm<int>     GDDmin     { get { return gddMin; }}
-        public Species.AuxParm<int>     GDDmax     { get { return gddMax; }}
-        public Species.AuxParm<int>     MinJanTemp { get { return minJanTemp; }}
-        public Species.AuxParm<double>  MaxDrought { get { return maxDrought; }}
-        public Species.AuxParm<double>  LeafLongevity {get {return leafLongevity;}}
+        public Landis.Library.Parameters.Species.AuxParm<int>     SppFunctionalType {get {return sppFunctionalType;}}
+        public Landis.Library.Parameters.Species.AuxParm<bool>     NFixer { get {return nFixer;}}
+        public Landis.Library.Parameters.Species.AuxParm<int>     GDDmin     { get { return gddMin; }}
+        public Landis.Library.Parameters.Species.AuxParm<int>     GDDmax     { get { return gddMax; }}
+        public Landis.Library.Parameters.Species.AuxParm<int>     MinJanTemp { get { return minJanTemp; }}
+        public Landis.Library.Parameters.Species.AuxParm<double>  MaxDrought { get { return maxDrought; }}
+        public Landis.Library.Parameters.Species.AuxParm<double>  LeafLongevity {get {return leafLongevity;}}
         //---------------------------------------------------------------------
         /// <summary>
         /// Can the species resprout epicormically following a fire?
         /// </summary>
-        public Species.AuxParm<bool>    Epicormic 
+        public Landis.Library.Parameters.Species.AuxParm<bool>    Epicormic 
         {
             get {
                 return epicormic;
@@ -326,28 +327,28 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------
-        public Species.AuxParm<double> LeafLignin
+        public Landis.Library.Parameters.Species.AuxParm<double> LeafLignin
         {
             get {
                 return leafLignin;
             }
         }
         //---------------------------------------------------------------------
-        public Species.AuxParm<double> WoodLignin
+        public Landis.Library.Parameters.Species.AuxParm<double> WoodLignin
         {
             get {
                 return woodLignin;
             }
         }
         //---------------------------------------------------------------------
-        public Species.AuxParm<double> CoarseRootLignin
+        public Landis.Library.Parameters.Species.AuxParm<double> CoarseRootLignin
         {
             get {
                 return coarseRootLignin;
             }
         }
         //---------------------------------------------------------------------
-        public Species.AuxParm<double> FineRootLignin
+        public Landis.Library.Parameters.Species.AuxParm<double> FineRootLignin
         {
             get {
                 return fineRootLignin;
@@ -355,7 +356,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public Species.AuxParm<double> LeafCN
+        public Landis.Library.Parameters.Species.AuxParm<double> LeafCN
         {
             get {
                 return leafCN;
@@ -363,7 +364,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public Species.AuxParm<double> WoodCN
+        public Landis.Library.Parameters.Species.AuxParm<double> WoodCN
         {
             get {
                 return woodCN;
@@ -371,7 +372,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public Species.AuxParm<double> CoarseRootCN
+        public Landis.Library.Parameters.Species.AuxParm<double> CoarseRootCN
         {
             get {
                 return coarseRootCN;
@@ -379,7 +380,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public Species.AuxParm<double> FoliageLitterCN
+        public Landis.Library.Parameters.Species.AuxParm<double> FoliageLitterCN
         {
             get {
                 return foliageLitterCN;
@@ -387,7 +388,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public Species.AuxParm<double> FineRootCN
+        public Landis.Library.Parameters.Species.AuxParm<double> FineRootCN
         {
             get {
                 return fineRootCN;
@@ -395,7 +396,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public Species.AuxParm<int> MaxANPP
+        public Landis.Library.Parameters.Species.AuxParm<int> MaxANPP
         {
             get
             {
@@ -404,7 +405,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public Species.AuxParm<int> MaxBiomass
+        public Landis.Library.Parameters.Species.AuxParm<int> MaxBiomass
         {
             get
             {
@@ -1008,25 +1009,25 @@ namespace Landis.Extension.Succession.NECN
             fireReductionsTable = new FireReductions[6];
             harvestReductionsTable = new List<HarvestReductions>();
 
-            sppFunctionalType       = new Species.AuxParm<int>(speciesDataset);
-            nFixer                  = new Species.AuxParm<bool>(speciesDataset);
-            gddMin                  = new Species.AuxParm<int>(speciesDataset);
-            gddMax                  = new Species.AuxParm<int>(speciesDataset);
-            minJanTemp              = new Species.AuxParm<int>(speciesDataset);
-            maxDrought              = new Species.AuxParm<double>(speciesDataset);
-            leafLongevity           = new Species.AuxParm<double>(speciesDataset);
-            epicormic               = new Species.AuxParm<bool>(speciesDataset);
-            leafLignin              = new Species.AuxParm<double>(speciesDataset);
-            woodLignin              = new Species.AuxParm<double>(speciesDataset);
-            coarseRootLignin        = new Species.AuxParm<double>(speciesDataset);
-            fineRootLignin          = new Species.AuxParm<double>(speciesDataset);
-            leafCN                  = new Species.AuxParm<double>(speciesDataset);
-            woodCN                  = new Species.AuxParm<double>(speciesDataset);
-            coarseRootCN            = new Species.AuxParm<double>(speciesDataset);
-            foliageLitterCN         = new Species.AuxParm<double>(speciesDataset);
-            fineRootCN              = new Species.AuxParm<double>(speciesDataset);
-            maxANPP                 = new Species.AuxParm<int>(speciesDataset);
-            maxBiomass              = new Species.AuxParm<int>(speciesDataset);
+            sppFunctionalType       = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            nFixer                  = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            gddMin                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            gddMax                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            minJanTemp              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            maxDrought              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            leafLongevity           = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            epicormic               = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            leafLignin              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            woodLignin              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            coarseRootLignin        = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            fineRootLignin          = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            leafCN                  = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            woodCN                  = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            coarseRootCN            = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            foliageLitterCN         = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            fineRootCN              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            maxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
 
             maximumShadeLAI = new double[6];
 
@@ -1079,14 +1080,14 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        private Species.AuxParm<T> ConvertToActualValues<T>(Species.AuxParm<InputValue<T>> inputValues)
-        {
-            Species.AuxParm<T> actualValues = new Species.AuxParm<T>(PlugIn.ModelCore.Species);//speciesDataset);
-            foreach (ISpecies species in PlugIn.ModelCore.Species)//speciesDataset)
-                if (inputValues[species] != null)
-                    actualValues[species] = inputValues[species].Actual;
-            return actualValues;
-        }
+        //private Landis.Library.Parameters.Species.AuxParm<T> ConvertToActualValues<T>(Species.AuxParm<InputValue<T>> inputValues)
+        //{
+        //    Species.AuxParm<T> actualValues = new Species.AuxParm<T>(PlugIn.ModelCore.Species);//speciesDataset);
+        //    foreach (ISpecies species in PlugIn.ModelCore.Species)//speciesDataset)
+        //        if (inputValues[species] != null)
+        //            actualValues[species] = inputValues[species].Actual;
+        //    return actualValues;
+        //}
 
         //---------------------------------------------------------------------
 

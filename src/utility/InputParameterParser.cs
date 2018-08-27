@@ -1,8 +1,7 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
 //  Author: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using Landis.Library.Succession;
 using System.Collections.Generic;
 
@@ -11,7 +10,7 @@ namespace Landis.Extension.Succession.NECN
     /// <summary>
     /// A parser that reads biomass succession parameters from text input.
     /// </summary>
-    public class InputParametersParser//<TParseResult>
+    public class InputParametersParser
         : TextParser<IInputParameters>
     {
         public override string LandisDataValue
