@@ -40,9 +40,6 @@ namespace Landis.Extension.Succession.NECN
 
                 SiteVars.ResetAnnualValues(site);
 
-                //if(y == 0 && SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-                //    FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
-
                 // Next, Grow and Decompose each month
                 int[] months = new int[12]{6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
 
@@ -68,6 +65,7 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyNEE[site][Month] = 0.0;
                     SiteVars.MonthlyResp[site][Month] = 0.0;
                     SiteVars.MonthlyStreamN[site][Month] = 0.0;
+                    SiteVars.MonthlyLAI[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);
                     //SiteVars.LAI[site] = Century.ComputeLAI((ActiveSite)site);

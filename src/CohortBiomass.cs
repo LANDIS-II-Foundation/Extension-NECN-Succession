@@ -178,10 +178,13 @@ namespace Landis.Extension.Succession.NECN
             double limitLAI = calculateLAI_Limit(cohort, site);
 
             // RMS 03/2016: Testing alternative more similar to how Biomass Succession operates: REMOVE FOR NEXT RELEASE
-            double limitCapacity = 1.0 - Math.Min(1.0, Math.Exp(siteBiomass / maxBiomass * 5.0) / Math.Exp(5.0));
+            //double limitCapacity = 1.0 - Math.Min(1.0, Math.Exp(siteBiomass / maxBiomass * 5.0) / Math.Exp(5.0));
 
-            //double potentialNPP = maxNPP * limitLAI * limitH20 * limitT; // * limitCapacity;
-            double potentialNPP = maxNPP * limitLAI * limitH20 * limitT * limitCapacity;
+            double competition_limit = calculateCompetition_Limit(cohort, site);
+
+            //double potentialNPP_NoN = maxNPP * limitLAI * limitH20 * limitT; // * limitCapacity;
+            double potentialNPP = maxNPP * limitLAI * limitH20 * limitT * competition_limit;
+            //double potentialNPP = maxNPP * limitLAI * limitH20 * limitT * limitCapacity;
 
             double limitN = calculateN_Limit(site, cohort, potentialNPP, leafFractionNPP);
 
@@ -548,27 +551,16 @@ namespace Landis.Extension.Succession.NECN
             // foliar carbon, which may be necessary for simulating defoliation events.
             if(tlai <= 0.0) lai = rlai;
 
-            //lai = tlai;  // Century 4.5 ignores rlai.
+            if (Main.Month == 6)
+                SiteVars.LAI[site] += lai; //Tracking LAI.
 
-
-            // Limit aboveground wood production by leaf area
-            //  index.
-            //
-            //       REF:    Efficiency of Tree Crowns and Stemwood
-            //               Production at Different Canopy Leaf Densities
-            //               by Waring, Newman, and Bell
-            //               Forestry, Vol. 54, No. 2, 1981
-
-            //totalLAI += lai;
-            // if (totalLAI > ClimateRegionData.MaxLAI)
-            // lai = 0.1;
-
-            // The minimum LAI to calculate effect is 0.2.
-            //if (lai < 0.5) lai = 0.5;
+            // The minimum LAI to calculate effect is 0.1.
             if (lai < 0.1) lai = 0.1;
 
             if(Main.Month == 6)
                 SiteVars.LAI[site] += lai; //Tracking LAI.
+
+            SiteVars.MonthlyLAI[site][Main.Month] += lai;
 
             double LAI_limit = Math.Max(0.0, 1.0 - Math.Exp(laitop * lai));
 
@@ -590,6 +582,19 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}.     LAI Limits:  lai={2:0.0}, woodLAI={3:0.0}, leafLAI={4:0.0}, LAIlimit={5:0.00}.", PlugIn.ModelCore.CurrentTime, month + 1, lai, woodLAI, leafLAI, LAI_limit);
 
             return LAI_limit;
+
+        }
+
+        private static double calculateCompetition_Limit(ICohort cohort, ActiveSite site)
+        {
+            double k = -0.14;  // This is the value given for all temperature ecosystems. Istarted with 0.1
+            double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
+            double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
+
+            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+                Outputs.CalibrateLog.Write("{0:0.00},", monthly_cumulative_LAI);
+
+            return competition_limit;
 
         }
 
