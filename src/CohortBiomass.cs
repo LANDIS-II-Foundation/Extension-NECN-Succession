@@ -59,14 +59,16 @@ namespace Landis.Extension.Succession.NECN
             // Age-related mortality includes woody and standing leaf biomass.
             double[] mortalityAge = ComputeAgeMortality(cohort, site);
 
+            // ****** Growth *******
+            double[] actualANPP = ComputeActualANPP(cohort, site, siteBiomass, mortalityAge);
+            
             //  Growth-related mortality
-            double[] mortalityGrowth = ComputeGrowthMortality(cohort, site);
+            double[] mortalityGrowth = ComputeGrowthMortality(cohort, site, siteBiomass, actualANPP);
+            //double[] mortalityGrowth = ComputeGrowthMortality(cohort, site);
 
             double[] totalMortality = new double[2]{Math.Min(cohort.WoodBiomass, mortalityAge[0] + mortalityGrowth[0]), Math.Min(cohort.LeafBiomass, mortalityAge[1] + mortalityGrowth[1])};
             double nonDisturbanceLeafFall = totalMortality[1];
 
-            // ****** Growth *******
-            double[] actualANPP = ComputeActualANPP(cohort, site, siteBiomass, mortalityAge);
             
             double scorch = 0.0;
             defoliatedLeafBiomass = 0.0;
@@ -292,16 +294,30 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Monthly mortality as a function of standing leaf and wood biomass.
         /// </summary>
-        private double[] ComputeGrowthMortality(ICohort cohort, ActiveSite site)
+        //private double[] ComputeGrowthMortality(ICohort cohort, ActiveSite site)
+        private double[] ComputeGrowthMortality(ICohort cohort, ActiveSite site, double siteBiomass, double[] AGNPP)
         {
+
+            double maxBiomass = SpeciesData.Max_Biomass[cohort.Species];
+            double NPPwood = (double)AGNPP[0];
+            
             //if(cohort.WoodBiomass <= 0 || cohort.LeafBiomass <= 0)
             //    return (new double[2]{0.0, 0.0});
 
             double M_wood = cohort.WoodBiomass * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MonthlyWoodMortality;
             double M_leaf = 0.0;
 
+            double relativeBiomass = siteBiomass / maxBiomass;
+            double M_constant = 5.0;  //This constant controls the rate of change of mortality with NPP
+
+            //Functon which calculates an adjustment factor for mortality that ranges from 0 to 1 and exponentially increases with relative biomass.
+            double M_wood_relative = Math.Max(0.0, (Math.Exp(M_constant * relativeBiomass) - 1) / (Math.Exp(M_constant) - 1));
+
+            //This function calculates mortality as a function of NPP 
+             M_wood = NPPwood * M_wood_relative;
+
             // Leaves and Needles dropped.
-            if(SpeciesData.LeafLongevity[cohort.Species] > 1.0) 
+            if (SpeciesData.LeafLongevity[cohort.Species] > 1.0) 
             {
                 M_leaf = cohort.LeafBiomass / (double) SpeciesData.LeafLongevity[cohort.Species] / 12.0;  //Needle deposit spread across the year.
                
@@ -492,9 +508,7 @@ namespace Landis.Extension.Succession.NECN
 
             //...Calculate theoretical LAI as a function of large wood mass.
             //     There is no strong consensus on the true nature of the relationship
-            //     between LAI and stemwood mass.  Version 3.0 used a negative exponential
-            //     relationship between leaf mass and large wood mass, which tended to
-            //     break down in very large forests.  Many sutdies have cited as "general"
+            //     between LAI and stemwood mass.  Many sutdies have cited as "general"
             //      an increase of LAI up to a maximum, then a decrease to a plateau value
             //     (e.g. Switzer et al. 1968, Gholz and Fisher 1982).  However, this
             //     response is not general, and seems to mostly be a feature of young
