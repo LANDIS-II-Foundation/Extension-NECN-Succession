@@ -8,7 +8,7 @@ InitialCommunities      	initial-communities_LTBselect.txt
 InitialCommunitiesMap   	singlecell_3.img
 ClimateConfigFile		climate-generator-baseline.txt
 
-SoilDepthMapName		singlecell_110.img <<75
+SoilDepthMapName		singlecell_100test2.img <<75
 SoilDrainMapName		point75singlecell.img <<.691
 SoilBaseFlowMapName		point4singlecell.img <<0.4
 SoilStormFlowMapName		point4singlecell.img <<0.4

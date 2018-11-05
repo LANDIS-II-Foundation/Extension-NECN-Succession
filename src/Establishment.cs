@@ -145,7 +145,7 @@ namespace Landis.Extension.Succession.NECN
                   (max_Grow_Deg_Days - Deg_Days)) / (totalGDD * totalGDD);
             
            if (Deg_Day_GF < 0) Deg_Day_GF = 0.0;
-           //PlugIn.ModelCore.UI.WriteLine("SppMaxDD={0:0.00}, sppMinGDD={1:0.0}, actualGDD={2:0}, gddM={3:0.00}.", max_Grow_Deg_Days, min_Grow_Deg_Days, Deg_Days, Deg_Day_GF);
+           PlugIn.ModelCore.UI.WriteLine("SppMaxDD={0:0.00}, sppMinGDD={1:0.0}, actualGDD={2:0}, gddM={3:0.00}.", max_Grow_Deg_Days, min_Grow_Deg_Days, Deg_Days, Deg_Day_GF);
            
            return Deg_Day_GF;
         }
