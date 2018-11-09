@@ -65,18 +65,13 @@ namespace Landis.Extension.Succession.NECN
         
         /// <summary>
         /// Calculate coarse and fine roots based on aboveground wood and leaf biomass.
-        /// Coarse root:stem mass of loblolly pine from Albaugh et al 2006 based on multiple sites with loblolly pine.
-        /// Fine root:foliar biomass estimated from Park et al. 2008 at HBEF and Sleepers River.
-        /// Fine root production used an average of deciduous and conifer species since they didn't differ in Park et al. 2008.
         /// </summary>
         public static double CalculateCoarseRoot(ICohort cohort, double wood)
         {
-            //return (wood * 0.5);
             return (wood * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].CoarseRootFraction);
         }
         public static double CalculateFineRoot(ICohort cohort, double foliarBiomass)
         {
-            //return (foliarbiomass * 0.76);
             return (foliarBiomass * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FineRootFraction);
         }
     }

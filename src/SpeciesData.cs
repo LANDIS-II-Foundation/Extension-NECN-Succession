@@ -15,7 +15,7 @@ namespace Landis.Extension.Succession.NECN
 {
 
 
-    public class SpeciesData // : ISpeciesData
+    public class SpeciesData 
     {
         public static Landis.Library.Parameters.Species.AuxParm<int> FuncType;
         public static Landis.Library.Parameters.Species.AuxParm<bool> NFixer;
@@ -59,6 +59,21 @@ namespace Landis.Extension.Succession.NECN
             FineRootCN          = parameters.FineRootCN;
             Max_ANPP            = parameters.MaxANPP;
             Max_Biomass         = parameters.MaxBiomass;
+
+            foreach (ISpecies spp in PlugIn.ModelCore.Species)
+            {
+                try
+                {
+                    double maxLAI = FunctionalType.Table[SpeciesData.FuncType[spp]].MAXLAI;
+                    //PlugIn.ModelCore.UI.WriteLine("Spp={0}, FT={1}", spp.Name, SpeciesData.FuncType[spp]);
+
+                }
+                catch (Exception)
+                {
+                    string mesg = string.Format("Species or Functional Type Missing: {0}", spp.Name);
+                    throw new System.ApplicationException(mesg);
+                }
+            }
 
         }
     }

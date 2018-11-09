@@ -88,6 +88,7 @@ namespace Landis.Extension.Succession.NECN
             FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
 
             ClimateRegionData.Initialize(Parameters);
+            FunctionalType.Initialize(Parameters);
             SpeciesData.Initialize(Parameters);
             Util.ReadSoilDepthMap(Parameters.SoilDepthMapName);
             Util.ReadSoilDrainMap(Parameters.SoilDrainMapName);
@@ -109,7 +110,6 @@ namespace Landis.Extension.Succession.NECN
 
             ShadeLAI = Parameters.MaximumShadeLAI; 
             OtherData.Initialize(Parameters);
-            FunctionalType.Initialize(Parameters);
             FireEffects.Initialize(Parameters);
 
             //  Cohorts must be created before the base class is initialized

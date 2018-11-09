@@ -25,7 +25,7 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 
 >> --------------------     -------------------
   
-"NECN Succession"     NECN_LTBvalues_landscape.txt
+"NECN Succession"     NECN_LTB_landscape.txt
 
 
 

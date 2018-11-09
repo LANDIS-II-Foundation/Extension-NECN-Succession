@@ -24,17 +24,10 @@ namespace Landis.Extension.Succession.NECN
 
         public static class Names
         {
-            //public const string Timestep = "Timestep";
-            //public const string SeedingAlgorithm = "SeedingAlgorithm";
-
-            //public const string ClimateConfigFile = "ClimateConfigFile";
-            //public const string CalibrateMode = "CalibrateMode";
-            //public const string SufficientLight = "SufficientLightTable";
             public const string SpeciesParameters = "SpeciesParameters";
             public const string FunctionalGroupParameters = "FunctionalGroupParameters";
             public const string FireReductionParameters = "FireReductionParameters";
             public const string HarvestReductionParameters = "HarvestReductionParameters";
-            //public const string AgeOnlyDisturbanceParms = "AgeOnlyDisturbances:BiomassParameters";
         }
 
         //---------------------------------------------------------------------
