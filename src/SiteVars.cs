@@ -89,7 +89,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> frassC;
         private static ISiteVar<double> lai;
         private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. I'm coppying LAI implementation
-        private static ISiteVar<double> annualSoilMoisture; //Annual soil moisture calculation, defined as pet - aet
+        private static ISiteVar<double> annualClimaticWaterDeficit; //Annual soil moisture calculation, defined as pet - aet
         private static ISiteVar<int> dryDays;
                 
         public static ISiteVar<double> TotalWoodBiomass;
@@ -190,7 +190,7 @@ namespace Landis.Extension.Succession.NECN
             frassC              = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             lai                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            annualSoilMoisture  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            annualClimaticWaterDeficit  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             SmolderConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FlamingConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); 
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
@@ -335,7 +335,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.FrassC[site] = 0.0;
             SiteVars.LAI[site] = 0.0;
             SiteVars.AnnualPPT_AET[site] = 0.0;
-            SiteVars.AnnualSoilMoisture[site] = 0.0;
+            SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
             SiteVars.WoodMortality[site] = 0.0;
             //SiteVars.DryDays[site] = 0;
 
@@ -985,15 +985,15 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// A summary of Soil Moisture (PET - AET)
         /// </summary>
-        public static ISiteVar<double> AnnualSoilMoisture
+        public static ISiteVar<double> AnnualClimaticWaterDeficit
         {
             get
             {
-                return annualSoilMoisture;
+                return annualClimaticWaterDeficit;
             }
             set
             {
-                annualSoilMoisture = value;
+                annualClimaticWaterDeficit = value;
             }
 
 

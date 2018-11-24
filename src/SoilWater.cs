@@ -221,7 +221,9 @@ namespace Landis.Extension.Succession.NECN
             if (pet > 0.0) ratioPrecipPET = availableWater / pet;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
             SiteVars.AnnualPPT_AET[site] += Precipitation - actualET;
-            SiteVars.AnnualSoilMoisture[site] = pet - actualET;
+            SiteVars.AnnualClimaticWaterDeficit[site] += (pet - actualET) * 10.0;  // Convert to mm, the standard definition
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
+
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     

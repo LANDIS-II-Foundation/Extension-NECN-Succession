@@ -1,0 +1,15 @@
+LandisData "Climate Config"				
+		
+ClimateTimeSeries			Daily_AverageAllYears
+ClimateFile				climate_TM_short.csv
+ClimateFileFormat			Daily_Temp-C_Precip-mmDay
+
+SpinUpClimateTimeSeries			Daily_AverageAllYears
+SpinUpClimateFile			climate_TM_short.csv
+SpinUpClimateFileFormat			Daily_Temp-C_Precip-mmDay
+
+
+UsingFireClimate			no
+RelativeHumiditySlopeAdjust             77.68
+SpringStart				30
+WinterStart 				320
