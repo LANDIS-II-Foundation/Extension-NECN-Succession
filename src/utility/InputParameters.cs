@@ -22,7 +22,6 @@ namespace Landis.Extension.Succession.NECN
         private string climateConfigFile;
         private string initCommunities;
         private string communitiesMap;
-        //private string ageOnlyDisturbanceParms;
         private string soilDepthMapName;
         private string soilDrainMapName;
         private string soilBaseFlowMapName;

@@ -92,10 +92,6 @@ namespace Landis.Extension.Succession.NECN
             ReadVar(climateConfigFile);
             parameters.ClimateConfigFile = climateConfigFile.Value;
 
-            //InputVar<string> ageOnlyDisturbanceParms = new InputVar<string>("AgeOnlyDisturbances:BiomassParameters");
-            //ReadVar(ageOnlyDisturbanceParms);
-            //parameters.AgeOnlyDisturbanceParms = ageOnlyDisturbanceParms.Value;
-
             InputVar<string> soilDepthMapName = new InputVar<string>("SoilDepthMapName");
             ReadVar(soilDepthMapName);
             parameters.SoilDepthMapName = soilDepthMapName.Value;

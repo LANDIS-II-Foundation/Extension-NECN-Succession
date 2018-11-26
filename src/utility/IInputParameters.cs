@@ -111,19 +111,7 @@ namespace Landis.Extension.Succession.NECN
         double DenitrificationRate { get; }
         double InitialMineralN { get; }
         double InitialFineFuels { get; }
-        
-
-        //---------------------------------------------------------------------
-
-        ///// <summary>
-        ///// Path to the file with the biomass parameters for age-only
-        ///// disturbances.
-        ///// </summary>
-        //string AgeOnlyDisturbanceParms
-        //{
-        //    get;set;
-        //}
-
+   
         
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-//using System.Data;
+using System.IO;
 using System.Text;
 using Landis.Library.Metadata;
 using Landis.Core;
@@ -79,11 +79,13 @@ namespace Landis.Extension.Succession.NECN
             if (ANPPMapNames != null)
             {
                 PlugIn.ModelCore.UI.WriteLine("  ANPP Map Names = \"{0}\" ...", ANPPMapNames);
+                //string[] paths = { @"NECN", "AG_NPP-{timestep}.img" };
                 OutputMetadata mapOut_ANPP = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Aboveground Net Primary Production",
-                    FilePath = @"NECN\AG_NPP-{timestep}.img",  //century
+                    FilePath = @"NECN\AG_NPP-{timestep}.img",  
+                    //FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,
