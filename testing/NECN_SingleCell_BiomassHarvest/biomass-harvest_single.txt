@@ -20,7 +20,7 @@ Prescription PatchCutting
     StandRanking	MaxCohortAge
     SiteSelection 	Complete
     CohortsRemoved SpeciesList
-	PinuJeff	50-100 (10%)
+	PinuJeff	50-100 (90%)
 
 
 >> ----------------------------------
