@@ -70,7 +70,7 @@ Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\{#ExtensionName}; Flags: 
 
 ; LANDIS-II identifies the extension with the info in this .txt file
 ; NB. New releases must modify the name of this file and the info in it
-#define InfoTxt "NECN_Succession 6.0.txt"
+#define InfoTxt "NECN_Succession 6.Climate.txt"
 Source: {#InfoTxt}; DestDir: {#LandisPlugInDir}
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
