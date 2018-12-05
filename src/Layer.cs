@@ -362,9 +362,10 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("C FLOW EXCEEDS SOURCE!  Source: {0},{1}; Destination: {2},{3}.", this.Name, this.Type, destination.Name, destination.Type);
 
             //round these to avoid unexpected behavior
-            this.Carbon = Math.Round(this.Carbon - netCFlow);
-            destination.Carbon = Math.Round(destination.Carbon + netCFlow);
-
+            this.Carbon = Math.Round((this.Carbon - netCFlow),2);
+            //this.Carbon -= netCFlow;
+            destination.Carbon = Math.Round((destination.Carbon + netCFlow),2);
+            //destination.Carbon += netCFlow;
         }
 
         public void TransferNitrogen(Layer destination, double CFlow, double totalC, double ratioCNtoDestination, ActiveSite site)

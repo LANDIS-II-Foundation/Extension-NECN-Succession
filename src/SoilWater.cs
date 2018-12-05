@@ -71,12 +71,12 @@ namespace Landis.Extension.Succession.NECN
             beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
             endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
 
-            double wiltingPoint = SiteVars.SoilWiltingPoint[site];//ClimateRegionData.WiltingPoint[ecoregion];
-            double soilDepth = SiteVars.SoilDepth[site]; // ClimateRegionData.SoilDepth[ecoregion];
-            double fieldCapacity = SiteVars.SoilFieldCapacity[site];//ClimateRegionData.FieldCapacity[ecoregion];
-            double stormFlowFraction = SiteVars.SoilStormFlowFraction[site]; // ClimateRegionData.StormFlowFraction[ecoregion];
-            double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];//ClimateRegionData.BaseFlowFraction[ecoregion];
-            double drain = SiteVars.SoilDrain[site]; // ClimateRegionData.Drain[ecoregion];
+            double wiltingPoint = SiteVars.SoilWiltingPoint[site];
+            double soilDepth = SiteVars.SoilDepth[site]; 
+            double fieldCapacity = SiteVars.SoilFieldCapacity[site];
+            double stormFlowFraction = SiteVars.SoilStormFlowFraction[site]; 
+            double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];
+            double drain = SiteVars.SoilDrain[site]; 
            
                       
             //...Calculating snow pack first. Occurs when mean monthly air temperature is equal to or below freezing,

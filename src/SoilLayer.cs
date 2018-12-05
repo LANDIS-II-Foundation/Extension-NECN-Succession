@@ -257,7 +257,7 @@ namespace Landis.Extension.Succession.NECN
                 //Compute total C flow out of SOM3C
                 double totalCflow = som3c
                                 * SiteVars.DecayFactor[site]
-                                * PlugIn.Parameters.DecayRateSOM3 //ClimateRegionData.DecayRateSOM3[ecoregion]
+                                * PlugIn.Parameters.DecayRateSOM3 
                                 * anerb 
                                 * OtherData.MonthAdjust;
 
@@ -265,6 +265,7 @@ namespace Landis.Extension.Succession.NECN
                 //If decomposition can occur,
                 if (SiteVars.SOM3[site].DecomposePossible(ratioCNto1, SiteVars.MineralN[site]))
                 {
+                    //PlugIn.ModelCore.UI.WriteLine("BeforeSOM3 Decay.  C={0:0.00}.", SiteVars.SOM3[site].Carbon);
                     // CO2 loss - Compute and schedule respiration flows.
                     double co2loss = totalCflow * OtherData.FractionSOM3toCO2 * anerb;
                     double netCFlow = totalCflow - co2loss;
@@ -276,7 +277,7 @@ namespace Landis.Extension.Succession.NECN
                     // Partition and schedule C and N flows 
                     SiteVars.SOM3[site].TransferCarbon(SiteVars.SOM1soil[site], cFlowS3S1);
                     SiteVars.SOM3[site].TransferNitrogen(SiteVars.SOM1soil[site], cFlowS3S1, som3c, ratioCNto1, site);
-                    //PlugIn.ModelCore.UI.WriteLine("AfterSOM3.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
+                    //PlugIn.ModelCore.UI.WriteLine("AfterSOM3 Decay.  C={0:0.00}.", SiteVars.SOM3[site].Carbon);
                 }
             }
         }
