@@ -64,7 +64,6 @@ namespace Landis.Extension.Succession.NECN
             
             //  Growth-related mortality
             double[] mortalityGrowth = ComputeGrowthMortality(cohort, site, siteBiomass, actualANPP);
-            //double[] mortalityGrowth = ComputeGrowthMortality(cohort, site);
 
             double[] totalMortality = new double[2]{Math.Min(cohort.WoodBiomass, mortalityAge[0] + mortalityGrowth[0]), Math.Min(cohort.LeafBiomass, mortalityAge[1] + mortalityGrowth[1])};
             double nonDisturbanceLeafFall = totalMortality[1];
@@ -217,9 +216,6 @@ namespace Landis.Extension.Succession.NECN
             double woodNPP  = actualANPP * (1.0 - leafFractionNPP);
                         
             if (Double.IsNaN(leafNPP) || Double.IsNaN(woodNPP))
-
-
-
             {
                 PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP = NaN!  Will set to zero.");
                 //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}, SpeciesName={2}, CohortAge={3}.   GROWTH LIMITS: LAI={4:0.00}, H20={5:0.00}, N={6:0.00}, T={7:0.00}, Capacity={8:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, cohort.Species.Name, cohort.Age, limitLAI, limitH20, limitN, limitT, limitCapacity);
@@ -553,9 +549,7 @@ namespace Landis.Extension.Succession.NECN
 
             double tlai = maxlai * largeWoodC/(klai + largeWoodC);
 
-            //...Choose the LAI reducer on production.  I don't really understand
-            //     why we take the average in the first case, but it will probably
-            //     change...
+            //...Choose the LAI reducer on production. 
 
             //if (rlai < tlai) lai = (rlai + tlai) / 2.0;
             lai = tlai * rlai;
@@ -605,8 +599,8 @@ namespace Landis.Extension.Succession.NECN
             double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
             double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
 
-            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-                Outputs.CalibrateLog.Write("{0:0.00},", monthly_cumulative_LAI);
+            //if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            //    Outputs.CalibrateLog.Write("{0:0.00},", monthly_cumulative_LAI);
 
             return competition_limit;
 
