@@ -297,9 +297,6 @@ namespace Landis.Extension.Succession.NECN
             double maxBiomass = SpeciesData.Max_Biomass[cohort.Species];
             double NPPwood = (double)AGNPP[0];
             
-            //if(cohort.WoodBiomass <= 0 || cohort.LeafBiomass <= 0)
-            //    return (new double[2]{0.0, 0.0});
-
             double M_wood = cohort.WoodBiomass * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MonthlyWoodMortality;
             double M_leaf = 0.0;
 
