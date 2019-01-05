@@ -79,13 +79,13 @@ namespace Landis.Extension.Succession.NECN
             if (ANPPMapNames != null)
             {
                 PlugIn.ModelCore.UI.WriteLine("  ANPP Map Names = \"{0}\" ...", ANPPMapNames);
-                //string[] paths = { @"NECN", "AG_NPP-{timestep}.img" };
+                string[] paths = { @"NECN", "AG_NPP-{timestep}.img" };
                 OutputMetadata mapOut_ANPP = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Aboveground Net Primary Production",
-                    FilePath = @"NECN\AG_NPP-{timestep}.img",  
-                    //FilePath = Path.Combine(paths),
+                    //FilePath = @"NECN\AG_NPP-{timestep}.img",  
+                    FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,
@@ -95,11 +95,13 @@ namespace Landis.Extension.Succession.NECN
 
             if (ANEEMapNames != null)
             {
+                string[] paths = { @"NECN", "NEE-{timestep}.img" };
                 OutputMetadata mapOut_Nee = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Net Ecosystem Exchange",
-                    FilePath = @"NECN\NEE-{timestep}.img",  
+                    //FilePath = @"NECN\NEE-{timestep}.img",
+                    FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,
@@ -108,11 +110,13 @@ namespace Landis.Extension.Succession.NECN
             }
             if (SoilCarbonMapNames != null)
             {
+                string[] paths = { @"NECN", "SOC-{timestep}.img" };
                 OutputMetadata mapOut_SOC = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Soil Organic Carbon",
-                    FilePath = @"NECN\SOC-{timestep}.img",  
+                    //FilePath = @"NECN\SOC-{timestep}.img",
+                    FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,
@@ -121,11 +125,13 @@ namespace Landis.Extension.Succession.NECN
             }
             if (SoilNitrogenMapNames != null)
             {
+                string[] paths = { @"NECN", "SON-{timestep}.img" };
                 OutputMetadata mapOut_SON = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Soil Organic Nitrogen",
-                    FilePath = @"NECN\SON-{timestep}.img",  
+                    //FilePath = @"NECN\SON-{timestep}.img",
+                    FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_N_m2,
                     Visualize = true,
@@ -134,11 +140,13 @@ namespace Landis.Extension.Succession.NECN
             }
             if (TotalCMapNames != null)
             {
+                string[] paths = { @"NECN", "TotalC-{timestep}.img" };
                 OutputMetadata mapOut_TotalC = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Total Carbon",
-                    FilePath = @"NECN\TotalC-{timestep}.img",  
+                    //FilePath = @"NECN\TotalC-{timestep}.img",
+                    FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
                     Visualize = true,

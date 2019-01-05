@@ -88,8 +88,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlymineralN;
         private static ISiteVar<double> frassC;
         private static ISiteVar<double> lai;
-        private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. I'm coppying LAI implementation
-        private static ISiteVar<double> annualClimaticWaterDeficit; //Annual soil moisture calculation, defined as pet - aet
+        private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. 
         private static ISiteVar<int> dryDays;
                 
         public static ISiteVar<double> TotalWoodBiomass;
@@ -102,6 +101,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> fineFuels;
         public static ISiteVar<double> SmolderConsumption;
         public static ISiteVar<double> FlamingConsumption;
+        public static ISiteVar<double> AnnualClimaticWaterDeficit; //Annual soil moisture calculation, defined as pet - aet
 
 
         //---------------------------------------------------------------------
@@ -190,7 +190,7 @@ namespace Landis.Extension.Succession.NECN
             frassC              = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             lai                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            annualClimaticWaterDeficit  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            AnnualClimaticWaterDeficit  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             SmolderConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FlamingConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); 
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
@@ -205,6 +205,7 @@ namespace Landis.Extension.Succession.NECN
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.FineFuels, "Succession.FineFuels");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.SmolderConsumption, "Succession.SmolderConsumption");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.FlamingConsumption, "Succession.FlamingConsumption");
+            PlugIn.ModelCore.RegisterSiteVar(SiteVars.AnnualClimaticWaterDeficit, "Succession.CWD");
 
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -985,19 +986,19 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// A summary of Soil Moisture (PET - AET)
         /// </summary>
-        public static ISiteVar<double> AnnualClimaticWaterDeficit
-        {
-            get
-            {
-                return annualClimaticWaterDeficit;
-            }
-            set
-            {
-                annualClimaticWaterDeficit = value;
-            }
+        //public static ISiteVar<double> AnnualClimaticWaterDeficit
+        //{
+        //    get
+        //    {
+        //        return annualClimaticWaterDeficit;
+        //    }
+        //    set
+        //    {
+        //        annualClimaticWaterDeficit = value;
+        //    }
 
 
-        }
+        //}
     }
 
 }
