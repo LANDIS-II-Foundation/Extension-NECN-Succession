@@ -1,0 +1,17 @@
+LandisData "Base BDA"
+
+Timestep	1
+
+MapNames	bda/{agentName}-{timestep}.img
+
+SRDMapNames	bda/{agentName}-SRD-{timestep}.img
+
+NRDMapNames	bda/{agentName}-NRD-{timestep}.img
+
+>>BDPMapNames     bda/{agentName}-BDP-{timestep}.img
+
+LogFile		bda_log.csv
+
+BDAInputFiles	E:/SNPLMA3/LANDIS_modeling/LTW_NECN_H/BDA-inputs/JeffreyPineBeetle_Jan23.txt	
+                E:/SNPLMA3/LANDIS_modeling/LTW_NECN_H/BDA-inputs/MtnPineBeetle.txt	
+				E:/SNPLMA3/LANDIS_modeling/LTW_NECN_H/BDA-inputs/FirEngraver_Dominant.txt	

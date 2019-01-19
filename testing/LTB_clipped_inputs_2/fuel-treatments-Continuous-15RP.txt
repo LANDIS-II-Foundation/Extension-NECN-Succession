@@ -1,0 +1,165 @@
+LandisData  "Biomass Harvest"  << Continued Intensity Fuel Treatment Scenario - High rotation
+
+>>  All LTB mgt areas are  treated on a 15 year rotation
+
+Timestep    1
+
+ManagementAreas E:/SNPLMA3/LANDIS_modeling/LTW_NECN_H/management_areas.img
+
+Stands     E:/SNPLMA3/LANDIS_modeling/LTW_NECN_H/stands.img
+
+
+>> ***************
+>> PRESCRIPTIONS
+>> ***************
+
+
+
+>>------------------------------------
+
+Prescription FireRisk-LightThinning	<< goal -> reduce fire risk by reducing ladder fuels, using hand-thinnging (remove trees < 14 inches dbh)
+
+>>------------------------------------
+
+    	StandRanking 	FireHazard 
+	
+	>> Fuel Type	Fuel Type Rank
+	>> ---------	-------------
+		1	55
+		2	55
+		4	55
+		7	55
+		13	55
+		16	55
+		17	55
+		18	55
+		8	55
+		9	55
+		15	38
+		5	36
+		6	36
+		3	24
+		14	12
+		90	12
+		91	4
+	
+
+	ForestTypeTable 
+
+	>> InclusionRule	AgeRAnge	PecentCells	Species
+	>> -------------	---------	-----------	--------
+
+	Forbidden		1-1000		30		PopuTrem		
+
+
+    	SiteSelection 	Complete
+	
+	MinTimeSinceDamage	10
+
+    	CohortsRemoved SpeciesList 
+
+	AbieConc	1-50 51-60(80%) 61-70(70%) 71-80(40%)  81-90 (5%) 91-120 (1%)
+	CaloDecu	1-50 51-60(80%) 61-70(70%) 71-80(40%)  81-90 (5%) 91-120 (1%)
+
+	PinuJeff	1-30(99%) 31-40(75%) 41-50(50%) 51-60(30%) 61-70(12%) 71-80(5%) 81-90(2%) 91-120 (1%)
+	AbieMagn	1-30(99%) 31-40(75%) 41-50(50%) 51-60(30%) 61-70(12%) 71-80(5%) 81-90(2%) 91-120 (1%)
+	PinuCont	1-30(99%) 31-40(75%) 41-50(50%) 51-60(30%) 61-70(12%) 71-80(5%) 81-90(2%) 91-120 (1%)
+
+	PinuLamb	1-50(99%) 51-60(20%) 61-70(5%) 71-80(4%) 81-90(2%) 91-120 (1%)
+	
+	NonnResp  	10-200 (5%)
+	NonnSeed	10-200 (5%)
+	FixnResp	10-200 (5%)
+	FixnSeed	10-200 (5%)
+
+	PinuAlbi	900 (1%)
+
+>>------------------------------------
+
+Prescription FireRisk-ModerateThinning	<< goal -> reduce fire risk by reducing ladder fuels, using mechanical-thinnging (remove trees < 30 inches dbh)
+
+>>------------------------------------
+
+    	StandRanking 	FireHazard 
+	
+	<< Fuel Type	Fuel Type Rank
+	<< ---------	-------------
+		1	55
+		2	55
+		4	55
+		7	55
+		13	55
+		16	55
+		17	55
+		18	55
+		8	55
+		9	55
+		15	38
+		5	36
+		6	36
+		3	24
+		14	12
+		90	12
+		91	4
+	
+
+	ForestTypeTable 
+
+	>> InclusionRule	AgeRAnge	PecentCells	Species
+	>> -------------	---------	-----------	--------
+
+	Forbidden		1-1000		30		PopuTrem	
+
+    	SiteSelection 	Complete
+
+	MinTimeSinceDamage			10
+
+    	CohortsRemoved SpeciesList 
+
+
+	AbieConc	1-50 51-60(95%) 61-70(85%) 71-80(75%)  81-90 (60%) 91-100 (45%) 101-110 (20%) 111-120 (5%)
+	CaloDecu	1-50 51-60(95%) 61-70(85%) 71-80(75%)  81-90 (60%) 91-100 (45%) 101-110 (20%) 111-120 (5%)
+
+
+	PinuJeff	1-30(99%) 31-40(90%) 41-50(75%) 51-60(60%) 61-70(45%) 71-80(32%) 81-90(20%) 91-100(10%) 101-110(5%) 111-120 (1%)
+	AbieMagn	1-30(99%) 31-40(90%) 41-50(75%) 51-60(60%) 61-70(45%) 71-80(32%) 81-90(20%) 91-100(10%) 101-110(5%) 111-120 (1%)
+	PinuCont	1-30(99%) 31-40(90%) 41-50(75%) 51-60(60%) 61-70(45%) 71-80(32%) 81-90(20%) 91-100(10%) 101-110(5%) 111-120 (1%)
+
+	PinuLamb	1-50(99%) 51-60(30%) 61-70(10%) 71-80(7%) 81-90(5%) 91-100(3%) 101-120 (1%)
+	
+	NonnResp  	10-200 (30%)
+	NonnSeed	10-200 (30%)
+	FixnResp	10-200 (30%)
+	FixnSeed	10-200 (30%)
+
+	PinuAlbi	900 (1%)
+
+
+    
+>> ****************************
+>> PRESCRIPTION IMPLEMENTATION - 15 yr. rotation period, 5-year time-step (total Harvest Area = 33.3%)
+>> ****************************
+
+    HarvestImplementations
+>>  Mgmt Area   Prescription    			Harvest Area    Begin Time  End Time
+>>  ---------   ------------    			------------    ----------  --------
+>> 1 = Defensible space, 2 = Defense Zone, 3 = Extended WUI (0 = non-active, 4 = outside trmt areas, but forested)
+
+	1	FireRisk-ModerateThinning		10%	
+	1	FireRisk-LightThinning			23.3%		
+	
+	2	FireRisk-ModerateThinning		6.7%	 << 20% of 33.3% (<25% treatable area in MA that is < 30% slope)
+	2	FireRisk-LightThinning			26.6%	 << 80% of 33.3% 		
+		
+	3	FireRisk-ModerateThinning		3.3%	 << 10% of 33.3% (<16% treatable area in MA that is < 30% slope)	
+	3	FireRisk-LightThinning			30.0%	 << 90% of 33.3%		
+
+
+   
+>>-----------------------------------------------------------------
+>> OUTPUTS
+
+PrescriptionMaps    	harvest/prescripts-{timestep}.img
+BiomassMaps 		harvest/biomass-removed-{timestep}.img
+EventLog            	harvest/log.csv
+SummaryLog 		harvest/summary-log.csv

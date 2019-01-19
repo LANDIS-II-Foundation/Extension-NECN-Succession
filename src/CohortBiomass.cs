@@ -290,24 +290,28 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Monthly mortality as a function of standing leaf and wood biomass.
         /// </summary>
-        //private double[] ComputeGrowthMortality(ICohort cohort, ActiveSite site)
         private double[] ComputeGrowthMortality(ICohort cohort, ActiveSite site, double siteBiomass, double[] AGNPP)
         {
 
             double maxBiomass = SpeciesData.Max_Biomass[cohort.Species];
             double NPPwood = (double)AGNPP[0];
             
-            double M_wood = cohort.WoodBiomass * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MonthlyWoodMortality;
+            double M_wood_fixed = cohort.WoodBiomass * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MonthlyWoodMortality;
             double M_leaf = 0.0;
 
             double relativeBiomass = siteBiomass / maxBiomass;
             double M_constant = 5.0;  //This constant controls the rate of change of mortality with NPP
 
             //Functon which calculates an adjustment factor for mortality that ranges from 0 to 1 and exponentially increases with relative biomass.
-            double M_wood_relative = Math.Max(0.0, (Math.Exp(M_constant * relativeBiomass) - 1) / (Math.Exp(M_constant) - 1));
+            double M_wood_NPP = Math.Max(0.0, (Math.Exp(M_constant * relativeBiomass) - 1.0) / (Math.Exp(M_constant) - 1.0));
+            M_wood_NPP = Math.Min(M_wood_NPP, 1.0);
+            //PlugIn.ModelCore.UI.WriteLine("relativeBiomass={0}, siteBiomass={1}.", relativeBiomass, siteBiomass);
 
             //This function calculates mortality as a function of NPP 
-             M_wood = NPPwood * M_wood_relative;
+            double M_wood = (NPPwood * M_wood_NPP) + M_wood_fixed;
+
+            //PlugIn.ModelCore.UI.WriteLine("Mwood={0}, M_wood_relative={1}, NPPwood={2}, Spp={3}, Age={4}.", M_wood, M_wood_NPP, NPPwood, cohort.Species.Name, cohort.Age);
+
 
             // Leaves and Needles dropped.
             if (SpeciesData.LeafLongevity[cohort.Species] > 1.0) 
@@ -592,7 +596,7 @@ namespace Landis.Extension.Succession.NECN
 
         private static double calculateCompetition_Limit(ICohort cohort, ActiveSite site)
         {
-            double k = -0.14;  // This is the value given for all temperature ecosystems. Istarted with 0.1
+            double k = -0.14;  // This is the value given for all temperature ecosystems. I started with 0.1
             double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
             double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
 
