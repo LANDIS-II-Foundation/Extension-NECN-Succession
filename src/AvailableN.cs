@@ -188,7 +188,7 @@ namespace Landis.Extension.Succession.NECN
                     if (AvailableN.CohortMineralNfraction.TryGetValue(cohort.Species.Index, out cohortDict))
                         cohortDict.TryGetValue(cohortAddYear, out Nfraction);
                     
-                    double Nallocation = Nfraction * availableN;
+                    double Nallocation = Math.Max(0.05, Nfraction * availableN);
                    
                     if (Double.IsNaN(Nallocation) || Double.IsNaN(Nfraction) || Double.IsNaN(availableN))
                     {
