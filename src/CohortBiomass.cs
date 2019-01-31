@@ -480,7 +480,8 @@ namespace Landis.Extension.Succession.NECN
 
                 if (Ndemand > 0.0)
                 {
-                    limitN = Math.Min(1.0, (mineralNallocation + resorbedNallocation) / Ndemand);                   
+                    limitN = Math.Min(1.0, (mineralNallocation + resorbedNallocation) / Ndemand);
+                    //PlugIn.ModelCore.UI.WriteLine("mineralN={0}, resorbedN={1}, Ndemand={2}", mineralNallocation, resorbedNallocation, Ndemand);
 
                 }
                 else
@@ -560,16 +561,8 @@ namespace Landis.Extension.Succession.NECN
             // foliar carbon, which may be necessary for simulating defoliation events.
             if(tlai <= 0.0) lai = rlai;
 
-            if (Main.Month == 6)
-                SiteVars.LAI[site] += lai; //Tracking LAI.
-
             // The minimum LAI to calculate effect is 0.1.
             if (lai < 0.1) lai = 0.1;
-
-            if(Main.Month == 6)
-                SiteVars.LAI[site] += lai; //Tracking LAI.
-
-            SiteVars.MonthlyLAI[site][Main.Month] += lai;
 
             double LAI_limit = Math.Max(0.0, 1.0 - Math.Exp(laitop * lai));
 
@@ -581,6 +574,11 @@ namespace Landis.Extension.Succession.NECN
                 lai = 0.0;
                 LAI_limit = 0.0;
             }
+
+            if (Main.Month == 6)
+                SiteVars.LAI[site] += lai; //Tracking LAI.
+
+            SiteVars.MonthlyLAI[site][Main.Month] += lai;
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, tlai, rlai);

@@ -22,6 +22,7 @@ namespace Landis.Extension.Succession.NECN
         // Return amount of resorbed N in g N m-2.
         public static double GetResorbedNallocation(ICohort cohort, ActiveSite site)
         {
+            //cohort = null;
             int cohortAddYear = GetAddYear(cohort); 
             //PlugIn.ModelCore.UI.WriteLine("GETResorbedNallocation: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Main.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
             double resorbedNallocation = 0.0;
