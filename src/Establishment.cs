@@ -19,7 +19,7 @@ namespace Landis.Extension.Succession.NECN
         private static double[,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
         private static double[,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
         private static double[,] avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
-        private static double[] numberCalculations = new double[PlugIn.ModelCore.Ecoregions.Count];
+        private static int[] numberCalculations = new int[PlugIn.ModelCore.Ecoregions.Count];
 
 
         public static void InitializeLogFile()
@@ -69,6 +69,8 @@ namespace Landis.Extension.Succession.NECN
             avgJanuaryTlimit[species.Index, climateRegion.Index] += minJanTempMultiplier;
             avgPest[species.Index, climateRegion.Index] += establishProbability;
 
+            numberCalculations[climateRegion.Index]++;
+
             return establishProbability;
         }
 
@@ -82,10 +84,10 @@ namespace Landis.Extension.Succession.NECN
                         continue;
 
                         log.Write("{0}, {1}, {2},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name);
-                        log.Write("{0:0.00},", (avgMATlimit[species.Index, ecoregion.Index] / numberCalculations[ecoregion.Index]));
-                        log.Write("{0:0.00},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / numberCalculations[ecoregion.Index]));
-                        log.Write("{0:0.00},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / numberCalculations[ecoregion.Index]));
-                        log.WriteLine("{0:0.00}", (avgPest[species.Index, ecoregion.Index] / numberCalculations[ecoregion.Index]));
+                        log.Write("{0:0.00},", (avgMATlimit[species.Index, ecoregion.Index] / (double) numberCalculations[ecoregion.Index]));
+                        log.Write("{0:0.00},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[ecoregion.Index]));
+                        log.Write("{0:0.00},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[ecoregion.Index]));
+                        log.WriteLine("{0:0.00}", (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[ecoregion.Index]));
                 }
             }
 
@@ -93,7 +95,7 @@ namespace Landis.Extension.Succession.NECN
         avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
-        numberCalculations = new double[PlugIn.ModelCore.Ecoregions.Count];
+        numberCalculations = new int[PlugIn.ModelCore.Ecoregions.Count];
 
 
         }
