@@ -83,11 +83,6 @@ namespace Landis.Extension.Succession.NECN
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
             MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); //,LAIMapNames, ShadeClassMapNames);
             
-            //Initialize climate.
-            Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
-            FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
-
-            ClimateRegionData.Initialize(Parameters);
             FunctionalType.Initialize(Parameters);
             SpeciesData.Initialize(Parameters);
             Util.ReadSoilDepthMap(Parameters.SoilDepthMapName);
@@ -107,6 +102,11 @@ namespace Landis.Extension.Succession.NECN
                 Parameters.InitialSOM3CMapName,
                 Parameters.InitialSOM3NMapName);
             Util.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
+
+            //Initialize climate.
+            Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
+            FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
+            ClimateRegionData.Initialize(Parameters);
 
             ShadeLAI = Parameters.MaximumShadeLAI; 
             OtherData.Initialize(Parameters);
