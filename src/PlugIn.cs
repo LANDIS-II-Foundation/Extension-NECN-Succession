@@ -430,9 +430,7 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public bool Establish(ISpecies species, ActiveSite site)
         {
-            //IEcoregion ecoregion = modelCore.Ecoregion[site];
-            //double establishProbability = SpeciesData.EstablishProbability[species][ecoregion];
-            double establishProbability = Establishment.Calculate(species, site);// SpeciesData.EstablishProbability[species][ecoregion];
+            double establishProbability = Establishment.Calculate(species, site);
 
             return modelCore.GenerateUniform() < establishProbability;
         }
@@ -446,7 +444,7 @@ namespace Landis.Extension.Succession.NECN
         public bool PlantingEstablish(ISpecies species, ActiveSite site)
         {
             IEcoregion ecoregion = modelCore.Ecoregion[site];
-            double establishProbability = Establishment.Calculate(species, site); //, Timestep); // SpeciesData.EstablishProbability[species][ecoregion];
+            double establishProbability = Establishment.Calculate(species, site); 
 
             return establishProbability > 0.0;
         }

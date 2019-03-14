@@ -297,7 +297,7 @@ namespace Landis.Extension.Succession.NECN
                 pl.Time =    CurrentTime;
                 pl.ClimateRegionName =    ecoregion.Name;
                 pl.ClimateRegionIndex = ecoregion.Index;
-                pl.NumSites = ClimateRegionData.ActiveSiteCount[ecoregion]; //Climate_SWHC_Count[ecoregion.Index]; // ClimateRegionData.ActiveSiteCount[ecoregion];
+                pl.NumSites = ClimateRegionData.ActiveSiteCount[ecoregion]; 
 
                 pl.NEEC = (avgNEEc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.SOMTC = (avgSOMtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
