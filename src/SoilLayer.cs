@@ -3,6 +3,7 @@
 using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Utilities;
+using System;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -13,8 +14,6 @@ namespace Landis.Extension.Succession.NECN
         
         public static void Decompose(ActiveSite site)
         {
-            //PlugIn.ModelCore.UI.WriteLine("SiteVars.SOM2[site].Nitrogen = {0:0.00}", SiteVars.SOM2[site].Nitrogen);
-            //PlugIn.ModelCore.UI.WriteLine("SiteVars.MineralN = {0:0.00}", SiteVars.MineralN[site]);
             
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
             
@@ -61,10 +60,7 @@ namespace Landis.Extension.Succession.NECN
 
             //---------------------------------------------------------------------
             // Soil SOM1 decomposes to SOM2 and SOM3 with CO2 loss and leaching
-            
             double som1c_soil = SiteVars.SOM1soil[site].Carbon;
-            //PlugIn.ModelCore.UI.WriteLine("SOM1soil[site].Carbon={0:0.00}", som1c_soil);
-            //PlugIn.ModelCore.UI.WriteLine("SiteVars.MineralN = {0:0.00} - pre SOM1.", SiteVars.MineralN[site]);
           
             if (som1c_soil > 0.0000001)
             {
@@ -86,7 +82,7 @@ namespace Landis.Extension.Succession.NECN
                 double totalCflow = som1c_soil 
                             * SiteVars.DecayFactor[site]
                             * OtherData.LitterParameters[(int) LayerType.Soil].DecayRateMicrobes
-                            * PlugIn.Parameters.DecayRateSOM1 // ClimateRegionData.DecayRateSOM1[ecoregion]
+                            * PlugIn.Parameters.DecayRateSOM1 
                              * textureEffect
                              * anerb
                              * OtherData.MonthAdjust;
@@ -105,8 +101,11 @@ namespace Landis.Extension.Succession.NECN
  
                     // Decompose Soil SOM1 to SOM3
                     // The fraction of totalCflow that goes to SOM3 is a function of clay content.
-                    double clayEffect = OtherData.PS1S3_Intercept + (OtherData.PS1S3_Slope * SiteVars.SoilPercentClay[site]);//ClimateRegionData.PercentClay[ecoregion]);
+                    double clayEffect = OtherData.PS1S3_Intercept + (OtherData.PS1S3_Slope * SiteVars.SoilPercentClay[site]);
                     double cFlowS1S3 = netCFlow * clayEffect * (1.0 + OtherData.AnaerobicImpactSlope * (1.0 - anerb));
+
+                    if(cFlowS1S3 > netCFlow)
+                        throw new ApplicationException("Error: Carbon transfer SOM1->SOM3 exceeds C flow.");
 
                     //Compute and schedule C & N flows and update mineralization accumulators
                     double ratioCNto3 = Layer.BelowgroundDecompositionRatio(site,
@@ -127,10 +126,6 @@ namespace Landis.Extension.Succession.NECN
                     
                     if(SiteVars.WaterMovement[site] > 0.0)  //Volume of water moving-ML.  Used to be an index of water movement that indicates saturation (amov)
                     {
-                        //ML deleted the linten function which was poorly described in the Century manual.  
-                        //double leachTextureEffect = OtherData.OMLeachIntercept + OtherData.OMLeachSlope * ClimateRegionData.PercentSand[ecoregion];
-                        //double linten = System.Math.Min(1.0 - ((OtherData.OMLeachWater - SiteVars.WaterMovement[site])  / OtherData.OMLeachWater), 1.0);
-                        //cLeached = netCFlow * leachTextureEffect * linten;
 
                         double leachTextureEffect = OtherData.OMLeachIntercept + OtherData.OMLeachSlope * SiteVars.SoilPercentSand[site];//ClimateRegionData.PercentSand[ecoregion];
 

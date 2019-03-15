@@ -209,7 +209,6 @@ namespace Landis.Extension.Succession.NECN
         }
         // --------------------------------------------------
         public void DecomposeLignin(double totalCFlow, ActiveSite site)
-        // Originally from declig.f for decomposition of compartment lignin
         {
             double carbonToSOM1;    //Net C flow to SOM1
             double carbonToSOM2;    //Net C flow to SOM2
@@ -230,12 +229,12 @@ namespace Landis.Extension.Succession.NECN
                 carbonToSOM2 = totalCFlow * this.FractionLignin;
 
                 //MicrobialRespiration associated with decomposition to som2
-                double co2loss = carbonToSOM2 * OtherData.LigninRespirationRate;
+                double SOM2co2loss = carbonToSOM2 * OtherData.LigninRespirationRate;
 
-                this.Respiration(co2loss, site);
+                this.Respiration(SOM2co2loss, site);
 
                 //Net C flow to SOM2
-                double netCFlow = carbonToSOM2 - co2loss;
+                double netCFlow = carbonToSOM2 - SOM2co2loss;
 
                 // Partition and schedule C flows 
                 this.TransferCarbon(SiteVars.SOM2[site], netCFlow);
@@ -246,26 +245,34 @@ namespace Landis.Extension.Succession.NECN
                 // Decompose Wood Object to SOM1
                 // Gross C flow to som1
 
-                carbonToSOM1 = totalCFlow - carbonToSOM2 - co2loss;
+                carbonToSOM1 = totalCFlow - netCFlow;
+
+                double SOM1co2loss;
 
                 //MicrobialRespiration associated with decomposition to som1
                 if(this.Type == LayerType.Surface)
-                    co2loss = carbonToSOM1 * OtherData.StructuralToCO2Surface; 
+                    SOM1co2loss = carbonToSOM1 * OtherData.StructuralToCO2Surface; 
                 else
-                    co2loss = carbonToSOM1 * OtherData.StructuralToCO2Soil; 
+                    SOM1co2loss = carbonToSOM1 * OtherData.StructuralToCO2Soil; 
 
-                this.Respiration(co2loss, site);
+                this.Respiration(SOM1co2loss, site);
 
                 //Net C flow to SOM1
-                carbonToSOM1 -= co2loss;
+                carbonToSOM1 -= SOM1co2loss;
 
                 if(this.Type == LayerType.Surface)
                 {
+                    if (carbonToSOM1 > SiteVars.SOM1surface[site].Carbon)
+                        throw new ApplicationException("Error: Carbon transfer SOM1surface->SOM1 exceeds C flow.");
+
                     this.TransferCarbon(SiteVars.SOM1surface[site], carbonToSOM1);
                     this.TransferNitrogen(SiteVars.SOM1surface[site], carbonToSOM1, litterC, ratioCN, site);
                 }
                 else
                 {
+                    if (carbonToSOM1 > SiteVars.SOM1soil[site].Carbon)
+                        throw new ApplicationException("Error: Carbon transfer SOM1surface->SOM1 exceeds C flow.");
+
                     this.TransferCarbon(SiteVars.SOM1soil[site], carbonToSOM1);
                     this.TransferNitrogen(SiteVars.SOM1soil[site], carbonToSOM1, litterC, ratioCN, site);
                 }
@@ -361,8 +368,8 @@ namespace Landis.Extension.Succession.NECN
                 netCFlow = this.Carbon;
 
             //round these to avoid unexpected behavior
-            this.Carbon = Math.Round((this.Carbon - netCFlow),2);
-            destination.Carbon = Math.Round((destination.Carbon + netCFlow),2);
+            this.Carbon = this.Carbon - netCFlow; // Math.Round((this.Carbon - netCFlow),2);
+            destination.Carbon = destination.Carbon + netCFlow; // Math.Round((destination.Carbon + netCFlow),2);
         }
 
         public void TransferNitrogen(Layer destination, double CFlow, double totalC, double ratioCNtoDestination, ActiveSite site)

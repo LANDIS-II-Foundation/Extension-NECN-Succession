@@ -35,7 +35,7 @@ namespace Landis.Extension.Succession.NECN
             }
             
             log.AutoFlush = true;
-            log.WriteLine("Time, Species, ClimateRegion, AvgTempMult, AvgMinJanTempMult, AvgSoilMoistureMult, AvgProbEst");
+            log.WriteLine("Time, Species, ClimateRegion, NumberSitesChecked, AvgTempMult, AvgMinJanTempMult, AvgSoilMoistureMult, AvgProbEst");
         }
 
         public static double Calculate(ISpecies species, ActiveSite site)
@@ -80,14 +80,14 @@ namespace Landis.Extension.Succession.NECN
             {
                 foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
                 {
-                    if (!ecoregion.Active || ClimateRegionData.ActiveSiteCount[ecoregion] < 1)
+                    if (!ecoregion.Active)
                         continue;
 
-                        log.Write("{0}, {1}, {2},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name);
-                        log.Write("{0:0.00},", (avgMATlimit[species.Index, ecoregion.Index] / (double) numberCalculations[species.Index, ecoregion.Index]));
-                        log.Write("{0:0.00},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
-                        log.Write("{0:0.00},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
-                        log.WriteLine("{0:0.00}", (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
+                        log.Write("{0}, {1}, {2}, {3},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name, numberCalculations[species.Index, ecoregion.Index]);
+                        log.Write("{0:0.000},", (avgMATlimit[species.Index, ecoregion.Index] / (double) numberCalculations[species.Index, ecoregion.Index]));
+                        log.Write("{0:0.000},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
+                        log.Write("{0:0.000},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
+                        log.WriteLine("{0:0.000}", (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
                 }
             }
 
