@@ -307,7 +307,6 @@ namespace Landis.Extension.Succession.NECN
         private static double CalculateDecayFactor(int idef, double soilTemp, double rwc, double ratioPrecipPET, int month)
         {
             // Decomposition factor relfecting the effects of soil temperature and moisture on decomposition
-            // Originally revised from prelim.f of CENTURY
             // Irrigation is zero for natural forests
             double decayFactor = 0.0;   //represents defac in the original program defac.f
             double W_Decomp = 0.0;      //Water effect on decomposition
@@ -348,6 +347,7 @@ namespace Landis.Extension.Succession.NECN
 
             //defac must >= 0.0
             if (decayFactor < 0.0) decayFactor = 0.0;
+            if (decayFactor > 1.0) decayFactor = 1.0;
 
             //if (soilTemp < 0 && decayFactor > 0.01)
             //{

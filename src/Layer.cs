@@ -86,7 +86,7 @@ namespace Landis.Extension.Succession.NECN
             }
             set
             {
-                carbon = Math.Max(1.0, value);
+                carbon = Math.Max(0.0, value);
             }
         }
         //---------------------------------------------------------------------
@@ -102,7 +102,7 @@ namespace Landis.Extension.Succession.NECN
             }
             set
             {
-                nitrogen = Math.Max(1.0, value);
+                nitrogen = Math.Max(0.0, value);
             }
         }
         //---------------------------------------------------------------------
@@ -204,6 +204,14 @@ namespace Landis.Extension.Succession.NECN
                                 * OtherData.MonthAdjust;
 
                 //Decompose structural into som1 and som2 with CO2 loss.
+
+                if (totalCFlow > this.Carbon)
+                {
+                    string mesg = string.Format("Error: Decompose Structural totalCFlow > this.Carbon:  totalCFlow={0}, DecayFactor={1}, Anerb={2}", totalCFlow, SiteVars.DecayFactor[site], anerb);
+                    throw new ApplicationException(mesg);
+                }
+
+
                 this.DecomposeLignin(totalCFlow, site);
             }
         }
@@ -239,7 +247,6 @@ namespace Landis.Extension.Succession.NECN
                 // Partition and schedule C flows 
                 this.TransferCarbon(SiteVars.SOM2[site], netCFlow);
                 this.TransferNitrogen(SiteVars.SOM2[site], netCFlow, litterC, ratioCN, site);
-                //PlugIn.ModelCore.UI.WriteLine("Decompose1.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
 
                 // ----------------------------------------------
                 // Decompose Wood Object to SOM1
@@ -262,16 +269,22 @@ namespace Landis.Extension.Succession.NECN
 
                 if(this.Type == LayerType.Surface)
                 {
-                    if (carbonToSOM1 > SiteVars.SOM1surface[site].Carbon)
-                        throw new ApplicationException("Error: Carbon transfer SOM1surface->SOM1 exceeds C flow.");
+                    if (carbonToSOM1 > this.Carbon)
+                    {
+                        string mesg = string.Format("Error: Carbon transfer SOM1surface->SOM1 exceeds C flow. Source={0}, C-transfer={1}, C={2}", this.Name, carbonToSOM1, this.Carbon);
+                        throw new ApplicationException(mesg);
+                    }
 
                     this.TransferCarbon(SiteVars.SOM1surface[site], carbonToSOM1);
                     this.TransferNitrogen(SiteVars.SOM1surface[site], carbonToSOM1, litterC, ratioCN, site);
                 }
                 else
                 {
-                    if (carbonToSOM1 > SiteVars.SOM1soil[site].Carbon)
-                        throw new ApplicationException("Error: Carbon transfer SOM1surface->SOM1 exceeds C flow.");
+                    if (carbonToSOM1 > this.Carbon)
+                    {
+                        string mesg = string.Format("Error: Carbon transfer SOM1soil->SOM1 exceeds C flow.  Source={0}, C-transfer={1}, C={2}", this.Name, carbonToSOM1, this.Carbon);
+                        throw new ApplicationException(mesg);
+                    }
 
                     this.TransferCarbon(SiteVars.SOM1soil[site], carbonToSOM1);
                     this.TransferNitrogen(SiteVars.SOM1soil[site], carbonToSOM1, litterC, ratioCN, site);

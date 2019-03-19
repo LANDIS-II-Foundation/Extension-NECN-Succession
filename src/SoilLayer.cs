@@ -35,7 +35,7 @@ namespace Landis.Extension.Succession.NECN
                 //Compute total C flow out of surface microbes.
                 double totalCflow = som1c_surface
                     * SiteVars.DecayFactor[site]
-                    * PlugIn.Parameters.DecayRateSurf //ClimateRegionData.DecayRateSurf[ecoregion]
+                    * PlugIn.Parameters.DecayRateSurf 
                     * OtherData.MonthAdjust
                     * OtherData.LitterParameters[(int)LayerType.Surface].DecayRateMicrobes;
                     
@@ -74,7 +74,7 @@ namespace Landis.Extension.Succession.NECN
                 //Compute total C flow out of soil microbes.
                 //Added impact of soil anaerobic conditions -rm 12/91
                 double textureEffect = OtherData.TextureEffectIntercept
-                                        + OtherData.TextureEffectSlope * SiteVars.SoilPercentSand[site];//ClimateRegionData.PercentSand[ecoregion];
+                                        + OtherData.TextureEffectSlope * SiteVars.SoilPercentSand[site];
                 
                 double anerb = SiteVars.AnaerobicEffect[site];
 
@@ -127,9 +127,9 @@ namespace Landis.Extension.Succession.NECN
                     if(SiteVars.WaterMovement[site] > 0.0)  //Volume of water moving-ML.  Used to be an index of water movement that indicates saturation (amov)
                     {
 
-                        double leachTextureEffect = OtherData.OMLeachIntercept + OtherData.OMLeachSlope * SiteVars.SoilPercentSand[site];//ClimateRegionData.PercentSand[ecoregion];
+                        double leachTextureEffect = OtherData.OMLeachIntercept + OtherData.OMLeachSlope * SiteVars.SoilPercentSand[site];
 
-                        double indexWaterMovement = SiteVars.WaterMovement[site] / (SiteVars.SoilDepth[site] * SiteVars.SoilFieldCapacity[site]);//ClimateRegionData.FieldCapacity[ecoregion]);
+                        double indexWaterMovement = SiteVars.WaterMovement[site] / (SiteVars.SoilDepth[site] * SiteVars.SoilFieldCapacity[site]);
                                               
                         cLeached = netCFlow * leachTextureEffect * indexWaterMovement;
                                                                         

@@ -223,17 +223,17 @@ namespace Landis.Extension.Succession.NECN
             LitterType litterParmsSoil = new LitterType();
 
             // Structural decomposition rate, the fraction of the pool that turns over each year.
-            litterParmsSurface.DecayRateStrucC = 3.9;//DEC1(1)  
-            litterParmsSoil.DecayRateStrucC = 4.9; //DEC1(2)  
+            litterParmsSurface.DecayRateStrucC = 3.9 / 100.0;//DEC1(1)  
+            litterParmsSoil.DecayRateStrucC = 4.9 / 100.0; //DEC1(2)  
 
             // Metabolic decomposition rate, the fraction of the pool that turns over each year.
-            litterParmsSurface.DecayRateMetabolicC = 1.48; //DEC2(1)  //modified assuming they meant, 'percentage'
-            litterParmsSoil.DecayRateMetabolicC = 1.85; //DEC2(2)  //modified assuming they meant, 'percentage'
+            litterParmsSurface.DecayRateMetabolicC = 14.8 / 100.0; //DEC2(1)  //modified assuming they meant, 'percentage'
+            litterParmsSoil.DecayRateMetabolicC = 18.5 / 100; //DEC2(2)  //modified assuming they meant, 'percentage'
 
             // Decomposition rate of organic matter with active turnover, the fraction of the pool
             // that turns over each year (SOM1)
-            litterParmsSurface.DecayRateMicrobes = 1.0; // 6.0; //DEC3(1)  set to 1.0 until meaning of 'fraction' is determined.
-            litterParmsSoil.DecayRateMicrobes = 1.0; // 7.3; //DEC3(2)  
+            litterParmsSurface.DecayRateMicrobes = 6.0 / 100.0; //DEC3(1)  set to 1.0 until meaning of 'fraction' is determined.
+            litterParmsSoil.DecayRateMicrobes = 7.3 / 100.0; //DEC3(2)  
 
             LitterParameters[0] = litterParmsSurface;
             LitterParameters[1] = litterParmsSoil;
