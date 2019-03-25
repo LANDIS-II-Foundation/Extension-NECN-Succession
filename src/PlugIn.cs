@@ -41,6 +41,7 @@ namespace Landis.Extension.Succession.NECN
 
         public static int FutureClimateBaseYear;
         public static int B_MAX;
+        private ICommunity initialCommunity;
 
         //---------------------------------------------------------------------
 
@@ -77,12 +78,12 @@ namespace Landis.Extension.Succession.NECN
         public override void Initialize()
         {
             PlugIn.ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
-            Timestep              = Parameters.Timestep;
-            SuccessionTimeStep    = Timestep;
-            sufficientLight       = Parameters.LightClassProbabilities;
+            Timestep = Parameters.Timestep;
+            SuccessionTimeStep = Timestep;
+            sufficientLight = Parameters.LightClassProbabilities;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
             MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); //,LAIMapNames, ShadeClassMapNames);
-            
+
             FunctionalType.Initialize(Parameters);
             SpeciesData.Initialize(Parameters);
             Util.ReadSoilDepthMap(Parameters.SoilDepthMapName);
@@ -93,7 +94,7 @@ namespace Landis.Extension.Succession.NECN
             Util.ReadWiltingPointMap(Parameters.SoilWiltingPointMapName);
             Util.ReadPercentSandMap(Parameters.SoilPercentSandMapName);
             Util.ReadPercentClayMap(Parameters.SoilPercentClayMapName);
-            Util.ReadSoilCNMaps(Parameters.InitialSOM1CSurfaceMapName, 
+            Util.ReadSoilCNMaps(Parameters.InitialSOM1CSurfaceMapName,
                 Parameters.InitialSOM1NSurfaceMapName,
                 Parameters.InitialSOM1CSoilMapName,
                 Parameters.InitialSOM1NSoilMapName,
@@ -108,7 +109,7 @@ namespace Landis.Extension.Succession.NECN
             FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
             ClimateRegionData.Initialize(Parameters);
 
-            ShadeLAI = Parameters.MaximumShadeLAI; 
+            ShadeLAI = Parameters.MaximumShadeLAI;
             OtherData.Initialize(Parameters);
             FireEffects.Initialize(Parameters);
 
@@ -128,7 +129,6 @@ namespace Landis.Extension.Succession.NECN
             Landis.Library.LeafBiomassCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
             Landis.Library.LeafBiomassCohorts.Cohort.DeathEvent += CohortTotalMortality;
 
-
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
             if (Parameters.CalibrateMode)
@@ -136,7 +136,7 @@ namespace Landis.Extension.Succession.NECN
             Establishment.InitializeLogFile();
 
             B_MAX = 0;
-            foreach(ISpecies species in ModelCore.Species)
+            foreach (ISpecies species in ModelCore.Species)
             {
                 if (SpeciesData.Max_Biomass[species] > B_MAX)
                     B_MAX = SpeciesData.Max_Biomass[species];
@@ -148,16 +148,16 @@ namespace Landis.Extension.Succession.NECN
             Outputs.WritePrimaryLogFile(0);
             Outputs.WriteShortPrimaryLogFile(0);
 
-            
+
         }
 
         //---------------------------------------------------------------------
 
         public override void Run()
         {
-            
+
             if (PlugIn.ModelCore.CurrentTime > 0)
-                    SiteVars.InitializeDisturbances();
+                SiteVars.InitializeDisturbances();
 
             ClimateRegionData.AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
 
@@ -165,7 +165,7 @@ namespace Landis.Extension.Succession.NECN
 
             base.Run();
 
-            if(Timestep > 0)
+            if (Timestep > 0)
                 ClimateRegionData.SetAllEcoregions_FutureAnnualClimate(ModelCore.CurrentTime);
 
             if (ModelCore.CurrentTime % Timestep == 0)
@@ -204,7 +204,7 @@ namespace Landis.Extension.Succession.NECN
 
             for (byte shade = 5; shade >= 1; shade--)
             {
-                if(PlugIn.ShadeLAI[shade] <=0 ) 
+                if (PlugIn.ShadeLAI[shade] <= 0)
                 {
                     string mesg = string.Format("Maximum LAI has not been defined for shade class {0}", shade);
                     throw new System.ApplicationException(mesg);
@@ -222,8 +222,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        protected override void InitializeSite(ActiveSite site,
-                                               ICommunity initialCommunity)
+        protected override void InitializeSite(ActiveSite site)//, ICommunity initialCommunity)
         {
 
             InitialBiomass initialBiomass = InitialBiomass.Compute(site, initialCommunity);
@@ -242,7 +241,7 @@ namespace Landis.Extension.Succession.NECN
 
             ICohort cohort = (Landis.Library.LeafBiomassCohorts.ICohort)eventArgs.Cohort;
 
-            float fractionPartialMortality = (float) eventArgs.Reduction;
+            float fractionPartialMortality = (float)eventArgs.Reduction;
             float foliarInput = cohort.LeafBiomass * fractionPartialMortality;
             float woodInput = cohort.WoodBiomass * fractionPartialMortality;
 
@@ -253,8 +252,8 @@ namespace Landis.Extension.Succession.NECN
                 {
                     HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
                 }
-                woodInput -= woodInput * (float) HarvestEffects.GetCohortWoodRemoval(site);
-                foliarInput -= foliarInput * (float) HarvestEffects.GetCohortLeafRemoval(site);
+                woodInput -= woodInput * (float)HarvestEffects.GetCohortWoodRemoval(site);
+                foliarInput -= foliarInput * (float)HarvestEffects.GetCohortLeafRemoval(site);
             }
             if (disturbanceType.IsMemberOf("disturbance:fire"))
             {
@@ -275,14 +274,14 @@ namespace Landis.Extension.Succession.NECN
 
                 SiteVars.SmolderConsumption[site] += woodFireConsumption;
                 SiteVars.FlamingConsumption[site] += foliarFireConsumption;
-                woodInput -= (float) woodFireConsumption;
-                foliarInput -= (float) foliarFireConsumption;
+                woodInput -= (float)woodFireConsumption;
+                foliarInput -= (float)foliarFireConsumption;
             }
 
             ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
             ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
 
-            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);  
+            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
             Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
 
             //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
@@ -303,9 +302,9 @@ namespace Landis.Extension.Succession.NECN
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
             ActiveSite site = eventArgs.Site;
 
-            ICohort cohort = (Landis.Library.LeafBiomassCohorts.ICohort) eventArgs.Cohort;
-            double foliarInput = (double) cohort.LeafBiomass;
-            double woodInput = (double) cohort.WoodBiomass;
+            ICohort cohort = (Landis.Library.LeafBiomassCohorts.ICohort)eventArgs.Cohort;
+            double foliarInput = (double)cohort.LeafBiomass;
+            double woodInput = (double)cohort.WoodBiomass;
 
             if (disturbanceType != null)
             {
@@ -345,7 +344,7 @@ namespace Landis.Extension.Succession.NECN
                         woodInput -= woodInput * (float)HarvestEffects.GetCohortWoodRemoval(site);
                         foliarInput -= foliarInput * (float)HarvestEffects.GetCohortLeafRemoval(site);
                     }
-                    
+
                     // If not fire, check for resprouting:
                     Landis.Library.Succession.Reproduction.CheckForResprouting(eventArgs.Cohort, site);
                 }
@@ -368,8 +367,8 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         //Grows the cohorts for future climate
         protected override void AgeCohorts(ActiveSite site,
-                                           ushort     years,
-                                           int?       successionTimestep)
+                                           ushort years,
+                                           int? successionTimestep)
         {
             Main.Run(site, years, successionTimestep.HasValue);
 
@@ -444,7 +443,7 @@ namespace Landis.Extension.Succession.NECN
         public bool PlantingEstablish(ISpecies species, ActiveSite site)
         {
             IEcoregion ecoregion = modelCore.Ecoregion[site];
-            double establishProbability = Establishment.Calculate(species, site); 
+            double establishProbability = Establishment.Calculate(species, site);
 
             return establishProbability > 0.0;
         }
@@ -459,7 +458,7 @@ namespace Landis.Extension.Succession.NECN
         {
             return SiteVars.Cohorts[site].IsMaturePresent(species);
         }
-        
+
         //---------------------------------------------------------------------
         // Outmoded but required?
 
@@ -495,6 +494,42 @@ namespace Landis.Extension.Succession.NECN
 
             return (poolInput - reduction);
         }
+
+        public override void InitializeSites(string initialCommunitiesText, string initialCommunitiesMap, ICore modelCore)
+        {
+            ModelCore.UI.WriteLine("   Loading initial communities from file \"{0}\" ...", initialCommunitiesText);
+            Landis.Library.InitialCommunities.DatasetParser parser = new Landis.Library.InitialCommunities.DatasetParser(Timestep, ModelCore.Species);
+            Landis.Library.InitialCommunities.IDataset communities = Landis.Data.Load<Landis.Library.InitialCommunities.IDataset>(initialCommunitiesText, parser);
+
+            ModelCore.UI.WriteLine("   Reading initial communities map \"{0}\" ...", initialCommunitiesMap);
+            IInputRaster<uintPixel> map;
+            map = ModelCore.OpenRaster<uintPixel>(initialCommunitiesMap);
+            using (map)
+            {
+                uintPixel pixel = map.BufferPixel;
+                foreach (Site site in ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    uint mapCode = pixel.MapCode.Value;
+                    if (!site.IsActive)
+                        continue;
+
+                    //if (!modelCore.Ecoregion[site].Active)
+                    //    continue;
+
+                    //modelCore.Log.WriteLine("ecoregion = {0}.", modelCore.Ecoregion[site]);
+
+                    ActiveSite activeSite = (ActiveSite)site;
+                    initialCommunity = communities.Find(mapCode);
+                    if (initialCommunity == null)
+                    {
+                        throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
+                    }
+
+                    InitializeSite(activeSite); //, community);
+                }
+            }
+        }
+    }
     }
 
-}
