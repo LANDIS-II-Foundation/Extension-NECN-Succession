@@ -14,20 +14,6 @@ namespace Landis.Extension.Succession.NECN
     public static class Util
     {
 
-        /// <summary>
-        /// Converts a table indexed by species and ecoregion into a
-        /// 2-dimensional array.
-        /// </summary>
-        //public static T[,] ToArray<T>(Species.AuxParm<Ecoregions.AuxParm<T>> table)
-        //{
-        //    T[,] array = new T[PlugIn.ModelCore.Ecoregions.Count, PlugIn.ModelCore.Species.Count];
-        //    foreach (ISpecies species in PlugIn.ModelCore.Species) {
-        //        foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions) {
-        //            array[ecoregion.Index, species.Index] = table[species][ecoregion];
-        //        }
-        //    }
-        //    return array;
-        //}
         //---------------------------------------------------------------------
 
         public static void ReadSoilDepthMap(string path)
@@ -218,7 +204,7 @@ namespace Landis.Extension.Succession.NECN
                                                           mapValue, 0.0, 0.75, site.Location.Row, site.Location.Column);
                         if (mapValue > SiteVars.SoilFieldCapacity[site])
                             throw new InputValueException(mapValue.ToString(),
-                                                          "Wilting Point {0} is greater than field capacity {1:0.0}.  Site_Row={3:0}, Site_Column={4:0}",
+                                                          "Wilting Point {0} is greater than field capacity {1:0.0}.  Site_Row={2:0}, Site_Column={3:0}",
                                                           mapValue, SiteVars.SoilFieldCapacity[site], site.Location.Row, site.Location.Column);
                         SiteVars.SoilWiltingPoint[site] = mapValue;
                     }
