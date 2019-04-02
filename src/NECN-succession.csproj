@@ -39,14 +39,11 @@
     <Reference Include="Landis.Library.BiomassCohorts-v3">
       <HintPath>lib\Landis.Library.BiomassCohorts-v3.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Climate-v3">
-      <HintPath>lib\Landis.Library.Climate-v3.dll</HintPath>
+    <Reference Include="Landis.Library.Climate-v4">
+      <HintPath>lib\Landis.Library.Climate-v4.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Cohorts-v2">
       <HintPath>lib\Landis.Library.Cohorts-v2.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.Library.InitialCommunity-vInputBiomass">
-      <HintPath>lib\Landis.Library.InitialCommunity-vInputBiomass.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.LeafBiomassCohorts-v2">
       <HintPath>lib\Landis.Library.LeafBiomassCohorts-v2.dll</HintPath>
@@ -58,8 +55,10 @@
       <HintPath>lib\Landis.Library.Parameters-v2.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Succession-v7">
-      <HintPath>lib\Landis.Library.Succession-v7.dll</HintPath>
+      <HintPath>lib\Landis.Library.Succession-InputAGB.dll</HintPath>
     </Reference>
-  </ItemGroup>
+    <Reference Include="Landis.Library.InitialCommunity-vInputBiomass">
+      <HintPath>lib\Landis.Library.InitialCommunity-vInputBiomass.dll</HintPath>
+    </Reference>  </ItemGroup>
 </Project>
 

@@ -1,9 +1,9 @@
 LandisData   Extension
 
 Name         "NECN Succession"
-Version      6.0
+Version      6.2
 Type         succession
-Assembly     Landis.Extension.Succession.NECN-v6-climate-temp
+Assembly     Landis.Extension.Succession.NECN-v6
 Class        Landis.Extension.Succession.NECN.PlugIn
 Description  "Succession with complete Carbon and Nitrogen cycling"
 CoreVersion  7.0

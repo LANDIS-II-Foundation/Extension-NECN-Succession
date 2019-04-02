@@ -958,7 +958,6 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         public void SetLatitude(InputValue<double> newValue)
         {
-            //Debug.Assert(ecoregion != null);
             latitude = CheckBiomassParm(newValue, 0.0, 50.0);
         }
         //---------------------------------------------------------------------

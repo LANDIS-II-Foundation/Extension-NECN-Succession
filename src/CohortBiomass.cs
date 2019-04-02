@@ -168,9 +168,9 @@ namespace Landis.Extension.Succession.NECN
         {
 
             double leafFractionNPP  = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FCFRACleaf;
-            double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];//.B_MAX_Spp[cohort.Species][ecoregion];
+            double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
             double sitelai          = SiteVars.LAI[site];
-            double maxNPP           = SpeciesData.Max_ANPP[cohort.Species];//.ANPP_MAX_Spp[cohort.Species][ecoregion];
+            double maxNPP           = SpeciesData.Max_ANPP[cohort.Species];
 
             double limitT   = calculateTemp_Limit(site, cohort.Species);
 
@@ -183,9 +183,7 @@ namespace Landis.Extension.Succession.NECN
 
             double competition_limit = calculateCompetition_Limit(cohort, site);
 
-            //double potentialNPP_NoN = maxNPP * limitLAI * limitH20 * limitT; // * limitCapacity;
             double potentialNPP = maxNPP * limitLAI * limitH20 * limitT * competition_limit;
-            //double potentialNPP = maxNPP * limitLAI * limitH20 * limitT * limitCapacity;
 
             double limitN = calculateN_Limit(site, cohort, potentialNPP, leafFractionNPP);
 
@@ -218,7 +216,6 @@ namespace Landis.Extension.Succession.NECN
             if (Double.IsNaN(leafNPP) || Double.IsNaN(woodNPP))
             {
                 PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP = NaN!  Will set to zero.");
-                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}, SpeciesName={2}, CohortAge={3}.   GROWTH LIMITS: LAI={4:0.00}, H20={5:0.00}, N={6:0.00}, T={7:0.00}, Capacity={8:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, cohort.Species.Name, cohort.Age, limitLAI, limitH20, limitN, limitT, limitCapacity);
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, maxBiomass, (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     WoodNPP={2:0.00}, LeafNPP={3:0.00}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, woodNPP, leafNPP);
                 if (Double.IsNaN(leafNPP))
