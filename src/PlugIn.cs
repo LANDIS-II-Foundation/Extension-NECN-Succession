@@ -329,8 +329,10 @@ namespace Landis.Extension.Succession.NECN
 
                     SiteVars.SmolderConsumption[site] += woodFireConsumption;
                     SiteVars.FlamingConsumption[site] += foliarFireConsumption;
-                    woodInput -= (float)woodFireConsumption;
-                    foliarInput -= (float)foliarFireConsumption;
+                    SiteVars.SourceSink[site].Carbon += woodFireConsumption * 0.47;
+                    SiteVars.SourceSink[site].Carbon += foliarFireConsumption * 0.47;
+                    woodInput -= woodFireConsumption;
+                    foliarInput -= foliarFireConsumption;
                 }
                 else
                 {
@@ -341,14 +343,19 @@ namespace Landis.Extension.Succession.NECN
                         {
                             HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
                         }
-                        woodInput -= woodInput * (float)HarvestEffects.GetCohortWoodRemoval(site);
-                        foliarInput -= foliarInput * (float)HarvestEffects.GetCohortLeafRemoval(site);
+                        double woodLoss = woodInput * (float)HarvestEffects.GetCohortWoodRemoval(site);
+                        double foliarLoss = foliarInput * (float)HarvestEffects.GetCohortLeafRemoval(site);
+                        SiteVars.SourceSink[site].Carbon += woodLoss * 0.47;
+                        SiteVars.SourceSink[site].Carbon += foliarLoss * 0.47;
+                        woodInput -= woodLoss;
+                        foliarInput -= foliarLoss;
                     }
 
                     // If not fire, check for resprouting:
                     Landis.Library.Succession.Reproduction.CheckForResprouting(eventArgs.Cohort, site);
                 }
             }
+
 
             //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
             ForestFloor.AddWoodLitter(woodInput, cohort.Species, eventArgs.Site);
@@ -462,38 +469,38 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         // Outmoded but required?
 
-        public static void SiteDisturbed(object sender,
-                                         Landis.Library.BiomassCohorts.DisturbanceEventArgs eventArgs)
-        {
-            PlugIn.ModelCore.UI.WriteLine("  Calculating Fire or Harvest Effects.");
+        //public static void SiteDisturbed(object sender,
+        //                                 Landis.Library.BiomassCohorts.DisturbanceEventArgs eventArgs)
+        //{
+        //    PlugIn.ModelCore.UI.WriteLine("  Calculating Fire or Harvest Effects.");
 
-            ExtensionType disturbanceType = eventArgs.DisturbanceType;
-            ActiveSite site = eventArgs.Site;
+        //    ExtensionType disturbanceType = eventArgs.DisturbanceType;
+        //    ActiveSite site = eventArgs.Site;
 
-            if (disturbanceType.IsMemberOf("disturbance:fire"))
-            {
-                SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
-                if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-                    FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
-            }
-            if (disturbanceType.IsMemberOf("disturbance:harvest"))
-            {
-                HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
-            }
-        }
+        //    if (disturbanceType.IsMemberOf("disturbance:fire"))
+        //    {
+        //        SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
+        //        if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
+        //            FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
+        //    }
+        //    if (disturbanceType.IsMemberOf("disturbance:harvest"))
+        //    {
+        //        HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
+        //    }
+        //}
 
         //---------------------------------------------------------------------
 
-        public static float ReduceInput(float poolInput,
-                                          Percentage reductionPercentage,
-                                          ActiveSite site)
-        {
-            float reduction = (poolInput * (float)reductionPercentage);
+        //public static float ReduceInput(float poolInput,
+        //                                  Percentage reductionPercentage,
+        //                                  ActiveSite site)
+        //{
+        //    float reduction = (poolInput * (float)reductionPercentage);
 
-            SiteVars.SourceSink[site].Carbon += (double)reduction * 0.47;
+        //    SiteVars.SourceSink[site].Carbon += (double)reduction * 0.47;
 
-            return (poolInput - reduction);
-        }
+        //    return (poolInput - reduction);
+        //}
 
         public override void InitializeSites(string initialCommunitiesText, string initialCommunitiesMap, ICore modelCore)
         {
