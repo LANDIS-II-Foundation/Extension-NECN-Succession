@@ -90,7 +90,11 @@ namespace Landis.Extension.Succession.NECN
 
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET;
-                    SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
+
+                    if(OtherData.Henne_WaterMode)
+                        SoilWaterHenne.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
+                    else
+                        SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
                     PlugIn.AnnualWaterBalance += ppt - AET;
 
@@ -118,7 +122,10 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SourceSink[site].Nitrogen += volatilize;
                     SiteVars.Nvol[site] += volatilize;
 
-                    SoilWater.Leach(site, baseFlow, stormFlow);
+                    if (OtherData.Henne_WaterMode)
+                        SoilWaterHenne.Leach(site, baseFlow, stormFlow);
+                    else
+                        SoilWater.Leach(site, baseFlow, stormFlow);
 
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyAGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyBGNPPcarbon[site][Month];

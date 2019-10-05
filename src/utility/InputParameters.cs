@@ -43,6 +43,7 @@ namespace Landis.Extension.Succession.NECN
 
         private bool calibrateMode;
         private bool smokeModelOutputs;
+        private bool henne_watermode;
         public WaterType wtype;
         public double probEstablishAdjust;
         private double atmosNslope;
@@ -186,6 +187,21 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 calibrateMode = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// </summary>
+        public bool Henne_WaterMode
+        {
+            get
+            {
+                return henne_watermode;
+            }
+            set
+            {
+                henne_watermode = value;
             }
         }
 

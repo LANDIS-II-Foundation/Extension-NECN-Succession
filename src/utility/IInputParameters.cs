@@ -41,6 +41,7 @@ namespace Landis.Extension.Succession.NECN
         double ProbEstablishAdjustment { get; set; }
         double[] MaximumShadeLAI { get; }
         bool SmokeModelOutputs { get; set; }
+        bool Henne_WaterMode { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>

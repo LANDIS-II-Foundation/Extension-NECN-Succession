@@ -14,7 +14,7 @@ namespace Landis.Extension.Succession.NECN
     public enum WaterTypePaul { Linear, Ratio }
 
 
-    public class SoilWaterPaul
+    public class SoilWaterHenne
     {
         private static double Precipitation;
         private static double H2Oinputs;

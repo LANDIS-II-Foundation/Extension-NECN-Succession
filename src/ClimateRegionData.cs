@@ -48,27 +48,6 @@ namespace Landis.Extension.Succession.NECN
 
             
         }
-        ////---------------------------------------------------------------------
-        //public static void ChangeParameters(Dynamic.IParameters parameters)
-        //{
-        //    B_MAX               = new Ecoregions.AuxParm<int>(PlugIn.ModelCore.Ecoregions);
-            
-        //    //  Fill in B_MAX array
-        //    foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions) 
-        //    {
-        //        if(ecoregion.Active)
-        //        {
-        //            int largest_B_MAX_Spp = 0;
-        //            foreach (ISpecies species in PlugIn.ModelCore.Species) 
-        //            {
-        //                largest_B_MAX_Spp = Math.Max(largest_B_MAX_Spp, SpeciesData.B_MAX_Spp[species][ecoregion]);
-        //                //PlugIn.ModelCore.UI.WriteLine("B_MAX={0}. species={1}, ecoregion={2}", largest_B_MAX_Spp, species.Name, ecoregion.Name);
-        //            }
-        //            B_MAX[ecoregion] = largest_B_MAX_Spp;
-        //        }
-        //    }
-         
-        //}
 
         //---------------------------------------------------------------------
         // Generates new climate parameters for a SINGLE ECOREGION at an annual time step.

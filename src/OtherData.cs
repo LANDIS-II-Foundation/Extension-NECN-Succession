@@ -14,6 +14,8 @@ namespace Landis.Extension.Succession.NECN
         public static bool CalibrateMode;
         public static double ProbEstablishAdjust;
         public static WaterType WType;
+        public static bool Henne_WaterMode;
+
 
         // NOTE: *****************************************************************
         // ALL input data comments derived from the Century Model Interface Help -
@@ -239,6 +241,8 @@ namespace Landis.Extension.Succession.NECN
             LitterParameters[1] = litterParmsSoil;
 
             CalibrateMode       = parameters.CalibrateMode;
+            Henne_WaterMode = parameters.Henne_WaterMode;
+
             WType = parameters.WType;
             //ProbEstablishAdjust = parameters.ProbEstablishAdjustment;
             //FractionSOM2toCO2   = parameters.FractionSOM2toCO2;
