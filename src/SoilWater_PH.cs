@@ -200,6 +200,8 @@ namespace Landis.Extension.Succession.NECN
             //less complex because it does not require partitioning the evaporation if evapotranspiration exceeds addToSoil.
 
             double waterEmpty = wiltingPoint * soilDepth;
+            waterFull = soilDepth * fieldCapacity;  //units of cm
+
 
             if (soilWaterContent > waterFull)
                 actualET = remainingPET;
@@ -219,8 +221,6 @@ namespace Landis.Extension.Succession.NECN
             soilWaterContent -= actualET;
 
             //Allow excess water to run off during storm events (stormflow)
-            waterFull = soilDepth * fieldCapacity;  //units of cm
-            
             double waterMovement = 0.0;            
 
             if (soilWaterContent > waterFull)
