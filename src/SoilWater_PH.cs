@@ -25,6 +25,8 @@ namespace Landis.Extension.Succession.NECN
         private static int daysInMonth;
         private static int beginGrowing;
         private static int endGrowing;
+        private static double holdingTank = 0.0;
+
 
         public static void Run(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
         {
@@ -47,7 +49,7 @@ namespace Landis.Extension.Succession.NECN
             double actualET = 0.0;
             double remainingPET = 0.0;
             double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
-            double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
+            //double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
             double availableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
             double priorWaterAvail = SiteVars.AvailableWater[site];
             double waterFull = 0.0;
@@ -240,7 +242,6 @@ namespace Landis.Extension.Succession.NECN
 
             // ********************************************************
             //PH: add new variable to track excess water and calclulate baseFlow
-            double holdingTank = 0.0;
             //PH: Remove stormFlow from from excess water
             waterMovement -= stormFlow;
             holdingTank += waterMovement;
@@ -310,14 +311,14 @@ namespace Landis.Extension.Succession.NECN
 
 
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
-            availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0);
+            availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
 
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
             //PH: availableWater is affected by my changes, and soilWaterContent should be higher now.  Therefore, I propose calculating using soilWaterContent directly instead
             //availableWater = soilWaterContent - waterEmpty;
             
             // Here calculate available water at the midpoint of the month
-            availableWater = (availableWaterMax + availableWaterMin)/ 2.0;
+            //availableWater = (availableWaterMax + availableWaterMin)/ 2.0;
 
             // Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;
