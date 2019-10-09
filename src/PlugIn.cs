@@ -42,6 +42,12 @@ namespace Landis.Extension.Succession.NECN
         public static int FutureClimateBaseYear;
         public static int B_MAX;
         private ICommunity initialCommunity;
+        //private enum ReproductionType { Planted, Serotiny, Resprout, Seed };
+
+        public static int[] SpeciesByPlant;
+        public static int[] SpeciesBySerotiny;
+        public static int[] SpeciesByResprout;
+        public static int[] SpeciesBySeed;
 
         //---------------------------------------------------------------------
 
@@ -160,6 +166,10 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.InitializeDisturbances();
 
             ClimateRegionData.AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
+            SpeciesByPlant = new int[ModelCore.Species.Count];
+            SpeciesByResprout = new int[ModelCore.Species.Count];
+            SpeciesBySerotiny = new int[ModelCore.Species.Count];
+            SpeciesBySeed = new int[ModelCore.Species.Count];
 
             //base.RunReproductionFirst();
 
@@ -185,6 +195,7 @@ namespace Landis.Extension.Succession.NECN
                 Outputs.WritePrimaryLogFile(PlugIn.ModelCore.CurrentTime);
                 Outputs.WriteShortPrimaryLogFile(PlugIn.ModelCore.CurrentTime);
                 Outputs.WriteMaps();
+                Outputs.WriteReproductionLog(PlugIn.ModelCore.CurrentTime);
                 Establishment.LogEstablishment();
             }
 
@@ -222,7 +233,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        protected override void InitializeSite(ActiveSite site)//, ICommunity initialCommunity)
+        protected override void InitializeSite(ActiveSite site)
         {
 
             InitialBiomass initialBiomass = InitialBiomass.Compute(site, initialCommunity);
@@ -427,6 +438,16 @@ namespace Landis.Extension.Succession.NECN
         {
             float[] initialBiomass = CohortBiomass.InitialBiomass(species, SiteVars.Cohorts[site], site);
             SiteVars.Cohorts[site].AddNewCohort(species, 1, initialBiomass[0], initialBiomass[1]);
+
+            if (reproductionType == "plant")
+                SpeciesByPlant[species.Index]++;
+            else if (reproductionType == "serotiny")
+                SpeciesBySerotiny[species.Index]++;
+            else if (reproductionType == "resprout")
+                SpeciesByResprout[species.Index]++;
+            else if (reproductionType == "seed")
+                SpeciesBySeed[species.Index]++;
+
         }
         //---------------------------------------------------------------------
 
@@ -466,41 +487,6 @@ namespace Landis.Extension.Succession.NECN
             return SiteVars.Cohorts[site].IsMaturePresent(species);
         }
 
-        //---------------------------------------------------------------------
-        // Outmoded but required?
-
-        //public static void SiteDisturbed(object sender,
-        //                                 Landis.Library.BiomassCohorts.DisturbanceEventArgs eventArgs)
-        //{
-        //    PlugIn.ModelCore.UI.WriteLine("  Calculating Fire or Harvest Effects.");
-
-        //    ExtensionType disturbanceType = eventArgs.DisturbanceType;
-        //    ActiveSite site = eventArgs.Site;
-
-        //    if (disturbanceType.IsMemberOf("disturbance:fire"))
-        //    {
-        //        SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
-        //        if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-        //            FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
-        //    }
-        //    if (disturbanceType.IsMemberOf("disturbance:harvest"))
-        //    {
-        //        HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
-        //    }
-        //}
-
-        //---------------------------------------------------------------------
-
-        //public static float ReduceInput(float poolInput,
-        //                                  Percentage reductionPercentage,
-        //                                  ActiveSite site)
-        //{
-        //    float reduction = (poolInput * (float)reductionPercentage);
-
-        //    SiteVars.SourceSink[site].Carbon += (double)reduction * 0.47;
-
-        //    return (poolInput - reduction);
-        //}
 
         public override void InitializeSites(string initialCommunitiesText, string initialCommunitiesMap, ICore modelCore)
         {
@@ -533,7 +519,7 @@ namespace Landis.Extension.Succession.NECN
                         throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
                     }
 
-                    InitializeSite(activeSite); //, community);
+                    InitializeSite(activeSite); 
                 }
             }
         }

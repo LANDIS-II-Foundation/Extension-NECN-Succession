@@ -42,6 +42,7 @@ namespace Landis.Extension.Succession.NECN
             Outputs.primaryLog = new MetadataTable<PrimaryLog>("NECN-succession-log.csv");
             Outputs.primaryLogShort = new MetadataTable<PrimaryLogShort>("NECN-succession-log-short.csv");
             Outputs.monthlyLog = new MetadataTable<MonthlyLog>("NECN-succession-monthly-log.csv");
+            Outputs.reproductionLog = new MetadataTable<ReproductionLog>("NECN-reproduction-log.csv");
 
             OutputMetadata tblOut_monthly = new OutputMetadata()
             {
@@ -70,9 +71,19 @@ namespace Landis.Extension.Succession.NECN
                 FilePath = Outputs.primaryLogShort.FilePath,
                 Visualize = true,
             };
+
             tblOut_primaryShort.RetriveFields(typeof(PrimaryLogShort));
             Extension.OutputMetadatas.Add(tblOut_primaryShort);
-            
+
+            OutputMetadata tblOut_repro = new OutputMetadata()
+            {
+                Type = OutputType.Table,
+                Name = "ReproductionLog",
+                FilePath = Outputs.reproductionLog.FilePath,
+                Visualize = false,
+            };
+            tblOut_repro.RetriveFields(typeof(ReproductionLog));
+            Extension.OutputMetadatas.Add(tblOut_repro);
             //---------------------------------------            
             //          map outputs:         
             //---------------------------------------

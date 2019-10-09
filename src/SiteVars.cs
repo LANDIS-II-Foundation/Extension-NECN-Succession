@@ -79,10 +79,6 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlyNEE;
         private static ISiteVar<double[]> monthlyStreamN;
         private static ISiteVar<double[]> monthlyLAI;
-        public static ISiteVar<double> AnnualNEE;
-        public static ISiteVar<double> FireCEfflux;
-        public static ISiteVar<double> FireNEfflux;
-        public static ISiteVar<double> Nvol;
         private static ISiteVar<double[]> monthlyResp;
         private static ISiteVar<double> totalNuptake;
         private static ISiteVar<double[]> monthlymineralN;
@@ -90,7 +86,11 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> lai;
         private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. 
         private static ISiteVar<int> dryDays;
-                
+
+        public static ISiteVar<double> AnnualNEE;
+        public static ISiteVar<double> FireCEfflux;
+        public static ISiteVar<double> FireNEfflux;
+        public static ISiteVar<double> Nvol;
         public static ISiteVar<double> TotalWoodBiomass;
         public static ISiteVar<int> PrevYearMortality;
         public static ISiteVar<byte> FireSeverity;

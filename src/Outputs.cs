@@ -21,7 +21,28 @@ namespace Landis.Extension.Succession.NECN
         public static MetadataTable<MonthlyLog> monthlyLog; 
         public static MetadataTable<PrimaryLog> primaryLog;
         public static MetadataTable<PrimaryLogShort> primaryLogShort;
+        public static MetadataTable<ReproductionLog> reproductionLog;
 
+
+        public static void WriteReproductionLog(int CurrentTime)
+        {
+            foreach (ISpecies spp in PlugIn.ModelCore.Species)
+            {
+                reproductionLog.Clear();
+                ReproductionLog rl = new ReproductionLog();
+
+                rl.Time = CurrentTime;
+                rl.SpeciesName = spp.Name;
+                rl.NumCohortsPlanting = PlugIn.SpeciesByPlant[spp.Index];
+                rl.NumCohortsSerotiny = PlugIn.SpeciesBySerotiny[spp.Index];
+                rl.NumCohortsSeed = PlugIn.SpeciesBySeed[spp.Index];
+                rl.NumCohortsResprout = PlugIn.SpeciesByResprout[spp.Index];
+
+                reproductionLog.AddObject(rl);
+                reproductionLog.WriteToFile();
+            }
+
+        }
 
         //---------------------------------------------------------------------
         public static void WriteShortPrimaryLogFile(int CurrentTime)

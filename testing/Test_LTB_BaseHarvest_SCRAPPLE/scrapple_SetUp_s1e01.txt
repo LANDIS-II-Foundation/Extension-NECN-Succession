@@ -29,8 +29,10 @@ MaximumRxWindSpeed 10.0
 MaximumRxFireWeatherIndex 30.0
 MinimumRxFireWeatherIndex 5.0
 MaximumRxFireIntensity 2
-NumberRxAnnualFires 5
+NumberRxAnnualFires 100
+NumberRxDailyFires 5
 FirstDayRxFires 2
+LastDayRxFires 360
 TargetRxSize 6
 
 MaximumSpreadAreaB0	3.1
