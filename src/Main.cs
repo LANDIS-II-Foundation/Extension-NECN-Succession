@@ -91,9 +91,9 @@ namespace Landis.Extension.Succession.NECN
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET;
 
-                    if(OtherData.Henne_WaterMode)
-                        SoilWaterHenne.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
-                    else
+                    //if(OtherData.Henne_WaterMode)
+                    //    SoilWaterHenne.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
+                    //else
                         SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
                     PlugIn.AnnualWaterBalance += ppt - AET;

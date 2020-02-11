@@ -14,7 +14,7 @@ namespace Landis.Extension.Succession.NECN
         public static bool CalibrateMode;
         public static double ProbEstablishAdjust;
         public static WaterType WType;
-        public static bool Henne_WaterMode;
+        public static bool Henne_WaterMode = false;
 
 
         // NOTE: *****************************************************************
