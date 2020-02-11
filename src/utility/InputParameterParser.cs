@@ -571,6 +571,8 @@ namespace Landis.Extension.Succession.NECN
             InputVar<int> frindex = new InputVar<int>("Fire Severity Index MUST = 1-5");
             InputVar<double> wred = new InputVar<double>("Coarse Litter Reduction");
             InputVar<double> lred = new InputVar<double>("Fine Litter Reduction");
+            InputVar<double> live_wood_red = new InputVar<double>("Cohort Wood Reduction");
+            InputVar<double> live_leaf_red = new InputVar<double>("Cohort Litter Reduction");
             InputVar<double> som_red = new InputVar<double>("SOM Reduction");
 
             while (! AtEndOfInput && CurrentName != Names.HarvestReductionParameters)// && CurrentName != Names.AgeOnlyDisturbanceParms)
@@ -594,6 +596,12 @@ namespace Landis.Extension.Succession.NECN
 
                 ReadValue(lred, currentLine);
                 inputFireReduction.FineLitterReduction = lred.Value;
+
+                ReadValue(live_wood_red, currentLine);
+                inputFireReduction.CohortWoodReduction = live_wood_red.Value;
+
+                ReadValue(live_leaf_red, currentLine);
+                inputFireReduction.CohortLeafReduction = live_leaf_red.Value;
 
                 ReadValue(som_red, currentLine);
                 inputFireReduction.SOMReduction = som_red.Value;

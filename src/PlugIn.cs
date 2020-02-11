@@ -280,13 +280,13 @@ namespace Landis.Extension.Succession.NECN
 
                 }
 
-                double woodFireConsumption = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
-                double foliarFireConsumption = foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
+                double live_woodFireConsumption = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortWoodReduction;
+                double live_foliarFireConsumption = foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortLeafReduction;
 
-                SiteVars.SmolderConsumption[site] += woodFireConsumption;
-                SiteVars.FlamingConsumption[site] += foliarFireConsumption;
-                woodInput -= (float)woodFireConsumption;
-                foliarInput -= (float)foliarFireConsumption;
+                SiteVars.SmolderConsumption[site] += live_woodFireConsumption;
+                SiteVars.FlamingConsumption[site] += live_foliarFireConsumption;
+                woodInput -= (float)live_woodFireConsumption;
+                foliarInput -= (float)live_foliarFireConsumption;
             }
 
             ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);

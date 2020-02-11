@@ -19,8 +19,8 @@ namespace Landis.Extension.Succession.NECN
         private double coarseLitterReduction;
         private double fineLitterReduction;
         private double somReduction;
-        //private double cohortWoodReduction;
-        //private double cohortLeafReduction;
+        private double cohortWoodReduction;
+        private double cohortLeafReduction;
         
         public double CoarseLitterReduction
         {
@@ -46,34 +46,34 @@ namespace Landis.Extension.Succession.NECN
             }
                
         }
-        //public double CohortWoodReduction
-        //{
-        //    get
-        //    {
-        //        return cohortWoodReduction;
-        //    }
-        //    set
-        //    {
-        //        if (value < 0.0 || value > 1.0)
-        //            throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
-        //        cohortWoodReduction = value;
-        //    }
+        public double CohortWoodReduction
+        {
+            get
+            {
+                return cohortWoodReduction;
+            }
+            set
+            {
+                if (value < 0.0 || value > 1.0)
+                    throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
+                cohortWoodReduction = value;
+            }
 
-        //}
-        //public double CohortLeafReduction
-        //{
-        //    get
-        //    {
-        //        return cohortLeafReduction;
-        //    }
-        //    set
-        //    {
-        //        if (value < 0.0 || value > 1.0)
-        //            throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
-        //        cohortLeafReduction = value;
-        //    }
+        }
+        public double CohortLeafReduction
+        {
+            get
+            {
+                return cohortLeafReduction;
+            }
+            set
+            {
+                if (value < 0.0 || value > 1.0)
+                    throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
+                cohortLeafReduction = value;
+            }
 
-        //}
+        }
         public double SOMReduction
         {
             get
@@ -93,8 +93,8 @@ namespace Landis.Extension.Succession.NECN
         {
             this.CoarseLitterReduction = 0.0; 
             this.FineLitterReduction = 0.0;
-            //this.CohortLeafReduction = 0.0;
-            //this.CohortWoodReduction = 0.0;
+            this.CohortLeafReduction = 0.0;
+            this.CohortWoodReduction = 0.0;
             this.SOMReduction = 0.0;
         }
     }
