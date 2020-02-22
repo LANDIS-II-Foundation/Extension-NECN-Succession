@@ -90,7 +90,7 @@ namespace Landis.Extension.Succession.NECN
             SuccessionTimeStep = Timestep;
             sufficientLight = Parameters.LightClassProbabilities;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
-            MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); //,LAIMapNames, ShadeClassMapNames);
+            MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); 
 
             FunctionalType.Initialize(Parameters);
             SpeciesData.Initialize(Parameters);
@@ -199,6 +199,8 @@ namespace Landis.Extension.Succession.NECN
                 Outputs.WriteMaps();
                 Outputs.WriteReproductionLog(PlugIn.ModelCore.CurrentTime);
                 Establishment.LogEstablishment();
+                if (PlugIn.InputCommunityMapNames != null && ModelCore.CurrentTime % PlugIn.InputCommunityMapFrequency == 0)
+                    Outputs.WriteCommunityMaps();
             }
 
         }
