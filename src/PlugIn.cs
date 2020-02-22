@@ -36,6 +36,8 @@ namespace Landis.Extension.Succession.NECN
         public static int ANEEMapFrequency;
         public static string TotalCMapNames = null;
         public static int TotalCMapFrequency;
+        public static string InputCommunityMapNames = null;
+        public static int InputCommunityMapFrequency;
         public static int SuccessionTimeStep;
         public static double ProbEstablishAdjust;
 
@@ -92,15 +94,15 @@ namespace Landis.Extension.Succession.NECN
 
             FunctionalType.Initialize(Parameters);
             SpeciesData.Initialize(Parameters);
-            Util.ReadSoilDepthMap(Parameters.SoilDepthMapName);
-            Util.ReadSoilDrainMap(Parameters.SoilDrainMapName);
-            Util.ReadSoilBaseFlowMap(Parameters.SoilBaseFlowMapName);
-            Util.ReadSoilStormFlowMap(Parameters.SoilStormFlowMapName);
-            Util.ReadFieldCapacityMap(Parameters.SoilFieldCapacityMapName);
-            Util.ReadWiltingPointMap(Parameters.SoilWiltingPointMapName);
-            Util.ReadPercentSandMap(Parameters.SoilPercentSandMapName);
-            Util.ReadPercentClayMap(Parameters.SoilPercentClayMapName);
-            Util.ReadSoilCNMaps(Parameters.InitialSOM1CSurfaceMapName,
+            ReadMaps.ReadSoilDepthMap(Parameters.SoilDepthMapName);
+            ReadMaps.ReadSoilDrainMap(Parameters.SoilDrainMapName);
+            ReadMaps.ReadSoilBaseFlowMap(Parameters.SoilBaseFlowMapName);
+            ReadMaps.ReadSoilStormFlowMap(Parameters.SoilStormFlowMapName);
+            ReadMaps.ReadFieldCapacityMap(Parameters.SoilFieldCapacityMapName);
+            ReadMaps.ReadWiltingPointMap(Parameters.SoilWiltingPointMapName);
+            ReadMaps.ReadPercentSandMap(Parameters.SoilPercentSandMapName);
+            ReadMaps.ReadPercentClayMap(Parameters.SoilPercentClayMapName);
+            ReadMaps.ReadSoilCNMaps(Parameters.InitialSOM1CSurfaceMapName,
                 Parameters.InitialSOM1NSurfaceMapName,
                 Parameters.InitialSOM1CSoilMapName,
                 Parameters.InitialSOM1NSoilMapName,
@@ -108,7 +110,7 @@ namespace Landis.Extension.Succession.NECN
                 Parameters.InitialSOM2NMapName,
                 Parameters.InitialSOM3CMapName,
                 Parameters.InitialSOM3NMapName);
-            Util.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
+            ReadMaps.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
 
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);

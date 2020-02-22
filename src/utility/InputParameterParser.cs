@@ -288,6 +288,16 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
+            InputVar<string> inputCommunityMaps = new InputVar<string>("CreateInputCommunityMaps");
+            if (ReadOptionalVar(inputCommunityMaps))
+            {
+                PlugIn.InputCommunityMapNames = inputCommunityMaps.Value;
+
+                InputVar<int> inputMapFreq = new InputVar<int>("InputCommunityMapFrequency");
+                ReadVar(inputMapFreq);
+                PlugIn.InputCommunityMapFrequency = inputMapFreq.Value;
+
+            }
 
             //--------------------------
             //  LAI and light table
