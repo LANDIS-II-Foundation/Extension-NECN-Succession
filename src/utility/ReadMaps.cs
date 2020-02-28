@@ -264,10 +264,10 @@ namespace Landis.Extension.Succession.NECN
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue <= 1.0 || mapValue > 10000.0)
+                        if (mapValue <= 1.0 || mapValue > 15000.0)
                             throw new InputValueException(mapValue.ToString(),
                                                           "SOM1C value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
-                                                          mapValue, 1.0, 10000.0, site.Location.Row, site.Location.Column);
+                                                          mapValue, 1.0, 15000.0, site.Location.Row, site.Location.Column);
                         SiteVars.SOM1soil[site].Carbon = mapValue;
                     }
                 }
@@ -303,10 +303,10 @@ namespace Landis.Extension.Succession.NECN
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue <= 1.0 || mapValue > 20000.0)
+                        if (mapValue <= 1.0 || mapValue > 25000.0)
                             throw new InputValueException(mapValue.ToString(),
                                                           "SOM2C value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
-                                                          mapValue, 1.0, 20000.0, site.Location.Row, site.Location.Column);
+                                                          mapValue, 1.0, 25000.0, site.Location.Row, site.Location.Column);
                         SiteVars.SOM2[site].Carbon = mapValue;
                     }
                 }
@@ -411,10 +411,10 @@ namespace Landis.Extension.Succession.NECN
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue < 0.0 || mapValue > 50000.0)
+                        if (mapValue < 0.0 || mapValue > 75000.0)
                             throw new InputValueException(mapValue.ToString(),
                                                           "SurfDeadWood value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
-                                                          mapValue, 0.0, 50000.0, site.Location.Row, site.Location.Column);
+                                                          mapValue, 0.0, 75000.0, site.Location.Row, site.Location.Column);
                         SiteVars.SurfaceDeadWood[site].Carbon = mapValue * 0.47;
                         SiteVars.SurfaceDeadWood[site].Nitrogen = mapValue * 0.47 / 200.0;  // 200 is a generic wood CN ratio
                         SiteVars.SurfaceStructural[site].Carbon = SiteVars.SurfaceDeadWood[site].Carbon * 0.85 * PlugIn.Parameters.InitialFineFuels;
