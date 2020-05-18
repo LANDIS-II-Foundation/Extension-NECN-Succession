@@ -585,7 +585,7 @@ namespace Landis.Extension.Succession.NECN
             InputVar<double> live_leaf_red = new InputVar<double>("Cohort Litter Reduction");
             InputVar<double> som_red = new InputVar<double>("SOM Reduction");
 
-            while (! AtEndOfInput && CurrentName != Names.HarvestReductionParameters)// && CurrentName != Names.AgeOnlyDisturbanceParms)
+            while (! AtEndOfInput && CurrentName != Names.HarvestReductionParameters)
             {
                 StringReader currentLine = new StringReader(CurrentLine);
 
