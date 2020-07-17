@@ -5,9 +5,9 @@
     <AssemblyName>Landis.Extension.Succession.NECN-v6</AssemblyName>
     <AssemblyTitle>Landis.Extension.Succession.NECN-v6</AssemblyTitle>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
-    <AssemblyVersion>6.4.1</AssemblyVersion>
-    <Version>6.4.1</Version>
-    <FileVersion>6.4.1</FileVersion>
+    <AssemblyVersion>6.5</AssemblyVersion>
+    <Version>6.5</Version>
+    <FileVersion>6.5</FileVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession</RepositoryUrl>
@@ -39,8 +39,8 @@
     <Reference Include="Landis.Library.BiomassCohorts-v3">
       <HintPath>lib\Landis.Library.BiomassCohorts-v3.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Climate-v4">
-      <HintPath>lib\Landis.Library.Climate-v4.dll</HintPath>
+    <Reference Include="Landis.Library.Climate-v4.1">
+      <HintPath>lib\Landis.Library.Climate-v4.1.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Cohorts-v2">
       <HintPath>lib\Landis.Library.Cohorts-v2.dll</HintPath>
