@@ -231,11 +231,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WType, SiteVars.SoilTemperature[site], relativeWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, pet, tave);
-            if (month == 0)
-                SiteVars.DryDays[site] = 0;
-            else
-                SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
-                        
+            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
             return;
         }
 
@@ -244,8 +240,12 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}.", month, beginGrowing, endGrowing);
             int[] julianMidMonth = { 15, 45, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349 };
             int dryDays = 0;
-            int julianDay = julianMidMonth[month]; 
-            int oldJulianDay = julianMidMonth[month-1]; 
+            int oldJulianDay = 0;
+            int julianDay = julianMidMonth[month];
+            if(month > 0)
+                oldJulianDay = julianMidMonth[month-1]; 
+            else
+                oldJulianDay = julianMidMonth[11];
             double dryDayInterp = 0.0;
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}, wiltPt={3:0.0}, waterAvail={4:0.0}, priorWater={5:0.0}.", month, beginGrowing, endGrowing, wiltingPoint, waterAvail, priorWaterAvail);
             

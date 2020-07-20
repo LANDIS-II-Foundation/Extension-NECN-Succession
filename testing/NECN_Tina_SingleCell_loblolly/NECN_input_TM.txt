@@ -28,7 +28,7 @@ InitialSOM3NMapName				./SingleCellRastersTina/singlecell_7point88.tif
 InitialDeadWoodSurfaceMapName	./SingleCellRastersTina/singlecell_0.tif
 InitialDeadCoarseRootsMapName	./SingleCellRastersTina/singlecell_0.tif
 
-CalibrateMode 	yes
+CalibrateMode 	no
 SmokeModelOutputs yes
 WaterDecayFunction Ratio <<Linear or Ratio
 
@@ -49,11 +49,11 @@ MaximumLAI
 >> Shade	Max LAI
 >> Class	
 >> ----------	--------------------	
-	1	1 
-	2	2.5 
-	3	3.5 
-	4	6
-	5	8
+	1	2 
+	2	4 
+	3	6 
+	4	8
+	5	10
 		
 
 LightEstablishmentTable
@@ -65,7 +65,7 @@ LightEstablishmentTable
 	2	0.5	0.5	1	0.25	0.1	0
 	3	0.1	0.5	1	1	0.5	0.1
 	4	0.1	0.25	0.5	0.5	1	0.25
-	5	0	0.1	0.25	0.25	0.5	1
+	5	0.1	0.25	0.25	0.5	1	0.5
 	
 SpeciesParameters
 >> Species   Funct	N-fix?	GDD	  GDD	Min	Max	    Leaf	Epi-	Leaf	FRoot	Wood	CRoot	Leaf  FRoot     Wood    CRoot  Littr 	MaxANPP MaxAGB
@@ -91,12 +91,11 @@ Hardwood        2            27.0    45.0    3.0     3.5     0.5     -0.8  2200.
 
 
 FireReductionParameters
->> Based on Stacy Drury's lit review/analysis. See 'Fuel consumption based on fire severity class.docx'
->>	Severity	WoodLitter	Litter	SOM
->>	Fire		Reduct		Reduct	Reduction
-	1			0.05		1.0 		1.0 <<0.1     
-	2			0.2			1.0			1.0 <<0.5
-	3			0.4			1.0			1.0
+>>	Severity	WoodLitter	Litter	CohortWood	CohortFoliar	SOM
+>>	Fire		Reductions------------------------------------------------->
+	1		0.0		0.5	0.05		0.85		0.1
+	2		0.5		0.75	0.15		0.95		0.5
+	3		1.0		1.0	0.35		1.0		0.75		
 
 HarvestReductionParameters
 >>	Name			WoodLitter	Litter	SOM			CohortWood	CohortLeaf

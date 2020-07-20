@@ -298,8 +298,10 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         public static void ResetAnnualValues(Site site)
         {
-            
+
             // Reset these accumulators to zero:
+            SiteVars.DryDays[site] = 0;
+
             SiteVars.CohortLeafN[site] = 0.0;
             SiteVars.CohortFRootN[site] = 0.0;
             SiteVars.CohortLeafC[site] = 0.0;

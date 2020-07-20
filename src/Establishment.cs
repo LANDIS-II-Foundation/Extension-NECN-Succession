@@ -40,7 +40,7 @@ namespace Landis.Extension.Succession.NECN
         public static double Calculate(ISpecies species, ActiveSite site)
         {
             IEcoregion climateRegion = PlugIn.ModelCore.Ecoregion[site];
-
+            
             double tempMultiplier = 0.0;
             double soilMultiplier = 0.0;
             double minJanTempMultiplier = 0.0;
@@ -126,7 +126,9 @@ namespace Landis.Extension.Succession.NECN
             {
                 Soil_Moist_GF = System.Math.Sqrt((double)(maxDrought - dryDays) / maxDrought);
             }
+
             //PlugIn.ModelCore.UI.WriteLine("BeginGrow={0}, EndGrow={1}, dryDays={2}, maxDrought={3}", weather.BeginGrowing, weather.EndGrowing, dryDays, maxDrought);
+
             return Soil_Moist_GF;
         }
         
