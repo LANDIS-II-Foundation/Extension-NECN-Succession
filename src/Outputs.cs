@@ -22,6 +22,7 @@ namespace Landis.Extension.Succession.NECN
         public static MetadataTable<PrimaryLog> primaryLog;
         public static MetadataTable<PrimaryLogShort> primaryLogShort;
         public static MetadataTable<ReproductionLog> reproductionLog;
+        public static MetadataTable<EstablishmentLog> establishmentLog;
 
 
         public static void WriteReproductionLog(int CurrentTime)

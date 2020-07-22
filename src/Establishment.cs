@@ -14,28 +14,31 @@ namespace Landis.Extension.Succession.NECN
     public class Establishment
     {
 
-        private static StreamWriter log;
+        //private static StreamWriter log;
         private static double[,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
         private static double[,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
         private static double[,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
         private static double[,] avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static int[,] numberCalculations = new int[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        private static double[,] avgDryDays = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        private static double[,] avgBeginGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        private static double[,] avgEndGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
 
-        public static void InitializeLogFile()
-        {
-            string logFileName   = "NECN-prob-establish-log.csv"; 
-            PlugIn.ModelCore.UI.WriteLine("   Opening a NECN log file \"{0}\" ...", logFileName);
-            try {
-                log = Landis.Data.CreateTextFile(logFileName);
-            }
-            catch (Exception err) {
-                string mesg = string.Format("{0}", err.Message);
-                throw new System.ApplicationException(mesg);
-            }
-            
-            log.AutoFlush = true;
-            log.WriteLine("Time, Species, ClimateRegion, NumberSitesChecked, AvgTempMult, AvgMinJanTempMult, AvgSoilMoistureMult, AvgProbEst");
-        }
+        //public static void InitializeLogFile()
+        //{
+        //    string logFileName   = "NECN-prob-establish-log.csv"; 
+        //    PlugIn.ModelCore.UI.WriteLine("   Opening a NECN log file \"{0}\" ...", logFileName);
+        //    try {
+        //        log = Landis.Data.CreateTextFile(logFileName);
+        //    }
+        //    catch (Exception err) {
+        //        string mesg = string.Format("{0}", err.Message);
+        //        throw new System.ApplicationException(mesg);
+        //    }
+
+        //    log.AutoFlush = true;
+        //    log.WriteLine("Time, Species, ClimateRegion, NumberSitesChecked, AvgTempMult, AvgMinJanTempMult, AvgSoilMoistureMult, AvgProbEst");
+        //}
 
         public static double Calculate(ISpecies species, ActiveSite site)
         {
@@ -68,6 +71,10 @@ namespace Landis.Extension.Succession.NECN
             avgJanuaryTlimit[species.Index, climateRegion.Index] += minJanTempMultiplier;
             avgPest[species.Index, climateRegion.Index] += establishProbability;
 
+            avgDryDays[species.Index, climateRegion.Index] += ecoDryDays;
+            avgBeginGDD[species.Index, climateRegion.Index] += ecoClimate.BeginGrowing;
+            avgEndGDD[species.Index, climateRegion.Index] += ecoClimate.EndGrowing;
+
             numberCalculations[species.Index, climateRegion.Index]++;
 
             return establishProbability;
@@ -82,11 +89,31 @@ namespace Landis.Extension.Succession.NECN
                     if (!ecoregion.Active)
                         continue;
 
-                        log.Write("{0},{1},{2},{3},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name, numberCalculations[species.Index, ecoregion.Index] );
-                        log.Write("{0:0.000},", (avgMATlimit[species.Index, ecoregion.Index] / (double) numberCalculations[species.Index, ecoregion.Index]));
-                        log.Write("{0:0.000},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
-                        log.Write("{0:0.000},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
-                        log.WriteLine("{0:0.000}", (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
+                    foreach (ISpecies spp in PlugIn.ModelCore.Species)
+                    {
+                        Outputs.establishmentLog.Clear();
+                        EstablishmentLog elog = new EstablishmentLog();
+
+                        elog.Time = PlugIn.ModelCore.CurrentTime;
+                        elog.SpeciesName = spp.Name;
+                        elog.ClimateRegion = ecoregion.Name;
+                        elog.NumberAttempts = numberCalculations[species.Index, ecoregion.Index];
+                        elog.AvgTempMult = (avgMATlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.AvgMinJanTempMult = (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.AvgSoilMoistureMult = (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.AvgProbEst = (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.DryDays = (avgDryDays[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.BeginGDD = (avgBeginGDD[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.EndGDD = (avgEndGDD[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+
+                        Outputs.establishmentLog.AddObject(elog);
+                        Outputs.establishmentLog.WriteToFile();
+                    }
+                    //log.Write("{0},{1},{2},{3},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name, numberCalculations[species.Index, ecoregion.Index] );
+                    //    log.Write("{0:0.000},", (avgMATlimit[species.Index, ecoregion.Index] / (double) numberCalculations[species.Index, ecoregion.Index]));
+                    //    log.Write("{0:0.000},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
+                    //    log.Write("{0:0.000},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
+                    //    log.WriteLine("{0:0.000}", (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
                 }
             }
 
@@ -95,9 +122,12 @@ namespace Landis.Extension.Succession.NECN
         avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         numberCalculations = new int[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgDryDays = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgBeginGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgEndGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
 
 
-        }
+    }
 
 
     //---------------------------------------------------------------------------

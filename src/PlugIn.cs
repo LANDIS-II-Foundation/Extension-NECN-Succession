@@ -141,7 +141,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (Parameters.CalibrateMode)
                 Outputs.CreateCalibrateLogFile();
-            Establishment.InitializeLogFile();
+            //Establishment.InitializeLogFile();
 
             B_MAX = 0;
             foreach (ISpecies species in ModelCore.Species)
