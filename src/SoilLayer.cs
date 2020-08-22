@@ -91,9 +91,12 @@ namespace Landis.Extension.Succession.NECN
                 // If it can't go to SOM2, it can't decompose at all.
                 // First determine if decomposition can occur:
                 if (SiteVars.SOM1soil[site].DecomposePossible(ratioCNtoSOM2, SiteVars.MineralN[site]))
-                {   
+                {
+                    
+                    //PlugIn.ModelCore.UI.WriteLine("Now decomposing SOM1soil:  MineralN={0:0.00}, DecayFactor={1:0.00}, PercentSand={2:0.0}.", SiteVars.MineralN[site], SiteVars.DecayFactor[site], SiteVars.SoilPercentSand[site]);
+                    
                     //CO2 Loss - Compute and schedule respiration flows
-                    double P1CO2_Soil = OtherData.P1CO2_Soil_Intercept + OtherData.P1CO2_Soil_Slope * SiteVars.SoilPercentSand[site];//ClimateRegionData.PercentSand[ecoregion];
+                    double P1CO2_Soil = OtherData.P1CO2_Soil_Intercept + OtherData.P1CO2_Soil_Slope * SiteVars.SoilPercentSand[site];
 
                     double co2loss = totalCflow * P1CO2_Soil;
                     double netCFlow = totalCflow - co2loss;
@@ -116,7 +119,6 @@ namespace Landis.Extension.Succession.NECN
                     //Partition and schedule C and N flows 
                     SiteVars.SOM1soil[site].TransferCarbon(SiteVars.SOM3[site], cFlowS1S3);
                     SiteVars.SOM1soil[site].TransferNitrogen(SiteVars.SOM3[site], cFlowS1S3, som1c_soil, ratioCNto3, site);
-                    //PlugIn.ModelCore.UI.WriteLine("AfterSOM1.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
                      
                     // Leaching of Organics
                     // This only occurs when the water flow out of water layer 2
@@ -154,11 +156,11 @@ namespace Landis.Extension.Succession.NECN
                     // C & N movement from SOM1 to SOM2.
                     // SOM2 gets what's left of totalCflow.
                     double cFlowS1S2 = netCFlow - cFlowS1S3 - cLeached;
+                    PlugIn.ModelCore.UI.WriteLine("Flow from SOM1soil to SOM2 = {0}. ", cFlowS1S2);
 
                     //Partition and schedule C and N flows 
                     SiteVars.SOM1soil[site].TransferCarbon(SiteVars.SOM2[site], cFlowS1S2);
                     SiteVars.SOM1soil[site].TransferNitrogen(SiteVars.SOM2[site], cFlowS1S2, som1c_soil, ratioCNtoSOM2, site);
-                    //PlugIn.ModelCore.UI.WriteLine("PartitionCN.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
 
                 }  
             } 

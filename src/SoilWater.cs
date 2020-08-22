@@ -229,7 +229,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
-            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WType, SiteVars.SoilTemperature[site], relativeWaterContent, ratioPrecipPET, month);
+            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WType, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, pet, tave);
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
             return;
@@ -304,7 +304,7 @@ namespace Landis.Extension.Succession.NECN
         
         //---------------------------------------------------------------------------
 
-        private static double CalculateDecayFactor(int idef, double soilTemp, double rwc, double ratioPrecipPET, int month)
+        private static double CalculateDecayFactor(int waterDecayFunction, double soilTemp, double relativeWaterContent, double ratioPrecipPET, int month)
         {
             // Decomposition factor relfecting the effects of soil temperature and moisture on decomposition
             // Irrigation is zero for natural forests
@@ -315,25 +315,22 @@ namespace Landis.Extension.Succession.NECN
             //      soilTemp;        //Soil temperature
             //      T_Decomp;     //Effect of soil temperature on decomposition
             //      W_Decomp;     //Effect of soil moisture on decompostion
-            //      rwcf[10];     //Initial relative water content for 10 soil layers
-            //      avh2o;        //Water available to plants for growth in soil profile
             //      precipitation;       //Precipitation of current month
-            //      irract;       //Actual amount of irrigation per month (cm H2O/month)
             //      pet;          //Monthly potential evapotranspiration in centimeters (cm)
 
-            //Option selection for wfunc depending on idef
+            //Option selection for wfunc depending on waterDecayFunction
             //      idef = 0;     // for linear option
             //      idef = 1;     // for ratio option
 
 
-            if (idef == 0)
+            if (waterDecayFunction == 0)
             {
-                if (rwc > 13.0)
+                if (relativeWaterContent > 13.0)
                     W_Decomp = 1.0;
                 else
-                    W_Decomp = 1.0 / (1.0 + 4.0 * System.Math.Exp(-6.0 * rwc));
+                    W_Decomp = 1.0 / (1.0 + 4.0 * System.Math.Exp(-6.0 * relativeWaterContent));
             }
-            else if (idef == 1)
+            else if (waterDecayFunction == 1)
             {
                 if (ratioPrecipPET > 9)
                     W_Decomp = 1.0;
@@ -351,8 +348,8 @@ namespace Landis.Extension.Succession.NECN
 
             //if (soilTemp < 0 && decayFactor > 0.01)
             //{
-            //    PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, PET={2:0.00}, MinT={3:0.0}, MaxT={4:0.0}, AveT={5:0.0}, H20={6:0.0}.", Century.Year, month, pet, tmin, tmax, tave, H2Oinputs);
-            //    PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, DecayFactor={2:0.00}, tempFactor={3:0.00}, waterFactor={4:0.00}, ratioPrecipPET={5:0.000}, soilT={6:0.0}.", Century.Year, month, decayFactor, tempModifier, W_Decomp, ratioPrecipPET, soilTemp);
+                //PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, PET={2:0.00}, MinT={3:0.0}, MaxT={4:0.0}, AveT={5:0.0}, H20={6:0.0}.", Main.Year, month, pet, tmin, tmax, tave, H2Oinputs);
+                //PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, DecayFactor={2:0.00}, tempFactor={3:0.00}, waterFactor={4:0.00}, ratioPrecipPET={5:0.000}, soilT={6:0.0}.", Main.Year, month, decayFactor, tempModifier, W_Decomp, ratioPrecipPET, soilTemp);
             //}
 
             return decayFactor;   //Combination of water and temperature effects on decomposition

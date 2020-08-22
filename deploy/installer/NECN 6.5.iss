@@ -60,6 +60,7 @@ Source: {#BuildDir}\Landis.Library.Biomass-v2.dll; DestDir: {#ExtDir}; Flags: un
 Source: {#BuildDir}\Landis.Library.Climate-v4.1.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 Source: {#BuildDir}\Landis.Library.Succession-v8.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 Source: {#BuildDir}\Landis.Library.InitialCommunity-vInputBiomass.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#BuildDir}\Landis.Library.InitialCommunity-vInputBiomass.pdb; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 
 ; Complete example for testing the extension
 Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\{#ExtensionName}; Flags: ignoreversion
