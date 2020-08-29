@@ -1,7 +1,7 @@
 ; LANDIS-II Extension infomation
 #define CoreRelease "LANDIS-II-V7"
 #define ExtensionName "NECN Succession"
-#define AppVersion "6.5.99"
+#define AppVersion "6.5"
 #define AppPublisher "LANDIS-II Foundation"
 #define AppURL "http://www.landis-ii.org/"
 
@@ -60,7 +60,7 @@ Source: {#BuildDir}\Landis.Library.Biomass-v2.dll; DestDir: {#ExtDir}; Flags: un
 Source: {#BuildDir}\Landis.Library.Climate-v4.1.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 Source: {#BuildDir}\Landis.Library.Succession-v8.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 Source: {#BuildDir}\Landis.Library.InitialCommunity-vInputBiomass.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.InitialCommunity-vInputBiomass.pdb; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+; Source: {#BuildDir}\Landis.Library.InitialCommunity-vInputBiomass.pdb; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 
 ; Complete example for testing the extension
 Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\{#ExtensionName}; Flags: ignoreversion
