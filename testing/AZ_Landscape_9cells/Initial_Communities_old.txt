@@ -1,0 +1,6 @@
+LandisData "Initial Communities"
+
+MapCode 0
+
+MapCode  1 
+PinuPond 30 (1) 60 (722) 90 (2131) 120 (2641) 150 (3027) 180 (3336) 210 (3649) 240 (3889) 

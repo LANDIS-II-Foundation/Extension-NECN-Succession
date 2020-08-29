@@ -1,0 +1,79 @@
+LandisData  "Dynamic Fire System"
+
+Timestep  1
+
+>>---------------------------------------
+>> FIRE INPUTS
+>>----------------------------------------
+
+EventSizeType	size_based  		<<'size-based' or 'duration_based'
+
+
+BuildUpIndex	Y			<< yes or no; Y or N
+
+
+>> Fire Region Data Table
+>> Fire region| Fire Size    	  | Seasonal Foliar Moisture Content (FMC) Data: Hi, Lo, and Proportion (Pr) | Other Ecorgion Data
+>>            |             	  | Spring (Sp)            Summer (Su)             Fall (Fa)                 |           
+>> Code Name  | Mu  	Sigma Max | SpFMCLo SpFMCHi SpHiPr SuFMCLo SuFMCHi SuFMCPr FaFMCLo FaFMCHi FaHiPr    | OpenFuel NumIgns 
+>> -----------  ------------   ------------------------------------------------------------------------   ----------------
+    1    Low     0.4		0.009 3   107     119     0.00   92      119     0.23    120     120     1.00        2         1
+   0  inactive  0  0 		0  0   	   0       0      0        0      0	      0       0       0           0        0   
+
+InitialFireEcoregionsMap  	"FireRegion.tif"
+
+
+
+DynamicEcoregionTable
+>>Year	FileName
+
+
+
+SeasonTable
+>> Season  Leaf,    Prop of  Percent  DayLength
+>> Name    Status   Fires    Curing   Proportion
+>> ------  -------  -------  -------  ----------
+   Spring  LeafOff  0.1    	50		1.0
+   Summer  LeafOn   0.7     	51		1.0
+   Fall    LeafOff  0.2     	100		1.0
+
+InitialWeatherDatabase  	"FWI_TWX_EcoregionALL.csv"  << Initial contemporary weather file
+
+DynamicWeatherTable
+>>Year  FileName
+
+
+FuelTypeTable
+>> Allowed base types:  Conifer, ConiferPlantation, Deciduous, Slash, Open
+>> Allowed surface types:  See Canadian Fire Behavior System (CFBS)
+>> The fuel types in the example file (below) are derived from the CFBS.
+
+>> Index  BaseType  		SurfaceType InitProb a   b      c   q    BUI maxBE CBH
+>> -----  --------  		----------- -------- --- ---    --- ---  --- ----- ---
+   1      ConiferPlantation C6  	    1.0      30  0.0800 3.0 0.80 62  1.197 1  << 12 to 36	PinuPond
+   2      Conifer   		C3          1.0      110 0.0444 3.0 0.75 62  1.261 3  << 37 to 113	PinuPond
+   3      Conifer   		C7          1.0      45  0.0305 2.0 0.85 106 1.134 5  << 114 to 400	PinuPond
+   4 	  Conifer   		C7          1.0      45  0.0305 2.0 0.85 106 1.134 3  << 12 to 400	PinuPond
+   13     Open      		O1a         1.0     190  0.0310 1.4 1.0   1  1.000 0  << 0 to 11 	PinuPond 
+   99	  Conifer   		C7          1.0      45  0.0305 2.0 0.85 106 1.134 7  << post thin
+   95     Conifer   		C7          1.0      45  0.0305 2.0 0.85 106 1.134 7  << post severity 2 and 3
+   
+   
+
+SeverityCalibrationFactor  1
+
+FireDamageTable
+>> Cohort Age       FireSeverity - 
+>> % of longevity   FireTolerance
+>> --------------   --------------
+     2.5%              -2
+     12.5%             -1
+     50%                0
+     85%                1
+	 100%				2
+
+
+MapNames  		fire/severity-{timestep}.img
+LogFile   		fire/dynamic-fire-test-log.csv
+SummaryLogFile 		fire/summary-log.csv
+

@@ -1,0 +1,9 @@
+LandisData	"Ecoregions"		
+
+>> 	Map Code		
+>>Active	Name	Description
+>>--------------------------------------------------------			
+yes	1	Test		"Test"
+no 	0	none		"not in the region of interest"
+
+

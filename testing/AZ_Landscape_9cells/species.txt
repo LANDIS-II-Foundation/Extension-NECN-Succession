@@ -1,0 +1,19 @@
+LandisData	Species		
+>> Species for ForFRI
+				
+>>						Sexual		Shade	Fire	Seed   Disp    Dist		Veg			Sprout Age	Post-Fire
+>>	Name		Long	Maturit		Tol.	Tol.	Effecti		Maximum		Rep P		Min	Max		Regen
+>>	------------------------------------------------------------------------------------------------------------
+
+	
+	PinuPond 	400 	7			2		4		35			120 		0			0	0  		none						<<from Hurteau files
+	
+
+
+
+
+
+
+
+
+

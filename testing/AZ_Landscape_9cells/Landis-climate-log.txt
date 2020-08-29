@@ -1,0 +1,805 @@
+   Loading spin-up weather data from file spinup_1981_2010_new.csv ...
+   Converting raw data from text file: spinup_1981_2010_new.csv, Format=daily_temp-c_precip-mmday, Temporal=Daily.
+   Loading future weather data from file IPSLCM5ALR_future_all.csv ...
+   Converting raw data from text file: IPSLCM5ALR_future_all.csv, Format=daily_temp-c_precip-mmday, Temporal=Daily.
+Core.StartTime = 0, Core.EndTime = 90.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1981, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1981, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1982, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1982, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1983, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1983, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1984, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1984, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1985, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1985, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1986, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1986, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1987, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1987, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1988, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1988, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1989, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1989, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1990, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1990, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1991, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1991, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1992, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1992, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1993, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1993, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1994, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1994, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1995, actualYearUsed=1981.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1995, actualYear = 1981, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1996, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1996, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1997, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1997, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1998, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1998, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 1999, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 1999, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2000, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2000, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2001, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2001, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2002, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2002, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2003, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2003, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2004, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2004, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2005, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2005, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2006, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2006, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2007, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2007, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2008, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2008, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2009, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2009, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2010, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2010, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2011, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2011, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2012, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2012, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2013, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2013, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2014, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2014, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2015, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2015, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2016, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2016, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2017, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2017, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2018, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2018, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2019, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2019, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2020, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2020, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2021, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2021, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2022, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2022, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2023, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2023, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2024, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2024, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2025, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2025, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2026, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2026, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2027, actualYearUsed=1981.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2027, actualYear = 1981, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2028, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2028, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2029, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2029, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2030, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2030, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2031, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2031, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2032, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2032, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2033, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2033, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2034, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2034, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2035, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2035, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2036, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2036, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2037, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2037, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2038, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2038, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2039, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2039, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2040, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2040, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2041, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2041, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2042, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2042, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2043, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2043, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2044, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2044, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2045, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2045, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2046, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2046, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2047, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2047, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2048, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2048, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2049, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2049, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2050, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2050, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2051, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2051, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2052, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2052, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2053, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2053, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2054, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2054, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2055, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2055, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2056, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2056, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2057, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2057, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2058, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2058, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2059, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2059, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2060, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2060, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2061, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2061, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2062, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2062, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2063, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2063, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2064, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2064, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2065, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2065, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2066, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2066, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2067, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2067, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2068, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2068, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2069, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2069, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2070, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2070, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2071, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2071, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2072, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2072, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2073, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2073, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2074, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2074, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2075, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2075, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2076, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2076, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2077, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2077, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2078, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2078, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2079, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2079, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2080, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2080, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2081, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2081, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2082, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2082, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2083, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2083, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2084, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2084, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2085, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2085, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2086, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2086, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2087, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2087, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2088, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2088, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2089, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2089, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2090, actualYearUsed=1981.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2090, actualYear = 1981, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2091, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2091, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2092, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2092, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2093, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2093, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2094, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2094, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2095, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2095, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2096, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2096, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2097, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2097, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2098, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2098, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2099, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2099, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2100, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2100, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2101, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2101, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2102, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2102, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2103, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2103, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2104, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2104, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2105, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2105, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2106, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2106, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2107, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2107, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2108, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2108, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2109, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2109, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2110, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2110, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2111, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2111, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2112, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2112, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2113, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2113, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2114, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2114, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2115, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2115, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2116, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2116, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2117, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2117, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2118, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2118, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2119, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2119, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2120, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2120, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2121, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2121, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2122, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2122, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2123, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2123, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2124, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2124, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2125, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2125, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2126, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2126, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2127, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2127, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2128, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2128, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2129, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2129, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2130, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2130, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2131, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2131, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2132, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2132, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2133, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2133, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2134, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2134, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2135, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2135, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2136, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2136, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2137, actualYearUsed=1981.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2137, actualYear = 1981, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2138, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2138, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2139, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2139, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2140, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2140, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2141, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2141, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2142, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2142, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2143, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2143, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2144, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2144, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2145, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2145, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2146, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2146, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2147, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2147, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2148, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2148, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2149, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2149, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2150, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2150, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2151, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2151, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2152, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2152, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2153, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2153, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2154, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2154, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2155, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2155, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2156, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2156, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2157, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2157, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2158, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2158, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2159, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2159, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2160, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2160, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2161, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2161, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2162, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2162, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2163, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2163, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2164, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2164, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2165, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2165, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2166, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2166, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2167, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2167, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2168, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2168, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2169, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2169, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2170, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2170, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2171, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2171, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2172, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2172, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2173, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2173, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2174, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2174, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2175, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2175, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2176, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2176, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2177, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2177, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2178, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2178, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2179, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2179, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2180, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2180, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2181, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2181, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2182, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2182, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2183, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2183, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2184, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2184, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2185, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2185, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2186, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2186, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2187, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2187, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2188, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2188, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2189, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2189, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2190, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2190, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2191, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2191, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2192, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2192, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2193, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2193, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2194, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2194, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2195, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2195, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2196, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2196, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2197, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2197, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2198, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2198, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2199, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2199, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2200, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2200, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2201, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2201, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2202, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2202, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2203, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2203, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2204, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2204, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2205, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2205, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2206, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2206, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2207, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2207, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2208, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2208, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2209, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2209, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2210, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2210, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2211, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2211, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2212, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2212, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2213, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2213, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2214, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2214, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2215, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2215, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2216, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2216, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2217, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2217, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2218, actualYearUsed=1981.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2218, actualYear = 1981, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2219, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2219, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2220, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2220, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2221, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2221, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2222, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2222, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2223, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2223, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2224, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2224, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2225, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2225, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2226, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2226, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2227, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2227, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2228, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2228, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2229, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2229, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2230, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2230, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2231, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2231, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2232, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2232, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2233, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2233, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2234, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2234, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2235, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2235, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2236, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2236, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2237, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2237, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2238, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2238, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2239, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2239, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2240, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2240, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2241, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2241, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2242, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2242, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2243, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2243, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2244, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2244, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2245, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2245, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2246, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2246, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2247, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2247, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2248, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2248, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2249, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2249, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2250, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2250, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2251, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2251, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2252, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2252, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2253, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2253, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2254, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2254, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2255, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2255, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2256, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2256, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2257, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2257, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2258, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2258, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2259, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2259, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2260, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2260, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2261, actualYearUsed=1981.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2261, actualYear = 1981, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2262, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2262, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2263, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2263, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2264, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2264, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2265, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2265, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2266, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2266, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2267, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2267, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2268, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2268, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2269, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2269, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2270, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2270, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2271, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2271, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2272, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2272, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2273, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2273, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2274, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2274, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2275, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2275, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2276, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2276, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2277, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2277, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2278, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2278, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2279, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2279, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2280, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2280, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2281, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2281, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2282, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2282, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2283, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2283, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2284, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2284, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2285, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2285, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2286, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2286, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2287, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2287, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2288, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2288, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2289, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2289, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2290, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2290, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2291, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2291, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2292, actualYearUsed=1985.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2292, actualYear = 1985, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2293, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2293, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2294, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2294, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2295, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2295, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2296, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2296, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2297, actualYearUsed=1999.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2297, actualYear = 1999, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2298, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2298, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2299, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2299, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2300, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2300, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2301, actualYearUsed=1986.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2301, actualYear = 1986, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2302, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2302, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2303, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2303, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2304, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2304, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2305, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2305, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2306, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2306, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2307, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2307, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2308, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2308, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2309, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2309, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2310, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2310, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2311, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2311, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2312, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2312, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2313, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2313, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2314, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2314, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2315, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2315, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2316, actualYearUsed=1982.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2316, actualYear = 1982, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2317, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2317, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2318, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2318, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2319, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2319, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2320, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2320, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2321, actualYearUsed=2004.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2321, actualYear = 2004, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2322, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2322, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2323, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2323, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2324, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2324, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2325, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2325, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2326, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2326, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2327, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2327, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2328, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2328, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2329, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2329, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2330, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2330, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2331, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2331, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2332, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2332, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2333, actualYearUsed=2006.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2333, actualYear = 2006, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2334, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2334, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2335, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2335, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2336, actualYearUsed=2005.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2336, actualYear = 2005, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2337, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2337, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2338, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2338, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2339, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2339, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2340, actualYearUsed=1996.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2340, actualYear = 1996, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2341, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2341, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2342, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2342, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2343, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2343, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2344, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2344, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2345, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2345, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2346, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2346, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2347, actualYearUsed=1991.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2347, actualYear = 1991, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2348, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2348, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2349, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2349, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2350, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2350, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2351, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2351, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2352, actualYearUsed=1984.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2352, actualYear = 1984, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2353, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2353, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2354, actualYearUsed=1988.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2354, actualYear = 1988, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2355, actualYearUsed=1995.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2355, actualYear = 1995, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2356, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2356, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2357, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2357, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2358, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2358, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2359, actualYearUsed=1990.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2359, actualYear = 1990, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2360, actualYearUsed=1998.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2360, actualYear = 1998, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2361, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2361, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2362, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2362, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2363, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2363, actualYear = 2001, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2364, actualYearUsed=2009.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2364, actualYear = 2009, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2365, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2365, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2366, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2366, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2367, actualYearUsed=1987.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2367, actualYear = 1987, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2368, actualYearUsed=2007.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2368, actualYear = 2007, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2369, actualYearUsed=2010.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2369, actualYear = 2010, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2370, actualYearUsed=1989.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2370, actualYear = 1989, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2371, actualYearUsed=1997.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2371, actualYear = 1997, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2372, actualYearUsed=1993.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2372, actualYear = 1993, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2373, actualYearUsed=2000.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2373, actualYear = 2000, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2374, actualYearUsed=1994.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2374, actualYear = 1994, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2375, actualYearUsed=1983.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2375, actualYear = 1983, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2376, actualYearUsed=2003.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2376, actualYear = 2003, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2377, actualYearUsed=1992.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2377, actualYear = 1992, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2378, actualYearUsed=2008.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2378, actualYear = 2008, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2379, actualYearUsed=2002.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2379, actualYear = 2002, phase = SpinUp_Climate.
+  Completed calculations for SpinUp_Climate using Daily_RandomYear. Ecoregion = Test, SimulatedYear = 2380, actualYearUsed=2001.
+  AnnualClimate_Daily: Daily_RandomYear: timeStep = 2380, actualYear = 2001, phase = SpinUp_Climate.

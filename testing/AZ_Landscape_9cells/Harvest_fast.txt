@@ -1,0 +1,78 @@
+LandisData  "Biomass Harvest"  
+
+Timestep    1
+
+ManagementAreas "E:/Landis/Test_Landscape/FireRegion.tif"
+
+Stands      "E:/Landis/Test_Landscape/FireRegion.tif"
+
+
+>> ***************
+>> PRESCRIPTIONS
+>> ***************
+
+
+
+>>------------------------------------
+
+Prescription Test	
+
+>>------------------------------------
+
+    	StandRanking 	FireHazard 
+	
+	>> Fuel Type	Fuel Type Rank
+	>> ---------	-------------
+		1				9
+		2				9
+		3				9
+		4				9
+		5				9
+		6				9
+		7				9
+		8				9
+		9				9
+		10				9
+		11				9
+		12				9	
+		13				9
+
+
+	ForestTypeTable 
+
+	>> InclusionRule	AgeRAnge	PecentCells	Species
+	>> -------------	---------	-----------	--------
+
+	SiteSelection 	Complete
+	
+	MinTimeSinceDamage	10
+
+    CohortsRemoved SpeciesList 
+
+	PinuPond  	1-400 (50%) 
+	
+
+
+>> ****************************
+>> PRESCRIPTION IMPLEMENTATION - 
+>> ****************************
+
+    HarvestImplementations
+>>  Mgmt Area   Prescription    			Harvest Area    Begin Time  End Time
+>>  ---------   ------------    			------------    ----------  --------
+>> 1 = Test
+
+	
+		1			Test						100%			   1			2
+	
+	
+	
+	
+   
+>>-----------------------------------------------------------------
+>> OUTPUTS
+
+PrescriptionMaps    	harvest/prescripts-{timestep}.img
+BiomassMaps 		harvest/biomass-removed-{timestep}.img
+EventLog            	harvest/log.csv
+SummaryLog 		harvest/summary-log.csv

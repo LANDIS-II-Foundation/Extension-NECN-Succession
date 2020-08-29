@@ -1,0 +1,8 @@
+LandisData  "Output Biomass-by-Age"
+
+Timestep   1
+
+MapNames   outputs/spp-biomass-by-age/{species}-{ageclass}-{timestep}.img
+
+Species	PinuPond  	ageclass1(1-10) ageclass2(11-40) ageclass3(41-80) ageclass4(81-110) ageclass5(>110)
+	

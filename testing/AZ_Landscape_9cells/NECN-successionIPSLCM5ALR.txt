@@ -1,0 +1,102 @@
+LandisData	"NECN Succession"
+
+Timestep  1
+
+SeedingAlgorithm  WardSeedDispersal
+
+InitialCommunities      "Initial_Communities.txt"
+InitialCommunitiesMap   "FireRegion.tif"
+ClimateConfigFile 	"climate-generatorIPSLCM5ALR.txt"	
+
+SoilDepthMapName				"soil_depth.tif"
+SoilDrainMapName				"soil_drain.tif" 
+SoilBaseFlowMapName				"soil_baseflow.tif" 
+SoilStormFlowMapName			"soil_stormflow.tif"
+SoilFieldCapacityMapName		"FieldCap.tif"
+SoilWiltingPointMapName			"WiltPoint.tif"
+SoilPercentSandMapName			"perSand.tif"
+SoilPercentClayMapName			"perClay.tif"
+InitialSOM1CsurfMapName			"som1csurfnew.tif"
+InitialSOM1NsurfMapName			"som1nsurfnew.tif"
+InitialSOM1CsoilMapName			"som1csoilnew.tif"
+InitialSOM1NsoilMapName			"som1nsoilnew.tif"
+InitialSOM2CMapName				"som2cnew.tif"
+InitialSOM2NMapName				"som2nnew.tif"
+InitialSOM3CMapName				"som3cnew.tif"
+InitialSOM3NMapName				"som3nnew.tif"
+InitialDeadWoodSurfaceMapName	"init_deadnew.tif"
+InitialDeadCoarseRootsMapName	"init_deadnew.tif"
+
+CalibrateMode 	no
+SmokeModelOutputs yes
+WaterDecayFunction Linear <<Linear or Ratio
+
+
+ProbabilityEstablishAdjust 	0.2
+InitialMineralN				2.4
+InitialFineFuels 		0.03  << a fraction 0-1.0 of dead wood.
+AtmosphericNSlope			0.035
+AtmosphericNIntercept		0.004
+Latitude					35.2
+DenitrificationRate			0.001
+DecayRateSurf				1.0
+DecayRateSOM1				1.0
+DecayRateSOM2				0.018
+DecayRateSOM3				0.00035
+
+
+MaximumLAI
+
+>> Shade		Max LAI
+>> Class	
+>> ----------	--------------------	
+	1			0.5 
+	2			1 
+	3			1.5 
+	4			2
+	5			2.5
+
+LightEstablishmentTable
+>> Spp Shade	Probability
+>> Class	by Actual Shade
+>> ----------	--------------------	
+>>		0		1		2		3		4		5
+	1	1.0		0.5		0.25	0.0		0.0		0.0
+	2	1.0		1.0		0.5		0.25	0.0		0.0
+	3	1.0		1.0		1.0		0.5		0.25	0.0
+	4	1.0		1.0		1.0		1.0		0.5		0.25
+	5	0.1		0.5		1.0		1.0		1.0		1.0
+
+SpeciesParameters
+								
+>> Species  Funct	N		GDD		GDD		Min		Max		Leaf	Epi-	Leaf	FRoot	Wood	CRoot	Leaf  	FRoot 	Wood  	CRoot 	Littr 	max		max	
+>>	    	ional	Fixer	Min		Max		Jan		Drought	Long	cormic	Lign%	Lign%	Lign%	Lign%	CN    	CN    	CN    	CN    	CN		ANPP	AGB
+>> 	    	Type							Temp					re-
+>> ----------------------------------------------------------------------------------------------------------------------------------------------------
+PinuPond    1		N   	155 	4000    -5      0.92    4.5     N       0.28    0.2    	0.25    0.25    48  	48      250  	170   	100    	150		21413 	<< from Hurteau files
+
+
+
+FunctionalGroupParameters  <<										Age	Leaf
+>> Name	Index	PPDF1	PPDF2	PPDF3	PPDF4	FCFRAC	BTOLAI	KLAI	MAXLAI	PPRPTS2	PPRPTS3	Wood	Monthly	Mort	Drop   CRootFrac FRootFRac
+>> 		T-Mean	T-Max	T-shape	T-shape	leaf						DecayR	WoodMortShape	Month
+Conifer   1     16.0    30.0    0.8       3.0    0.2     0.004  5000      10    1.0     0.5    	0.4     0.002   10       10	0.1		0.1
+
+
+FireReductionParameters <<values estimated from Campbell et al. 2007
+>>	Severity	Wood	Litter		SOM
+>>	Fire		Reduct	Reduct		Reduct
+	1			0.0		0.7			0.7  0.5 0.1
+	2			0.05	0.75		0.75 0.5 0.1
+	3			0.4		0.75		0.75 0.5 0.1
+	4			0.45	0.85		0.85 0.5 0.1
+	5			0.5		1.0			1.0 0.5 0.1
+
+HarvestReductionParameters
+>>	Name						WoodLitter	Litter	SOM			CohortWood	CohortLeaf
+>>								Reduct		Reduct	Reduction	Removal		Removal
+	Test						0			0		0			0.85		0
+	
+	
+
+   

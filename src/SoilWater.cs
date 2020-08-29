@@ -229,7 +229,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
-            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WType, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
+            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WType, SiteVars.SoilTemperature[site], availableWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, pet, tave);
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
             return;
@@ -304,7 +304,7 @@ namespace Landis.Extension.Succession.NECN
         
         //---------------------------------------------------------------------------
 
-        private static double CalculateDecayFactor(int waterDecayFunction, double soilTemp, double relativeWaterContent, double ratioPrecipPET, int month)
+        private static double CalculateDecayFactor(int waterDecayFunction, double soilTemp, double availableWaterContent, double ratioPrecipPET, int month)
         {
             // Decomposition factor relfecting the effects of soil temperature and moisture on decomposition
             // Irrigation is zero for natural forests
@@ -319,16 +319,16 @@ namespace Landis.Extension.Succession.NECN
             //      pet;          //Monthly potential evapotranspiration in centimeters (cm)
 
             //Option selection for wfunc depending on waterDecayFunction
-            //      idef = 0;     // for linear option
-            //      idef = 1;     // for ratio option
+            //      waterDecayFunction = 0;     // for linear option
+            //      waterDecayFunction = 1;     // for ratio option
 
 
             if (waterDecayFunction == 0)
             {
-                if (relativeWaterContent > 13.0)
+                if (availableWaterContent > 13.0)
                     W_Decomp = 1.0;
                 else
-                    W_Decomp = 1.0 / (1.0 + 4.0 * System.Math.Exp(-6.0 * relativeWaterContent));
+                    W_Decomp = 1.0 / (1.0 + 4.0 * System.Math.Exp(-6.0 * availableWaterContent));
             }
             else if (waterDecayFunction == 1)
             {
