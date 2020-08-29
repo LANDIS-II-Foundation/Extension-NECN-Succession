@@ -156,7 +156,7 @@ namespace Landis.Extension.Succession.NECN
                     // C & N movement from SOM1 to SOM2.
                     // SOM2 gets what's left of totalCflow.
                     double cFlowS1S2 = netCFlow - cFlowS1S3 - cLeached;
-                    PlugIn.ModelCore.UI.WriteLine("Flow from SOM1soil to SOM2 = {0}. ", cFlowS1S2);
+                    //PlugIn.ModelCore.UI.WriteLine("Flow from SOM1soil to SOM2 = {0}. ", cFlowS1S2);
 
                     //Partition and schedule C and N flows 
                     SiteVars.SOM1soil[site].TransferCarbon(SiteVars.SOM2[site], cFlowS1S2);
