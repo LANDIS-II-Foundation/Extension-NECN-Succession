@@ -77,7 +77,7 @@ PinuPond    1		N   	155 	4000    -5      0.92    4.5     N       0.28    0.2    
 
 
 
-FunctionalGroupParameters  <<										Age	Leaf
+FunctionalGroupParameters  <<											Age	Leaf
 >> Name	Index	PPDF1	PPDF2	PPDF3	PPDF4	FCFRAC	BTOLAI	KLAI	MAXLAI	PPRPTS2	PPRPTS3	Wood	Monthly	Mort	Drop   CRootFrac FRootFRac
 >> 		T-Mean	T-Max	T-shape	T-shape	leaf						DecayR	WoodMortShape	Month
 Conifer   1     16.0    30.0    0.8       3.0    0.2     0.004  5000      10    1.0     0.5    	0.4     0.002   10       10	0.1		0.1
