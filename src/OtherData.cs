@@ -13,8 +13,8 @@ namespace Landis.Extension.Succession.NECN
         public static LitterType[] LitterParameters;
         public static bool CalibrateMode;
         public static double ProbEstablishAdjust;
-        public static WaterType WType;
-        public static bool Henne_WaterMode = false;
+        public static WaterType WaterDecayFunction;
+        public static bool SoilWaterVersion64 = false;
 
 
         // NOTE: *****************************************************************
@@ -224,6 +224,10 @@ namespace Landis.Extension.Succession.NECN
             LitterType litterParmsSurface = new LitterType();
             LitterType litterParmsSoil = new LitterType();
 
+            CalibrateMode = parameters.CalibrateMode;
+            SoilWaterVersion64 = parameters.SoilWater64;
+            WaterDecayFunction = parameters.WType;
+            
             // Structural decomposition rate, the fraction of the pool that turns over each year.
             litterParmsSurface.DecayRateStrucC = 3.9 / 100.0;//DEC1(1)  
             litterParmsSoil.DecayRateStrucC = 4.9 / 100.0; //DEC1(2)  
@@ -240,15 +244,6 @@ namespace Landis.Extension.Succession.NECN
             LitterParameters[0] = litterParmsSurface;
             LitterParameters[1] = litterParmsSoil;
 
-            CalibrateMode       = parameters.CalibrateMode;
-            Henne_WaterMode = parameters.Henne_WaterMode;
-
-            WType = parameters.WType;
-            //ProbEstablishAdjust = parameters.ProbEstablishAdjustment;
-            //FractionSOM2toCO2   = parameters.FractionSOM2toCO2;
-            //FractionSOM3toCO2   = parameters.FractionSOM3toCO2;
-            //DecayRateSOM2       = parameters.DecayRateSOM2;
-            //DecayRateSOM3       = parameters.DecayRateSOM3;
 
         }
 

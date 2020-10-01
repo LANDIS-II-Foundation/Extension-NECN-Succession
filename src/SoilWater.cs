@@ -28,7 +28,7 @@ namespace Landis.Extension.Succession.NECN
         private static double holdingTank = 0.0;
 
 
-        public static void Run(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
+        public static void RunVersion64(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
         {
 
             //Originally from h2olos.f of CENTURY model
@@ -231,15 +231,19 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
-            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WType, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
+            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, pet, tave);
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
             return;
         }
 
-        public static void RunPenmanMonteith(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
+        public static void Run(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
         {
-
+            //     Original Water Submodel for Century - written by Bill Parton
+            //     Updated from Fortran 4 - rm 2/92
+            //     Rewritten by Bill Pulliam - 9/94
+            //     Rewritten by Melissa Lucash - 11/2014
+            //     Rewritten by Paul Henne, USGS - 6/2020
 
             //PlugIn.ModelCore.UI.WriteLine("month={0}.", Main.Month);
 
@@ -247,13 +251,11 @@ namespace Landis.Extension.Succession.NECN
             double addToSoil = 0.0;
             double bareSoilEvap = 0.0;
             baseFlow = 0.0;
-            //double relativeWaterContent = 0.0;
             double snow = 0.0;
             stormFlow = 0.0;
             double actualET = 0.0;
             double remainingPET = 0.0;
             double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
-            //double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
             double availableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
             double priorWaterAvail = SiteVars.AvailableWater[site];
             double waterFull = 0.0;
@@ -324,8 +326,8 @@ namespace Landis.Extension.Succession.NECN
                 //soilWaterContent += addToSoil;
             }
 
-            //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
-            //PH: available water may need to be calculated differently with my proposed changes, but I moved this variable down for now so that soilEvaporation comes out first.
+            // Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
+            //PH:  I moved this variable down for now so that soilEvaporation comes out first.
             //availableWaterMax = soilWaterContent;
 
             //...Evaporate water from the snow pack (rewritten by Pulliam 9/94)
@@ -342,20 +344,18 @@ namespace Landis.Extension.Succession.NECN
                 liquidSnowpack = liquidSnowpack - evaporatedSnow;
 
                 //...Decrement remaining pet by energy used to evaporate snow:
-
                 //PH: CENTURY code divides evaporatedSnow by 0.87 so it matches the PET used to melt snow.
                 remainingPET = pet - evaporatedSnow / 0.87;
-                //remainingPET = pet - evaporatedSnow;
 
                 if (remainingPET < 0.0)
                     remainingPET = 0.0;
 
                 //Subtract evaporated snowfrom the soil water content
-                //PH: Take evaporated snow out of snowmelt instead of soil...or is that double counting evaporation? Could this cause addToSoil to go negative?  
-                //It is already taken out of the snowpack, and is used to decrement PET so that it won't affect AET
-                addToSoil -= evaporatedSnow;
-                if (addToSoil < 0.0)
-                    addToSoil = 0.0;
+                //PH: Take evaporated snow out of snowmelt instead of soil. 
+                // It is already taken out of the snowpack, and is used to decrement PET so that it won't affect AET
+                //addToSoil -= evaporatedSnow;
+                //if (addToSoil < 0.0)
+                //    addToSoil = 0.0;
                 //soilWaterContent -= evaporatedSnow;
             }
 
@@ -465,10 +465,9 @@ namespace Landis.Extension.Succession.NECN
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
             availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
 
-            //Calculate the final amount of available water to the trees, which is the average of the max and min          
-            //PH: availableWater is affected by my changes, and soilWaterContent should be higher now.  Therefore, I propose calculating using soilWaterContent directly instead
-            //availableWater = soilWaterContent - waterEmpty;
-            //availableWater = (availableWaterMax + availableWaterMin)/ 2.0;
+            // Calculate the final amount of available water to the trees, which is the average of the max and min          
+            // PH: availableWater is affected by my changes, and soilWaterContent should be higher now.  
+            // Therefore, calculating using soilWaterContent directly instead
 
             // Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;
@@ -483,7 +482,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
-            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WType, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
+            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, pet, tave);
             if (month == 0)
                 SiteVars.DryDays[site] = 0;

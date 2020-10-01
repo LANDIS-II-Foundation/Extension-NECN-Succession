@@ -176,13 +176,13 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.SmokeModelOutputs = false;
 
-            InputVar<bool> henne_water_mode = new InputVar<bool>("HenneWaterMode");
-            if (ReadOptionalVar(henne_water_mode))
+            InputVar<bool> version64 = new InputVar<bool>("Version64SoilWater");
+            if (ReadOptionalVar(version64))
             {
-                parameters.Henne_WaterMode = henne_water_mode.Value;
+                parameters.SoilWater64 = version64.Value;
             }
             else
-                parameters.Henne_WaterMode = false;
+                parameters.SoilWater64 = false;
 
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
