@@ -68,14 +68,7 @@ LightEstablishmentTable
 	5	0.1		0.5		1.0		1.0		1.0		1.0
 
 SpeciesParameters
-								
->> Species  Funct	N		GDD		GDD		Min		Max		Leaf	Epi-	Leaf	FRoot	Wood	CRoot	Leaf  	FRoot 	Wood  	CRoot 	Littr 	max		max	
->>	    	ional	Fixer	Min		Max		Jan		Drought	Long	cormic	Lign%	Lign%	Lign%	Lign%	CN    	CN    	CN    	CN    	CN		ANPP	AGB
->> 	    	Type							Temp					re-
->> ----------------------------------------------------------------------------------------------------------------------------------------------------
-PinuPond    1		N   	155 	4000    -5      0.92    4.5     N       0.28    0.2    	0.25    0.25    48  	48      250  	170   	100    	150		21413 	<< from Hurteau files
-
-
+CSV_File NECN_Spp_Table.csv								
 
 FunctionalGroupParameters  <<											Age	Leaf
 >> Name	Index	PPDF1	PPDF2	PPDF3	PPDF4	FCFRAC	BTOLAI	KLAI	MAXLAI	PPRPTS2	PPRPTS3	Wood	Monthly	Mort	Drop   CRootFrac FRootFRac

@@ -816,8 +816,12 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public void SetFunctionalType(ISpecies           species,
-                                     InputValue<int> newValue)
+        public void SetFunctionalType(ISpecies species, InputValue<int> newValue)
+        {
+            Debug.Assert(species != null);
+            sppFunctionalType[species] = CheckBiomassParm(newValue, 0, 100);
+        }
+        public void SetFunctionalType(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
             sppFunctionalType[species] = CheckBiomassParm(newValue, 0, 100);
@@ -839,10 +843,20 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             gddMin[species] = CheckBiomassParm(newValue, 1, 4000);
         }
+        public void SetGDDmin(ISpecies species,int newValue)
+        {
+            Debug.Assert(species != null);
+            gddMin[species] = CheckBiomassParm(newValue, 1, 4000);
+        }
         //---------------------------------------------------------------------
 
         public void SetGDDmax(ISpecies           species,
                                      InputValue<int> newValue)
+        {
+            Debug.Assert(species != null);
+            gddMax[species] = CheckBiomassParm(newValue, 500, 7000);
+        }
+        public void SetGDDmax(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
             gddMax[species] = CheckBiomassParm(newValue, 500, 7000);
@@ -855,6 +869,11 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             minJanTemp[species] = CheckBiomassParm(newValue, -60, 20);
         }
+        public void SetMinJanTemp(ISpecies species,int newValue)
+        {
+            Debug.Assert(species != null);
+            minJanTemp[species] = CheckBiomassParm(newValue, -60, 20);
+        }
         //---------------------------------------------------------------------
 
         public void SetMaxDrought(ISpecies           species,
@@ -863,10 +882,20 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             maxDrought[species] = CheckBiomassParm(newValue, 0.0, 1.0);
         }
+        public void SetMaxDrought(ISpecies species,double newValue)
+        {
+            Debug.Assert(species != null);
+            maxDrought[species] = CheckBiomassParm(newValue, 0.0, 1.0);
+        }
         //---------------------------------------------------------------------
 
         public void SetLeafLongevity(ISpecies           species,
                                      InputValue<double> newValue)
+        {
+            Debug.Assert(species != null);
+            leafLongevity[species] = CheckBiomassParm(newValue, 1.0, 10.0);
+        }
+        public void SetLeafLongevity(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
             leafLongevity[species] = CheckBiomassParm(newValue, 1.0, 10.0);
@@ -880,10 +909,20 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             leafLignin[species] = CheckBiomassParm(newValue, 0.0, 0.4);
         }
+        public void SetLeafLignin(ISpecies species,double newValue)
+        {
+            Debug.Assert(species != null);
+            leafLignin[species] = CheckBiomassParm(newValue, 0.0, 0.4);
+        }
         //---------------------------------------------------------------------
 
         public void SetWoodLignin(ISpecies           species,
                                           InputValue<double> newValue)
+        {
+            Debug.Assert(species != null);
+            woodLignin[species] = CheckBiomassParm(newValue, 0.0, 0.4);
+        }
+        public void SetWoodLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
             woodLignin[species] = CheckBiomassParm(newValue, 0.0, 0.4);
@@ -896,10 +935,20 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             coarseRootLignin[species] = CheckBiomassParm(newValue, 0.0, 0.4);
         }
+        public void SetCoarseRootLignin(ISpecies species,double newValue)
+        {
+            Debug.Assert(species != null);
+            coarseRootLignin[species] = CheckBiomassParm(newValue, 0.0, 0.4);
+        }
         //---------------------------------------------------------------------
 
         public void SetFineRootLignin(ISpecies           species,
                                           InputValue<double> newValue)
+        {
+            Debug.Assert(species != null);
+            fineRootLignin[species] = CheckBiomassParm(newValue, 0.0, 0.4);
+        }
+        public void SetFineRootLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
             fineRootLignin[species] = CheckBiomassParm(newValue, 0.0, 0.4);
@@ -912,19 +961,33 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             leafCN[species] = CheckBiomassParm(newValue, 5.0, 100.0);
         }
+        public void SetLeafCN(ISpecies species,double newValue)
+        {
+            Debug.Assert(species != null);
+            leafCN[species] = CheckBiomassParm(newValue, 5.0, 100.0);
+        }
         //---------------------------------------------------------------------
 
         public void SetWoodCN(ISpecies           species,
                                           InputValue<double> newValue)
         {
             Debug.Assert(species != null);
-            //woodCN[species] = CheckBiomassParm(newValue, 5.0, 600.0);
+            woodCN[species] = CheckBiomassParm(newValue, 5.0, 900.0);
+        }
+        public void SetWoodCN(ISpecies species,double newValue)
+        {
+            Debug.Assert(species != null);
             woodCN[species] = CheckBiomassParm(newValue, 5.0, 900.0);
         }
         //---------------------------------------------------------------------
 
         public void SetCoarseRootCN(ISpecies           species,
                                           InputValue<double> newValue)
+        {
+            Debug.Assert(species != null);
+            coarseRootCN[species] = CheckBiomassParm(newValue, 5.0, 500.0);
+        }
+        public void SetCoarseRootCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
             coarseRootCN[species] = CheckBiomassParm(newValue, 5.0, 500.0);
@@ -937,10 +1000,20 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             foliageLitterCN[species] = CheckBiomassParm(newValue, 5.0, 100.0);
         }
+        public void SetFoliageLitterCN(ISpecies species,double newValue)
+        {
+            Debug.Assert(species != null);
+            foliageLitterCN[species] = CheckBiomassParm(newValue, 5.0, 100.0);
+        }
         //---------------------------------------------------------------------
 
         public void SetFineRootCN(ISpecies           species,
                                           InputValue<double> newValue)
+        {
+            Debug.Assert(species != null);
+            fineRootCN[species] = CheckBiomassParm(newValue, 5.0, 100.0);
+        }
+        public void SetFineRootCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
             fineRootCN[species] = CheckBiomassParm(newValue, 5.0, 100.0);
@@ -953,9 +1026,19 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             maxANPP[species] = CheckBiomassParm(newValue, 2, 1000);
         }
+        public void SetMaxANPP(ISpecies species,int newValue)
+        {
+            Debug.Assert(species != null);
+            maxANPP[species] = CheckBiomassParm(newValue, 2, 1000);
+        }
         //---------------------------------------------------------------------
 
         public void SetMaxBiomass(ISpecies species, InputValue<int> newValue)
+        {
+            Debug.Assert(species != null);
+            maxBiomass[species] = CheckBiomassParm(newValue, 2, 100000);
+        }
+        public void SetMaxBiomass(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
             maxBiomass[species] = CheckBiomassParm(newValue, 2, 100000);
@@ -1067,6 +1150,16 @@ namespace Landis.Extension.Succession.NECN
             }
             return newValue.Actual;
         }
+        private double CheckBiomassParm(double newValue,
+                                                    double minValue,
+                                                    double maxValue)
+        {
+                if (newValue < minValue || newValue > maxValue)
+                    throw new InputValueException(newValue.ToString(),
+                                                  "{0} is not between {1:0.0} and {2:0.0}",
+                                                  newValue.ToString(), minValue, maxValue);
+            return newValue;
+        }
         //---------------------------------------------------------------------
 
         private int CheckBiomassParm(InputValue<int> newValue,
@@ -1081,27 +1174,16 @@ namespace Landis.Extension.Succession.NECN
             }
             return newValue.Actual;
         }
-        //---------------------------------------------------------------------
-
-        //private Ecoregions.AuxParm<T> ConvertToActualValues<T>(Ecoregions.AuxParm<InputValue<T>> inputValues)
-        //{
-        //    Ecoregions.AuxParm<T> actualValues = new Ecoregions.AuxParm<T>(PlugIn.ModelCore.Ecoregions); //ecoregionDataset);
-        //    foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)//ecoregionDataset)
-        //        if (inputValues[ecoregion] != null)
-        //            actualValues[ecoregion] = inputValues[ecoregion].Actual;
-        //    return actualValues;
-        //}
-
-        //---------------------------------------------------------------------
-
-        //private Landis.Library.Parameters.Species.AuxParm<T> ConvertToActualValues<T>(Species.AuxParm<InputValue<T>> inputValues)
-        //{
-        //    Species.AuxParm<T> actualValues = new Species.AuxParm<T>(PlugIn.ModelCore.Species);//speciesDataset);
-        //    foreach (ISpecies species in PlugIn.ModelCore.Species)//speciesDataset)
-        //        if (inputValues[species] != null)
-        //            actualValues[species] = inputValues[species].Actual;
-        //    return actualValues;
-        //}
+        private int CheckBiomassParm(int newValue,
+                                                    int minValue,
+                                                    int maxValue)
+        {
+                if (newValue < minValue || newValue > maxValue)
+                    throw new InputValueException(newValue.ToString(),
+                                                  "{0} is not between {1:0.0} and {2:0.0}",
+                                                  newValue.ToString(), minValue, maxValue);
+            return newValue;
+        }
 
         //---------------------------------------------------------------------
 
