@@ -387,9 +387,10 @@ namespace Landis.Extension.Succession.NECN
                 throw NewParseException("Expected shade class {0}", previousNumber + 1);
 
             //-------------------------
-            //  Species Parameters table
+            //  Read Species Parameters table
+            PlugIn.ModelCore.UI.WriteLine("   Begin parsing NECN SPECIES table.");
 
-            InputVar<string> csv = new InputVar<string>("CSV_File");
+            InputVar<string> csv = new InputVar<string>("Species_CSV_File");
             ReadName("SpeciesParameters");
             if (ReadOptionalVar(csv))
             {
@@ -398,7 +399,7 @@ namespace Landis.Extension.Succession.NECN
                 foreach (DataRow row in speciesTable.Rows)
                 {
                     ISpecies species = ReadSpecies(System.Convert.ToString(row["SpeciesCode"]));
-                    parameters.SetFunctionalType(species, System.Convert.ToInt32(row["FunctionalType"]));
+                    parameters.SetFunctionalType(species, System.Convert.ToInt32(row["FunctionalGroupIndex"]));
                     parameters.NFixer[species] = System.Convert.ToBoolean(row["NitrogenFixer"]);
                     parameters.SetGDDmin(species, System.Convert.ToInt32(row["GDDMinimum"]));
                     parameters.SetGDDmax(species, System.Convert.ToInt32(row["GDDMaximum"]));
@@ -516,100 +517,137 @@ namespace Landis.Extension.Succession.NECN
             //--------- Read In Functional Group Table -------------------------------
             PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
 
+            InputVar<string> func_csv = new InputVar<string>("Functional_CSV_File");
             ReadName("FunctionalGroupParameters");
-            //string InitialEcoregionParameters = "InitialEcoregionParameters";
+            if (ReadOptionalVar(func_csv))
+            {
+                CSVParser functionalParser = new CSVParser();
+                DataTable functionalTable = functionalParser.ParseToDataTable(func_csv.Value);
+                foreach (DataRow row in functionalTable.Rows)
+                {
+                    string FunctionalTypeName = System.Convert.ToString(row["FunctionalGroupName"]);
+                    int funcIndex = System.Convert.ToInt32(row["FunctionalGroupIndex"]); 
 
-            InputVar<string> ftname = new InputVar<string>("Name");
-            InputVar<int> ftindex = new InputVar<int>("Index (< 25)");
-            InputVar<double> tempcurve1 = new InputVar<double>("TempCurve(1)");
-            InputVar<double> tempcurve2 = new InputVar<double>("TempCurve(2)");
-            InputVar<double> tempcurve3 = new InputVar<double>("TempCurve(3)");
-            InputVar<double> tempcurve4 = new InputVar<double>("TempCurve(4)");
-            InputVar<double> fcfleaf = new InputVar<double>("FCFRAC: Leaf");
-            InputVar<double> btolai = new InputVar<double>("BTOLAI");
-            InputVar<double> klai = new InputVar<double>("KLAI");
-            InputVar<double> maxlai = new InputVar<double>("MAXLAI");
-            InputVar<double> mwm = new InputVar<double>("Monthly Wood Mortality");
-            InputVar<double> wdr = new InputVar<double>("Wood Decay Rate");
-            InputVar<double> mortCurveShapeParm = new InputVar<double>("Mortality Curve Shape Parameter");
-            InputVar<int> leafNeedleDrop = new InputVar<int>("Leaf or Needle Drop Month");
+                    if (funcIndex >= numFunctionalTypes)
+                        throw new InputValueException(funcIndex.ToString(),
+                                                  "The index:  {0} exceeds the allowable number of functional groups, {1}",
+                                                  funcIndex.ToString(), numFunctionalTypes);
 
-            InputVar<double> ppr2 = new InputVar<double>("MoistureCurve2");
-            InputVar<double> ppr3 = new InputVar<double>("MoistureCurve3");
-            InputVar<double> coarseRootFraction = new InputVar<double>("CRootFrac");
-            InputVar<double> fineRootFraction = new InputVar<double>("FRootFrac");
+                    FunctionalType funcTParms = new FunctionalType();
+                    parameters.FunctionalTypes[funcIndex] = funcTParms;
 
-            while (! AtEndOfInput && CurrentName != Names.FireReductionParameters) {
-                StringReader currentLine = new StringReader(CurrentLine);
-
-                ReadValue(ftname , currentLine);
-
-                ReadValue(ftindex , currentLine);
-                int ln = (int) ftindex.Value.Actual;
-
-                if(ln >= numFunctionalTypes)
-                    throw new InputValueException(ftindex.Value.String,
-                                              "The index:  {0} exceeds the allowable number of functional groups, {1}",
-                                              ftindex.Value.String, numFunctionalTypes-1);
-
-
-                FunctionalType funcTParms = new FunctionalType();
-                parameters.FunctionalTypes[ln] = funcTParms;
-
-                ReadValue(tempcurve1, currentLine);
-                funcTParms.TempCurve1 = tempcurve1.Value;
-
-                ReadValue(tempcurve2, currentLine);
-                funcTParms.TempCurve2 = tempcurve2.Value;
-
-                ReadValue(tempcurve3, currentLine);
-                funcTParms.TempCurve3 = tempcurve3.Value;
-
-                ReadValue(tempcurve4, currentLine);
-                funcTParms.TempCurve4 = tempcurve4.Value;
-
-                ReadValue(fcfleaf, currentLine);
-                funcTParms.FCFRACleaf = fcfleaf.Value;
-
-                ReadValue(btolai, currentLine);
-                funcTParms.BTOLAI = btolai.Value;
-
-                ReadValue(klai, currentLine);
-                funcTParms.KLAI = klai.Value;
-
-                ReadValue(maxlai, currentLine);
-                funcTParms.MAXLAI = maxlai.Value;
-
-                ReadValue(ppr2, currentLine);
-                funcTParms.MoistureCurve2 = ppr2.Value;
-
-                ReadValue(ppr3, currentLine);
-                funcTParms.MoistureCurve3 = ppr3.Value;
-
-                ReadValue(wdr, currentLine);
-                funcTParms.WoodDecayRate = wdr.Value;
-
-                ReadValue(mwm, currentLine);
-                funcTParms.MonthlyWoodMortality = mwm.Value;
-
-                ReadValue(mortCurveShapeParm, currentLine);
-                funcTParms.MortCurveShape = mortCurveShapeParm.Value;
-
-                ReadValue(leafNeedleDrop, currentLine);
-                funcTParms.LeafNeedleDrop = leafNeedleDrop.Value;
-
-                ReadValue(coarseRootFraction, currentLine);
-                funcTParms.CoarseRootFraction = coarseRootFraction.Value;
-
-                ReadValue(fineRootFraction, currentLine);
-                funcTParms.FineRootFraction = fineRootFraction.Value;
-
-                //PlugIn.ModelCore.UI.WriteLine("PPRPTS2={0}.", parameters.FunctionalTypeTable[ln].PPRPTS2);
-
-                CheckNoDataAfter("the " + fineRootFraction.Name + " column", currentLine);
-                GetNextLine();
+                    funcTParms.TempCurve1 = System.Convert.ToDouble(row["TemperatureCurve1"]);
+                    funcTParms.TempCurve2 = System.Convert.ToDouble(row["TemperatureCurve2"]); 
+                    funcTParms.TempCurve3 = System.Convert.ToDouble(row["TemperatureCurve3"]); 
+                    funcTParms.TempCurve4 = System.Convert.ToDouble(row["TemperatureCurve4"]); 
+                    funcTParms.FractionANPPtoLeaf = System.Convert.ToDouble(row["FractionANPPtoLeaf"]); 
+                    funcTParms.BiomassToLAI = System.Convert.ToDouble(row["BiomassToLAI"]);
+                    funcTParms.KLAI = System.Convert.ToDouble(row["KLAI"]);
+                    funcTParms.MaxLAI = System.Convert.ToDouble(row["MaximumLAI"]);
+                    funcTParms.MoistureCurve2 = System.Convert.ToDouble(row["MoistureCurve2"]); 
+                    funcTParms.MoistureCurve3 = System.Convert.ToDouble(row["MoistureCurve3"]);
+                    funcTParms.WoodDecayRate = System.Convert.ToDouble(row["WoodDecayRate"]);
+                    funcTParms.MonthlyWoodMortality = System.Convert.ToDouble(row["MonthlyWoodMortality"]);
+                    funcTParms.LongevityMortalityShape = System.Convert.ToDouble(row["LongevityMortalityShape"]);
+                    funcTParms.FoliageDropMonth = System.Convert.ToInt32(row["FoliageDropMonth"]);
+                    funcTParms.CoarseRootFraction = System.Convert.ToDouble(row["CoarseRootFraction"]);
+                    funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
+                }
             }
-            
+            else
+            {
+                InputVar<string> ftname = new InputVar<string>("Name");
+                InputVar<int> ftindex = new InputVar<int>("Index (< 25)");
+                InputVar<double> tempcurve1 = new InputVar<double>("TempCurve(1)");
+                InputVar<double> tempcurve2 = new InputVar<double>("TempCurve(2)");
+                InputVar<double> tempcurve3 = new InputVar<double>("TempCurve(3)");
+                InputVar<double> tempcurve4 = new InputVar<double>("TempCurve(4)");
+                InputVar<double> fcfleaf = new InputVar<double>("FCFRAC: Leaf");
+                InputVar<double> btolai = new InputVar<double>("BTOLAI");
+                InputVar<double> klai = new InputVar<double>("KLAI");
+                InputVar<double> maxlai = new InputVar<double>("MAXLAI");
+                InputVar<double> mwm = new InputVar<double>("Monthly Wood Mortality");
+                InputVar<double> wdr = new InputVar<double>("Wood Decay Rate");
+                InputVar<double> mortCurveShapeParm = new InputVar<double>("Mortality Curve Shape Parameter");
+                InputVar<int> leafNeedleDrop = new InputVar<int>("Leaf or Needle Drop Month");
+
+                InputVar<double> ppr2 = new InputVar<double>("MoistureCurve2");
+                InputVar<double> ppr3 = new InputVar<double>("MoistureCurve3");
+                InputVar<double> coarseRootFraction = new InputVar<double>("CRootFrac");
+                InputVar<double> fineRootFraction = new InputVar<double>("FRootFrac");
+
+                while (!AtEndOfInput && CurrentName != Names.FireReductionParameters)
+                {
+                    StringReader currentLine = new StringReader(CurrentLine);
+
+                    ReadValue(ftname, currentLine);
+
+                    ReadValue(ftindex, currentLine);
+                    int ln = (int)ftindex.Value.Actual;
+
+                    if (ln >= numFunctionalTypes)
+                        throw new InputValueException(ftindex.Value.String,
+                                                  "The index:  {0} exceeds the allowable number of functional groups, {1}",
+                                                  ftindex.Value.String, numFunctionalTypes - 1);
+
+
+                    FunctionalType funcTParms = new FunctionalType();
+                    parameters.FunctionalTypes[ln] = funcTParms;
+
+                    ReadValue(tempcurve1, currentLine);
+                    funcTParms.TempCurve1 = tempcurve1.Value;
+
+                    ReadValue(tempcurve2, currentLine);
+                    funcTParms.TempCurve2 = tempcurve2.Value;
+
+                    ReadValue(tempcurve3, currentLine);
+                    funcTParms.TempCurve3 = tempcurve3.Value;
+
+                    ReadValue(tempcurve4, currentLine);
+                    funcTParms.TempCurve4 = tempcurve4.Value;
+
+                    ReadValue(fcfleaf, currentLine);
+                    funcTParms.FractionANPPtoLeaf = fcfleaf.Value;
+
+                    ReadValue(btolai, currentLine);
+                    funcTParms.BiomassToLAI = btolai.Value;
+
+                    ReadValue(klai, currentLine);
+                    funcTParms.KLAI = klai.Value;
+
+                    ReadValue(maxlai, currentLine);
+                    funcTParms.MaxLAI = maxlai.Value;
+
+                    ReadValue(ppr2, currentLine);
+                    funcTParms.MoistureCurve2 = ppr2.Value;
+
+                    ReadValue(ppr3, currentLine);
+                    funcTParms.MoistureCurve3 = ppr3.Value;
+
+                    ReadValue(wdr, currentLine);
+                    funcTParms.WoodDecayRate = wdr.Value;
+
+                    ReadValue(mwm, currentLine);
+                    funcTParms.MonthlyWoodMortality = mwm.Value;
+
+                    ReadValue(mortCurveShapeParm, currentLine);
+                    funcTParms.LongevityMortalityShape = mortCurveShapeParm.Value;
+
+                    ReadValue(leafNeedleDrop, currentLine);
+                    funcTParms.FoliageDropMonth = leafNeedleDrop.Value;
+
+                    ReadValue(coarseRootFraction, currentLine);
+                    funcTParms.CoarseRootFraction = coarseRootFraction.Value;
+
+                    ReadValue(fineRootFraction, currentLine);
+                    funcTParms.FineRootFraction = fineRootFraction.Value;
+
+                    //PlugIn.ModelCore.UI.WriteLine("PPRPTS2={0}.", parameters.FunctionalTypeTable[ln].PPRPTS2);
+
+                    CheckNoDataAfter("the " + fineRootFraction.Name + " column", currentLine);
+                    GetNextLine();
+                }
+            }
             //--------- Read In Fire Reductions Table ---------------------------
             PlugIn.ModelCore.UI.WriteLine("   Begin reading FIRE REDUCTION parameters.");
             ReadName(Names.FireReductionParameters);

@@ -14,16 +14,16 @@ namespace Landis.Extension.Succession.NECN
         double TempCurve2 { get; set; }
         double TempCurve3 { get; set; }
         double TempCurve4 { get; set; }
-        double FCFRACleaf{get;set;}
-        double BTOLAI{get;set;}
+        double FractionANPPtoLeaf{get;set;}
+        double BiomassToLAI{get;set;}
         double KLAI{get;set;}
-        double MAXLAI{get;set;}
+        double MaxLAI{get;set;}
         double MoistureCurve2 {get;set;}
         double MoistureCurve3 { get; set; }
         double MonthlyWoodMortality{get;set;}
         double WoodDecayRate{get;set;}
-        double MortCurveShape{get;set;}
-        int LeafNeedleDrop{get;set;}
+        double LongevityMortalityShape{get;set;}
+        int FoliageDropMonth{get;set;}
         double CoarseRootFraction { get; set; }
         double FineRootFraction { get; set; }
 
@@ -128,7 +128,7 @@ namespace Landis.Extension.Succession.NECN
         /// C allocation fraction of old leaves for mature forest.
         /// Century Model Interface Help - Colorado State University, Fort Collins, CO  80523
         /// </summary>
-        public double FCFRACleaf
+        public double FractionANPPtoLeaf
         {
             get {
                 return fcfracLeaf;
@@ -145,7 +145,7 @@ namespace Landis.Extension.Succession.NECN
         /// Biomass to leaf area index (LAI) conversion factor for trees.  This is a biome-specific parameters.  
         /// Century Model Interface Help - Colorado State University, Fort Collins, CO  80523
         /// </summary>
-        public double BTOLAI
+        public double BiomassToLAI
         {
             get {
                 return btolai;
@@ -179,7 +179,7 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// The Century manual recommends a maximum of 20 (?)
         /// </summary>
-        public double MAXLAI
+        public double MaxLAI
         {
             get {
                 return maxlai;
@@ -246,7 +246,7 @@ namespace Landis.Extension.Succession.NECN
         /// Determines the shape of the age-related mortality curve.  Ranges from a gradual senescence (5)
         /// to a steep senescence (15).
         /// </summary>
-        public double MortCurveShape 
+        public double LongevityMortalityShape 
         { 
             get { 
                 return mortCurveShape;
@@ -262,7 +262,7 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Determines at what month of the year needles or leaves are dropped.
         /// </summary>
-        public int LeafNeedleDrop
+        public int FoliageDropMonth
         {
             get { 
                 return leafNeedleDrop;

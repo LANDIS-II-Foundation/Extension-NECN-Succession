@@ -68,7 +68,7 @@ LightEstablishmentTable
 	5	0.1		0.5		1.0		1.0		1.0		1.0
 
 SpeciesParameters
-CSV_File NECN_Spp_Table.csv								
+Species_CSV_File NECN_Spp_Table.csv								
 
 FunctionalGroupParameters  <<											Age	Leaf
 >> Name	Index	PPDF1	PPDF2	PPDF3	PPDF4	FCFRAC	BTOLAI	KLAI	MAXLAI	PPRPTS2	PPRPTS3	Wood	Monthly	Mort	Drop   CRootFrac FRootFRac

@@ -167,7 +167,7 @@ namespace Landis.Extension.Succession.NECN
                                          double[]   mortalityAge)
         {
 
-            double leafFractionNPP  = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FCFRACleaf;
+            double leafFractionNPP  = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FractionANPPtoLeaf;
             double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
             double sitelai          = SiteVars.LAI[site];
             double maxNPP           = SpeciesData.Max_ANPP[cohort.Species];
@@ -249,7 +249,7 @@ namespace Landis.Extension.Succession.NECN
             double monthAdjust = 1.0 / 12.0;
             double totalBiomass = (double) (cohort.WoodBiomass + cohort.LeafBiomass);
             double max_age      = (double) cohort.Species.Longevity;
-            double d            = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MortCurveShape;
+            double d            = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].LongevityMortalityShape;
 
             double M_AGE_wood =    cohort.WoodBiomass *  monthAdjust *
                                     Math.Exp((double) cohort.Age / max_age * d) / Math.Exp(d);
@@ -318,12 +318,12 @@ namespace Landis.Extension.Succession.NECN
             }
             else
             {
-                if(Main.Month +1 == FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].LeafNeedleDrop)
+                if(Main.Month +1 == FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth)
                 {
                     M_leaf = cohort.LeafBiomass / 2.0;  //spread across 2 months
                     
                 }
-                if (Main.Month +2 > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].LeafNeedleDrop)
+                if (Main.Month +2 > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth)
                 {
                     M_leaf = cohort.LeafBiomass;  //drop the remainder
                 }
@@ -387,7 +387,7 @@ namespace Landis.Extension.Succession.NECN
         {
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
-            double leafFrac = FunctionalType.Table[SpeciesData.FuncType[species]].FCFRACleaf;
+            double leafFrac = FunctionalType.Table[SpeciesData.FuncType[species]].FractionANPPtoLeaf;
 
             double B_ACT = SiteVars.ActualSiteBiomass(site);
             double B_MAX = SpeciesData.Max_Biomass[species]; // B_MAX_Spp[species][ecoregion];
@@ -535,9 +535,9 @@ namespace Landis.Extension.Succession.NECN
 
             double lai = 0.0;
             double laitop = -0.47;  // This is the value given for all biomes in the tree.100 file.
-            double btolai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].BTOLAI;
+            double btolai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].BiomassToLAI;
             double klai   = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].KLAI;
-            double maxlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MAXLAI;
+            double maxlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MaxLAI;
 
             double rlai = (Math.Max(0.0, 1.0 - Math.Exp(btolai * leafC)));
 
@@ -566,7 +566,7 @@ namespace Landis.Extension.Succession.NECN
             //This allows LAI to go to zero for deciduous trees.
 
             if (SpeciesData.LeafLongevity[cohort.Species] <= 1.0 &&
-                (Main.Month > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].LeafNeedleDrop || Main.Month < 3))
+                (Main.Month > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth || Main.Month < 3))
             {
                 lai = 0.0;
                 LAI_limit = 0.0;

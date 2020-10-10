@@ -245,8 +245,6 @@ namespace Landis.Extension.Succession.NECN
             //     Rewritten by Melissa Lucash - 11/2014
             //     Rewritten by Paul Henne, USGS - 6/2020
 
-            //PlugIn.ModelCore.UI.WriteLine("month={0}.", Main.Month);
-
             //...Initialize Local Variables
             double addToSoil = 0.0;
             double bareSoilEvap = 0.0;
@@ -255,8 +253,7 @@ namespace Landis.Extension.Succession.NECN
             stormFlow = 0.0;
             double actualET = 0.0;
             double remainingPET = 0.0;
-            double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
-            double availableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
+            double availableWater = 0.0;     //amount of water deemed available to the trees.
             double priorWaterAvail = SiteVars.AvailableWater[site];
             double waterFull = 0.0;
 
@@ -274,6 +271,8 @@ namespace Landis.Extension.Succession.NECN
             tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
             tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
             pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
+            if(OtherData.CalibrateMode)
+                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, PET={1}.", month, pet);
             daysInMonth = AnnualClimate.DaysInMonth(month, year);
             beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
             endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
@@ -294,7 +293,7 @@ namespace Landis.Extension.Succession.NECN
                 snow = H2Oinputs;
                 H2Oinputs = 0.0;
                 liquidSnowpack += snow;  //only tracking liquidsnowpack (water equivalent) and not the actual amount of snow on the ground (i.e. not snowpack).
-                //PlugIn.ModelCore.UI.WriteLine("Let it snow!! snow={0}, liquidsnowpack={1}.", snow, liquidSnowpack);
+                
             }
             else
             {
@@ -379,30 +378,29 @@ namespace Landis.Extension.Succession.NECN
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
                 remainingPET = pet;
+                if (OtherData.CalibrateMode)
+                    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
+
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * H2Oinputs), (0.4 * remainingPET));
 
                 //Subtract soil evaporation from soil water content
                 //PH: Subtract soilEvaporation from addToSoil so it won't drive down soil water. 
                 //PH: SoilEvaporation represents water that evaporates before reaching soil, so should not be subtracted from soil.
                 addToSoil -= soilEvaporation;
-                //soilWaterContent -= soilEvaporation;
+                if (OtherData.CalibrateMode)
+                    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, addToSoil={1}.", month, addToSoil);
             }
 
             //PH: Add liquid water to soil
             soilWaterContent += addToSoil;
-            //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
-            //PH: Moved down so that soilEvaporation comes out first.
-            availableWaterMax = soilWaterContent;
+
             // ********************************************************
-
-
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
-            //  Bergström, 1992
-
-            // ********************************************************
-            //PH: Moved up to take evapotranspiration out before excess drains away. This is different from the CENTURY approach, 
+            // Bergström, 1992
+            // PH: Moved up to take evapotranspiration out before excess drains away. This is different from the CENTURY approach, 
             // where evaporation is taken out of the add first, but is 
             // less complex because it does not require partitioning the evaporation if evapotranspiration exceeds addToSoil.
+            // ********************************************************
 
             double waterEmpty = wiltingPoint * soilDepth;
             waterFull = soilDepth * fieldCapacity;  //units of cm
@@ -418,9 +416,9 @@ namespace Landis.Extension.Succession.NECN
             if (actualET < 0.0)
                 actualET = 0.0;
             AET = actualET;
+            if (OtherData.CalibrateMode)
+                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, AET);
             // ********************************************************
-
-            //PlugIn.ModelCore.UI.WriteLine("AET {0} = ", AET);
 
             //Subtract transpiration from soil water content
             soilWaterContent -= actualET;
@@ -455,12 +453,13 @@ namespace Landis.Extension.Succession.NECN
             //Leaching occurs. Drain baseflow fraction from holding tank.
             //PH: Now baseflow comes from holding tank.
             baseFlow = holdingTank * baseFlowFraction;
+            if (OtherData.CalibrateMode)
+                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, baseflow={1}.", month, baseFlow);
 
             //Subtract baseflow from soil water
             //PH: Subtract from holding tank instead. To not deplete soil water but still allow estimation of baseFlow.
             holdingTank -= baseFlow;
             // ********************************************************
-
 
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
             availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);

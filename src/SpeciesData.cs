@@ -64,7 +64,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 try
                 {
-                    double maxLAI = FunctionalType.Table[SpeciesData.FuncType[spp]].MAXLAI;
+                    double maxLAI = FunctionalType.Table[SpeciesData.FuncType[spp]].MaxLAI;
                     //PlugIn.ModelCore.UI.WriteLine("Spp={0}, FT={1}", spp.Name, SpeciesData.FuncType[spp]);
 
                 }

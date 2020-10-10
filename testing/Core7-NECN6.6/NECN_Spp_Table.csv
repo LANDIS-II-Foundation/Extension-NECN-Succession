@@ -1,4 +1,4 @@
-SpeciesCode,FunctionalType,NitrogenFixer,GDDMinimum,GDDMaximum,MinJanuaryT,MaxDrought,LeafLongevity,Epicormic,LeafLignin,FineRootLignin,WoodLignin,CoarseRootLignin,LeafCN,FineRootCN,WoodCN,CoarseRootCN,FoliageLitterCN,MaximumANPP,MaximumBiomass
+SpeciesCode,FunctionalGroupIndex,NitrogenFixer,GDDMinimum,GDDMaximum,MinJanuaryT,MaxDrought,LeafLongevity,Epicormic,LeafLignin,FineRootLignin,WoodLignin,CoarseRootLignin,LeafCN,FineRootCN,WoodCN,CoarseRootCN,FoliageLitterCN,MaximumANPP,MaximumBiomass
 PinuJeff,1,FALSE,555,2149,-5,0.94,6,FALSE,0.28,0.2,0.25,0.25,48,48,250,167,100,200,30000
 PinuLamb,1,FALSE,815,2866,-5,0.9,2.5,FALSE,0.17,0.2,0.25,0.25,53,53,278,185,100,150,40000
 CaloDecu,1,FALSE,837,2938,-18,0.99,4,FALSE,0.1,0.2,0.25,0.25,48,48,500,333,100,150,24000
