@@ -89,8 +89,8 @@ namespace Landis.Extension.Succession.NECN
                     if (!ecoregion.Active)
                         continue;
 
-                    foreach (ISpecies spp in PlugIn.ModelCore.Species)
-                    {
+                    //foreach (ISpecies spp in PlugIn.ModelCore.Species)
+                    //{
                         Outputs.establishmentLog.Clear();
                         EstablishmentLog elog = new EstablishmentLog();
 
@@ -108,7 +108,7 @@ namespace Landis.Extension.Succession.NECN
 
                         Outputs.establishmentLog.AddObject(elog);
                         Outputs.establishmentLog.WriteToFile();
-                    }
+                    //}
                     //log.Write("{0},{1},{2},{3},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name, numberCalculations[species.Index, ecoregion.Index] );
                     //    log.Write("{0:0.000},", (avgMATlimit[species.Index, ecoregion.Index] / (double) numberCalculations[species.Index, ecoregion.Index]));
                     //    log.Write("{0:0.000},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
