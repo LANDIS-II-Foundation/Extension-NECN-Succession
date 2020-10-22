@@ -188,8 +188,8 @@ namespace Landis.Extension.Succession.NECN
         // Valid Range: 0.0 to 1.0
         // FWLOSS(3) - Scaling factor for transpiration water loss (h2olos).
         // FWLOSS(4) - Scaling factor for potential evapotranspiration (pevap).
-        public const double WaterLossFactor1 = 0.8;
-        public const double WaterLossFactor2 = 0.8;
+        public static double WaterLossFactor1 = 0.8;
+        public static double WaterLossFactor2 = 0.8;
         //public const WaterLossFactor3 = 0.0;
         public const double WaterLossFactor4 = 0.9;
 

@@ -91,6 +91,14 @@ namespace Landis.Extension.Succession.NECN
 
         public static void ReadSoilStormFlowMap(string path)
         {
+            if(PlugIn.StormFlowOverride > 0.0)
+            {
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    SiteVars.SoilStormFlowFraction[site] = PlugIn.StormFlowOverride;
+                }
+                return;
+            }
             IInputRaster<DoublePixel> map = MakeDoubleMap(path);
 
             using (map)

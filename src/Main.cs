@@ -66,9 +66,9 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyResp[site][Month] = 0.0;
                     SiteVars.MonthlyStreamN[site][Month] = 0.0;
                     SiteVars.MonthlyLAI[site][Month] = 0.0;
+                    SiteVars.MonthlySoilWaterContent[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);
-                    //SiteVars.LAI[site] = Century.ComputeLAI((ActiveSite)site);
                                    
                     double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month];
 

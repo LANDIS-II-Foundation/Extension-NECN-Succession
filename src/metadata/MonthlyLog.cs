@@ -43,5 +43,8 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Unit = FieldUnits.g_N_m2, Desc = "N Leaching", Format = "0.00")]
         public double StreamN { get; set; }
+
+        [DataFieldAttribute(Desc = "Soil Water Content", Format = "0.00")]
+        public double SoilWaterContent { get; set; }
     }
 }

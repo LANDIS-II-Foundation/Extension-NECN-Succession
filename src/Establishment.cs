@@ -95,7 +95,7 @@ namespace Landis.Extension.Succession.NECN
                         EstablishmentLog elog = new EstablishmentLog();
 
                         elog.Time = PlugIn.ModelCore.CurrentTime;
-                        elog.SpeciesName = spp.Name;
+                        elog.SpeciesName = species.Name;
                         elog.ClimateRegion = ecoregion.Name;
                         elog.NumberAttempts = numberCalculations[species.Index, ecoregion.Index];
                         elog.AvgTempMult = (avgMATlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);

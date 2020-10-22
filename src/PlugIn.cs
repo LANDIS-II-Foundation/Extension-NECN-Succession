@@ -40,11 +40,11 @@ namespace Landis.Extension.Succession.NECN
         public static int InputCommunityMapFrequency;
         public static int SuccessionTimeStep;
         public static double ProbEstablishAdjust;
+        public static double StormFlowOverride = 0.0;
 
         public static int FutureClimateBaseYear;
         public static int B_MAX;
         private ICommunity initialCommunity;
-        //private enum ReproductionType { Planted, Serotiny, Resprout, Seed };
 
         public static int[] SpeciesByPlant;
         public static int[] SpeciesBySerotiny;

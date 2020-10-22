@@ -235,6 +235,24 @@ namespace Landis.Extension.Succession.NECN
             ReadVar(drsom3);
             parameters.SetDecayRateSOM3(drsom3.Value);
 
+            InputVar<double> stormFlowOverride = new InputVar<double>("StormFlowOverride");
+            if (ReadOptionalVar(stormFlowOverride))
+            {
+                PlugIn.StormFlowOverride = stormFlowOverride.Value;
+            }
+
+            InputVar<double> wf1Override = new InputVar<double>("WaterLossFactor1Override");
+            if (ReadOptionalVar(wf1Override))
+            {
+                OtherData.WaterLossFactor1 = wf1Override.Value;
+            }
+
+            InputVar<double> wf2Override = new InputVar<double>("WaterLossFactor2Override");
+            if (ReadOptionalVar(wf2Override))
+            {
+                OtherData.WaterLossFactor2 = wf2Override.Value;
+            }
+
             InputVar<string> anppMaps = new InputVar<string>("ANPPMapNames");
             if (ReadOptionalVar(anppMaps))
             {

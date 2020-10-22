@@ -398,10 +398,11 @@ namespace Landis.Extension.Succession.NECN
             double[] avgResp = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avgNEE = new double[PlugIn.ModelCore.Ecoregions.Count];
 
-            double[] Ndep = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] StreamN = new double[PlugIn.ModelCore.Ecoregions.Count];
-             
-            
+            double[] nitrogenDeposition = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] streamN = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] soilWaterContent = new double[PlugIn.ModelCore.Ecoregions.Count];
+
+
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
                 ppt[ecoregion.Index] = 0.0;
@@ -409,8 +410,9 @@ namespace Landis.Extension.Succession.NECN
                 avgNPPtc[ecoregion.Index] = 0.0;
                 avgResp[ecoregion.Index] = 0.0;
                 avgNEE[ecoregion.Index] = 0.0;
-                Ndep[ecoregion.Index] = 0.0;
-                StreamN[ecoregion.Index] = 0.0;
+                nitrogenDeposition[ecoregion.Index] = 0.0;
+                streamN[ecoregion.Index] = 0.0;
+                soilWaterContent[ecoregion.Index] = 0.0;
             }
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -426,8 +428,9 @@ namespace Landis.Extension.Succession.NECN
 
                 SiteVars.AnnualNEE[site] += SiteVars.MonthlyNEE[site][month];
 
-                Ndep[ecoregion.Index] = ClimateRegionData.MonthlyNDeposition[ecoregion][month];
-                StreamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
+                nitrogenDeposition[ecoregion.Index] = ClimateRegionData.MonthlyNDeposition[ecoregion][month];
+                streamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
+                soilWaterContent[ecoregion.Index] += SiteVars.MonthlySoilWaterContent[site][month];
 
             }
             
@@ -451,8 +454,9 @@ namespace Landis.Extension.Succession.NECN
                     ml.avgNPPtc = (avgNPPtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.avgResp = (avgResp[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.avgNEE = (avgNEE[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.Ndep = Ndep[ecoregion.Index];
-                    ml.StreamN = (StreamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.Ndep = nitrogenDeposition[ecoregion.Index];
+                    ml.StreamN = (streamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.SoilWaterContent = (soilWaterContent[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
 
                     monthlyLog.AddObject(ml);
                     monthlyLog.WriteToFile();

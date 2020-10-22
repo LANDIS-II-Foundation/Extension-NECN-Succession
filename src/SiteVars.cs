@@ -80,6 +80,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlyStreamN;
         private static ISiteVar<double[]> monthlyLAI;
         private static ISiteVar<double[]> monthlyResp;
+        private static ISiteVar<double[]> monthlySoilWaterContent;
         private static ISiteVar<double> totalNuptake;
         private static ISiteVar<double[]> monthlymineralN;
         private static ISiteVar<double> frassC;
@@ -167,10 +168,11 @@ namespace Landis.Extension.Succession.NECN
             monthlyBGNPPC       = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             monthlyNEE          = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             monthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            monthlyResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            monthlySoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             AnnualNEE           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireCEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireNEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            monthlyResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
             cohortLeafN         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             cohortFRootN         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -231,7 +233,7 @@ namespace Landis.Extension.Succession.NECN
                 monthlyStreamN[site]         = new double[12];
                 monthlyResp[site]           = new double[12];
                 monthlyLAI[site] = new double[12];
-                //monthlymineralN[site]       = new double[12];
+                monthlySoilWaterContent[site]       = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
             }
@@ -901,6 +903,22 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 monthlyLAI = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// A summary of Monthly SoilWaterContent
+        /// </summary>
+        public static ISiteVar<double[]> MonthlySoilWaterContent
+        {
+            get
+            {
+                return monthlySoilWaterContent;
+            }
+            set
+            {
+                monthlySoilWaterContent = value;
             }
         }
         //---------------------------------------------------------------------
