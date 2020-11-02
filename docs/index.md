@@ -13,7 +13,10 @@ The Net Ecosystem Carbon & Nitrogen (NECN) Succession extension implements succe
 # Release Notes
 
 - Latest official release: Version 6.4.1 — May 2020
-- This extension was formerly named Century Succession. 
+- This extension was formerly named Century Succession.
+- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v6.4%20User%20Guide.pdf).
+- [User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/master/docs/LANDIS-II%20Climate%20Library%20v4.1%20User%20Guide.pdf)
+- Full release details found in the NECN User Guide and on GitHub.
 
 # Requirements
 
@@ -21,7 +24,6 @@ To use NECN, you need:
 
 - The [LANDIS-II model v7.0](http://www.landis-ii.org/install) installed on your computer.
 - The parameter files for your scenario (see Parameterization section below).
-- Full details found in the [User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v6.4%20User%20Guide.pdf).
 
 # Download
 
