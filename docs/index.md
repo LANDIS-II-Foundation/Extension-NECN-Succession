@@ -33,7 +33,7 @@ LANDIS-II requires a global parameter file for your scenario, and then different
 
 Example files for NECN can be found [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN6.4).
 
-# What do I do if I have questions, or if I need help ? (Support)
+# Support
 
 If you have a question, please contact Robert Scheller at rschell@ncsu. 
 You can also ask for help in the [LANDIS-II users group](http://www.landis-ii.org/users).
