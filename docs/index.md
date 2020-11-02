@@ -27,6 +27,10 @@ To use NECN, you need:
 
 Version 6.4.1 can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/past-releases/LANDIS-II-V7%20NECN%20Succession%206.4.1-setup.exe). To install it on your computer, just launch the installer.
 
+# Citation
+
+How to cite: Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effects of forest harvest intensity in combination with wind disturbance on carbon dynamics in a Lake States mesic landscape. Ecological Modelling 222: 144-153.
+
 # Example Files
 
 LANDIS-II requires a global parameter file for your scenario, and then different parameter files for each extension that you use.
