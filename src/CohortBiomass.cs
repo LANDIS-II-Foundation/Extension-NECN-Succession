@@ -531,37 +531,35 @@ namespace Landis.Extension.Succession.NECN
 
             //...Local variables
             double leafC = (double) cohort.LeafBiomass * 0.47;
-            double largeWoodC = (double) cohort.WoodBiomass * 0.47;
+            double woodC = (double) cohort.WoodBiomass * 0.47;
 
             double lai = 0.0;
-            double laitop = -0.47;  // This is the value given for all biomes in the tree.100 file.
+            double lai_to_growth = -0.47;  // This is the value given for all biomes in the tree.100 file.
             double btolai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].BiomassToLAI;
             double klai   = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].KLAI;
             double maxlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MaxLAI;
 
-            double rlai = (Math.Max(0.0, 1.0 - Math.Exp(btolai * leafC)));
-
-            if (SpeciesData.LeafLongevity[cohort.Species] > 1.0)
+            // adjust for leaf on/off
+            double seasonal_adjustment = 1.0;
+            if (SpeciesData.LeafLongevity[cohort.Species] <= 1.0)
             {
-                rlai = 1.0;
+                seasonal_adjustment = (Math.Max(0.0, 1.0 - Math.Exp(btolai * leafC)));
             }
-
-            double tlai = maxlai * largeWoodC/(klai + largeWoodC);
+            
+            // The cohort LAI given wood Carbon
+            double base_lai = maxlai * woodC/(klai + woodC);
 
             //...Choose the LAI reducer on production. 
-
-            //if (rlai < tlai) lai = (rlai + tlai) / 2.0;
-            lai = tlai * rlai;
-            //else lai = tlai;
+            lai = base_lai * seasonal_adjustment;
 
             // This will allow us to set MAXLAI to zero such that LAI is completely dependent upon
             // foliar carbon, which may be necessary for simulating defoliation events.
-            if(tlai <= 0.0) lai = rlai;
+            if(base_lai <= 0.0) lai = seasonal_adjustment;
 
             // The minimum LAI to calculate effect is 0.1.
             if (lai < 0.1) lai = 0.1;
 
-            double LAI_limit = Math.Max(0.0, 1.0 - Math.Exp(laitop * lai));
+            double LAI_Growth_limit = Math.Max(0.0, 1.0 - Math.Exp(lai_to_growth * lai));
 
             //This allows LAI to go to zero for deciduous trees.
 
@@ -569,7 +567,7 @@ namespace Landis.Extension.Succession.NECN
                 (Main.Month > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth || Main.Month < 3))
             {
                 lai = 0.0;
-                LAI_limit = 0.0;
+                LAI_Growth_limit = 0.0;
             }
 
             if (Main.Month == 6)
@@ -578,14 +576,14 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyLAI[site][Main.Month] += lai;
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-                Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, tlai, rlai);
+                Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, base_lai, seasonal_adjustment);
 
 
             //PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}. Spp={2}, leafC={3:0.0}, woodC={4:0.00}.", PlugIn.ModelCore.CurrentTime, month + 1, species.Name, leafC, largeWoodC);
             //PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}. Spp={2}, lai={3:0.0}, woodC={4:0.00}.", PlugIn.ModelCore.CurrentTime, month + 1, species.Name, lai, largeWoodC);
             //PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}.     LAI Limits:  lai={2:0.0}, woodLAI={3:0.0}, leafLAI={4:0.0}, LAIlimit={5:0.00}.", PlugIn.ModelCore.CurrentTime, month + 1, lai, woodLAI, leafLAI, LAI_limit);
 
-            return LAI_limit;
+            return LAI_Growth_limit;
 
         }
 
