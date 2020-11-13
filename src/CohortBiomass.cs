@@ -538,6 +538,16 @@ namespace Landis.Extension.Succession.NECN
             double btolai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].BiomassToLAI;
             double klai   = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].KLAI;
             double maxlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MaxLAI;
+            double k = -0.14;  // This is the value given for all temperature ecosystems. 
+            double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
+            /// The competition limit is the relationship of the individual to the total amount of LAI
+            /// As the LAI increase the individual contributes less, limiting the amount of leaf area of the
+            /// The younger cohorts as it reaches the species max. 
+            double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
+
+            double maxBiomass = SpeciesData.Max_Biomass[cohort.Species];
+            maxlai = maxlai*competition_limit; // NewFunction for site biomass;
+
 
             // adjust for leaf on/off
             double seasonal_adjustment = 1.0;
@@ -545,7 +555,8 @@ namespace Landis.Extension.Succession.NECN
             {
                 seasonal_adjustment = (Math.Max(0.0, 1.0 - Math.Exp(btolai * leafC)));
             }
-            
+
+           
             // The cohort LAI given wood Carbon
             double base_lai = maxlai * woodC/(klai + woodC);
 
@@ -576,6 +587,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyLAI[site][Main.Month] += lai;
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, base_lai, seasonal_adjustment);
 
 
