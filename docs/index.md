@@ -35,7 +35,7 @@ How to cite: Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2
 
 # Example Files
 
-LANDIS-II requires a global parameter file for your scenario, and then different parameter files for each extension that you use.
+LANDIS-II requires a global parameter file for your scenario, and then different parameter files for each extension.
 
 Example files are [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/ExampleNECNv64.zip).
 
