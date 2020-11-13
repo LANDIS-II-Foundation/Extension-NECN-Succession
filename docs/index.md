@@ -23,7 +23,7 @@ The Net Ecosystem Carbon & Nitrogen (NECN) Succession extension implements succe
 To use NECN, you need:
 
 - The [LANDIS-II model v7.0](http://www.landis-ii.org/install) installed on your computer.
-- The parameter files for your scenario (see Parameterization section below).
+- Example files (see below)
 
 # Download
 
