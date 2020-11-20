@@ -48,7 +48,7 @@ If you come across any issue or suspected bug when using NECN, please post about
 
 # Author
 
-[Robert Scheller](http://www.cef-cfr.ca/index.php?n=Membres.ClementHardy)
+[Robert Scheller](https://sites.google.com/a/ncsu.edu/dynamic-ecosystems-landscape-lab/people/robert-scheller)
 
 Professor at the North Carolina State University
 
