@@ -1,4 +1,4 @@
-# What is NECN?
+# What is the NECN Succession Extension?
 
 The Net Ecosystem Carbon & Nitrogen (NECN) Succession extension implements succession with full accounting of above and below ground carbon and nitrogen. Aboveground biomass generally follows the behavior of previous Biomass Succession extensions with cohorts that have biomass (g m-2). In addition, below ground processing of Carbon and Nitrogen is simulated following the logic of the Century nutrient cycling model (v4.0). 
 
@@ -31,7 +31,7 @@ Version 6.4.1 can be downloaded [here](https://github.com/LANDIS-II-Foundation/E
 
 # Citation
 
-How to cite: Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effects of forest harvest intensity in combination with wind disturbance on carbon dynamics in a Lake States mesic landscape. Ecological Modelling 222: 144-153.
+Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effects of forest harvest intensity in combination with wind disturbance on carbon dynamics in a Lake States mesic landscape. Ecological Modelling 222: 144-153.
 
 # Example Files
 
