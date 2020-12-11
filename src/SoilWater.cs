@@ -17,11 +17,11 @@ namespace Landis.Extension.Succession.NECN
     public class SoilWater
     {
         private static double Precipitation;
-        private static double H2Oinputs;
+        //private static double Precipitation;
         private static double tave;
         private static double tmax;
         private static double tmin;
-        private static double pet;
+        private static double PET;
         private static int daysInMonth;
         private static int beginGrowing;
         private static int endGrowing;
@@ -46,7 +46,7 @@ namespace Landis.Extension.Succession.NECN
             //double relativeWaterContent = 0.0;
             double snow = 0.0;
             stormFlow = 0.0;
-            double actualET = 0.0;
+            AET = 0.0;
             double remainingPET = 0.0;
             double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
             double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
@@ -61,14 +61,14 @@ namespace Landis.Extension.Succession.NECN
             double soilWaterContent = SiteVars.SoilWaterContent[site];
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
-            H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; //rain + irract in cm;
-            Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; //rain + irract in cm;
+            Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
+            //Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
             //PlugIn.ModelCore.UI.WriteLine("SoilWater. WaterInputs={0:0.00}, .", H2Oinputs);
             tave = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
             //PlugIn.ModelCore.UI.WriteLine("SoilWater. AvgTemp={0:0.00}, .", tave);
             tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
             tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
-            pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
+            PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
             daysInMonth = AnnualClimate.DaysInMonth(month, year);
             beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
             endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
@@ -86,14 +86,14 @@ namespace Landis.Extension.Succession.NECN
             
             if (tmin <= 0.0) // Use tmin to dictate whether it snows or rains. 
             {
-                snow = H2Oinputs; 
-                H2Oinputs = 0.0;  
+                snow = Precipitation; 
+                Precipitation = 0.0;  
                 liquidSnowpack += snow;  //only tracking liquidsnowpack (water equivalent) and not the actual amount of snow on the ground (i.e. not snowpack).
                 //PlugIn.ModelCore.UI.WriteLine("Let it snow!! snow={0}, liquidsnowpack={1}.", snow, liquidSnowpack);
             }
             else
             {
-                soilWaterContent += H2Oinputs;
+                soilWaterContent += Precipitation;
                 //PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", H2Oinputs, soilWaterContent);
             }
 
@@ -124,7 +124,7 @@ namespace Landis.Extension.Succession.NECN
             if (liquidSnowpack > 0.0)
             {
                 //...Calculate cm of snow that remaining pet energy can evaporate:
-                double evaporatedSnow = pet * 0.87;
+                double evaporatedSnow = PET * 0.87;
 
                 //...Don't evaporate more snow than actually exists:
                 if (evaporatedSnow > liquidSnowpack)
@@ -133,7 +133,7 @@ namespace Landis.Extension.Succession.NECN
                 liquidSnowpack = liquidSnowpack - evaporatedSnow;
 
                 //...Decrement remaining pet by energy used to evaporate snow:
-                remainingPET = pet - evaporatedSnow;
+                remainingPET = PET - evaporatedSnow;
                 
                 if (remainingPET < 0.0) 
                     remainingPET = 0.0;
@@ -178,8 +178,8 @@ namespace Landis.Extension.Succession.NECN
                 bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
                 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                remainingPET = pet;
-                double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * H2Oinputs), (0.4 * remainingPET));
+                remainingPET = PET;
+                double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
                 
                 //Subtract soil evaporation from soil water content
                soilWaterContent -= soilEvaporation;
@@ -191,20 +191,14 @@ namespace Landis.Extension.Succession.NECN
             double waterEmpty = wiltingPoint * soilDepth;
 
             if (soilWaterContent > waterFull)
-                actualET = remainingPET;
+                AET = remainingPET;
             else
             {
-                actualET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0);
+                AET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0);
             }
 
-            if (actualET < 0.0)
-                actualET = 0.0;
-            AET = actualET;
-
-            //PlugIn.ModelCore.UI.WriteLine("AET {0} = ", AET);
-
             //Subtract transpiration from soil water content
-            soilWaterContent -= actualET;
+            soilWaterContent -= AET;
 
             //Leaching occurs. Drain baseflow fraction from holding tank.
             baseFlow = soilWaterContent * baseFlowFraction;
@@ -220,10 +214,10 @@ namespace Landis.Extension.Succession.NECN
 
             // Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;
-            if (pet > 0.0) ratioPrecipPET = availableWater / pet;  //assumes that the ratio is the amount of incoming precip divided by PET.
+            if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
-            SiteVars.AnnualPPT_AET[site] += Precipitation - actualET;
-            SiteVars.AnnualClimaticWaterDeficit[site] += (pet - actualET) * 10.0;  // Convert to mm, the standard definition
+            SiteVars.AnnualPPT_AET[site] += Precipitation - AET;
+            SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
@@ -232,7 +226,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
-            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, pet, tave);
+            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
             return;
         }
@@ -265,14 +259,14 @@ namespace Landis.Extension.Succession.NECN
             double soilWaterContent = SiteVars.SoilWaterContent[site];
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
-            H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; //rain + irract in cm;
-            Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; //rain + irract in cm;
+            Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
+            //Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
             tave = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
             tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
             tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
-            pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
+            PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
             if(OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, PET={1}.", month, pet);
+                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, PET={1}.", month, PET);
             daysInMonth = AnnualClimate.DaysInMonth(month, year);
             beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
             endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
@@ -290,15 +284,15 @@ namespace Landis.Extension.Succession.NECN
 
             if (tmin <= 0.0) // Use tmin to dictate whether it snows or rains. 
             {
-                snow = H2Oinputs;
-                H2Oinputs = 0.0;
+                snow = Precipitation;
+                Precipitation = 0.0;
                 liquidSnowpack += snow;  //only tracking liquidsnowpack (water equivalent) and not the actual amount of snow on the ground (i.e. not snowpack).
                 
             }
             else
             {
                 //PH: Accumulate precipitation and snowmelt before adding to soil so that interception and soil evaporation can come out first
-                addToSoil += H2Oinputs;
+                addToSoil += Precipitation;
                 //soilWaterContent += H2Oinputs;
                 //PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", H2Oinputs, soilWaterContent);
             }
@@ -334,7 +328,7 @@ namespace Landis.Extension.Succession.NECN
             if (liquidSnowpack > 0.0)
             {
                 //...Calculate cm of snow that remaining pet energy can evaporate:
-                double evaporatedSnow = pet * 0.87;
+                double evaporatedSnow = PET * 0.87;
 
                 //...Don't evaporate more snow than actually exists:
                 if (evaporatedSnow > liquidSnowpack)
@@ -344,7 +338,7 @@ namespace Landis.Extension.Succession.NECN
 
                 //...Decrement remaining pet by energy used to evaporate snow:
                 //PH: CENTURY code divides evaporatedSnow by 0.87 so it matches the PET used to melt snow.
-                remainingPET = pet - evaporatedSnow / 0.87;
+                remainingPET = PET - evaporatedSnow / 0.87;
 
                 if (remainingPET < 0.0)
                     remainingPET = 0.0;
@@ -377,11 +371,11 @@ namespace Landis.Extension.Succession.NECN
                 bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                remainingPET = pet;
+                remainingPET = PET;
                 if (OtherData.CalibrateMode)
                     PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
 
-                double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * H2Oinputs), (0.4 * remainingPET));
+                double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
                 //Subtract soil evaporation from soil water content
                 //PH: Subtract soilEvaporation from addToSoil so it won't drive down soil water. 
@@ -470,10 +464,10 @@ namespace Landis.Extension.Succession.NECN
 
             // Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;
-            if (pet > 0.0) ratioPrecipPET = availableWater / pet;  //assumes that the ratio is the amount of incoming precip divided by PET.
+            if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
             SiteVars.AnnualPPT_AET[site] += actualET; // RMS:  Currently using this to test AET by itself // Precipitation - actualET;
-            SiteVars.AnnualClimaticWaterDeficit[site] += (pet - actualET) * 10.0;  // Convert to mm, the standard definition
+            SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
@@ -484,7 +478,7 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
-            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, pet, tave);
+            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             if (month == 0)
                 SiteVars.DryDays[site] = 0;
             else
