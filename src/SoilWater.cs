@@ -224,6 +224,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.WaterMovement[site] = waterMovement;
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
+            SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
+
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
@@ -466,7 +468,7 @@ namespace Landis.Extension.Succession.NECN
             double ratioPrecipPET = 0.0;
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
-            SiteVars.AnnualPPT_AET[site] += actualET; // RMS:  Currently using this to test AET by itself // Precipitation - actualET;
+            SiteVars.AnnualPPT_AET[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
 
