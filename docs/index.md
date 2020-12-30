@@ -1,6 +1,6 @@
 # What is the NECN Succession Extension?
 
-The Net Ecosystem Carbon & Nitrogen (NECN) Succession extension implements succession with full accounting of above and below ground carbon and nitrogen. Aboveground biomass generally follows the behavior of previous Biomass Succession extensions with cohorts that have biomass (g m-2). In addition, below ground processing of Carbon and Nitrogen is simulated following the logic of the Century nutrient cycling model (v4.0). 
+The Net Ecosystem Carbon & Nitrogen (NECN) Succession extension implements succession with full accounting of above and below ground carbon and nitrogen. Aboveground biomass is represented with cohorts that have biomass (g m-2). In addition, below ground processing of Carbon and Nitrogen is simulated following the core logic of the Century nutrient cycling model (v4.0). 
 
 # Features
 
