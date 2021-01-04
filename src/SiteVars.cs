@@ -103,6 +103,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> SmolderConsumption;
         public static ISiteVar<double> FlamingConsumption;
         public static ISiteVar<double> AnnualClimaticWaterDeficit; //Annual soil moisture calculation, defined as pet - aet
+        public static ISiteVar<double> AnnualPotentialEvapotranspiration; //PET
 
 
         //---------------------------------------------------------------------
@@ -193,6 +194,7 @@ namespace Landis.Extension.Succession.NECN
             lai                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualClimaticWaterDeficit  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            AnnualPotentialEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             SmolderConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FlamingConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); 
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
@@ -208,6 +210,7 @@ namespace Landis.Extension.Succession.NECN
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.SmolderConsumption, "Succession.SmolderConsumption");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.FlamingConsumption, "Succession.FlamingConsumption");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.AnnualClimaticWaterDeficit, "Succession.CWD");
+            PlugIn.ModelCore.RegisterSiteVar(SiteVars.AnnualPotentialEvapotranspiration, "Succession.PET");
 
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -341,6 +344,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.LAI[site] = 0.0;
             SiteVars.AnnualPPT_AET[site] = 0.0;
             SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
+            SiteVars.AnnualPotentialEvapotranspiration[site] = 0.0;
             SiteVars.WoodMortality[site] = 0.0;
             //SiteVars.DryDays[site] = 0;
 

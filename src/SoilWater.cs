@@ -218,6 +218,7 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.AnnualPPT_AET[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
+            SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
@@ -470,6 +471,7 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.AnnualPPT_AET[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
+            SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
