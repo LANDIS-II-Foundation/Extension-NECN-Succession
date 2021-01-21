@@ -14,7 +14,7 @@ namespace Landis.Extension.Succession.NECN
         public static bool CalibrateMode;
         public static double ProbEstablishAdjust;
         public static WaterType WaterDecayFunction;
-        public static bool SoilWaterVersion64 = false;
+        public static bool SoilWaterVersion_Henne = false;
 
 
         // NOTE: *****************************************************************
@@ -225,7 +225,7 @@ namespace Landis.Extension.Succession.NECN
             LitterType litterParmsSoil = new LitterType();
 
             CalibrateMode = parameters.CalibrateMode;
-            SoilWaterVersion64 = parameters.SoilWater64;
+            SoilWaterVersion_Henne = parameters.SoilWater_Henne;
             WaterDecayFunction = parameters.WType;
             
             // Structural decomposition rate, the fraction of the pool that turns over each year.

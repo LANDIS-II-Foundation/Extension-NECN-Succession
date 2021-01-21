@@ -178,13 +178,13 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.SmokeModelOutputs = false;
 
-            InputVar<bool> version64 = new InputVar<bool>("Version64SoilWater");
-            if (ReadOptionalVar(version64))
+            InputVar<bool> version_Henne = new InputVar<bool>("Version_Henne_SoilWater");
+            if (ReadOptionalVar(version_Henne))
             {
-                parameters.SoilWater64 = version64.Value;
+                parameters.SoilWater_Henne = version_Henne.Value;
             }
             else
-                parameters.SoilWater64 = false;
+                parameters.SoilWater_Henne = false;
 
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
@@ -684,9 +684,9 @@ namespace Landis.Extension.Succession.NECN
                 ReadValue(frindex , currentLine);
                 int ln = (int) frindex.Value.Actual;
 
-                if(ln < 1 || ln > 5)
+                if(ln < 1 || ln > 10)
                     throw new InputValueException(frindex.Value.String,
-                                              "The fire severity index:  {0} must be 1-5,",
+                                              "The fire severity index:  {0} must be 1-10,",
                                               frindex.Value.String);
 
 

@@ -91,8 +91,8 @@ namespace Landis.Extension.Succession.NECN
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET;
 
-                    if(OtherData.SoilWaterVersion64)
-                        SoilWater.RunVersion64(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
+                    if(OtherData.SoilWaterVersion_Henne)
+                        SoilWater.RunVersion_Henne(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
                     else
                         SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 

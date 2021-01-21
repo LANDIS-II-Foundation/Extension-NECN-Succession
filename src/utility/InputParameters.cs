@@ -193,7 +193,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         /// <summary>
         /// </summary>
-        public bool SoilWater64
+        public bool SoilWater_Henne
         {
             get
             {

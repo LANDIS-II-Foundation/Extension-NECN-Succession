@@ -28,7 +28,7 @@ namespace Landis.Extension.Succession.NECN
         private static double holdingTank = 0.0;
 
 
-        public static void RunVersion64(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
+        public static void RunVersion_Henne(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
         {
 
             //Originally from h2olos.f of CENTURY model

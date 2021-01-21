@@ -105,7 +105,7 @@ namespace Landis.Extension.Succession.NECN
         
         public FireEffects(int numberOfSeverities)
         {
-            ReductionsTable = new FireReductions[numberOfSeverities+1];  //will ignore zero
+            ReductionsTable = new FireReductions[numberOfSeverities];  
             
             for(int i=0; i <= numberOfSeverities; i++)
             {
