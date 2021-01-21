@@ -103,15 +103,15 @@ namespace Landis.Extension.Succession.NECN
     {
         public static FireReductions[] ReductionsTable; 
         
-        public FireEffects(int numberOfSeverities)
-        {
-            ReductionsTable = new FireReductions[numberOfSeverities];  
+        //public FireEffects(int numberOfSeverities)
+        //{
+        //    ReductionsTable = new FireReductions[numberOfSeverities];  
             
-            for(int i=0; i <= numberOfSeverities; i++)
-            {
-                ReductionsTable[i] = new FireReductions();
-            }
-        }
+        //    for(int i=0; i <= numberOfSeverities; i++)
+        //    {
+        //        ReductionsTable[i] = new FireReductions();
+        //    }
+        //}
        
 
         //---------------------------------------------------------------------
