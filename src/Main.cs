@@ -92,7 +92,7 @@ namespace Landis.Extension.Succession.NECN
                     double baseFlow, stormFlow, AET;
 
                     if(OtherData.SoilWaterVersion_Henne)
-                        SoilWater.RunVersion_Henne(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
+                        SoilWater.Run_Henne(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
                     else
                         SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 

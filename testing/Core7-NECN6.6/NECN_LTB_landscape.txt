@@ -34,7 +34,7 @@ WaterDecayFunction Ratio <<Linear or Ratio
 
 ProbabilityEstablishAdjust 	1.0
 InitialMineralN			2.0
-InitialFineFuels 		0.1  << a fraction 0-1.0 of dead wood.
+InitialFineFuels 		0.99  << a fraction 0-1.0 of dead wood.
 AtmosphericNSlope		0.05
 AtmosphericNIntercept		0.05
 Latitude			44.0
@@ -43,10 +43,6 @@ DecayRateSurf			0.01
 DecayRateSOM1			0.01
 DecayRateSOM2			0.2
 DecayRateSOM3			0.001
-
-StormFlowOverride	0.2
-WaterLossFactor1Override 0.5
-WaterLossFactor2Override 0.5
 
 MaximumLAI
 
@@ -64,9 +60,9 @@ LightEstablishmentTable
 >> Class	by Actual Shade
 >> ----------	--------------------	
 >>		0	1	2	3	4	5
-	1	1.0	0.1	0.0	0.0	0.0	0.0
-	2	1.0	1.0	0.1	0.05	0.0	0.0
-	3	1.0	1.0	1.0	0.1	0.05	0.0
+	1	1.0	0.1	0.05	0.05	0.0	0.0
+	2	1.0	1.0	0.1	0.05	0.05	0.0
+	3	1.0	1.0	1.0	0.1	0.05	0.05
 	4	1.0	1.0	1.0	1.0	0.1	0.05
 	5	0.1	0.5	1.0	1.0	1.0	1.0
 
