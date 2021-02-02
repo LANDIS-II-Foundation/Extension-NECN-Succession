@@ -250,7 +250,6 @@ namespace Landis.Extension.Succession.NECN
             stormFlow = 0.0;
             double actualET = 0.0;
             double remainingPET = 0.0;
-            double availableWater = 0.0;     //amount of water deemed available to the trees.
             double priorWaterAvail = SiteVars.AvailableWater[site];
             double waterFull = 0.0;
 
@@ -280,6 +279,9 @@ namespace Landis.Extension.Succession.NECN
             double stormFlowFraction = SiteVars.SoilStormFlowFraction[site];
             double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];
             double drain = SiteVars.SoilDrain[site];
+            double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
+            double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
+            double availableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
 
 
             //...Calculating snow pack first. Occurs when mean monthly air temperature is equal to or below freezing,
@@ -384,6 +386,7 @@ namespace Landis.Extension.Succession.NECN
                 //PH: Subtract soilEvaporation from addToSoil so it won't drive down soil water. 
                 //PH: SoilEvaporation represents water that evaporates before reaching soil, so should not be subtracted from soil.
                 addToSoil -= soilEvaporation;
+                remainingPET -= soilEvaporation;
                 if (OtherData.CalibrateMode)
                     PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, addToSoil={1}.", month, addToSoil);
             }
@@ -401,17 +404,29 @@ namespace Landis.Extension.Succession.NECN
 
             double waterEmpty = wiltingPoint * soilDepth;
             waterFull = soilDepth * fieldCapacity;  //units of cm
+            availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
 
 
-            if (soilWaterContent > waterFull)
+            //if (soilWaterContent > waterFull)
+            //    actualET = remainingPET;
+            //else
+            //{
+            //    actualET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0);
+            //}
+
+            //if (actualET < 0.0)
+            //    actualET = 0.0;
+            if ((soilWaterContent - waterEmpty) >= remainingPET)
+            {
                 actualET = remainingPET;
+            }
             else
             {
-                actualET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0);
+                actualET = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
             }
+            actualET = Math.Min(soilWaterContent - waterEmpty, actualET);
 
-            if (actualET < 0.0)
-                actualET = 0.0;
+
             AET = actualET;
             if (OtherData.CalibrateMode)
                 PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, AET);
@@ -459,7 +474,11 @@ namespace Landis.Extension.Succession.NECN
             // ********************************************************
 
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
-            availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
+            //availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
+            availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0);
+
+            //Calculate the final amount of available water to the trees, which is the average of the max and min          
+            availableWater = (availableWaterMax + availableWaterMin) / 2.0;
 
             // Calculate the final amount of available water to the trees, which is the average of the max and min          
             // PH: availableWater is affected by my changes, and soilWaterContent should be higher now.  
