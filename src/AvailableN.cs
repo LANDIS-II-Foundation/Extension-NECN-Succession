@@ -330,7 +330,9 @@ namespace Landis.Extension.Succession.NECN
 
             if (OtherData.CalibrateMode && PlugIn.ModelCore.CurrentTime > 0)
             {
-                //Outputs.CalibrateLog.Write("{0:0.00}, {1:0.00}, {2:0.00}, {3:0.00},", deltaWood, deltaLeaf, totalMortality[0], totalMortality[1]);
+                CalibrateLog.resorbedNused = resorbedNused;
+                CalibrateLog.mineralNused = Nuptake;
+                CalibrateLog.demand_N = totalNdemand;
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", resorbedNused, Nuptake, totalNdemand);
             }
 

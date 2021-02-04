@@ -44,6 +44,7 @@ namespace Landis.Extension.Succession.NECN
             Outputs.monthlyLog = new MetadataTable<MonthlyLog>("NECN-succession-monthly-log.csv");
             Outputs.reproductionLog = new MetadataTable<ReproductionLog>("NECN-reproduction-log.csv");
             Outputs.establishmentLog = new MetadataTable<EstablishmentLog>("NECN-prob-establish-log.csv");
+            Outputs.calibrateLog = new MetadataTable<CalibrateLog>("NECN-calibrate-log.csv");
 
             OutputMetadata tblOut_monthly = new OutputMetadata()
             {
@@ -95,6 +96,16 @@ namespace Landis.Extension.Succession.NECN
             };
             tblOut_repro.RetriveFields(typeof(EstablishmentLog));
             Extension.OutputMetadatas.Add(tblOut_pest);
+
+            OutputMetadata tblOut_cali = new OutputMetadata()
+            {
+                Type = OutputType.Table,
+                Name = "CalibrateLog",
+                FilePath = Outputs.calibrateLog.FilePath,
+                Visualize = false,
+            };
+            tblOut_repro.RetriveFields(typeof(CalibrateLog));
+            Extension.OutputMetadatas.Add(tblOut_cali);
             //---------------------------------------            
             //          map outputs:         
             //---------------------------------------

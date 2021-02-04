@@ -23,6 +23,7 @@ namespace Landis.Extension.Succession.NECN
         public static MetadataTable<PrimaryLogShort> primaryLogShort;
         public static MetadataTable<ReproductionLog> reproductionLog;
         public static MetadataTable<EstablishmentLog> establishmentLog;
+        public static MetadataTable<CalibrateLog> calibrateLog;
 
 
         public static void WriteReproductionLog(int CurrentTime)
@@ -468,7 +469,7 @@ namespace Landis.Extension.Succession.NECN
         //Write log file for growth and limits
         public static void CreateCalibrateLogFile()
         {
-            string logFileName = "NECN-calibrate-log.csv";
+            string logFileName = "NECN-calibrate-OLD-log.csv";
             PlugIn.ModelCore.UI.WriteLine("******************WARNING************************", logFileName);
             PlugIn.ModelCore.UI.WriteLine("******YOU ARE CURRENTLY IN CALIBRATE MODE********", logFileName);
             PlugIn.ModelCore.UI.WriteLine("*************************************************", logFileName);

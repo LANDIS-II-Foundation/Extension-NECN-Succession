@@ -24,21 +24,6 @@ namespace Landis.Extension.Succession.NECN
         private static double[,] avgBeginGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgEndGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
 
-        //public static void InitializeLogFile()
-        //{
-        //    string logFileName   = "NECN-prob-establish-log.csv"; 
-        //    PlugIn.ModelCore.UI.WriteLine("   Opening a NECN log file \"{0}\" ...", logFileName);
-        //    try {
-        //        log = Landis.Data.CreateTextFile(logFileName);
-        //    }
-        //    catch (Exception err) {
-        //        string mesg = string.Format("{0}", err.Message);
-        //        throw new System.ApplicationException(mesg);
-        //    }
-
-        //    log.AutoFlush = true;
-        //    log.WriteLine("Time, Species, ClimateRegion, NumberSitesChecked, AvgTempMult, AvgMinJanTempMult, AvgSoilMoistureMult, AvgProbEst");
-        //}
 
         public static double Calculate(ISpecies species, ActiveSite site)
         {
@@ -89,8 +74,6 @@ namespace Landis.Extension.Succession.NECN
                     if (!ecoregion.Active)
                         continue;
 
-                    //foreach (ISpecies spp in PlugIn.ModelCore.Species)
-                    //{
                         Outputs.establishmentLog.Clear();
                         EstablishmentLog elog = new EstablishmentLog();
 
@@ -108,12 +91,6 @@ namespace Landis.Extension.Succession.NECN
 
                         Outputs.establishmentLog.AddObject(elog);
                         Outputs.establishmentLog.WriteToFile();
-                    //}
-                    //log.Write("{0},{1},{2},{3},", PlugIn.ModelCore.CurrentTime, species.Name, ecoregion.Name, numberCalculations[species.Index, ecoregion.Index] );
-                    //    log.Write("{0:0.000},", (avgMATlimit[species.Index, ecoregion.Index] / (double) numberCalculations[species.Index, ecoregion.Index]));
-                    //    log.Write("{0:0.000},", (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
-                    //    log.Write("{0:0.000},", (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
-                    //    log.WriteLine("{0:0.000}", (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]));
                 }
             }
 

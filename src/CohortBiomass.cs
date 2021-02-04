@@ -41,13 +41,22 @@ namespace Landis.Extension.Succession.NECN
         /// related mortality (M_BIO).
         /// </summary>
         public float[] ComputeChange(ICohort cohort, ActiveSite site)
-        {           
-            
+        {
+
             ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
             // First call to the Calibrate Log:
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            {
+                CalibrateLog.year = PlugIn.ModelCore.CurrentTime;
+                CalibrateLog.month = Main.Month + 1;
+                CalibrateLog.climateRegionIndex = ecoregion.Index;
+                CalibrateLog.speciesName = cohort.Species.Name;
+                CalibrateLog.cohortAge = cohort.Age;
+                CalibrateLog.cohortWoodB = cohort.WoodBiomass;
+                CalibrateLog.cohortLeafB = cohort.LeafBiomass;
                 Outputs.CalibrateLog.Write("{0},{1},{2},{3},{4},{5:0.0},{6:0.0},", PlugIn.ModelCore.CurrentTime, Main.Month + 1, ecoregion.Index, cohort.Species.Name, cohort.Age, cohort.WoodBiomass, cohort.LeafBiomass);
+            } 
            
 
             double siteBiomass = Main.ComputeLivingBiomass(SiteVars.Cohorts[site]);
@@ -108,11 +117,6 @@ namespace Landis.Extension.Succession.NECN
                 defoliatedLeafBiomass = 0.0;
             }
 
-            // RMS 03/2016: Additional mortality as reaching capacity limit:  SAVE FOR NEXT RELEASE
-            //double maxBiomass = SpeciesData.B_MAX_Spp[cohort.Species][ecoregion];
-            //double limitCapacity = Math.Min(1.0, Math.Exp(siteBiomass / maxBiomass * 5.0) / Math.Exp(5.0));  // 1.0 = total limit; 0.0 = No limit
-            //totalMortality[0] += (actualANPP[0] * limitCapacity); // totalMortality not to exceed ANPP allocation
-
 
             if (totalMortality[0] <= 0.0 || cohort.WoodBiomass <= 0.0)
                 totalMortality[0] = 0.0;
@@ -151,8 +155,8 @@ namespace Landis.Extension.Succession.NECN
 
             if (OtherData.CalibrateMode && PlugIn.ModelCore.CurrentTime > 0)
             {
+                CalibrateLog.WriteLogFile();
                 Outputs.CalibrateLog.WriteLine("{0:0.00},{1:0.00},{2:0.00},{3:0.00},", deltaWood, deltaLeaf, totalMortality[0], totalMortality[1]);
-                //Outputs.CalibrateLog.WriteLine("{0:0.00}, {1:0.00}, {2:0.00}", resorbedNused, mineralNused, totalNdemand);
             }
 
             return deltas;
@@ -227,7 +231,18 @@ namespace Landis.Extension.Succession.NECN
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
-                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},{3:0.00}, {4:0.00},", limitLAI, limitH20, limitT, limitCapacity, limitN);
+                CalibrateLog.limitLAI = limitLAI;
+                CalibrateLog.limitH20 = limitH20;
+                CalibrateLog.limitT = limitT;
+                CalibrateLog.limitN = limitN;
+                CalibrateLog.maxNPP = maxNPP;
+                CalibrateLog.maxB = maxBiomass;
+                CalibrateLog.siteB = siteBiomass;
+                CalibrateLog.cohortB = (cohort.WoodBiomass + cohort.LeafBiomass);
+                CalibrateLog.soilTemp = SiteVars.SoilTemperature[site];
+                CalibrateLog.actualWoodNPP = woodNPP;
+                CalibrateLog.actualLeafNPP = leafNPP;
+                
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},{3:0.00},", limitLAI, limitH20, limitT, limitN);
                 Outputs.CalibrateLog.Write("{0},{1},{2},{3:0.0},{4:0.0},", maxNPP, maxBiomass, (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", woodNPP, leafNPP);
@@ -277,8 +292,11 @@ namespace Landis.Extension.Succession.NECN
             }
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            {
+                CalibrateLog.mortalityAGEleaf = M_AGE_leaf;
+                CalibrateLog.mortalityAGEwood = M_AGE_wood;
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", M_AGE_wood, M_AGE_leaf);
-
+            }
 
             return M_AGE;
         }
@@ -338,7 +356,11 @@ namespace Landis.Extension.Succession.NECN
             }
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            {
+                CalibrateLog.mortalityBIOwood = M_wood;
+                CalibrateLog.mortalityBIOleaf = M_leaf;
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", M_wood, M_leaf);
+            }
 
             SiteVars.WoodMortality[site] += (M_wood);
 
@@ -443,11 +465,11 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyAGNPPcarbon[site][Main.Month] += NPPwood + NPPleaf;
             SiteVars.MonthlyBGNPPcarbon[site][Main.Month] += NPPcoarseRoot + NPPfineRoot;
 
-            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-            {
-                Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", NPPwood, NPPleaf);
+            //if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            //{
+            //    Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", NPPwood, NPPleaf);
 
-            }
+            //}
 
 
         }
@@ -484,10 +506,14 @@ namespace Landis.Extension.Succession.NECN
                 else
                     limitN = 1.0; // No demand means that it is a new or very small cohort.  Will allow it to grow anyways.                
             }
-            
+
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            {
+                CalibrateLog.mineralNalloc = mineralNallocation;
+                CalibrateLog.resorbedNalloc = resorbedNallocation;
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", mineralNallocation, resorbedNallocation);
+            }
 
             return Math.Max(limitN, 0.0);
         }
@@ -587,9 +613,12 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyLAI[site][Main.Month] += lai;
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-
+            {
+                CalibrateLog.actual_LAI = lai;
+                CalibrateLog.base_lai = base_lai;
+                CalibrateLog.seasonal_adjustment = seasonal_adjustment;
                 Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, base_lai, seasonal_adjustment);
-
+            }
 
             //PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}. Spp={2}, leafC={3:0.0}, woodC={4:0.00}.", PlugIn.ModelCore.CurrentTime, month + 1, species.Name, leafC, largeWoodC);
             //PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}. Spp={2}, lai={3:0.0}, woodC={4:0.00}.", PlugIn.ModelCore.CurrentTime, month + 1, species.Name, lai, largeWoodC);
@@ -678,7 +707,10 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("Intercept={0}, Slope={1}, WaterLimit={2}.", intcpt, slope, WaterLimit);     
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            {
+                CalibrateLog.availableWater = SiteVars.AvailableWater[site];
                 Outputs.CalibrateLog.Write("{0:0.00},", SiteVars.AvailableWater[site]);
+            }
 
             return WaterLimit;
         }
