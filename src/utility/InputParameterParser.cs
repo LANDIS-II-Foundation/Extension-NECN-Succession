@@ -559,7 +559,7 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.TempCurve3 = System.Convert.ToDouble(row["TemperatureCurve3"]); 
                     funcTParms.TempCurve4 = System.Convert.ToDouble(row["TemperatureCurve4"]); 
                     funcTParms.FractionANPPtoLeaf = System.Convert.ToDouble(row["FractionANPPtoLeaf"]); 
-                    funcTParms.BiomassToLAI = System.Convert.ToDouble(row["BiomassToLAI"]);
+                    funcTParms.BiomassToLAI = System.Convert.ToDouble(row["LeafBiomassToLAI"]);
                     funcTParms.KLAI = System.Convert.ToDouble(row["KLAI"]);
                     funcTParms.MaxLAI = System.Convert.ToDouble(row["MaximumLAI"]);
                     funcTParms.MoistureCurve2 = System.Convert.ToDouble(row["MoistureCurve2"]); 
@@ -765,8 +765,6 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public static void RegisterForInputValues()
         {
-            //Type.SetDescription<LayerType>("Litter Types");
-            //InputValues.Register<LayerType>(LTParse);
             Type.SetDescription<WaterType>("Water Effect on Decomposition");
             InputValues.Register<WaterType>(WParse);
 

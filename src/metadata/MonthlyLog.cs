@@ -24,27 +24,27 @@ namespace Landis.Extension.Succession.NECN
         public int NumSites { set; get; }
 
         [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Precipitation", Format = "0.0")]
-        public double ppt {get; set;}
+        public double Precipitation {get; set;}
 
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Air Temperature", Format = "0.0")]
-        public double airtemp { get; set; }
+        public double AirTemp { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Aboveground NPP C", Format = "0.00")]
-        public double avgNPPtc { get; set; }
+        [DataFieldAttribute(Unit = "g_C_m2_month1", Desc = "Total NPP C", Format = "0.00")]
+        public double AvgTotalNPP_C { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Aboveground Heterotrophic Respiration", Format = "0.00")]
-        public double avgResp { get; set; }
+        [DataFieldAttribute(Unit = "g_C_m2_month1", Desc = "Heterotrophic Respiration", Format = "0.00")]
+        public double AvgHeteroRespiration { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Net Ecosystem Exchange", Format = "0.00")]
+        [DataFieldAttribute(Unit = "g_C_m2_month1", Desc = "Net Ecosystem Exchange", Format = "0.00")]
         public double avgNEE { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_N_m2, Desc = "N Deposition and Fixation", Format = "0.00")]
+        [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "N Deposition and Fixation", Format = "0.00")]
         public double Ndep { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_N_m2, Desc = "N Leaching", Format = "0.00")]
+        [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "N Leaching", Format = "0.00")]
         public double StreamN { get; set; }
 
-        [DataFieldAttribute(Desc = "Soil Water Content", Format = "0.00")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Soil Water Content", Format = "0.00")]
         public double SoilWaterContent { get; set; }
     }
 }

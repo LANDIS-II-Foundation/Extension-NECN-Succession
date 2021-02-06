@@ -94,7 +94,7 @@ namespace Landis.Extension.Succession.NECN
                 FilePath = Outputs.establishmentLog.FilePath,
                 Visualize = false,
             };
-            tblOut_repro.RetriveFields(typeof(EstablishmentLog));
+            tblOut_pest.RetriveFields(typeof(EstablishmentLog));
             Extension.OutputMetadatas.Add(tblOut_pest);
 
             OutputMetadata tblOut_cali = new OutputMetadata()
@@ -104,7 +104,7 @@ namespace Landis.Extension.Succession.NECN
                 FilePath = Outputs.calibrateLog.FilePath,
                 Visualize = false,
             };
-            tblOut_repro.RetriveFields(typeof(CalibrateLog));
+            tblOut_cali.RetriveFields(typeof(CalibrateLog));
             Extension.OutputMetadatas.Add(tblOut_cali);
             //---------------------------------------            
             //          map outputs:         

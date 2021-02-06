@@ -692,7 +692,7 @@ namespace Landis.Extension.Succession.NECN
             //PPRPTS naming convention is imported from orginal Century model. Now replaced with 'MoistureCurve' to be more intuitive
             //...New way (with updated naming convention):
 
-            double moisturecurve1 = OtherData.MoistureCurve1;
+            double moisturecurve1 = 0.0; // OtherData.MoistureCurve1;
             double moisturecurve2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
             double moisturecurve3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
 

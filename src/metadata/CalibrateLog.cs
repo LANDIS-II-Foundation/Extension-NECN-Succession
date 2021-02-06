@@ -66,21 +66,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        //CalibrateLog.Write("Year, Month, ClimateRegionIndex, SpeciesName, CohortAge, CohortWoodB, CohortLeafB, ");  // from ComputeChange
-        //    CalibrateLog.Write("MortalityAGEwood, MortalityAGEleaf, ");  // from ComputeAgeMortality
-        //    CalibrateLog.Write("availableWater,");  //from Water_limit
-        //    CalibrateLog.Write("LAI, tlai, rlai,");  // from ComputeChange
-        //    CalibrateLog.Write("mineralNalloc, resorbedNalloc, ");  // from calculateN_Limit
-
-        //    // These three together:
-        //    CalibrateLog.Write("limitLAI, limitH20, limitT, limitN, ");  //from ComputeActualANPP
-        //    CalibrateLog.Write("maxNPP, Bmax, Bsite, Bcohort, soilTemp, ");  //from ComputeActualANPP
-        //    CalibrateLog.Write("actualWoodNPP, actualLeafNPP, ");  //from ComputeActualANPP
-
-        //    CalibrateLog.Write("MortalityBIOwood, MortalityBIOleaf, ");  // from ComputeGrowthMortality
-        //    CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
-        //    CalibrateLog.Write("resorbedNused, mineralNused, Ndemand,");  // from AdjustAvailableN
-        //    CalibrateLog.WriteLine("deltaWood, deltaLeaf, totalMortalityWood, totalMortalityLeaf");  // from ComputeChange
 
         [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Simulation Year")]
         public int Year {set; get;}
@@ -119,13 +104,13 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Mortality Thinning Leaf Biomass", Format = "0.00000")]
         public double MortalityTHINleafBiomass { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = "m2_m2", Desc = "Base LAI", Format = "0.0")]
+        [DataFieldAttribute(Unit = "m2_m-2", Desc = "Base LAI", Format = "0.0")]
         public double BaseLAI { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = "Fraction", Desc = "Seaonal LAI Adjust", Format = "0.00")]
         public double SeaonalAdjustLAI { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = "m2_m2", Desc = "Leaf Area Index", Format = "0.0")]
+        [DataFieldAttribute(Unit = "m2_m-2", Desc = "Leaf Area Index", Format = "0.0")]
         public double LAI { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = "Fraction", Desc = "Growth Limit LAI", Format = "0.00")]
@@ -140,13 +125,13 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "Fraction", Desc = "Growth Limit Nitrogen", Format = "0.00")]
         public double GrowthLimitN { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_B_m2_yr1, Desc = "Maximum ANPP")]
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Maximum ANPP")]
         public double MaximumANPP { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_B_m2_yr1, Desc = "Actual Wood ANPP", Format = "0.000")]
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Actual Wood ANPP", Format = "0.000")]
         public double ActualWoodANPP { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_B_m2_yr1, Desc = "Actual Leaf ANPP", Format = "0.0000")]
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Actual Leaf ANPP", Format = "0.0000")]
         public double ActualLeafANPP { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Cohort Maximum Biomass")]
@@ -161,19 +146,19 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Soil Temperature", Format = "0.0")]
         public double SoilTemperature { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_N, Desc = "Mineral N Allocation", Format = "0.000")]
+        [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Mineral N Allocation", Format = "0.000")]
         public double MineralNalloc { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_N, Desc = "Resorbed N Allocation", Format = "0.000")]
+        [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Resorbed N Allocation", Format = "0.000")]
         public double ResorbedNalloc { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_N, Desc = "Mineral N Consumed", Format = "0.000")]
+        [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Mineral N Consumed", Format = "0.000")]
         public double MineralNconsumed { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_N, Desc = "Resorbed N Consumed", Format = "0.000")]
+        [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Resorbed N Consumed", Format = "0.000")]
         public double ResorbedNconsumed { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_N, Desc = "Total N Demand", Format = "0.000")]
+        [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Total N Demand", Format = "0.000")]
         public double TotalNDemand { set; get; }
 
     }

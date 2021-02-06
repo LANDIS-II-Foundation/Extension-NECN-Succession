@@ -198,7 +198,9 @@ namespace Landis.Extension.Succession.NECN
                 //Compute total C flow out of structural in layer
                 double totalCFlow = System.Math.Min(this.Carbon, OtherData.MaxStructuralC)
                                 * SiteVars.DecayFactor[site]
-                                * OtherData.LitterParameters[(int)this.Type].DecayRateStrucC
+                                //* OtherData.LitterParameters[(int)this.Type].DecayRateStrucC
+                                // v6:  Replace the fixed value (0.39) with the user input value for surficial C decay
+                                * PlugIn.Parameters.DecayRateSurf
                                 * anerb
                                 * System.Math.Exp(-1.0 * OtherData.LigninDecayEffect * this.FractionLignin)
                                 * OtherData.MonthAdjust;
