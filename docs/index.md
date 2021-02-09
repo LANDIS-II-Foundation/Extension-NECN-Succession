@@ -1,6 +1,6 @@
 # What is the NECN Succession Extension?
 
-The Net Ecosystem Carbon & Nitrogen (NECN) Succession extension implements succession with full accounting of above and below ground carbon and nitrogen. Aboveground biomass is represented with cohorts that have biomass (g m-2). In addition, below ground processing of Carbon and Nitrogen is simulated following the core logic of the Century nutrient cycling model (v4.0). 
+The NECN Succession extension was designed to provide total ecosystem accounting of Carbon and Nitrogen and to allow species to respond dynamically to a changing climate via establishment and growth.  NECN calculates how cohorts grow, reproduce, age, and die.  Dead biomass is tracked over time, divided into four pools:  surface wood, soil wood (dead coarse roots), surface litter (dead leaves), and soil litter (dead fine roots).  In addition, three principle soil pools:  fast (soil organic matter (SOM) 1), slow (SOM2), and passive (SOM3) are simulated, following the Century soil model.
 
 # Features
 
@@ -12,9 +12,9 @@ The Net Ecosystem Carbon & Nitrogen (NECN) Succession extension implements succe
 
 # Release Notes
 
-- Latest official release: Version 6.4.1 — May 2020
+- Latest official release: Version 6.6 — February 2021
 - This extension was formerly named Century Succession.
-- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v6.4%20User%20Guide.pdf).
+- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v6.6%20User%20Guide.pdf).
 - [User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/master/docs/LANDIS-II%20Climate%20Library%20v4.1%20User%20Guide.pdf)
 - Full release details found in the NECN User Guide and on GitHub.
 
@@ -27,7 +27,7 @@ To use NECN, you need:
 
 # Download
 
-Version 6.4.1 can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/past-releases/LANDIS-II-V7%20NECN%20Succession%206.4.1-setup.exe). To install it on your computer, just launch the installer.
+Version 6.6 can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/installer/LANDIS-II-V7%20NECN%20Succession%206.6-setup.exe). To install it on your computer, just launch the installer.
 
 # Citation
 

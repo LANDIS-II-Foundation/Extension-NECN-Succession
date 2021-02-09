@@ -333,7 +333,7 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.resorbedNused = resorbedNused;
                 CalibrateLog.mineralNused = Nuptake;
                 CalibrateLog.demand_N = totalNdemand;
-                Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", resorbedNused, Nuptake, totalNdemand);
+                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", resorbedNused, Nuptake, totalNdemand);
             }
 
         }

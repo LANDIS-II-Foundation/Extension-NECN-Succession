@@ -19,6 +19,7 @@ namespace Landis.Extension.Succession.NECN
         public static double limitLAI, limitH20, limitT, limitN;
         public static double maxNPP, maxB, siteB, cohortB, soilTemp;
         public static double actualWoodNPP, actualLeafNPP;
+        public static double deltaWood, deltaLeaf;
         public static double mortalityBIOwood, mortalityBIOleaf;
         //    CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
         public static double resorbedNused, mineralNused, demand_N;
@@ -58,6 +59,8 @@ namespace Landis.Extension.Succession.NECN
             clog.SoilTemperature = soilTemp;
             clog.ActualWoodANPP = actualWoodNPP;
             clog.ActualLeafANPP = actualLeafNPP;
+            clog.DeltaWood = deltaWood;
+            clog.DeltaLeaf = deltaLeaf;
             clog.TotalNDemand = demand_N;
 
 
@@ -133,6 +136,12 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Actual Leaf ANPP", Format = "0.0000")]
         public double ActualLeafANPP { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Change in Wood Biomass", Format = "0.000")]
+        public double DeltaWood { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Change in Leaf Biomass", Format = "0.0000")]
+        public double DeltaLeaf { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Cohort Maximum Biomass")]
         public double CohortMaximumBiomass { set; get; }

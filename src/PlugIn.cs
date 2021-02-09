@@ -139,9 +139,8 @@ namespace Landis.Extension.Succession.NECN
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
-            if (Parameters.CalibrateMode)
-                Outputs.CreateCalibrateLogFile();
-            //Establishment.InitializeLogFile();
+            //if (Parameters.CalibrateMode)
+            //    Outputs.CreateCalibrateLogFile();
 
             B_MAX = 0;
             foreach (ISpecies species in ModelCore.Species)

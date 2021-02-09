@@ -17,7 +17,7 @@ namespace Landis.Extension.Succession.NECN
 {
     public class Outputs
     {
-        public static StreamWriter CalibrateLog;
+        //public static StreamWriter CalibrateLog;
         public static MetadataTable<MonthlyLog> monthlyLog; 
         public static MetadataTable<PrimaryLog> primaryLog;
         public static MetadataTable<PrimaryLogShort> primaryLogShort;
@@ -467,44 +467,44 @@ namespace Landis.Extension.Succession.NECN
         }
         
         //Write log file for growth and limits
-        public static void CreateCalibrateLogFile()
-        {
-            string logFileName = "NECN-calibrate-OLD-log.csv";
-            PlugIn.ModelCore.UI.WriteLine("******************WARNING************************", logFileName);
-            PlugIn.ModelCore.UI.WriteLine("******YOU ARE CURRENTLY IN CALIBRATE MODE********", logFileName);
-            PlugIn.ModelCore.UI.WriteLine("*************************************************", logFileName);
-            PlugIn.ModelCore.UI.WriteLine("   Opening NECN calibrate log file \"{0}\" ...", logFileName);
-            try
-            {
-                CalibrateLog = new StreamWriter(logFileName);
-            }
-            catch (Exception err)
-            {
-                string mesg = string.Format("{0}", err.Message);
-                throw new System.ApplicationException(mesg);
-            }
+        //public static void CreateCalibrateLogFile()
+        //{
+        //    string logFileName = "NECN-calibrate-OLD-log.csv";
+        //    PlugIn.ModelCore.UI.WriteLine("******************WARNING************************", logFileName);
+        //    PlugIn.ModelCore.UI.WriteLine("******YOU ARE CURRENTLY IN CALIBRATE MODE********", logFileName);
+        //    PlugIn.ModelCore.UI.WriteLine("*************************************************", logFileName);
+        //    PlugIn.ModelCore.UI.WriteLine("   Opening NECN calibrate log file \"{0}\" ...", logFileName);
+        //    try
+        //    {
+        //        CalibrateLog = new StreamWriter(logFileName);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        string mesg = string.Format("{0}", err.Message);
+        //        throw new System.ApplicationException(mesg);
+        //    }
 
-            CalibrateLog.AutoFlush = true;
+        //    CalibrateLog.AutoFlush = true;
 
-            CalibrateLog.Write("Year, Month, ClimateRegionIndex, SpeciesName, CohortAge, CohortWoodB, CohortLeafB, ");  // from ComputeChange
-            CalibrateLog.Write("MortalityAGEwood, MortalityAGEleaf, ");  // from ComputeAgeMortality
-            CalibrateLog.Write("availableWater,");  //from Water_limit
-            CalibrateLog.Write("LAI, tlai, rlai,");  // from ComputeChange
-            CalibrateLog.Write("mineralNalloc, resorbedNalloc, ");  // from calculateN_Limit
+        //    CalibrateLog.Write("Year, Month, ClimateRegionIndex, SpeciesName, CohortAge, CohortWoodB, CohortLeafB, ");  // from ComputeChange
+        //    CalibrateLog.Write("MortalityAGEwood, MortalityAGEleaf, ");  // from ComputeAgeMortality
+        //    CalibrateLog.Write("availableWater,");  //from Water_limit
+        //    CalibrateLog.Write("LAI, tlai, rlai,");  // from ComputeChange
+        //    CalibrateLog.Write("mineralNalloc, resorbedNalloc, ");  // from calculateN_Limit
 
-            // These three together:
-            CalibrateLog.Write("limitLAI, limitH20, limitT, limitN, ");  //from ComputeActualANPP
-            CalibrateLog.Write("maxNPP, Bmax, Bsite, Bcohort, soilTemp, ");  //from ComputeActualANPP
-            CalibrateLog.Write("actualWoodNPP, actualLeafNPP, ");  //from ComputeActualANPP
+        //    // These three together:
+        //    CalibrateLog.Write("limitLAI, limitH20, limitT, limitN, ");  //from ComputeActualANPP
+        //    CalibrateLog.Write("maxNPP, Bmax, Bsite, Bcohort, soilTemp, ");  //from ComputeActualANPP
+        //    CalibrateLog.Write("actualWoodNPP, actualLeafNPP, ");  //from ComputeActualANPP
 
-            CalibrateLog.Write("MortalityBIOwood, MortalityBIOleaf, ");  // from ComputeGrowthMortality
-            CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
-            CalibrateLog.Write("resorbedNused, mineralNused, Ndemand,");  // from AdjustAvailableN
-            CalibrateLog.WriteLine("deltaWood, deltaLeaf, totalMortalityWood, totalMortalityLeaf");  // from ComputeChange
+        //    CalibrateLog.Write("MortalityBIOwood, MortalityBIOleaf, ");  // from ComputeGrowthMortality
+        //    CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
+        //    CalibrateLog.Write("resorbedNused, mineralNused, Ndemand,");  // from AdjustAvailableN
+        //    CalibrateLog.WriteLine("deltaWood, deltaLeaf, totalMortalityWood, totalMortalityLeaf");  // from ComputeChange
                         
             
 
-        }
+        //}
         
         public static void WriteMaps()
         {
