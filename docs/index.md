@@ -37,7 +37,10 @@ Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effe
 
 LANDIS-II requires a global parameter file for your scenario, and then different parameter files for each extension.
 
-Example files are [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN6.4/ExampleNECNv64.zip).
+Landscape example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN6.6).
+
+Single-cell example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN6.6-SingleCell).
+
 
 # Support
 
