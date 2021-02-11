@@ -241,7 +241,10 @@ namespace Landis.Extension.Succession.NECN
                 //MicrobialRespiration associated with decomposition to som2
                 double SOM2co2loss = carbonToSOM2 * OtherData.LigninRespirationRate;
 
-                this.Respiration(SOM2co2loss, site);
+                if (this.Type == LayerType.Surface)
+                    this.Respiration(SOM2co2loss, site, true);
+                else
+                    this.Respiration(SOM2co2loss, site, false);
 
                 //Net C flow to SOM2
                 double netCFlow = carbonToSOM2 - SOM2co2loss;
@@ -259,12 +262,17 @@ namespace Landis.Extension.Succession.NECN
                 double SOM1co2loss;
 
                 //MicrobialRespiration associated with decomposition to som1
-                if(this.Type == LayerType.Surface)
-                    SOM1co2loss = carbonToSOM1 * OtherData.StructuralToCO2Surface; 
+                if (this.Type == LayerType.Surface)
+                {
+                    SOM1co2loss = carbonToSOM1 * OtherData.StructuralToCO2Surface;
+                    this.Respiration(SOM1co2loss, site, true);
+                }
                 else
-                    SOM1co2loss = carbonToSOM1 * OtherData.StructuralToCO2Soil; 
+                {
+                    SOM1co2loss = carbonToSOM1 * OtherData.StructuralToCO2Soil;
+                    this.Respiration(SOM1co2loss, site, false);
+                }
 
-                this.Respiration(SOM1co2loss, site);
 
                 //Net C flow to SOM1
                 carbonToSOM1 -= SOM1co2loss;
@@ -338,12 +346,16 @@ namespace Landis.Extension.Succession.NECN
                 {
                     //CO2 loss
                     if (this.Type == LayerType.Surface)
+                    {
                         co2loss = totalCFlow * OtherData.MetabolicToCO2Surface;
+                        this.Respiration(co2loss, site, true);
+                    }
                     else
+                    {
                         co2loss = totalCFlow * OtherData.MetabolicToCO2Soil;
-
+                        this.Respiration(co2loss, site, false);
+                    }
                     //PlugIn.ModelCore.UI.WriteLine("BeforeResp.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
-                    this.Respiration(co2loss, site);
                     //PlugIn.ModelCore.UI.WriteLine("AfterResp.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
 
                     //Decompose metabolic into som1
@@ -502,7 +514,7 @@ namespace Landis.Extension.Succession.NECN
             return;
         }
 
-        public void Respiration(double co2loss, ActiveSite site)
+        public void Respiration(double co2loss, ActiveSite site, bool surface)
         {
         // Compute flows associated with microbial respiration.
 
@@ -534,7 +546,11 @@ namespace Landis.Extension.Succession.NECN
             this.TransferCarbon(SiteVars.SourceSink[site], co2loss);
 
             //Add lost CO2 to monthly heterotrophic respiration
-            SiteVars.MonthlyResp[site][Main.Month] += co2loss;
+            SiteVars.MonthlyHeterotrophicResp[site][Main.Month] += co2loss;
+
+            if(!surface)
+                SiteVars.MonthlySoilResp[site][Main.Month] += co2loss;
+
 
             this.Nitrogen -= mineralNFlow;
             SiteVars.MineralN[site] += mineralNFlow;

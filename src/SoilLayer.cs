@@ -47,7 +47,7 @@ namespace Landis.Extension.Succession.NECN
                     //CO2 loss - Compute and schedule respiration flows.
                     double co2loss = totalCflow * OtherData.P1CO2_Surface;
                     double netCFlow = totalCflow - co2loss;
-                    SiteVars.SOM1surface[site].Respiration(co2loss, site);
+                    SiteVars.SOM1surface[site].Respiration(co2loss, site, false);
 
                     // Decompose Surface SOM1 to SOM2
                     SiteVars.SOM1surface[site].TransferCarbon(SiteVars.SOM2[site], netCFlow);
@@ -100,7 +100,7 @@ namespace Landis.Extension.Succession.NECN
 
                     double co2loss = totalCflow * P1CO2_Soil;
                     double netCFlow = totalCflow - co2loss;
-                    SiteVars.SOM1soil[site].Respiration(co2loss, site);
+                    SiteVars.SOM1soil[site].Respiration(co2loss, site, false);
  
                     // Decompose Soil SOM1 to SOM3
                     // The fraction of totalCflow that goes to SOM3 is a function of clay content.
@@ -199,7 +199,7 @@ namespace Landis.Extension.Succession.NECN
                     //CO2 loss - Compute and schedule respiration flows
                     double co2loss = totalCflow * OtherData.FractionSOM2toCO2;
                     double netCFlow = totalCflow - co2loss;
-                    SiteVars.SOM2[site].Respiration(co2loss, site);
+                    SiteVars.SOM2[site].Respiration(co2loss, site, false);
                     //PlugIn.ModelCore.UI.WriteLine("AfterTransferto.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
 
                     // -----------------------------------------------
@@ -266,7 +266,7 @@ namespace Landis.Extension.Succession.NECN
                     // CO2 loss - Compute and schedule respiration flows.
                     double co2loss = totalCflow * OtherData.FractionSOM3toCO2 * anerb;
                     double netCFlow = totalCflow - co2loss;
-                    SiteVars.SOM3[site].Respiration(co2loss, site);
+                    SiteVars.SOM3[site].Respiration(co2loss, site, false);
 
                     // Decompose SOM3 to soil SOM1
                     double cFlowS3S1 = netCFlow;

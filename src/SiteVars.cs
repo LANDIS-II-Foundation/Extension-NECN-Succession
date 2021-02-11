@@ -79,7 +79,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlyNEE;
         private static ISiteVar<double[]> monthlyStreamN;
         private static ISiteVar<double[]> monthlyLAI;
-        private static ISiteVar<double[]> monthlyResp;
+        private static ISiteVar<double[]> monthlyHeteroResp;
         private static ISiteVar<double[]> monthlySoilWaterContent;
         private static ISiteVar<double> totalNuptake;
         private static ISiteVar<double[]> monthlymineralN;
@@ -104,6 +104,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> FlamingConsumption;
         public static ISiteVar<double> AnnualClimaticWaterDeficit; //Annual soil moisture calculation, defined as pet - aet
         public static ISiteVar<double> AnnualPotentialEvapotranspiration; //PET
+        public static ISiteVar<double[]> MonthlySoilResp;
 
 
         //---------------------------------------------------------------------
@@ -169,7 +170,7 @@ namespace Landis.Extension.Succession.NECN
             monthlyBGNPPC       = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             monthlyNEE          = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             monthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            monthlyResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            monthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             monthlySoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             AnnualNEE           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireCEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -200,6 +201,7 @@ namespace Landis.Extension.Succession.NECN
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
             //HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
             HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
+            MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
@@ -234,7 +236,8 @@ namespace Landis.Extension.Succession.NECN
                 monthlyBGNPPC[site]           = new double[12];
                 monthlyNEE[site]            = new double[12];
                 monthlyStreamN[site]         = new double[12];
-                monthlyResp[site]           = new double[12];
+                monthlyHeteroResp[site]           = new double[12];
+                MonthlySoilResp[site] = new double[12];
                 monthlyLAI[site] = new double[12];
                 monthlySoilWaterContent[site]       = new double[12];
 
@@ -854,13 +857,13 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// A summary of heterotrophic respiration, i.e. CO2 loss from decomposition (g C/m2)
         /// </summary>
-        public static ISiteVar<double[]> MonthlyResp
+        public static ISiteVar<double[]> MonthlyHeterotrophicResp
         {
             get {
-                return monthlyResp;
+                return monthlyHeteroResp;
             }
             set {
-                monthlyResp = value;
+                monthlyHeteroResp = value;
             }
         }
         //---------------------------------------------------------------------

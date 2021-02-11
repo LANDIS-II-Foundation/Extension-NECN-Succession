@@ -63,7 +63,8 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyAGNPPcarbon[site][Month] = 0.0;
                     SiteVars.MonthlyBGNPPcarbon[site][Month] = 0.0;
                     SiteVars.MonthlyNEE[site][Month] = 0.0;
-                    SiteVars.MonthlyResp[site][Month] = 0.0;
+                    SiteVars.MonthlyHeterotrophicResp[site][Month] = 0.0;
+                    SiteVars.MonthlySoilResp[site][Month] = 0.0;
                     SiteVars.MonthlyStreamN[site][Month] = 0.0;
                     SiteVars.MonthlyLAI[site][Month] = 0.0;
                     SiteVars.MonthlySoilWaterContent[site][Month] = 0.0;

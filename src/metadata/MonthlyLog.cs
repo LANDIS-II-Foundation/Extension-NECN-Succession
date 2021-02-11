@@ -35,6 +35,9 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "g_C_m2_month1", Desc = "Heterotrophic Respiration", Format = "0.00")]
         public double AvgHeteroRespiration { get; set; }
 
+        [DataFieldAttribute(Unit = "g_C_m2_month1", Desc = "Soil Respiration", Format = "0.00")]
+        public double AvgSoilRespiration { get; set; }
+
         [DataFieldAttribute(Unit = "g_C_m2_month1", Desc = "Net Ecosystem Exchange", Format = "0.00")]
         public double avgNEE { get; set; }
 

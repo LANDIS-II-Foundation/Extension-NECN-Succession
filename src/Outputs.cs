@@ -396,7 +396,8 @@ namespace Landis.Extension.Succession.NECN
             double[] airtemp = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             double[] avgNPPtc = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] avgResp = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] avgTotalResp = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] avgSoilResp = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avgNEE = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             double[] nitrogenDeposition = new double[PlugIn.ModelCore.Ecoregions.Count];
@@ -409,7 +410,8 @@ namespace Landis.Extension.Succession.NECN
                 ppt[ecoregion.Index] = 0.0;
                 airtemp[ecoregion.Index] = 0.0;
                 avgNPPtc[ecoregion.Index] = 0.0;
-                avgResp[ecoregion.Index] = 0.0;
+                avgTotalResp[ecoregion.Index] = 0.0;
+                avgSoilResp[ecoregion.Index] = 0.0;
                 avgNEE[ecoregion.Index] = 0.0;
                 nitrogenDeposition[ecoregion.Index] = 0.0;
                 streamN[ecoregion.Index] = 0.0;
@@ -424,7 +426,8 @@ namespace Landis.Extension.Succession.NECN
                 airtemp[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
 
                 avgNPPtc[ecoregion.Index] += SiteVars.MonthlyAGNPPcarbon[site][month] + SiteVars.MonthlyBGNPPcarbon[site][month];
-                avgResp[ecoregion.Index] += SiteVars.MonthlyResp[site][month];
+                avgTotalResp[ecoregion.Index] += SiteVars.MonthlyHeterotrophicResp[site][month];
+                avgSoilResp[ecoregion.Index] += SiteVars.MonthlySoilResp[site][month];
                 avgNEE[ecoregion.Index] += SiteVars.MonthlyNEE[site][month];
 
                 SiteVars.AnnualNEE[site] += SiteVars.MonthlyNEE[site][month];
@@ -453,7 +456,8 @@ namespace Landis.Extension.Succession.NECN
                     ml.Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
                     ml.AirTemp = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
                     ml.AvgTotalNPP_C = (avgNPPtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.AvgHeteroRespiration = (avgResp[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AvgHeteroRespiration = (avgTotalResp[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AvgSoilRespiration = (avgSoilResp[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.avgNEE = (avgNEE[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.Ndep = nitrogenDeposition[ecoregion.Index];
                     ml.StreamN = (streamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
