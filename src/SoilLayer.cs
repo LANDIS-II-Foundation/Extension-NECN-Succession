@@ -47,7 +47,7 @@ namespace Landis.Extension.Succession.NECN
                     //CO2 loss - Compute and schedule respiration flows.
                     double co2loss = totalCflow * OtherData.P1CO2_Surface;
                     double netCFlow = totalCflow - co2loss;
-                    SiteVars.SOM1surface[site].Respiration(co2loss, site, false);
+                    SiteVars.SOM1surface[site].Respiration(co2loss, site, false); ////SURFACE DECAY ALSO COUNTED AS SOIL RESPIRATION (Shih-Chieh Chang)
 
                     // Decompose Surface SOM1 to SOM2
                     SiteVars.SOM1surface[site].TransferCarbon(SiteVars.SOM2[site], netCFlow);

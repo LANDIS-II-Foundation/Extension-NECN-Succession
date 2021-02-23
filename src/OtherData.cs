@@ -24,7 +24,7 @@ namespace Landis.Extension.Succession.NECN
 
         // Maximum amount of structural material that will decompose in grams of carbon
         // per square meter (g C /m2).
-        public const double MaxStructuralC = 5000; //STRMAX(1) and (2)
+        // public const double MaxStructuralC = 5000; //STRMAX(1) and (2)
 
         // P2CO2 & P3CO2 - Controls flow from soil organic matter with intermediate turnover
         // to CO2 (fraction of C lost as CO2 during decomposition).

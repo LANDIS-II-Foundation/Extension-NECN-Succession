@@ -196,7 +196,8 @@ namespace Landis.Extension.Succession.NECN
                 if (this.Type == LayerType.Surface) anerb = 1.0; // No anaerobic effect on surface material
 
                 //Compute total C flow out of structural in layer
-                double totalCFlow = System.Math.Min(this.Carbon, OtherData.MaxStructuralC)
+                double totalCFlow = //System.Math.Min(this.Carbon, OtherData.MaxStructuralC)
+                                this.Carbon
                                 * SiteVars.DecayFactor[site]
                                 //* OtherData.LitterParameters[(int)this.Type].DecayRateStrucC
                                 // v6:  Replace the fixed value (0.39) with the user input value for surficial C decay
@@ -218,6 +219,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         // --------------------------------------------------
+        // Only wood contains lignin
         public void DecomposeLignin(double totalCFlow, ActiveSite site)
         {
             double carbonToSOM1;    //Net C flow to SOM1
@@ -348,13 +350,15 @@ namespace Landis.Extension.Succession.NECN
                     if (this.Type == LayerType.Surface)
                     {
                         co2loss = totalCFlow * OtherData.MetabolicToCO2Surface;
-                        this.Respiration(co2loss, site, true);
+                        //this.Respiration(co2loss, site, true);
                     }
                     else
                     {
                         co2loss = totalCFlow * OtherData.MetabolicToCO2Soil;
-                        this.Respiration(co2loss, site, false);
+                        //this.Respiration(co2loss, site, false);
                     }
+
+                    this.Respiration(co2loss, site, false);  //SURFACE DECAY ALSO COUNTED AS SOIL RESPIRATION (Shih-Chieh Chang)
                     //PlugIn.ModelCore.UI.WriteLine("BeforeResp.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
                     //PlugIn.ModelCore.UI.WriteLine("AfterResp.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
 
