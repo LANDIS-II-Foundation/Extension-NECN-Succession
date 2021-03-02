@@ -64,7 +64,7 @@ namespace Landis.Extension.Succession.NECN
         }
         
         /// <summary>
-        /// Calculate coarse and fine roots based on aboveground wood and leaf biomass.
+        /// Calculate coarse and fine roots biomass or NPP based on aboveground wood and leaf biomass.
         /// </summary>
         public static double CalculateCoarseRoot(ICohort cohort, double wood)
         {

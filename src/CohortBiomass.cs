@@ -466,6 +466,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.BGNPPcarbon[site] += NPPcoarseRoot + NPPfineRoot;
             SiteVars.MonthlyAGNPPcarbon[site][Main.Month] += NPPwood + NPPleaf;
             SiteVars.MonthlyBGNPPcarbon[site][Main.Month] += NPPcoarseRoot + NPPfineRoot;
+            SiteVars.MonthlySoilResp[site][Main.Month] += (NPPcoarseRoot + NPPfineRoot) * 0.53/0.47;
+
 
             //if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             //{
