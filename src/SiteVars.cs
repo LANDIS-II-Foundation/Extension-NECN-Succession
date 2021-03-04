@@ -85,7 +85,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlymineralN;
         private static ISiteVar<double> frassC;
         private static ISiteVar<double> lai;
-        private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. 
+        //private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. 
         private static ISiteVar<int> dryDays;
 
         public static ISiteVar<double> AnnualNEE;
@@ -104,6 +104,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> FlamingConsumption;
         public static ISiteVar<double> AnnualClimaticWaterDeficit; //Annual soil moisture calculation, defined as pet - aet
         public static ISiteVar<double> AnnualPotentialEvapotranspiration; //PET
+        public static ISiteVar<double> AnnualWaterBalance; //Annual soil moisture calculation, defined as pet - aet
         public static ISiteVar<double[]> MonthlySoilResp;
 
 
@@ -193,7 +194,7 @@ namespace Landis.Extension.Succession.NECN
             monthlymineralN     = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             frassC              = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             lai                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            annualPPT_AET       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            AnnualWaterBalance       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualClimaticWaterDeficit  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualPotentialEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             SmolderConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -345,7 +346,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.ResorbedN[site] = 0.0;
             SiteVars.FrassC[site] = 0.0;
             SiteVars.LAI[site] = 0.0;
-            SiteVars.AnnualPPT_AET[site] = 0.0;
+            SiteVars.AnnualWaterBalance[site] = 0.0;
             SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
             SiteVars.AnnualPotentialEvapotranspiration[site] = 0.0;
             SiteVars.WoodMortality[site] = 0.0;
@@ -995,21 +996,21 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of Annual Water Budget (ppt - AET)
+        /// A summary of Annual Water Budget (PPT - AET)
         /// </summary>
-        public static ISiteVar<double> AnnualPPT_AET
-        {
-            get
-            {
-                return annualPPT_AET;
-            }
-            set
-            {
-                annualPPT_AET = value;
-            }
+        //public static ISiteVar<double> AnnualWaterBalance
+        //{
+        //    get
+        //    {
+        //        return annualPPT_AET;
+        //    }
+        //    set
+        //    {
+        //        annualPPT_AET = value;
+        //    }
 
 
-        }
+        //}
         /// <summary>
         /// A summary of Soil Moisture (PET - AET)
         /// </summary>

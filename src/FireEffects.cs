@@ -132,7 +132,17 @@ namespace Landis.Extension.Succession.NECN
             // PlugIn.ModelCore.UI.WriteLine("   Calculating fire induced layer reductions. FineLitter={0}, Wood={1}, Duff={2}.", ReductionsTable[severity].FineLitterReduction, ReductionsTable[severity].CoarseLitterReduction, ReductionsTable[severity].SOMReduction);
 
             // Structural litter first
-            double fineLitterReduction = ReductionsTable[severity].FineLitterReduction;
+            double fineLitterReduction = 0.0;
+
+            try
+            {
+                fineLitterReduction = ReductionsTable[severity].FineLitterReduction;
+            }
+            catch
+            {
+                PlugIn.ModelCore.UI.WriteLine("   NOTE:  The fire reductions table does not contain an entry for severity {0}.  DEFAULT REDUCTION = 0.", severity);
+                return;
+            }
 
 
             double carbonLoss = SiteVars.SurfaceStructural[site].Carbon * fineLitterReduction;

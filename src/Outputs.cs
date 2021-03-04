@@ -521,7 +521,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (site.IsActive)
                         {
-                            pixel.MapCode.Value = (int)((SiteVars.AnnualPPT_AET[site]));
+                            pixel.MapCode.Value = (int)((SiteVars.AnnualWaterBalance[site]));
                         }
                         else
                         {

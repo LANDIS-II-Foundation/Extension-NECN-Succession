@@ -62,10 +62,7 @@ namespace Landis.Extension.Succession.NECN
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
             Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
-            //Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
-            //PlugIn.ModelCore.UI.WriteLine("SoilWater. WaterInputs={0:0.00}, .", H2Oinputs);
             tave = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
-            //PlugIn.ModelCore.UI.WriteLine("SoilWater. AvgTemp={0:0.00}, .", tave);
             tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
             tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
             PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
@@ -216,7 +213,7 @@ namespace Landis.Extension.Succession.NECN
             double ratioPrecipPET = 0.0;
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
-            SiteVars.AnnualPPT_AET[site] += Precipitation - AET;
+            SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
@@ -488,7 +485,7 @@ namespace Landis.Extension.Succession.NECN
             double ratioPrecipPET = 0.0;
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
-            SiteVars.AnnualPPT_AET[site] += Precipitation - AET;
+            SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
