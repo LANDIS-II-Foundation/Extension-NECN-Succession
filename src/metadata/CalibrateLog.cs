@@ -14,7 +14,7 @@ namespace Landis.Extension.Succession.NECN
         public static string speciesName;
         public static double mortalityAGEwood, mortalityAGEleaf;
         public static double availableWater;
-        public static double actual_LAI, base_lai, seasonal_adjustment;
+        public static double actual_LAI, actual_LAI_tree, base_lai, seasonal_adjustment;
         public static double mineralNalloc, resorbedNalloc;
         public static double limitLAI, limitH20, limitT, limitN;
         public static double maxNPP, maxB, siteB, cohortB, soilTemp;
@@ -41,7 +41,7 @@ namespace Landis.Extension.Succession.NECN
             clog.MortalityTHINwoodBiomass = mortalityBIOwood;
             clog.MortalityTHINleafBiomass = mortalityBIOleaf;
             clog.AvailableWater = availableWater;
-            clog.LAI = actual_LAI;
+            clog.TotalLAI = actual_LAI;
             clog.BaseLAI = base_lai;
             clog.SeaonalAdjustLAI = seasonal_adjustment;
             clog.MineralNalloc = mineralNalloc;
@@ -113,8 +113,11 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "Fraction", Desc = "Seaonal LAI Adjust", Format = "0.00")]
         public double SeaonalAdjustLAI { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = "m2_m-2", Desc = "Leaf Area Index", Format = "0.0")]
-        public double LAI { set; get; }
+        [DataFieldAttribute(Unit = "m2_m-2", Desc = "Total Leaf Area Index", Format = "0.0")]
+        public double TotalLAI { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "m2_m-2", Desc = "Tree Leaf Area Index", Format = "0.0")]
+        public double TreLAI { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = "Fraction", Desc = "Growth Limit LAI", Format = "0.00")]
         public double GrowthLimitLAI { set; get; }

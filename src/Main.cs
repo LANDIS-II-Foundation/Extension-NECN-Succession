@@ -63,10 +63,11 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyAGNPPcarbon[site][Month] = 0.0;
                     SiteVars.MonthlyBGNPPcarbon[site][Month] = 0.0;
                     SiteVars.MonthlyNEE[site][Month] = 0.0;
-                    SiteVars.MonthlyHeterotrophicResp[site][Month] = 0.0;
+                    SiteVars.MonthlyHeteroResp[site][Month] = 0.0;
                     SiteVars.MonthlySoilResp[site][Month] = 0.0;
                     SiteVars.MonthlyStreamN[site][Month] = 0.0;
                     SiteVars.MonthlyLAI[site][Month] = 0.0;
+                    SiteVars.MonthlyLAI_Trees[site][Month] = 0.0;
                     SiteVars.MonthlySoilWaterContent[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);

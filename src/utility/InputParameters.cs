@@ -44,8 +44,8 @@ namespace Landis.Extension.Succession.NECN
         private bool calibrateMode;
         private bool smokeModelOutputs;
         private bool henne_watermode;
-        public WaterType wtype;
-        public double probEstablishAdjust;
+        private WaterType wtype;
+        private double probEstablishAdjust;
         private double atmosNslope;
         private double atmosNintercept;
         private double latitude;
@@ -85,6 +85,9 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<int> maxBiomass;
         
         private List<ISufficientLight> sufficientLight;
+        private Landis.Library.Parameters.Species.AuxParm<bool> grass;
+        private double grassThresholdMultiplier; // W.Hotta 2020.07.07
+        public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
 
         //---------------------------------------------------------------------
@@ -322,6 +325,7 @@ namespace Landis.Extension.Succession.NECN
 
         public Landis.Library.Parameters.Species.AuxParm<int>     SppFunctionalType {get {return sppFunctionalType;}}
         public Landis.Library.Parameters.Species.AuxParm<bool>     NFixer { get {return nFixer;}}
+        public Landis.Library.Parameters.Species.AuxParm<bool> Grass { get { return grass; } }
         public Landis.Library.Parameters.Species.AuxParm<int>     GDDmin     { get { return gddMin; }}
         public Landis.Library.Parameters.Species.AuxParm<int>     GDDmax     { get { return gddMax; }}
         public Landis.Library.Parameters.Species.AuxParm<int>     MinJanTemp { get { return minJanTemp; }}
@@ -1080,6 +1084,13 @@ namespace Landis.Extension.Succession.NECN
         {
             decayRateSOM3 = VerifyRange(newValue, 0.0, 1.0);
         }
+        // --------------------------------------------------------------------
+        // Multiplier to adjust judgement whether a tree-cohort is larger than grass layer
+        // W.Hotta 2020.07.07
+        public void SetGrassThresholdMultiplier(InputValue<double> newValue)
+        {
+            grassThresholdMultiplier = VerifyRange(newValue, 0.0, 10.0);
+        }
         //---------------------------------------------------------------------
         public void SetDenitrif(InputValue<double> newValue)
         {
@@ -1108,6 +1119,7 @@ namespace Landis.Extension.Succession.NECN
 
             sppFunctionalType       = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             nFixer                  = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            grass = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
             gddMin                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             gddMax                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             minJanTemp              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);

@@ -78,9 +78,6 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlyBGNPPC;
         private static ISiteVar<double[]> monthlyNEE;
         private static ISiteVar<double[]> monthlyStreamN;
-        private static ISiteVar<double[]> monthlyLAI;
-        private static ISiteVar<double[]> monthlyHeteroResp;
-        private static ISiteVar<double[]> monthlySoilWaterContent;
         private static ISiteVar<double> totalNuptake;
         private static ISiteVar<double[]> monthlymineralN;
         private static ISiteVar<double> frassC;
@@ -99,13 +96,18 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<string> HarvestPrescriptionName;
         public static ISiteVar<int> HarvestTime;
         public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
-        public static ISiteVar<double> fineFuels;
+        public static ISiteVar<double> FineFuels;
         public static ISiteVar<double> SmolderConsumption;
         public static ISiteVar<double> FlamingConsumption;
         public static ISiteVar<double> AnnualClimaticWaterDeficit; //Annual soil moisture calculation, defined as pet - aet
         public static ISiteVar<double> AnnualPotentialEvapotranspiration; //PET
         public static ISiteVar<double> AnnualWaterBalance; //Annual soil moisture calculation, defined as pet - aet
         public static ISiteVar<double[]> MonthlySoilResp;
+        public static ISiteVar<double[]> MonthlyLAI;
+        public static ISiteVar<double[]> MonthlyLAI_Trees;
+        public static ISiteVar<double[]> MonthlyHeteroResp;
+        public static ISiteVar<double[]> MonthlySoilWaterContent;
+
 
 
         //---------------------------------------------------------------------
@@ -118,7 +120,7 @@ namespace Landis.Extension.Succession.NECN
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<Library.LeafBiomassCohorts.SiteCohorts>();
             biomassCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.BiomassCohorts.ISiteCohorts>.Wrap(cohorts);
             baseCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.AgeOnlyCohorts.ISiteCohorts>.Wrap(cohorts);
-            fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            FineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             
@@ -150,8 +152,9 @@ namespace Landis.Extension.Succession.NECN
             sourceSink          = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
 
             // Other variables
-            monthlyLAI = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            mineralN            = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            MonthlyLAI = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyLAI_Trees = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            mineralN = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             resorbedN           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             waterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -171,8 +174,8 @@ namespace Landis.Extension.Succession.NECN
             monthlyBGNPPC       = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             monthlyNEE          = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             monthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            monthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            monthlySoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlySoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             AnnualNEE           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireCEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireNEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -237,10 +240,11 @@ namespace Landis.Extension.Succession.NECN
                 monthlyBGNPPC[site]           = new double[12];
                 monthlyNEE[site]            = new double[12];
                 monthlyStreamN[site]         = new double[12];
-                monthlyHeteroResp[site]           = new double[12];
+                MonthlyHeteroResp[site]           = new double[12];
                 MonthlySoilResp[site] = new double[12];
-                monthlyLAI[site] = new double[12];
-                monthlySoilWaterContent[site]       = new double[12];
+                MonthlyLAI[site] = new double[12];
+                MonthlyLAI_Trees[site] = new double[12];
+                MonthlySoilWaterContent[site]       = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
             }
@@ -502,17 +506,17 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Fine Fuels biomass
         /// </summary>
-        public static ISiteVar<double> FineFuels
-        {
-            get
-            {
-                return fineFuels;
-            }
-            set
-            {
-                fineFuels = value;
-            }
-        }
+        //public static ISiteVar<double> FineFuels
+        //{
+        //    get
+        //    {
+        //        return fineFuels;
+        //    }
+        //    set
+        //    {
+        //        fineFuels = value;
+        //    }
+        //}
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -858,15 +862,15 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// A summary of heterotrophic respiration, i.e. CO2 loss from decomposition (g C/m2)
         /// </summary>
-        public static ISiteVar<double[]> MonthlyHeterotrophicResp
-        {
-            get {
-                return monthlyHeteroResp;
-            }
-            set {
-                monthlyHeteroResp = value;
-            }
-        }
+        //public static ISiteVar<double[]> MonthlyHeterotrophicResp
+        //{
+        //    get {
+        //        return monthlyHeteroResp;
+        //    }
+        //    set {
+        //        monthlyHeteroResp = value;
+        //    }
+        //}
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Net Ecosystem Exchange (g C/m2), from a flux tower's perspective,
@@ -902,33 +906,33 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// A summary of Monthly LAI
         /// </summary>
-        public static ISiteVar<double[]> MonthlyLAI
-        {
-            get
-            {
-                return monthlyLAI;
-            }
-            set
-            {
-                monthlyLAI = value;
-            }
-        }
+        //public static ISiteVar<double[]> MonthlyLAI
+        //{
+        //    get
+        //    {
+        //        return MonthlyLAI;
+        //    }
+        //    set
+        //    {
+        //        MonthlyLAI = value;
+        //    }
+        //}
         //---------------------------------------------------------------------
 
         /// <summary>
         /// A summary of Monthly SoilWaterContent
         /// </summary>
-        public static ISiteVar<double[]> MonthlySoilWaterContent
-        {
-            get
-            {
-                return monthlySoilWaterContent;
-            }
-            set
-            {
-                monthlySoilWaterContent = value;
-            }
-        }
+        //public static ISiteVar<double[]> MonthlySoilWaterContent
+        //{
+        //    get
+        //    {
+        //        return monthlySoilWaterContent;
+        //    }
+        //    set
+        //    {
+        //        monthlySoilWaterContent = value;
+        //    }
+        //}
         //---------------------------------------------------------------------
 
         /// <summary>

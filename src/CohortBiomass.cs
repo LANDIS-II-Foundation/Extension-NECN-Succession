@@ -616,9 +616,19 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.MonthlyLAI[site][Main.Month] += lai;
 
+            // Chihiro 2021.02.23
+            // Tracking Tree species LAI above grasses
+            if (!SpeciesData.Grass[cohort.Species])
+                SiteVars.MonthlyLAI_Trees[site][Main.Month] += lai;
+
+
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
                 CalibrateLog.actual_LAI = lai;
+                if (!SpeciesData.Grass[cohort.Species])
+                    CalibrateLog.actual_LAI_tree = lai;
+                else
+                    CalibrateLog.actual_LAI_tree = 0;
                 CalibrateLog.base_lai = base_lai;
                 CalibrateLog.seasonal_adjustment = seasonal_adjustment;
                 //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, base_lai, seasonal_adjustment);
@@ -632,11 +642,40 @@ namespace Landis.Extension.Succession.NECN
         private static double calculate_LAI_Competition(ICohort cohort, ActiveSite site)
         {
             double k = -0.14;  // This is the value given for all temperature ecosystems. I started with 0.1
-            double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
-            double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
+                               //double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
+                               //double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
 
-            //if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-            //    Outputs.CalibrateLog.Write("{0:0.00},", monthly_cumulative_LAI);
+            //   Chihiro 2020.01.22
+            //   Competition between cohorts considering understory and overstory interactions
+            //   If the biomass of tree cohort is larger than total grass biomass on the site, 
+            //   monthly_cummulative_LAI should ignore grass LAI.
+            //
+            //   Added GrassThresholdMultiplier (W.Hotta 2020.07.07)
+            //   grassThresholdMultiplier: User defined parameter to adjust relationships between AGB and Hight of the cohort
+            //   default = 1.0
+            //
+            //   if (the cohort is tree species) and (biomass_of_tree_cohort > total_grass_biomass_on_the_site * threshold_multiplier):
+            //     monthly_cummulative_LAI = Monthly_LAI_of_tree_species
+            //   else:
+            //     monthly_cummulative_LAI = Monthly_LAI_of_tree_& grass_species
+            //  
+            double monthly_cumulative_LAI = 0.0;
+            double grassThresholdMultiplier = PlugIn.Parameters.GrassThresholdMultiplier;
+            // PlugIn.ModelCore.UI.WriteLine("TreeLAI={0},TreeLAI={0}", SiteVars.MonthlyLAITree[site][Main.Month], SiteVars.MonthlyLAI[site][Main.Month]); // added (W.Hotta 2020.07.07)
+            // PlugIn.ModelCore.UI.WriteLine("Spp={0},Time={1},Mo={2},cohortBiomass={3},grassBiomass={4},LAI={5}", cohort.Species.Name, PlugIn.ModelCore.CurrentTime, Main.Month + 1, cohort.Biomass, Main.ComputeGrassBiomass(site), monthly_cumulative_LAI); // added (W.Hotta 2020.07.07)
+
+            if (!SpeciesData.Grass[cohort.Species] &&
+                cohort.Biomass > ComputeGrassBiomass(site) * grassThresholdMultiplier)
+            {
+                monthly_cumulative_LAI = SiteVars.MonthlyLAI_Trees[site][Main.Month];
+                // PlugIn.ModelCore.UI.WriteLine("Higher than Sasa");  // added (W.Hotta 2020.07.07)
+            }
+            else
+            {
+                monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
+            }
+
+            double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
 
             return competition_limit;
 
@@ -663,32 +702,19 @@ namespace Landis.Extension.Succession.NECN
             // Ratio_AvailWaterToPET used to be pptprd and WaterLimit used to be pprdwc
             double Ratio_AvailWaterToPET = 0.0;
             double waterContent = SiteVars.SoilFieldCapacity[site] - SiteVars.SoilWiltingPoint[site];
-                //ClimateRegionData.FieldCapacity[ecoregion] - ClimateRegionData.WiltingPoint[ecoregion];  // Difference between two fractions (FC - WP), not the actual water content, per se.
             double tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[Main.Month];
-            
             double H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
-            
             double pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[Main.Month];
-            //PlugIn.ModelCore.UI.WriteLine("pet={0}, waterContent={1}, precip={2}.", pet, waterContent, H2Oinputs);
             
             if (pet >= 0.01)
-            {   //       Trees are allowed to access the whole soil profile -rm 2/97
-                //         pptprd = (avh2o(1) + tmoist) / pet
-               // pptprd = (SiteVars.AvailableWater[site] + H2Oinputs) / pet;  
+            {   
                 Ratio_AvailWaterToPET = (SiteVars.AvailableWater[site] / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
-                //PlugIn.ModelCore.UI.WriteLine("RatioAvailWaterToPET={0}, AvailableWater={1}.", Ratio_AvailWaterToPET, SiteVars.AvailableWater[site]);            
             }
             else Ratio_AvailWaterToPET = 0.01;
 
             //...The equation for the y-intercept (intcpt) is A+B*WC.  A and B
             //     determine the effect of soil texture on plant production based
             //     on moisture.
-
-            //...Old way:
-            //      intcpt = 0.0 + 1.0 * wc
-            //      The second point in the equation is (.8,1.0)
-            //      slope = (1.0-0.0)/(.8-intcpt)
-            //      pprdwc = 1.0+slope*(x-.8)
 
             //PPRPTS naming convention is imported from orginal Century model. Now replaced with 'MoistureCurve' to be more intuitive
             //...New way (with updated naming convention):
@@ -722,10 +748,6 @@ namespace Landis.Extension.Succession.NECN
         {
             //Originally from gpdf.f of CENTURY model
             //It calculates the limitation of soil temperature on aboveground forest potential production.
-            //It is a function and only called by potcrp.f and potfor.f.
-
-            //A1 is temperature. A2~A5 are paramters from tree.100
-
             //...This routine is functionally equivalent to the routine of the
             //     same name, described in the publication:
 
@@ -735,7 +757,6 @@ namespace Landis.Extension.Succession.NECN
             //       Natural Resource Ecology Lab.
             //       Colorado State University
             //       Fort collins, Colorado  80523
-            //...Local variables
 
             double A1 = SiteVars.SoilTemperature[site];
             double A2 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve1;
@@ -752,7 +773,18 @@ namespace Landis.Extension.Succession.NECN
 
             return U1;
         }
-
+        //---------------------------------------------------------------------
+        // Chihiro 2020.01.22
+        public static double ComputeGrassBiomass(ActiveSite site)
+        {
+            double grassTotal = 0;
+            if (SiteVars.Cohorts[site] != null)
+                foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
+                    foreach (ICohort cohort in speciesCohorts)
+                        if (SpeciesData.Grass[cohort.Species])
+                            grassTotal += cohort.WoodBiomass;
+            return grassTotal;
+        }
 
     }
 }

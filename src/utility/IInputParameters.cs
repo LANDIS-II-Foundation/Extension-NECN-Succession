@@ -42,6 +42,7 @@ namespace Landis.Extension.Succession.NECN
         double[] MaximumShadeLAI { get; }
         bool SmokeModelOutputs { get; set; }
         bool SoilWater_Henne { get; set; }
+        double GrassThresholdMultiplier { get; }
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -84,6 +85,7 @@ namespace Landis.Extension.Succession.NECN
 
         Landis.Library.Parameters.Species.AuxParm<int> SppFunctionalType{get;}
         Landis.Library.Parameters.Species.AuxParm<bool> NFixer{get;}
+        Landis.Library.Parameters.Species.AuxParm<bool> Grass { get; }
         Landis.Library.Parameters.Species.AuxParm<int> GDDmin{get;}
         Landis.Library.Parameters.Species.AuxParm<int> GDDmax{get;}
         Landis.Library.Parameters.Species.AuxParm<int> MinJanTemp{get;}
