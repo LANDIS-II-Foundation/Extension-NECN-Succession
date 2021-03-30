@@ -237,6 +237,7 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.limitH20 = limitH20;
                 CalibrateLog.limitT = limitT;
                 CalibrateLog.limitN = limitN;
+                CalibrateLog.limitLAIcompetition = competition_limit; // Chihiro, 2021.03.26: added
                 CalibrateLog.maxNPP = maxNPP;
                 CalibrateLog.maxB = maxBiomass;
                 CalibrateLog.siteB = siteBiomass;
@@ -631,6 +632,7 @@ namespace Landis.Extension.Succession.NECN
                     CalibrateLog.actual_LAI_tree = 0;
                 CalibrateLog.base_lai = base_lai;
                 CalibrateLog.seasonal_adjustment = seasonal_adjustment;
+                CalibrateLog.siteLAI = SiteVars.MonthlyLAI[site][Main.Month]; // Chihiro, 2021.03.26: added
                 //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, base_lai, seasonal_adjustment);
             }
 
