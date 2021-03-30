@@ -105,6 +105,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlySoilResp;
         public static ISiteVar<double[]> MonthlyLAI;
         public static ISiteVar<double[]> MonthlyLAI_Trees;
+        public static ISiteVar<double[]> MonthlyLAI_Grasses; // Chihiro, 2021.03.30: tentative
+        public static ISiteVar<double> MonthlyLAI_GrassesLastMonth; // Chihiro, 2021.03.30: tentative
         public static ISiteVar<double[]> MonthlyHeteroResp;
         public static ISiteVar<double[]> MonthlySoilWaterContent;
 
@@ -154,6 +156,8 @@ namespace Landis.Extension.Succession.NECN
             // Other variables
             MonthlyLAI = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyLAI_Trees = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyLAI_Grasses = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();  // Chihiro, 2021.03.30: tentative
+            MonthlyLAI_GrassesLastMonth = PlugIn.ModelCore.Landscape.NewSiteVar<double>();  // Chihiro, 2021.03.30: tentative
             mineralN = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             resorbedN           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             waterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -244,6 +248,7 @@ namespace Landis.Extension.Succession.NECN
                 MonthlySoilResp[site] = new double[12];
                 MonthlyLAI[site] = new double[12];
                 MonthlyLAI_Trees[site] = new double[12];
+                MonthlyLAI_Grasses[site] = new double[12];
                 MonthlySoilWaterContent[site]       = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();

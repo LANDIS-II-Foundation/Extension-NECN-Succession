@@ -621,6 +621,10 @@ namespace Landis.Extension.Succession.NECN
             // Tracking Tree species LAI above grasses
             if (!SpeciesData.Grass[cohort.Species])
                 SiteVars.MonthlyLAI_Trees[site][Main.Month] += lai;
+            else
+                SiteVars.MonthlyLAI_Grasses[site][Main.Month] += lai; // Chihiro, 2021.03.30: tentative
+                
+
 
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
@@ -674,7 +678,8 @@ namespace Landis.Extension.Succession.NECN
             }
             else
             {
-                monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
+                // monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
+                monthly_cumulative_LAI = SiteVars.MonthlyLAI_Trees[site][Main.Month] + SiteVars.MonthlyLAI_GrassesLastMonth[site]; // Chihiro, 2021.03.30: tentative. trees + grass layer
             }
 
             double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
