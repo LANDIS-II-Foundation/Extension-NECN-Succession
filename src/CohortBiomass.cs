@@ -237,6 +237,7 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.limitH20 = limitH20;
                 CalibrateLog.limitT = limitT;
                 CalibrateLog.limitN = limitN;
+                CalibrateLog.limitLAIcompetition = competition_limit; // Chihiro, 2021.03.26: added
                 CalibrateLog.maxNPP = maxNPP;
                 CalibrateLog.maxB = maxBiomass;
                 CalibrateLog.siteB = siteBiomass;
@@ -620,6 +621,10 @@ namespace Landis.Extension.Succession.NECN
             // Tracking Tree species LAI above grasses
             if (!SpeciesData.Grass[cohort.Species])
                 SiteVars.MonthlyLAI_Trees[site][Main.Month] += lai;
+            else
+                SiteVars.MonthlyLAI_Grasses[site][Main.Month] += lai; // Chihiro, 2021.03.30: tentative
+                
+
 
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
@@ -631,6 +636,7 @@ namespace Landis.Extension.Succession.NECN
                     CalibrateLog.actual_LAI_tree = 0;
                 CalibrateLog.base_lai = base_lai;
                 CalibrateLog.seasonal_adjustment = seasonal_adjustment;
+                CalibrateLog.siteLAI = SiteVars.MonthlyLAI[site][Main.Month]; // Chihiro, 2021.03.26: added
                 //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, base_lai, seasonal_adjustment);
             }
 
@@ -672,7 +678,8 @@ namespace Landis.Extension.Succession.NECN
             }
             else
             {
-                monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
+                // monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
+                monthly_cumulative_LAI = SiteVars.MonthlyLAI_Trees[site][Main.Month] + SiteVars.MonthlyLAI_GrassesLastMonth[site]; // Chihiro, 2021.03.30: tentative. trees + grass layer
             }
 
             double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));

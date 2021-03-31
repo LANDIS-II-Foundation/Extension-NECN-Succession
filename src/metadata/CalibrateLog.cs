@@ -14,9 +14,9 @@ namespace Landis.Extension.Succession.NECN
         public static string speciesName;
         public static double mortalityAGEwood, mortalityAGEleaf;
         public static double availableWater;
-        public static double actual_LAI, actual_LAI_tree, base_lai, seasonal_adjustment;
+        public static double actual_LAI, actual_LAI_tree, base_lai, seasonal_adjustment, siteLAI;
         public static double mineralNalloc, resorbedNalloc;
-        public static double limitLAI, limitH20, limitT, limitN;
+        public static double limitLAI, limitH20, limitT, limitN, limitLAIcompetition;
         public static double maxNPP, maxB, siteB, cohortB, soilTemp;
         public static double actualWoodNPP, actualLeafNPP;
         public static double deltaWood, deltaLeaf;
@@ -41,7 +41,9 @@ namespace Landis.Extension.Succession.NECN
             clog.MortalityTHINwoodBiomass = mortalityBIOwood;
             clog.MortalityTHINleafBiomass = mortalityBIOleaf;
             clog.AvailableWater = availableWater;
-            clog.TotalLAI = actual_LAI;
+            clog.ActualLAI = actual_LAI; // Chihiro, 2021.03.26: renamed
+            clog.TreeLAI = actual_LAI_tree;
+            clog.SiteLAI = siteLAI; // Chihiro, 2021.03.26: added
             clog.BaseLAI = base_lai;
             clog.SeaonalAdjustLAI = seasonal_adjustment;
             clog.MineralNalloc = mineralNalloc;
@@ -52,6 +54,7 @@ namespace Landis.Extension.Succession.NECN
             clog.GrowthLimitN = limitN;
             clog.GrowthLimitSoilWater = limitH20;
             clog.GrowthLimitT = limitT;
+            clog.GrowthLimitLAIcompetition = limitLAIcompetition; // Chihiro, 2021.03.26: added
             clog.MaximumANPP = maxNPP;
             clog.CohortMaximumBiomass = maxB;
             clog.TotalSiteBiomass = siteB;
@@ -113,11 +116,17 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "Fraction", Desc = "Seaonal LAI Adjust", Format = "0.00")]
         public double SeaonalAdjustLAI { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = "m2_m-2", Desc = "Total Leaf Area Index", Format = "0.0")]
-        public double TotalLAI { set; get; }
+        // Chihiro, 2021.03.26: modified from LAI
+        [DataFieldAttribute(Unit = "m2_m-2", Desc = "Actual LAI adjusted by seasonality", Format = "0.0")]
+        public double ActualLAI { set; get; }
         // ********************************************************************
+        // Chihiro, 2021.03.26: added
+        [DataFieldAttribute(Unit = "m2_m-2", Desc = "Site Total LAI above this cohort", Format = "0.0")]
+        public double SiteLAI { set; get; }
+        // ********************************************************************
+        // Chihiro, 2021.03.26: added
         [DataFieldAttribute(Unit = "m2_m-2", Desc = "Tree Leaf Area Index", Format = "0.0")]
-        public double TreLAI { set; get; }
+        public double TreeLAI { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = "Fraction", Desc = "Growth Limit LAI", Format = "0.00")]
         public double GrowthLimitLAI { set; get; }
@@ -130,6 +139,10 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = "Fraction", Desc = "Growth Limit Nitrogen", Format = "0.00")]
         public double GrowthLimitN { set; get; }
+        // ********************************************************************
+        // Chihiro, 2021.03.26: added
+        [DataFieldAttribute(Unit = "Fraction", Desc = "Growth Limit LAI competition", Format = "0.00")]
+        public double GrowthLimitLAIcompetition { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Maximum ANPP")]
         public double MaximumANPP { set; get; }
