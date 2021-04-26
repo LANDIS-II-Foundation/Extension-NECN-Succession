@@ -1,0 +1,8 @@
+﻿SpeciesCode,FunctionalGroupIndex,NitrogenFixer,GDDMinimum,GDDMaximum,MinJanuaryT,MaxDrought,LeafLongevity,Epicormic,LeafLignin,FineRootLignin,WoodLignin,CoarseRootLignin,LeafCN,FineRootCN,WoodCN,CoarseRootCN,FoliageLitterCN,MaximumANPP,MaximumBiomass
+betuerma,1,FALSE,484,2036,-28,0.5,1,FALSE,0.21,0.27,0.2,0.25,24,26,384,50,65,445,18661
+fagucren,2,FALSE,484,2036,-28,0.5,1,FALSE,0.21,0.27,0.2,0.25,24,26,384,50,65,368,28773
+quercris,3,FALSE,1100,4571,-17,0.67,1,TRUE,0.2,0.33,0.23,0.3,22,58,345,113,32,357,16172
+acermono,4,FALSE,1222,3100,-18,0.07,1,FALSE,0.21,0.33,0.19,0.31,25,23,388,50,41,560,10564
+larikaem,5,FALSE,280,2660,-29,0.83,1,FALSE,0.21,0.23,0.31,0.2,30,26,600,50,74,427,35211
+abiesach,6,FALSE,560,2386,-25,0.67,3,FALSE,0.22,0.23,0.31,0.2,44,43,482,84,74,377,17881
+crypjapo,7,FALSE,1445,5477,-13,0.67,3,FALSE,0.27,0.4,0.38,0.35,52,28,380,170,100,496,40350
