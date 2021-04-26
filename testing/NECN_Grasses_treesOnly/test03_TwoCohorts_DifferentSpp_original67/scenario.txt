@@ -1,0 +1,17 @@
+LandisData  Scenario
+
+>>
+>> Date: 2021/04/20
+>> Note: testing grass branch
+>>
+
+Duration		100
+Species   		../input/species_donan_noGrass.txt
+Ecoregions      ../ini/ecoregions_onecell.txt
+EcoregionsMap   ../input/onecell_ID3.img
+CellLength  	100 	<< meters, 100 x 100 m = 1 ha
+
+>> Extension          Initialization File
+"NECN Succession"			../ini/NECN-succession_onecell_original67.txt
+DisturbancesRandomOrder  	yes  	<< optional parameter; default = no
+RandomNumberSeed  			4,357
