@@ -426,7 +426,7 @@ namespace Landis.Extension.Succession.NECN
                 airtemp[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
 
                 avgNPPtc[ecoregion.Index] += SiteVars.MonthlyAGNPPcarbon[site][month] + SiteVars.MonthlyBGNPPcarbon[site][month];
-                avgTotalResp[ecoregion.Index] += SiteVars.MonthlyHeterotrophicResp[site][month];
+                avgTotalResp[ecoregion.Index] += SiteVars.MonthlyHeteroResp[site][month];
                 avgSoilResp[ecoregion.Index] += SiteVars.MonthlySoilResp[site][month];
                 avgNEE[ecoregion.Index] += SiteVars.MonthlyNEE[site][month];
 

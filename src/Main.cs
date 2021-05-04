@@ -63,10 +63,12 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyAGNPPcarbon[site][Month] = 0.0;
                     SiteVars.MonthlyBGNPPcarbon[site][Month] = 0.0;
                     SiteVars.MonthlyNEE[site][Month] = 0.0;
-                    SiteVars.MonthlyHeterotrophicResp[site][Month] = 0.0;
+                    SiteVars.MonthlyHeteroResp[site][Month] = 0.0;
                     SiteVars.MonthlySoilResp[site][Month] = 0.0;
                     SiteVars.MonthlyStreamN[site][Month] = 0.0;
                     SiteVars.MonthlyLAI[site][Month] = 0.0;
+                    SiteVars.MonthlyLAI_Trees[site][Month] = 0.0;
+                    SiteVars.MonthlyLAI_Grasses[site][Month] = 0.0; // Chihiro, 2020.03.30: tentative
                     SiteVars.MonthlySoilWaterContent[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);
@@ -106,6 +108,11 @@ namespace Landis.Extension.Succession.NECN
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
                     else
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
+
+                    // Track the grasses species LAI on the site
+                    // Chihiro 2021.03.30: tentative
+                    SiteVars.MonthlyLAI_GrassesLastMonth[site] = SiteVars.MonthlyLAI_Grasses[site][Month];
+
 
                     WoodLayer.Decompose(site);
                     LitterLayer.Decompose(site);

@@ -550,7 +550,7 @@ namespace Landis.Extension.Succession.NECN
             this.TransferCarbon(SiteVars.SourceSink[site], co2loss);
 
             //Add lost CO2 to monthly heterotrophic respiration
-            SiteVars.MonthlyHeterotrophicResp[site][Main.Month] += co2loss;
+            SiteVars.MonthlyHeteroResp[site][Main.Month] += co2loss;
 
             if(!surface)
                 SiteVars.MonthlySoilResp[site][Main.Month] += co2loss;
