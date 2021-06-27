@@ -10,7 +10,8 @@ using Landis.SpatialModeling;
 namespace Landis.Extension.Succession.NECN
 {
 
-    public enum LayerName {Leaf, FineRoot, Wood, CoarseRoot, Metabolic, Structural, SOM1, SOM2, SOM3, Other};
+    // Chihiro; add grass layer to track dead wood in grass species
+    public enum LayerName { Leaf, FineRoot, Wood, Grass, CoarseRoot, Metabolic, Structural, SOM1, SOM2, SOM3, Other };
     public enum LayerType {Surface, Soil, Other} 
 
     /// <summary>
