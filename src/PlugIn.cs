@@ -431,45 +431,52 @@ namespace Landis.Extension.Succession.NECN
             return modelCore.GenerateUniform() < lightProbability;
 
         }
-        
+
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// Compute the ratio of projected area of nursery logs to the cell area.
+        /// Compute the ratio of projected area (= occupation area) of nursery logs to the grid area.
         /// </summary>
         // W.Hotta & Chihiro;
         //
-        // Assumptions: 
-        //     - all downed logs has the same hight
-        //     - all downed logs has the same hight
-        //     - then, volume can be calculated
+        // Description: 
+        //     - Every SiteVars.CurrentDeadWoodC[site] is downed logs.
+        //     - Only the downed logs (SiteVars.CurrentDeadWoodC[site]) which decay class is between 3 to 5 
+        //       are suitable for establishment and treated as nursery logs.
+        //     - The carbon stocks of the nursery logs are converted to volume 
+        //       using a wood density of each decay class.
+        //     - Then, the volume is converted to the projected area (occupation area) 
+        //       using the mean height of downed logs derived from field data.
+        //         - Cross-section of every downed log are assumed the same elliptical shapes.
         //
         //
         // Psudo-code:
         //
-        // double hight_of_downed_logs      // static value from field observation
-        // double density_of_decay_class_XX // Wood density (g cm^-3) of dead wood for each decay class.
-        //                                  // Decay class 3-5 is suitable for establishment.
-        //                                  // Reference: Unidentified spp category in Table 3 of Ugawa et al. (2012)
-        //                                  //            https://www.ffpri.affrc.go.jp/pubs/bulletin/425/documents/425-2.pdf
-        // double decayClass3AreaRatio      // the amount of downed logs which is suitable for tree establishment
-        //                                  // computed by ComputeNurseryLogC function
-        //
-        // // Compute the area of the downed logs which decay class is XX (XX ranges from 3 to 5)
-        // double Projected_area_of_the_downed_logs
-        //   = 2 * biomass_of_the_downed_logs_which_decay_class_is_XX / (Math.PI * hight_of_downed_logs * density_of_decay_class_XX)
-        //
-        // // Compute the area occupancy of downed logs which decay class is XX
-        // double decayClassXXAreaRatio = Projected_area_of_the_downed_logs / Area_of_the_grid
-        //   
-        // // Compute the sum of area occupancy of decay class 3-5
-        // return Math.Min(1.0, decayClass3AreaRatio + decayClass4AreaRatio + decayClass5AreaRatio) // decayClassAreaRatio should be 0-1
+        //     double hight_of_downed_logs      // static value from field observation  // Units: cm
+        //     double density_of_decay_class_XX // Wood density (g cm^-3) of dead wood for each decay class.
+        //                                      // XX ranges from 3-5
+        //                                      // Decay class 3-5 is suitable for establishment.
+        //                                      //   Reference: Unidentified spp category in Table 3 of Ugawa et al. (2012)
+        //                                      //              https://www.ffpri.affrc.go.jp/pubs/bulletin/425/documents/425-2.pdf
+        //     double decayClassXXAreaRatio     // the amount of downed logs which is suitable for tree establishment
+        //                                      // computed by ComputeNurseryLogC function
+        //                                      // XX ranges from 3-5
+        //     
+        //     // Compute the area of the downed logs which decay class is XX (XX ranges from 3 to 5)
+        //     double Projected_area_of_the_downed_logs
+        //       = 2 * biomass_of_the_downed_logs_which_decay_class_is_XX / (Math.PI * hight_of_downed_logs * density_of_decay_class_XX)
+        //     
+        //     // Compute the area occupancy of downed logs which decay class is XX
+        //     double decayClassXXAreaRatio = Projected_area_of_the_downed_logs / Area_of_the_grid
+        //       
+        //     // Compute the sum of area occupancy of decay class 3-5
+        //     return Math.Min(1.0, decayClass3AreaRatio + decayClass4AreaRatio + decayClass5AreaRatio) // decayClassAreaRatio should be 0-1
         //
         //
         private static double ComputeNurseryLogAreaRatio(ISpecies species, ActiveSite site)
         {
             // Hight of downed logs
-            double hight = 28.64;
+            double hight = 28.64; // Units: cm
 
             // Wood density (g cm^-3) of dead wood for each decay class.
             // Decay class 3-5 is suitable for establishment.
@@ -484,7 +491,7 @@ namespace Landis.Extension.Succession.NECN
             double[] nurseryLogC = ComputeNurseryLogC(site, densityDecayClass0, densityDecayClass3, densityDecayClass4, densityDecayClass5);
 
             // Compute the area ratio in the site of the nursery log occupies.
-            // We assumed that all fallen tree was elliptical.
+            // We assumed that the cross section of all downed logs are elliptical shapes.
             // Variables:
             //   decayClassXAreaRatio (-)
             //   nurseryLogC[X] (gC m^-2)
@@ -508,47 +515,46 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         // W.Hotta & Chihiro; 
         //
-        // Assumptions: 
-        //     - all downed logs has the same hight
-        //     - all downed logs has the same hight
-        //     - then, volume can be calculated
+        // Description: 
+        //     - In the process of decomposition of downed logs, 
+        //       the volume remains the same, only the density changes.
         //
         //
         // Psudo-code:
         //
-        // // Define thresholds to identify decay class
-        // double decayRatio3 = densityDecayClass3 / densityDecayClass0
-        // double decayRatio4 = densityDecayClass4 / densityDecayClass0
-        // double decayRatio5 = densityDecayClass5 / densityDecayClass0
-        //
-        // // Initialize nursery log carbon for each decay class
-        // double decayClass3 = 0.0;
-        // double decayClass4 = 0.0;
-        // double decayClass5 = 0.0;
-        //
-        // // Update the amount of carbon for each decayClass
-        // for (int i = 0; i < SiteVars.CurrentDeadWoodC[site].Length; i++):
-        //     // Compute the ratio of the current dead wood C to the origindal dead wood carbon
-        //     double decayRatio = SiteVars.CurrentDeadWoodC[site][i] / SiteVars.OriginalDeadWoodC[site][i];
-        //
-        //     // Identify the decay class of the current dead wood carbon 
-        //     // and update the amount of C of each decay class
-        //     if (decayRatio >= decayRatio4) and (decayRatio < decayRatio3):
-        //         decayClass3 += SiteVars.CurrentDeadWoodC[site][i]
-        //     elif (decayRatio >= decayRatio5) and (decayRatio < decayRatio4):
-        //         decayClass4 += SiteVars.CurrentDeadWoodC[site][i]
-        //     elif decayRatio < decayRatio5:
-        //         decayClass5 += SiteVars.CurrentDeadWoodC[site][i]
-        //
-        // return new double[3] { decayClass3, decayClass4, decayClass5 }
+        //     // Define thresholds to identify decay class
+        //     double retentionRatioThreshold3 = densityDecayClass3 / densityDecayClass0
+        //     double retentionRatioThreshold4 = densityDecayClass4 / densityDecayClass0
+        //     double retentionRatioThreshold5 = densityDecayClass5 / densityDecayClass0
+        //     
+        //     // Initialize nursery log carbon for each decay class
+        //     double decayClass3 = 0.0;
+        //     double decayClass4 = 0.0;
+        //     double decayClass5 = 0.0;
+        //     
+        //     // Update the amount of carbon for each decayClass
+        //     for (int i = 0; i < SiteVars.CurrentDeadWoodC[site].Length; i++):
+        //         // Compute the ratio of the current dead wood C to the origindal dead wood carbon (i.e. the amount of carbon just after the focused dead wood was generated.)
+        //         double retentionRatio = SiteVars.CurrentDeadWoodC[site][i] / SiteVars.OriginalDeadWoodC[site][i];
+        //     
+        //         // Identify the decay class of the current dead wood carbon 
+        //         // and update the amount of C of each decay class
+        //         if (retentionRatio >= retentionRatioThreshold4) and (retentionRatio < retentionRatioThreshold3):
+        //             decayClass3 += SiteVars.CurrentDeadWoodC[site][i]
+        //         elif (retentionRatio >= retentionRatioThreshold5) and (retentionRatio < retentionRatioThreshold4):
+        //             decayClass4 += SiteVars.CurrentDeadWoodC[site][i]
+        //         elif retentionRatio < retentionRatioThreshold5:
+        //             decayClass5 += SiteVars.CurrentDeadWoodC[site][i]
+        //     
+        //     return new double[3] { decayClass3, decayClass4, decayClass5 }
         //
         //
         private static double[] ComputeNurseryLogC(ActiveSite site, double densityDecayClass0, double densityDecayClass3, double densityDecayClass4, double densityDecayClass5)
         {
             // Define thresholds to identify decay class
-            double decayRatio3 = densityDecayClass3 / densityDecayClass0;
-            double decayRatio4 = densityDecayClass4 / densityDecayClass0;
-            double decayRatio5 = densityDecayClass5 / densityDecayClass0;
+            double retentionRatioThreshold3 = densityDecayClass3 / densityDecayClass0;
+            double retentionRatioThreshold4 = densityDecayClass4 / densityDecayClass0;
+            double retentionRatioThreshold5 = densityDecayClass5 / densityDecayClass0;
 
             // Initialize nursery log carbon for each decay class
             double decayClass3 = 0.0;
@@ -559,19 +565,19 @@ namespace Landis.Extension.Succession.NECN
             for (int i = 0; i < SiteVars.CurrentDeadWoodC[site].Length; i++)
             {
                 // Compute the ratio of the current dead wood C to the origindal dead wood C
-                double decayRatio = SiteVars.CurrentDeadWoodC[site][i] / SiteVars.OriginalDeadWoodC[site][i];
+                double retentionRatio = SiteVars.CurrentDeadWoodC[site][i] / SiteVars.OriginalDeadWoodC[site][i];
                 // PlugIn.ModelCore.UI.WriteLine("decayRatio:{0},{1}", PlugIn.ModelCore.CurrentTime, decayRatio);
 
-                // Identify the decay class of the current dead wood carbon & update the amount of C of each decay class
-                if (decayRatio >= decayRatio4 & decayRatio < decayRatio3)
+                // Identify the decay class of the current dead wood carbon & update the amount of C of each decay class (i.e. the amount of carbon just after the focused dead wood was generated.)
+                if (retentionRatio >= retentionRatioThreshold4 & retentionRatio < retentionRatioThreshold3)
                 {
                     decayClass3 += SiteVars.CurrentDeadWoodC[site][i];
                 }
-                else if (decayRatio >= decayRatio5 & decayRatio < decayRatio4)
+                else if (retentionRatio >= retentionRatioThreshold5 & retentionRatio < retentionRatioThreshold4)
                 {
                     decayClass4 += SiteVars.CurrentDeadWoodC[site][i];
                 }
-                else if (decayRatio < decayRatio5)
+                else if (retentionRatio < retentionRatioThreshold5)
                 {
                     decayClass5 += SiteVars.CurrentDeadWoodC[site][i];
                 }
