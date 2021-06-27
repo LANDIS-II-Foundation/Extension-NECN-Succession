@@ -223,6 +223,24 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SurfaceDeadWood[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;
 
+            // Reduce carbon from CWD
+            // Chihiro; 2020.01.20
+            SiteVars.OriginalDeadWoodC[site][PlugIn.ModelCore.CurrentTime - 1] -= carbonLoss;
+            SiteVars.CurrentDeadWoodC[site][PlugIn.ModelCore.CurrentTime - 1] -= carbonLoss;
+
+
+            // Surface dead wood of grass species
+            // Chihiro; 2020.08.26
+            carbonLoss = Math.Round(SiteVars.SurfaceDeadGrass[site].Carbon * woodLossMultiplier, 2);
+            nitrogenLoss = Math.Round(SiteVars.SurfaceDeadGrass[site].Nitrogen * woodLossMultiplier, 2);
+
+            SiteVars.SurfaceDeadGrass[site].Carbon -= carbonLoss;
+            SiteVars.SourceSink[site].Carbon += carbonLoss;
+
+            SiteVars.SurfaceDeadGrass[site].Nitrogen -= nitrogenLoss;
+            SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
+
+
             // Soil Organic Matter (Duff)
 
             carbonLoss = Math.Round(SiteVars.SOM1surface[site].Carbon * som_Multiplier, 2);
