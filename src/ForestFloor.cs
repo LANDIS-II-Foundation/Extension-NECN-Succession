@@ -24,14 +24,24 @@ namespace Landis.Extension.Succession.NECN
                                     ActiveSite site)
         {
         
-            if(woodBiomass > 0)
-            WoodLayer.PartitionResidue(woodBiomass,  
-                            FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate,
-                            SpeciesData.WoodCN[species], 
-                            SpeciesData.WoodLignin[species], 
-                            LayerName.Wood,
-                            LayerType.Surface,
-                            site);
+        // Swich layer name according to the species; Chihiro
+            LayerName lname;
+            if (species.Name == "sasa_spp")
+            {
+                lname = LayerName.Grass;
+            }
+            else
+            {
+                lname = LayerName.Wood;
+            }
+            if (woodBiomass > 0)
+                WoodLayer.PartitionResidue(woodBiomass,
+                                FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate,
+                                SpeciesData.WoodCN[species],
+                                SpeciesData.WoodLignin[species],
+                                lname, //LayerName.Wood,
+                                LayerType.Surface,
+                                site);
             
         }
 
