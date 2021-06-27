@@ -235,6 +235,40 @@ namespace Landis.Extension.Succession.NECN
             return finalShade;
         }
         //---------------------------------------------------------------------
+        
+
+        /// <summary>
+        /// Compute site shade above the grass species
+        /// </summary>
+        // Chihiro 2020.01.22
+        //
+        // Description:
+        //     We just copied ComputeShade method and replaced SiteVars.LAI[site] to SiteVars.LAITree[site]
+        //     to ignore grass species.
+        //
+        public static byte ComputeShadeTree(ActiveSite site)
+        {
+            IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+            byte finalShade = 0;
+            if (!ecoregion.Active)
+                return 0;
+            for (byte shade = 5; shade >= 1; shade--)
+            {
+                if (PlugIn.ShadeLAI[shade] <= 0)
+                {
+                    string mesg = string.Format("Maximum LAI has not been defined for shade class {0}", shade);
+                    throw new System.ApplicationException(mesg);
+                }
+                if (SiteVars.LAITree[site] >= PlugIn.ShadeLAI[shade])
+                {
+                    finalShade = shade;
+                    break;
+                }
+            }
+            return finalShade;
+        }
+        //---------------------------------------------------------------------
+
 
         protected override void InitializeSite(ActiveSite site)
         {
@@ -400,14 +434,73 @@ namespace Landis.Extension.Succession.NECN
         /// germinate/resprout.
         /// This is a Delegate method to base succession.
         /// </summary>
+        /// 
+        // W.Hotta and Chihiro modified
+        // 
+        // Description:
+        //     - Modify light probability based on the amount of nursery log on the site
+        //
+        //
+        // Psudo-code:
+        // 
+        //     double siteShade = site shade calculated by original NECN // This siteShade includes both tree and grass species
+        //     double siteShadeTree = ComputeShadeTree(site)             // Only tree species, excluding grass species
+        //     bool isSufficientlight = false
+        //     
+        //     double lightProbability = light probability of original NECN // This lightProbability includes both tree and grass species
+        //     double lightProbabilityTree = light probability ignoring grass layer
+        //     bool found = false
+        //     
+        //     int bestShadeClass = 0      // the best shade class for the species which is used for 
+        //     string regenType = 'failed' // Identify where the cohort established
+        //                                 // 'failed', 'nlog', or 'surface'
+        //     
+        //     // Compute the light probabilities on the site
+        //     foreach lights in sufficientLight:
+        //         identify lightProbability, lightProbabilityTree, and bestShadeClass for the species on the site
+        //     
+        //     // Compute the availability of nursery log on the site (nurseryLogAvailability)
+        //     double nurseryLogAvailabilityModifier = 1.0;                    // user defined tuning parameter
+        //     double nurseryLogAvailability = nurseryLogAvailabilityModifier 
+        //                                     * ComputeNurseryLogAreaRatio(species, site);
+        //     
+        //     // Determine if the species can establish or not
+        //     if The species is CWD-dependent: (Case 1)
+        //         if there is sufficient light above grass layer & enough nursery logs:
+        //             // establish on the nursery log
+        //             isSufficientlight = true
+        //             regenType = 'nlog'
+        //     
+        //     else The species can establish on both forest floors & nursery logs (CWD independent): (Case 2)
+        //         if there is sufficient light on forest floor considering both Tree and Grass species LAI:
+        //             // establish on the surface soil
+        //             isSufficientlight = true
+        //             regenType = 'surface'
+        //             
+        //         else If (1) the site shade is darker than the best shade class for the species and 
+        //                 (2) the light availability above grass species layer meets the species requirement:
+        //             if Threre are sufficient amounts of downed logs:
+        //                 // establish on the nursery log
+        //                 isSufficientlight = true
+        //                 regenType = 'nlog'
+        //
+        //     return isSufficientlight;
+        //
+        //
         public bool SufficientLight(ISpecies species, ActiveSite site)
         {
 
             //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
             byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
+            byte siteShadeTree = ComputeShadeTree(site); // Shade by tree species excluding grass species; Chihiro
+            bool isSufficientlight = false;
 
             double lightProbability = 0.0;
+            double lightProbabilityTree = 0.0; // Light probability considering LAI of tree species only; Chihiro
             bool found = false;
+
+            int bestShadeClass = 0; // the best shade class for the species; Chihiro
+            string regenType = "failed"; // Identify where the cohort established; Chihiro
 
             foreach (ISufficientLight lights in sufficientLight)
             {
@@ -421,6 +514,20 @@ namespace Landis.Extension.Succession.NECN
                     if (siteShade == 3) lightProbability = lights.ProbabilityLight3;
                     if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
                     if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
+                    
+                    // Light probability considering LAI of only tree species; Chihiro
+                    if (siteShadeTree == 0) lightProbabilityTree = lights.ProbabilityLight0;
+                    if (siteShadeTree == 1) lightProbabilityTree = lights.ProbabilityLight1;
+                    if (siteShadeTree == 2) lightProbabilityTree = lights.ProbabilityLight2;
+                    if (siteShadeTree == 3) lightProbabilityTree = lights.ProbabilityLight3;
+                    if (siteShadeTree == 4) lightProbabilityTree = lights.ProbabilityLight4;
+                    if (siteShadeTree == 5) lightProbabilityTree = lights.ProbabilityLight5;
+
+                    // Identify the best shade class for the species; Chihiro
+                    bestShadeClass = ComputeBestShadeClass(lights);
+                    // if (PlugIn.ModelCore.CurrentTime == 1)
+                    //     PlugIn.ModelCore.UI.WriteLine("MaxLight:{0},{1}",species.Name, bestShadeClass);
+
                     found = true;
                 }
             }
@@ -428,7 +535,113 @@ namespace Landis.Extension.Succession.NECN
             if (!found)
                 PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
 
-            return modelCore.GenerateUniform() < lightProbability;
+            
+            // ------------------------------------------------------------------------
+            // Modify light probability based on the amount of nursery log on the site
+            // W.Hotta 2020.01.22
+            //
+            // Compute the availability of nursery log on the site
+            double nurseryLogAvailabilityModifier = 1.0; // tuning parameter
+            double nurseryLogAvailability = nurseryLogAvailabilityModifier * ComputeNurseryLogAreaRatio(species, site);
+            if (OtherData.CalibrateMode)
+            {
+                PlugIn.ModelCore.UI.WriteLine("original_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
+                PlugIn.ModelCore.UI.WriteLine("siteShade:{0},{1}", siteShade, siteShadeTree);
+                PlugIn.ModelCore.UI.WriteLine("siteLAI:{0}", SiteVars.LAI[site]);
+            }
+
+            // Case 1. CWD-dependent species (species which can only be established on nursery log)
+            if (species.Name == "Picejezo" || species.Name == "Picegleh") // TODO: this should be a functional type parameter
+            {
+                lightProbabilityTree *= nurseryLogAvailability;
+                isSufficientlight = modelCore.GenerateUniform() < lightProbabilityTree;
+                if (isSufficientlight) regenType = "nlog";
+            }
+            // Case 2. CWD-independent species (species which can be established on both forest floor & nursery log)
+            else
+            {
+                // 1. Can the cohort establish on forest floor? (lightProbability is considering both Tree and Grass species)
+                if (modelCore.GenerateUniform() < lightProbability)
+                {
+                    isSufficientlight = true;
+                    regenType = "surface";
+                }
+                else
+                {
+                    // 2. If (1) the site shade is darker than the best shade class for the species and 
+                    //       (2) the light availability above grass species layer meets the species requirement,
+                    if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbabilityTree)
+                    {
+                        // 3. check if threre are sufficient amounts of downed logs?
+                        isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
+                        if (isSufficientlight) regenType = "nlog";
+                    }
+                }
+            }
+
+            if (OtherData.CalibrateMode)
+            {
+                PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
+                PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
+                PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
+            }
+            // ---------------------------------------------------------------------
+
+            return isSufficientlight;
+            //return modelCore.GenerateUniform() < lightProbability;
+        }
+        // Original SufficientLight method
+        //public bool SufficientLight(ISpecies species, ActiveSite site)
+        //{
+
+        //    //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
+        //    byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
+
+        //    double lightProbability = 0.0;
+        //    bool found = false;
+
+        //    foreach (ISufficientLight lights in sufficientLight)
+        //    {
+
+        //        //PlugIn.ModelCore.UI.WriteLine("Sufficient Light:  ShadeClass={0}, Prob0={1}.", lights.ShadeClass, lights.ProbabilityLight0);
+        //        if (lights.ShadeClass == species.ShadeTolerance)
+        //        {
+        //            if (siteShade == 0) lightProbability = lights.ProbabilityLight0;
+        //            if (siteShade == 1) lightProbability = lights.ProbabilityLight1;
+        //            if (siteShade == 2) lightProbability = lights.ProbabilityLight2;
+        //            if (siteShade == 3) lightProbability = lights.ProbabilityLight3;
+        //            if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
+        //            if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
+        //            found = true;
+        //        }
+        //    }
+
+        //    if (!found)
+        //        PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
+
+        //    return modelCore.GenerateUniform() < lightProbability;
+
+        //}
+
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Compute the most suitable shade class for the species
+        /// This function identifies the peak of the light establishment table.
+        /// </summary>
+        // Chihiro 2020.01.22
+        //
+        private static int ComputeBestShadeClass(ISufficientLight lights)
+        {
+            int bestShadeClass = 0;
+            double maxProbabilityLight = 0.0;
+            if (lights.ProbabilityLight0 > maxProbabilityLight) bestShadeClass = 0;
+            if (lights.ProbabilityLight1 > maxProbabilityLight) bestShadeClass = 1;
+            if (lights.ProbabilityLight2 > maxProbabilityLight) bestShadeClass = 2;
+            if (lights.ProbabilityLight3 > maxProbabilityLight) bestShadeClass = 3;
+            if (lights.ProbabilityLight4 > maxProbabilityLight) bestShadeClass = 4;
+            if (lights.ProbabilityLight5 > maxProbabilityLight) bestShadeClass = 5;
+            return bestShadeClass;
 
         }
 
