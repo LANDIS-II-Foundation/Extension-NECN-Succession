@@ -115,6 +115,12 @@ namespace Landis.Extension.Succession.NECN
 
 
                     WoodLayer.Decompose(site);
+                    //if (OtherData.CalibrateMode)
+                    //{
+                    //    PlugIn.ModelCore.UI.WriteLine("currentDeadWoodC:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, string.Join(", ", SiteVars.CurrentDeadWoodC[site]));
+                    //    PlugIn.ModelCore.UI.WriteLine("SurfaceDeadWoodC: {0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, SiteVars.SurfaceDeadWood[site].Carbon);
+                    //    PlugIn.ModelCore.UI.WriteLine("SurfaceDeadGrassC:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, SiteVars.SurfaceDeadGrass[site].Carbon);
+                    //}
                     LitterLayer.Decompose(site);
                     SoilLayer.Decompose(site);
 
