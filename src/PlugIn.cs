@@ -466,7 +466,7 @@ namespace Landis.Extension.Succession.NECN
         //     
         //     // Determine if the species can establish or not
         //     if The species is CWD-dependent: (Case 1)
-        //         if there is sufficient light above grass layer & enough nursery logs:
+        //         if there is sufficient light & enough nursery logs:
         //             // establish on the nursery log
         //             isSufficientlight = true
         //             regenType = 'nlog'
@@ -553,8 +553,8 @@ namespace Landis.Extension.Succession.NECN
             // Case 1. CWD-dependent species (species which can only be established on nursery log)
             if (species.Name == "Picejezo" || species.Name == "Picegleh") // TODO: this should be a functional type parameter
             {
-                lightProbabilityTree *= nurseryLogAvailability;
-                isSufficientlight = modelCore.GenerateUniform() < lightProbabilityTree;
+                lightProbability *= nurseryLogAvailability;
+                isSufficientlight = modelCore.GenerateUniform() < lightProbability;
                 if (isSufficientlight) regenType = "nlog";
             }
             // Case 2. CWD-independent species (species which can be established on both forest floor & nursery log)
