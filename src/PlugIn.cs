@@ -451,7 +451,7 @@ namespace Landis.Extension.Succession.NECN
         //     double lightProbabilityTree = light probability ignoring grass layer
         //     bool found = false
         //     
-        //     int bestShadeClass = 0      // the best shade class for the species which is used for 
+        //     int bestShadeClass = 0      // the most suitable shade class for the species 
         //     string regenType = 'failed' // Identify where the cohort established
         //                                 // 'failed', 'nlog', or 'surface'
         //     
@@ -648,7 +648,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// Compute the ratio of projected area (= occupation area) of nursery logs to the grid area.
+        /// Compute the ratio of projected area (= occupancy area) of nursery logs to the grid area.
         /// </summary>
         // W.Hotta & Chihiro;
         //
@@ -660,7 +660,7 @@ namespace Landis.Extension.Succession.NECN
         //       using a wood density of each decay class.
         //     - Then, the volume is converted to the projected area (occupation area) 
         //       using the mean height of downed logs derived from field data.
-        //         - Cross-section of every downed log are assumed the same elliptical shapes.
+        //         - The shape of downed logs were assumed to be an elliptical cylinder
         //
         //
         // Psudo-code:
@@ -704,7 +704,7 @@ namespace Landis.Extension.Succession.NECN
             double[] nurseryLogC = ComputeNurseryLogC(site, densityDecayClass0, densityDecayClass3, densityDecayClass4, densityDecayClass5);
 
             // Compute the area ratio in the site of the nursery log occupies.
-            // We assumed that the cross section of all downed logs are elliptical shapes.
+            // The shape of downed logs were assumed to be an elliptical cylinder
             // Variables:
             //   decayClassXAreaRatio (-)
             //   nurseryLogC[X] (gC m^-2)
