@@ -37,7 +37,57 @@ namespace Landis.Extension.Succession.NECN
             this.carbon = 0.0;
             this.nitrogen = 0.0;
 
-            this.decayValue = 0.0;
+            // Initial decay value of Wood is set to mean decay rate of all tree species.
+            // 
+            // 
+            // if this.name is LayerName.Wood:
+            //     double decayvalue = 0.0
+            //     double N_of_species = len(sppnames)
+            //     // Compute mean wood decay rate
+            //     for sppname in tree-sppnames:
+            //         decayrate += decayrate(sppname)
+            //     this.decayVlaue = decayvalue / N_of_species
+            //
+            // elif this.name is LayerName.Grass:
+            //     double decayvalue = 0.0
+            //     double N_of_species = len(sppnames)
+            //     // Compute mean wood decay rate
+            //     for sppname in grass-sppnames:
+            //         decayrate += decayrate(sppname)
+            //     this.decayVlaue = decayvalue / N_of_species
+            //
+            // else:
+            //     this.decayValue = 0.0
+            //
+            if (this.name == LayerName.Wood)
+            {
+                // Compute mean decay value
+                double decayvalue = 0.0;
+                double n_of_species = PlugIn.ModelCore.Species.Count;
+                foreach (ISpecies species in PlugIn.ModelCore.Species)
+                {
+                    if (species.Name != "sasa_spp")
+                        decayvalue += FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate;
+                }
+                this.decayValue = decayvalue / n_of_species;
+            }
+            else if (this.name == LayerName.Grass)
+            {
+                // Compute mean decay value
+                double decayvalue = 0.0;
+                double n_of_species = PlugIn.ModelCore.Species.Count;
+                foreach (ISpecies species in PlugIn.ModelCore.Species)
+                {
+                    if (species.Name == "sasa_spp")
+                        decayvalue += FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate;
+                }
+                this.decayValue = decayvalue / n_of_species;
+            }
+            else
+            {
+                this.decayValue = 0.0;
+            }
+            //this.decayValue = 0.0;
             this.fractionLignin = 0.0;
 
             this.netMineralization = 0.0;
