@@ -228,7 +228,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DeadWoodTemperature[site] = CalculateDeadWoodTemp(tmin, tmax, liveBiomass, month); // Added by W.Hotta (2020.10.25)
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
-            SiteVars.DecayFactorDeadWood[site] = CalculateDeadWoodDecayFactor((int)OtherData.WType, SiteVars.DeadWoodTemperature[site], relativeWaterContent, ratioPrecipPET, month); // Added by W.Hotta (2020.10.25)
+            SiteVars.DecayFactorDeadWood[site] = CalculateDeadWoodDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.DeadWoodTemperature[site], soilWaterContent, ratioPrecipPET, month); // Added by W.Hotta (2020.10.25)
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
             return;
