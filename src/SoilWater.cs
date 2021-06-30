@@ -226,7 +226,9 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
 
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
+            SiteVars.DeadWoodTemperature[site] = CalculateDeadWoodTemp(tmin, tmax, liveBiomass, month); // Added by W.Hotta (2020.10.25)
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
+            SiteVars.DecayFactorDeadWood[site] = CalculateDeadWoodDecayFactor((int)OtherData.WType, SiteVars.DeadWoodTemperature[site], relativeWaterContent, ratioPrecipPET, month); // Added by W.Hotta (2020.10.25)
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
             return;
@@ -645,6 +647,83 @@ namespace Landis.Extension.Succession.NECN
             return r;
         }
         //---------------------------------------------------------------------------
+
+        // Added by W.Hotta (2020.10.25) ---------------------------------------------------------------------------
+
+        private static double CalculateDeadWoodDecayFactor(int idef, double DeadWoodTemp, double rwc, double ratioPrecipPET, int month)
+        {
+            // Decomposition factor relfecting the effects of soil temperature and moisture on decomposition
+            // Irrigation is zero for natural forests
+            double decayFactor = 0.0;   //represents defac in the original program defac.f
+            double W_Decomp = 0.0;      //Water effect on decomposition
+
+            //...where
+            //      soilTemp;        //Soil temperature
+            //      T_Decomp;     //Effect of soil temperature on decomposition
+            //      W_Decomp;     //Effect of soil moisture on decompostion
+            //      rwcf[10];     //Initial relative water content for 10 soil layers
+            //      avh2o;        //Water available to plants for growth in soil profile
+            //      precipitation;       //Precipitation of current month
+            //      irract;       //Actual amount of irrigation per month (cm H2O/month)
+            //      pet;          //Monthly potential evapotranspiration in centimeters (cm)
+
+            //Option selection for wfunc depending on idef
+            //      idef = 0;     // for linear option
+            //      idef = 1;     // for ratio option
+
+
+            if (idef == 0)
+            {
+                if (rwc > 13.0)
+                    W_Decomp = 1.0;
+                else
+                    W_Decomp = 1.0 / (1.0 + 4.0 * System.Math.Exp(-6.0 * rwc));
+            }
+            else if (idef == 1)
+            {
+                if (ratioPrecipPET > 9)
+                    W_Decomp = 1.0;
+                else
+                    W_Decomp = 1.0 / (1.0 + 30.0 * System.Math.Exp(-8.5 * ratioPrecipPET));
+            }
+
+            double tempModifier = T_Decomp_DeadWood(DeadWoodTemp);
+
+            decayFactor = tempModifier * W_Decomp;
+
+            //defac must >= 0.0
+            if (decayFactor < 0.0) decayFactor = 0.0;
+            if (decayFactor > 1.0) decayFactor = 1.0;
+
+            //if (soilTemp < 0 && decayFactor > 0.01)
+            //{
+            //    PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, PET={2:0.00}, MinT={3:0.0}, MaxT={4:0.0}, AveT={5:0.0}, H20={6:0.0}.", Century.Year, month, pet, tmin, tmax, tave, H2Oinputs);
+            //    PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, DecayFactor={2:0.00}, tempFactor={3:0.00}, waterFactor={4:0.00}, ratioPrecipPET={5:0.000}, soilT={6:0.0}.", Century.Year, month, decayFactor, tempModifier, W_Decomp, ratioPrecipPET, soilTemp);
+            //}
+
+            return decayFactor;   //Combination of water and temperature effects on decomposition
+        }
+
+        // Added by W.Hotta (2020.10.25) ---------------------------------------------------------------------------
+        private static double T_Decomp_DeadWood(double DeadWoodTemp)
+        {
+            //Originally from tcalc.f
+            //This function computes the effect of temperature on decomposition.
+            //It is an exponential function.  Older versions of Century used a density function.
+            //Created 10/95 - rm
+
+
+            double Teff0 = OtherData.TemperatureEffectIntercept;
+            double Teff1 = OtherData.TemperatureEffectSlope;
+            double Teff2 = OtherData.TemperatureEffectExponent;
+
+            double r = Teff0 + (Teff1 * System.Math.Exp(Teff2 * DeadWoodTemp));
+
+            return r;
+        }
+
+        //---------------------------------------------------------------------------
+
         private static double CalculateAnaerobicEffect(double drain, double ratioPrecipPET, double pet, double tave)
         {
 
@@ -714,6 +793,31 @@ namespace Landis.Extension.Succession.NECN
 
             return soilTemp;
         }
+
+        // Added by W.Hotta (2020.10.25) --------------------------------------------------------------------------
+        // In calcuration of DeadWoodTemp, litterBiomass and grass layer biomass should be ignored.
+        private static double CalculateDeadWoodTemp(double tmin, double tmax, double liveBiomass, int month)
+        {
+            // ----------- Calculate DeadWood Temperature -----------
+            double bio = Math.Max(0, liveBiomass - 3000); // 3000 is a tuning parameter.
+            bio = Math.Min(bio, 600.0);
+
+            //...Maximum temperature
+            double maxDeadWoodTemp = tmax + (25.4 / (1.0 + 18.0 * Math.Exp(-0.20 * tmax))) * (Math.Exp(OtherData.EffectBiomassMaxSurfT * bio) - 0.13);
+
+            //...Minimum temperature
+            double minDeadWoodTemp = tmin + OtherData.EffectBiomassMinSurfT * bio - 1.78;
+
+            //...Average surface temperature
+            //...Note: soil temperature used to calculate potential production does not
+            //         take into account the effect of snow (AKM)
+            double DeadWoodTemp = (maxDeadWoodTemp + minDeadWoodTemp) / 2.0;
+
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, Soil Temperature = {1}.", month+1, soilTemp);
+
+            return DeadWoodTemp;
+        }
+
         //--------------------------------------------------------------------------
         public static void Leach(Site site, double baseFlow, double stormFlow)
         {
