@@ -536,14 +536,18 @@ namespace Landis.Extension.Succession.NECN
             if (!found)
                 PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
 
-            
+
             // ------------------------------------------------------------------------
             // Modify light probability based on the amount of nursery log on the site
             // W.Hotta 2020.01.22
             //
             // Compute the availability of nursery log on the site
-            double nurseryLogAvailabilityModifier = 1.0; // tuning parameter
-            double nurseryLogAvailability = nurseryLogAvailabilityModifier * ComputeNurseryLogAreaRatio(species, site);
+            //   Option1: function type is linear
+            // double nurseryLogAvailabilityModifier = 1.0; // tuning parameter
+            // double nurseryLogAvailability = nurseryLogAvailabilityModifier * ComputeNurseryLogAreaRatio(species, site);
+            //   Option2: function type is power
+            double nurseryLogAvailabilityModifier = 2.0; // tuning parameter (only even)
+            double nurseryLogAvailability = 1 - Math.Pow(ComputeNurseryLogAreaRatio(species, site) - 1, nurseryLogAvailabilityModifier);
             if (OtherData.CalibrateMode)
             {
                 PlugIn.ModelCore.UI.WriteLine("original_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
