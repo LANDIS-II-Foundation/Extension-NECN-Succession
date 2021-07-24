@@ -55,7 +55,6 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.cohortAge = cohort.Age;
                 CalibrateLog.cohortWoodB = cohort.WoodBiomass;
                 CalibrateLog.cohortLeafB = cohort.LeafBiomass;
-                //Outputs.CalibrateLog.Write("{0},{1},{2},{3},{4},{5:0.0},{6:0.0},", PlugIn.ModelCore.CurrentTime, Main.Month + 1, ecoregion.Index, cohort.Species.Name, cohort.Age, cohort.WoodBiomass, cohort.LeafBiomass);
             } 
            
 
@@ -158,7 +157,6 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.deltaLeaf = deltaLeaf;
                 CalibrateLog.deltaWood = deltaWood;
                 CalibrateLog.WriteLogFile();
-                //Outputs.CalibrateLog.WriteLine("{0:0.00},{1:0.00},{2:0.00},{3:0.00},", deltaWood, deltaLeaf, totalMortality[0], totalMortality[1]);
             }
 
             return deltas;
@@ -174,7 +172,7 @@ namespace Landis.Extension.Succession.NECN
         {
 
             double leafFractionNPP  = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FractionANPPtoLeaf;
-            double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
+            //double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
             double sitelai          = SiteVars.LAI[site];
             double maxNPP           = SpeciesData.Max_ANPP[cohort.Species];
 
@@ -222,7 +220,7 @@ namespace Landis.Extension.Succession.NECN
             if (Double.IsNaN(leafNPP) || Double.IsNaN(woodNPP))
             {
                 PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP = NaN!  Will set to zero.");
-                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, maxBiomass, (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     WoodNPP={2:0.00}, LeafNPP={3:0.00}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, woodNPP, leafNPP);
                 if (Double.IsNaN(leafNPP))
                     leafNPP = 0.0;
@@ -239,16 +237,13 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.limitN = limitN;
                 CalibrateLog.limitLAIcompetition = competition_limit; // Chihiro, 2021.03.26: added
                 CalibrateLog.maxNPP = maxNPP;
-                CalibrateLog.maxB = maxBiomass;
+                CalibrateLog.maxB = SpeciesData.Max_Biomass[cohort.Species];
                 CalibrateLog.siteB = siteBiomass;
                 CalibrateLog.cohortB = (cohort.WoodBiomass + cohort.LeafBiomass);
                 CalibrateLog.soilTemp = SiteVars.SoilTemperature[site];
                 CalibrateLog.actualWoodNPP = woodNPP;
                 CalibrateLog.actualLeafNPP = leafNPP;
-                
-                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},{3:0.00},", limitLAI, limitH20, limitT, limitN);
-                //Outputs.CalibrateLog.Write("{0},{1},{2},{3:0.0},{4:0.0},", maxNPP, maxBiomass, (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
-                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", woodNPP, leafNPP);
+               
             }
                         
             return new double[2]{woodNPP, leafNPP};
@@ -275,11 +270,6 @@ namespace Landis.Extension.Succession.NECN
             double M_AGE_leaf =    cohort.LeafBiomass *  monthAdjust *
                                     Math.Exp((double) cohort.Age / max_age * d) / Math.Exp(d);
 
-            //if (PlugIn.ModelCore.CurrentTime <= 0 &&  SpinupMortalityFraction > 0.0)
-            //{
-            //    M_AGE_wood += cohort.Biomass * SpinupMortalityFraction;
-            //    M_AGE_leaf += cohort.Biomass * SpinupMortalityFraction;
-            //}
 
             M_AGE_wood = Math.Min(M_AGE_wood, cohort.WoodBiomass);
             M_AGE_leaf = Math.Min(M_AGE_leaf, cohort.LeafBiomass);
@@ -298,7 +288,6 @@ namespace Landis.Extension.Succession.NECN
             {
                 CalibrateLog.mortalityAGEleaf = M_AGE_leaf;
                 CalibrateLog.mortalityAGEwood = M_AGE_wood;
-                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", M_AGE_wood, M_AGE_leaf);
             }
 
             return M_AGE;
@@ -362,7 +351,6 @@ namespace Landis.Extension.Succession.NECN
             {
                 CalibrateLog.mortalityBIOwood = M_wood;
                 CalibrateLog.mortalityBIOleaf = M_leaf;
-                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", M_wood, M_leaf);
             }
 
             SiteVars.WoodMortality[site] += (M_wood);
@@ -415,7 +403,7 @@ namespace Landis.Extension.Succession.NECN
             double leafFrac = FunctionalType.Table[SpeciesData.FuncType[species]].FractionANPPtoLeaf;
 
             double B_ACT = SiteVars.ActualSiteBiomass(site);
-            double B_MAX = SpeciesData.Max_Biomass[species]; // B_MAX_Spp[species][ecoregion];
+            double B_MAX = SpeciesData.Max_Biomass[species]; 
 
             //  Initial biomass exponentially declines in response to
             //  competition.
@@ -426,10 +414,6 @@ namespace Landis.Extension.Succession.NECN
             double initialLeafB = initialBiomass * leafFrac;
             double initialWoodB = initialBiomass - initialLeafB;
             double[] initialB = new double[2] { initialWoodB, initialLeafB };
-
-
-
-
             float[] initialWoodLeafBiomass = new float[2] { (float)initialB[0], (float)initialB[1] };
 
             return initialWoodLeafBiomass;
@@ -468,15 +452,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyAGNPPcarbon[site][Main.Month] += NPPwood + NPPleaf;
             SiteVars.MonthlyBGNPPcarbon[site][Main.Month] += NPPcoarseRoot + NPPfineRoot;
             SiteVars.MonthlySoilResp[site][Main.Month] += (NPPcoarseRoot + NPPfineRoot) * 0.53/0.47;
-
-
-            //if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-            //{
-            //    Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", NPPwood, NPPleaf);
-
-            //}
-
-
         }
 
         //--------------------------------------------------------------------------
@@ -488,7 +463,6 @@ namespace Landis.Extension.Succession.NECN
             double mineralNallocation = AvailableN.GetMineralNallocation(cohort);
             double resorbedNallocation = AvailableN.GetResorbedNallocation(cohort, site);
 
-            //double LeafNPP = Math.Max(NPP * leafFractionNPP, 0.002 * cohort.WoodBiomass);  This allowed for Ndemand in winter when there was no leaf NPP
             double LeafNPP = (NPP * leafFractionNPP);
             
             double WoodNPP = NPP * (1.0 - leafFractionNPP); 
@@ -517,7 +491,6 @@ namespace Landis.Extension.Succession.NECN
             {
                 CalibrateLog.mineralNalloc = mineralNallocation;
                 CalibrateLog.resorbedNalloc = resorbedNallocation;
-                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},", mineralNallocation, resorbedNallocation);
             }
 
             return Math.Max(limitN, 0.0);
@@ -565,21 +538,13 @@ namespace Landis.Extension.Succession.NECN
             double woodC = (double) cohort.WoodBiomass * 0.47;
 
             double lai = 0.0;
-            double lai_to_growth = -0.47;  // This is the value given for all biomes in the tree.100 file.
+            double lai_to_growth = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].GrowthLAI;
             double btolai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].BiomassToLAI;
             double klai   = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].KLAI;
             double maxlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MaxLAI;
-            double k = -0.14;  // This is the value given for all temperature ecosystems. 
+            double minlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MinLAI;
             double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
-            /// The competition limit is the relationship of the individual to the total amount of LAI
-            /// As the LAI increase the individual contributes less, limiting the amount of leaf area of the
-            /// The younger cohorts as it reaches the species max. 
-            double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
-
-            double maxBiomass = SpeciesData.Max_Biomass[cohort.Species];
-            maxlai = maxlai*competition_limit; // NewFunction for site biomass;
-
-
+            
             // adjust for leaf on/off
             double seasonal_adjustment = 1.0;
             if (SpeciesData.LeafLongevity[cohort.Species] <= 1.0)
@@ -599,7 +564,7 @@ namespace Landis.Extension.Succession.NECN
             if(base_lai <= 0.0) lai = seasonal_adjustment;
 
             // The minimum LAI to calculate effect is 0.1.
-            if (lai < 0.1) lai = 0.1;
+            if (lai < minlai) lai = minlai;
 
             double LAI_Growth_limit = Math.Max(0.0, 1.0 - Math.Exp(lai_to_growth * lai));
 
@@ -637,7 +602,6 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.base_lai = base_lai;
                 CalibrateLog.seasonal_adjustment = seasonal_adjustment;
                 CalibrateLog.siteLAI = SiteVars.MonthlyLAI[site][Main.Month]; // Chihiro, 2021.03.26: added
-                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", lai, base_lai, seasonal_adjustment);
             }
 
 
@@ -647,9 +611,9 @@ namespace Landis.Extension.Succession.NECN
 
         private static double calculate_LAI_Competition(ICohort cohort, ActiveSite site)
         {
-            double k = -0.14;  // This is the value given for all temperature ecosystems. I started with 0.1
-                               //double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
-                               //double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
+            double k = -0.14;  
+            // This is the value given for all temperature ecosystems. 
+            // The model is relatively insensitive to this parameter ZR 06/01/2021
 
             //   Chihiro 2020.01.22
             //   Competition between cohorts considering understory and overstory interactions
@@ -689,12 +653,11 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------------
-        //... Originally from pprdwc(wc,x,pprpts) of CENTURY
+        //... Originally from CENTURY
 
         //...This funtion returns a value for potential plant production
         //     due to water content.  Basically you have an equation of a
         //     line with a moveable y-intercept depending on the soil type.
-        //     The value passed in for x is ((avh2o(1) + prcurr(month) + irract)/pet)
 
         //     pprpts(1):  The minimum ratio of available water to pet which
         //                 would completely limit production assuming wc=0.

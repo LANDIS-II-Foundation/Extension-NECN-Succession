@@ -239,7 +239,6 @@ namespace Landis.Extension.Succession.NECN
         {            
             if(ANPP[1] <= 0.0)
                 return 0.0;
-                //return 0.01;
              
 
             if (SpeciesData.NFixer[species])  // We fix our own N!
@@ -333,7 +332,6 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.resorbedNused = resorbedNused;
                 CalibrateLog.mineralNused = Nuptake;
                 CalibrateLog.demand_N = totalNdemand;
-                //Outputs.CalibrateLog.Write("{0:0.00},{1:0.00},{2:0.00},", resorbedNused, Nuptake, totalNdemand);
             }
 
         }
