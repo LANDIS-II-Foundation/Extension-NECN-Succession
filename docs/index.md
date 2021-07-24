@@ -11,6 +11,10 @@ The NECN Succession extension was designed to provide total ecosystem accounting
 - [x] Species parameters input as CSV delimited files.
 - [x] Estimate Soil Organic Carbon, Soil Nitrogen, Nitrogen fluxes
 
+# Citation
+
+Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effects of forest harvest intensity in combination with wind disturbance on carbon dynamics in a Lake States mesic landscape. Ecological Modelling 222: 144-153.
+
 # Release Notes
 
 - Latest official release: Version 6.7 — May 2021
@@ -29,10 +33,6 @@ To use NECN, you need:
 # Download
 
 The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/installer/LANDIS-II-V7%20NECN%20Succession%206.7-setup.exe). To install it on your computer, just launch the installer.
-
-# Citation
-
-Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effects of forest harvest intensity in combination with wind disturbance on carbon dynamics in a Lake States mesic landscape. Ecological Modelling 222: 144-153.
 
 # Example Files
 
