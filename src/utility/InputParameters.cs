@@ -83,9 +83,10 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> fineRootCN;
         private Landis.Library.Parameters.Species.AuxParm<int> maxANPP;
         private Landis.Library.Parameters.Species.AuxParm<int> maxBiomass;
-        
+        private Landis.Library.Parameters.Species.AuxParm<bool> grass;  // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
+
         private List<ISufficientLight> sufficientLight;
-        private Landis.Library.Parameters.Species.AuxParm<bool> grass;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
@@ -331,6 +332,9 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<int>     MinJanTemp { get { return minJanTemp; }}
         public Landis.Library.Parameters.Species.AuxParm<double>  MaxDrought { get { return maxDrought; }}
         public Landis.Library.Parameters.Species.AuxParm<double>  LeafLongevity {get {return leafLongevity;}}
+        public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
+
+
         //---------------------------------------------------------------------
         /// <summary>
         /// Can the species resprout epicormically following a fire?
@@ -1047,6 +1051,14 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             maxBiomass[species] = VerifyRange(newValue, 2, 100000);
         }
+
+        public void SetGrowthLAI(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            growthLAI[species] = VerifyRange(newValue, 0.0, 1.0);
+        }
+
+
         //---------------------------------------------------------------------
 
         public void SetAtmosNslope(InputValue<double> newValue)
@@ -1119,7 +1131,7 @@ namespace Landis.Extension.Succession.NECN
 
             sppFunctionalType       = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             nFixer                  = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
-            grass = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            grass                   = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
             gddMin                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             gddMax                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             minJanTemp              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
@@ -1137,6 +1149,7 @@ namespace Landis.Extension.Succession.NECN
             fineRootCN              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             maxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            growthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
 
             maximumShadeLAI = new double[6];
             sufficientLight         = new List<ISufficientLight>();

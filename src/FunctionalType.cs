@@ -19,7 +19,7 @@ namespace Landis.Extension.Succession.NECN
         double KLAI{get;set;}
         double MaxLAI{get;set;}
         double MinLAI { get; set; }
-        double GrowthLAI { get; set; }
+        //double GrowthLAI { get; set; }
         double MoistureCurve2 {get;set;}
         double MoistureCurve3 { get; set; }
         double MonthlyWoodMortality{get;set;}
@@ -51,7 +51,7 @@ namespace Landis.Extension.Succession.NECN
         private double coarseRootFraction;
         private double fineRootFraction;
         private double minLAI;
-        private double growthLAI;
+        //private double growthLAI;
 
         public static FunctionalTypeTable Table;
         
@@ -215,26 +215,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// This variable determines how quickly LAI increases and therefore competition among cohorts.
-        /// Prior default was 0.47, representing extreme competition for small cohorts.
-        /// </summary>
-        public double GrowthLAI
-        {
-            get
-            {
-                return growthLAI;
-            }
-            set
-            {
-                if (value < 0 || value > 1.0)
-                    throw new InputValueException(value.ToString(),
-                        "Growth LAI must be between 0 and 5");
-                growthLAI = value;
-            }
-        }
-
+      
 
         //---------------------------------------------------------------------
         // 'PPRPTS(2)': The effect of water content on the intercept, allows the user to 

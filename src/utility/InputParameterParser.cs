@@ -446,6 +446,8 @@ namespace Landis.Extension.Succession.NECN
                     parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
                     parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
                     parameters.Grass[species] = ReadGrass(row);
+                    parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
+
                 }
             }
             else
@@ -582,7 +584,6 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.CoarseRootFraction = System.Convert.ToDouble(row["CoarseRootFraction"]);
                     funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
                     funcTParms.MinLAI = ReadMinLAI(row);
-                    funcTParms.GrowthLAI = ReadGrowthLAI(row);
 
             }
             //}

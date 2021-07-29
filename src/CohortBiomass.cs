@@ -538,7 +538,7 @@ namespace Landis.Extension.Succession.NECN
             double woodC = (double) cohort.WoodBiomass * 0.47;
 
             double lai = 0.0;
-            double lai_to_growth = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].GrowthLAI;
+            double lai_to_growth = SpeciesData.GrowthLAI[cohort.Species] * -1.0;
             double btolai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].BiomassToLAI;
             double klai   = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].KLAI;
             double maxlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MaxLAI;

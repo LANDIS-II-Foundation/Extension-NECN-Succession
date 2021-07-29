@@ -39,6 +39,7 @@ namespace Landis.Extension.Succession.NECN
 
         // Optional parameters:
         public static Landis.Library.Parameters.Species.AuxParm<bool> Grass;
+        public static Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI;
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
@@ -63,6 +64,7 @@ namespace Landis.Extension.Succession.NECN
             Max_ANPP            = parameters.MaxANPP;
             Max_Biomass         = parameters.MaxBiomass;
             Grass               = parameters.Grass;
+            GrowthLAI           = parameters.GrowthLAI;
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {
