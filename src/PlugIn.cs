@@ -488,7 +488,7 @@ namespace Landis.Extension.Succession.NECN
         //     return isSufficientlight;
         //
         //
-        public bool SufficientLight(ISpecies species, ActiveSite site)
+        public bool SufficientLight(ICohort cohort, ISpecies species, ActiveSite site)
         {
 
             //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
@@ -556,7 +556,7 @@ namespace Landis.Extension.Succession.NECN
             }
 
             // Case 1. CWD-dependent species (species which can only be established on nursery log)
-            if (species.Name == "Picejezo" || species.Name == "Picegleh") // TODO: this should be a functional type parameter
+            if (SpeciesData.Nlog_depend[cohort.Species]) // W.Hotta (2021.08.01)
             {
                 lightProbability *= nurseryLogAvailability;
                 isSufficientlight = modelCore.GenerateUniform() < lightProbability;

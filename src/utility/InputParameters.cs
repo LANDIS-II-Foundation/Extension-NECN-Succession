@@ -86,6 +86,7 @@ namespace Landis.Extension.Succession.NECN
         
         private List<ISufficientLight> sufficientLight;
         private Landis.Library.Parameters.Species.AuxParm<bool> grass;
+        private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
@@ -326,6 +327,7 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<int>     SppFunctionalType {get {return sppFunctionalType;}}
         public Landis.Library.Parameters.Species.AuxParm<bool>     NFixer { get {return nFixer;}}
         public Landis.Library.Parameters.Species.AuxParm<bool> Grass { get { return grass; } }
+        public Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend { get { return nlog_depend; } }
         public Landis.Library.Parameters.Species.AuxParm<int>     GDDmin     { get { return gddMin; }}
         public Landis.Library.Parameters.Species.AuxParm<int>     GDDmax     { get { return gddMax; }}
         public Landis.Library.Parameters.Species.AuxParm<int>     MinJanTemp { get { return minJanTemp; }}
@@ -1120,6 +1122,7 @@ namespace Landis.Extension.Succession.NECN
             sppFunctionalType       = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             nFixer                  = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
             grass = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            nlog_depend = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
             gddMin                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             gddMax                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             minJanTemp              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
