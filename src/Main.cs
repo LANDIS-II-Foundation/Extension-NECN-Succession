@@ -130,15 +130,12 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SourceSink[site].Nitrogen += volatilize;
                     SiteVars.Nvol[site] += volatilize;
 
-                    //if (OtherData.Henne_WaterMode)
-                    //    SoilWaterHenne.Leach(site, baseFlow, stormFlow);
-                    //else
-                        SoilWater.Leach(site, baseFlow, stormFlow);
+                    SoilWater.Leach(site, baseFlow, stormFlow);
 
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyAGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyBGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] += SiteVars.SourceSink[site].Carbon;
-                    SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
+                    //SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
                     //SiteVars.FineFuels[site] = (System.Math.Min(1.0, (double) (PlugIn.ModelCore.CurrentTime - SiteVars.HarvestTime[site]) * 0.1));
                 }
             }

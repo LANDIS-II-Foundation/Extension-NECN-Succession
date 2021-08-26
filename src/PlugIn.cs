@@ -148,9 +148,12 @@ namespace Landis.Extension.Succession.NECN
             //}
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
+            {
                 Main.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
+                SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
+            }
 
-            Outputs.WritePrimaryLogFile(0);
+                Outputs.WritePrimaryLogFile(0);
             Outputs.WriteShortPrimaryLogFile(0);
 
 
