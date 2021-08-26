@@ -186,32 +186,6 @@ namespace Landis.Extension.Succession.NECN
                 };
                 Extension.OutputMetadatas.Add(mapOut_TotalC);
             }
-//            if (LAImapnames != null) //These are new maps for testing and analysis purposes
-//            {
-//                OutputMetadata mapOut_LAI = new OutputMetadata()
-//                {
-//                    Type = OutputType.Map,
-//                    Name = "LAI",
-//                    FilePath = @"century\LAI-{timestep}.gis",  //century
-//                    Map_DataType = MapDataType.Continuous,
-//                   Map_Unit = FieldUnits.g_C_m2, //Not sure
-//                    Visualize = true,
-//                };
-//                Extension.OutputMetadatas.Add(mapOut_LAI);
-//            }
-//            if (ShadeClassmapnames != null)
-//            {
-//                OutputMetadata mapOut_ShadeClass = new OutputMetadata()
-//                {
-//                    Type = OutputType.Map,
-//                    Name = "ShadeClass",
-//                    FilePath = @"century\ShadeClass-{timestep}.gis",  //century
-//                    Map_DataType = MapDataType.Continuous,
-//                   Map_Unit = FieldUnits.g_C_m2, //NOt sure
-//                    Visualize = true,
-//                };
-//                Extension.OutputMetadatas.Add(mapOut_LAI);
-//            }
 
 
             //---------------------------------------

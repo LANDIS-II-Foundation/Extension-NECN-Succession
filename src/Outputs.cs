@@ -17,7 +17,6 @@ namespace Landis.Extension.Succession.NECN
 {
     public class Outputs
     {
-        //public static StreamWriter CalibrateLog;
         public static MetadataTable<MonthlyLog> monthlyLog; 
         public static MetadataTable<PrimaryLog> primaryLog;
         public static MetadataTable<PrimaryLogShort> primaryLogShort;
@@ -470,45 +469,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
         
-        //Write log file for growth and limits
-        //public static void CreateCalibrateLogFile()
-        //{
-        //    string logFileName = "NECN-calibrate-OLD-log.csv";
-        //    PlugIn.ModelCore.UI.WriteLine("******************WARNING************************", logFileName);
-        //    PlugIn.ModelCore.UI.WriteLine("******YOU ARE CURRENTLY IN CALIBRATE MODE********", logFileName);
-        //    PlugIn.ModelCore.UI.WriteLine("*************************************************", logFileName);
-        //    PlugIn.ModelCore.UI.WriteLine("   Opening NECN calibrate log file \"{0}\" ...", logFileName);
-        //    try
-        //    {
-        //        CalibrateLog = new StreamWriter(logFileName);
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        string mesg = string.Format("{0}", err.Message);
-        //        throw new System.ApplicationException(mesg);
-        //    }
-
-        //    CalibrateLog.AutoFlush = true;
-
-        //    CalibrateLog.Write("Year, Month, ClimateRegionIndex, SpeciesName, CohortAge, CohortWoodB, CohortLeafB, ");  // from ComputeChange
-        //    CalibrateLog.Write("MortalityAGEwood, MortalityAGEleaf, ");  // from ComputeAgeMortality
-        //    CalibrateLog.Write("availableWater,");  //from Water_limit
-        //    CalibrateLog.Write("LAI, tlai, rlai,");  // from ComputeChange
-        //    CalibrateLog.Write("mineralNalloc, resorbedNalloc, ");  // from calculateN_Limit
-
-        //    // These three together:
-        //    CalibrateLog.Write("limitLAI, limitH20, limitT, limitN, ");  //from ComputeActualANPP
-        //    CalibrateLog.Write("maxNPP, Bmax, Bsite, Bcohort, soilTemp, ");  //from ComputeActualANPP
-        //    CalibrateLog.Write("actualWoodNPP, actualLeafNPP, ");  //from ComputeActualANPP
-
-        //    CalibrateLog.Write("MortalityBIOwood, MortalityBIOleaf, ");  // from ComputeGrowthMortality
-        //    CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
-        //    CalibrateLog.Write("resorbedNused, mineralNused, Ndemand,");  // from AdjustAvailableN
-        //    CalibrateLog.WriteLine("deltaWood, deltaLeaf, totalMortalityWood, totalMortalityLeaf");  // from ComputeChange
-                        
-            
-
-        //}
         
         public static void WriteMaps()
         {
@@ -531,26 +491,25 @@ namespace Landis.Extension.Succession.NECN
                         outputRaster.WriteBufferPixel();
                     }
             }
-            //AMK: Trying out directly writing maps
-                string pathANPP = MapNames.ReplaceTemplateVars(@"NECN\AG_NPP-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathANPP, PlugIn.ModelCore.Landscape.Dimensions))
+            string pathANPP = MapNames.ReplaceTemplateVars(@"NECN\AG_NPP-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathANPP, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
-                    IntPixel pixel = outputRaster.BufferPixel;
-                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    if (site.IsActive)
                     {
-                        if (site.IsActive)
-                        {
-                            pixel.MapCode.Value = (int)((SiteVars.AGNPPcarbon[site]));
-                        }
-                        else
-                        {
-                            //  Inactive site
-                            pixel.MapCode.Value = 0;
-                        }
-                        outputRaster.WriteBufferPixel();
+                        pixel.MapCode.Value = (int)((SiteVars.AGNPPcarbon[site]));
                     }
-
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
                 }
+
+            }
 
             string path = MapNames.ReplaceTemplateVars(@"NECN\SOMTC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path, PlugIn.ModelCore.Landscape.Dimensions))
@@ -572,26 +531,25 @@ namespace Landis.Extension.Succession.NECN
             }
 
             string path2 = MapNames.ReplaceTemplateVars(@"NECN\SoilN-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                    using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path2, PlugIn.ModelCore.Landscape.Dimensions))
+            using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path2, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                ShortPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
                     {
-                        ShortPixel pixel = outputRaster.BufferPixel;
-                        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
-                        {
-                            if (site.IsActive)
-                            {
-                                pixel.MapCode.Value = (short)(SiteVars.MineralN[site]);
-                            }
-                            else
-                            {
-                                //  Inactive site
-                                pixel.MapCode.Value = 0;
-                            }
-                            outputRaster.WriteBufferPixel();
-                        }
+                        pixel.MapCode.Value = (short)(SiteVars.MineralN[site]);
                     }
-                //}
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+            }
 
-                    string path4 = MapNames.ReplaceTemplateVars(@"NECN\ANEE-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            string path4 = MapNames.ReplaceTemplateVars(@"NECN\ANEE-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path4, PlugIn.ModelCore.Landscape.Dimensions))
                     {
                         ShortPixel pixel = outputRaster.BufferPixel;
@@ -967,13 +925,10 @@ namespace Landis.Extension.Succession.NECN
 
                     +SiteVars.MineralN[site]
 
-                   //+ SiteVars.SurfaceDeadWood[site].Nitrogen
-                   //+ SiteVars.SoilDeadWood[site].Nitrogen
-
                     + SiteVars.SurfaceStructural[site].Nitrogen
                     + SiteVars.SoilStructural[site].Nitrogen
                     + SiteVars.SurfaceMetabolic[site].Nitrogen
-            +SiteVars.SoilMetabolic[site].Nitrogen
+            + SiteVars.SoilMetabolic[site].Nitrogen
 
             + SiteVars.SOM1surface[site].Nitrogen
             + SiteVars.SOM1soil[site].Nitrogen
