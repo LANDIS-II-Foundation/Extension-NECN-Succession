@@ -59,7 +59,7 @@ Source: {#BuildDir}\Landis.Library.Parameters-v2.dll; DestDir: {#ExtDir}; Flags:
 Source: {#BuildDir}\Landis.Library.Biomass-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 Source: {#BuildDir}\Landis.Library.Climate-v4.3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 Source: {#BuildDir}\Landis.Library.Succession-v8.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.InitialCommunity-vInputBiomass.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#BuildDir}\Landis.Library.InitialCommunity.Biomass.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 ; Source: {#BuildDir}\Landis.Library.InitialCommunity-vInputBiomass.pdb; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 
 ; LANDIS-II identifies the extension with the info in this .txt file
@@ -75,7 +75,6 @@ Filename: {#ExtensionsCmd}; Parameters: "add ""{#InfoTxt}"" "; WorkingDir: {#Lan
 
 
 [UninstallRun]
-; Remove "Age-Only Succession" from "extensions.xml" file.
 Filename: {#ExtensionsCmd}; Parameters: "remove ""NECN Succession"" "; WorkingDir: {#LandisPlugInDir}
 
 

@@ -17,9 +17,9 @@ Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effe
 
 # Release Notes
 
-- Latest official release: Version 6.7 — May 2021
-- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v6.7%20User%20Guide.pdf).
-- [User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/master/docs/LANDIS-II%20Climate%20Library%20v4.2%20User%20Guide.pdf)
+- Latest official release: Version 6.8 — October 2021
+- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v6.8%20User%20Guide.pdf).
+- [User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/master/docs/LANDIS-II%20Climate%20Library%20v4.3%20User%20Guide.pdf)
 - Full release details found in the NECN User Guide and on GitHub.
 - This extension was formerly named Century Succession.
 
@@ -38,7 +38,7 @@ The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundat
 
 LANDIS-II requires a global parameter file for your scenario, and then different parameter files for each extension.
 
-Landscape example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN6.7).
+Landscape example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN6.8).
 
 Single-cell example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN6.6-SingleCell).
 

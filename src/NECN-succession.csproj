@@ -57,8 +57,8 @@
     <Reference Include="Landis.Library.Succession-v8">
       
     </Reference>
-    <Reference Include="Landis.Library.InitialCommunity-vInputBiomass">
-      <HintPath>lib\Landis.Library.InitialCommunity-vInputBiomass.dll</HintPath>
+    <Reference Include="Landis.Library.InitialCommunity.Biomass">
+      <HintPath>lib\Landis.Library.InitialCommunity.Biomass.dll</HintPath>
     </Reference>  </ItemGroup>
 </Project>
 
