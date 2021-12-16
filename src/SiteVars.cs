@@ -24,7 +24,6 @@ namespace Landis.Extension.Succession.NECN
         
         // Dead biomass:
         private static ISiteVar<Layer> surfaceDeadWood;
-        private static ISiteVar<Layer> surfaceDeadGrass; // Track dead wood of grass species; Chihiro 2020.1.14
         private static ISiteVar<Layer> soilDeadWood;
         
         private static ISiteVar<Layer> surfaceStructural;
@@ -133,7 +132,6 @@ namespace Landis.Extension.Succession.NECN
             
             // Dead biomass:
             surfaceDeadWood     = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            surfaceDeadGrass    = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>(); // Dead wood of grass species; Chihiro 2020.01.14
             soilDeadWood        = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
             
             surfaceStructural   = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
@@ -237,7 +235,6 @@ namespace Landis.Extension.Succession.NECN
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
                 surfaceDeadWood[site]       = new Layer(LayerName.Wood, LayerType.Surface);
-                surfaceDeadGrass[site]      = new Layer(LayerName.Grass, LayerType.Surface); // Dead wood of grass species; Chihiro 2020.01.14
                 soilDeadWood[site]          = new Layer(LayerName.CoarseRoot, LayerType.Soil);
                 
                 // Dead wood carbons; Chihiro 2020.01.14
@@ -354,7 +351,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SourceSink[site]      = new Layer(LayerName.Other, LayerType.Other);
             
             SiteVars.SurfaceDeadWood[site].NetMineralization = 0.0;
-            SiteVars.SurfaceDeadGrass[site].NetMineralization = 0.0; // Dead wood of grass species; Chihiro 2020.01.14
             SiteVars.SurfaceStructural[site].NetMineralization = 0.0;
             SiteVars.SurfaceMetabolic[site].NetMineralization = 0.0;
             
@@ -401,19 +397,6 @@ namespace Landis.Extension.Succession.NECN
         {
             get {
                 return surfaceDeadWood;
-            }
-        }
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        ///  The intact dead woody pools for grass species for the landscape's sites.
-        /// </summary>
-        // Chihiro 2020.01.14
-        public static ISiteVar<Layer> SurfaceDeadGrass
-        {
-            get {
-                return surfaceDeadGrass;
             }
         }
 

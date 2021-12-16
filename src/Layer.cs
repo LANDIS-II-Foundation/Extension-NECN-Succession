@@ -11,7 +11,7 @@ namespace Landis.Extension.Succession.NECN
 {
 
     // Chihiro; add grass layer to track dead wood in grass species
-    public enum LayerName { Leaf, FineRoot, Wood, Grass, CoarseRoot, Metabolic, Structural, SOM1, SOM2, SOM3, Other };
+    public enum LayerName { Leaf, FineRoot, Wood, CoarseRoot, Metabolic, Structural, SOM1, SOM2, SOM3, Other };
     public enum LayerType {Surface, Soil, Other} 
 
     /// <summary>
@@ -66,19 +66,7 @@ namespace Landis.Extension.Succession.NECN
                 double n_of_species = PlugIn.ModelCore.Species.Count;
                 foreach (ISpecies species in PlugIn.ModelCore.Species)
                 {
-                    if (species.Name != "sasa_spp")
-                        decayvalue += FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate;
-                }
-                this.decayValue = decayvalue / n_of_species;
-            }
-            else if (this.name == LayerName.Grass)
-            {
-                // Compute mean decay value
-                double decayvalue = 0.0;
-                double n_of_species = PlugIn.ModelCore.Species.Count;
-                foreach (ISpecies species in PlugIn.ModelCore.Species)
-                {
-                    if (species.Name == "sasa_spp")
+                    if (!SpeciesData.Grass[species])
                         decayvalue += FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate;
                 }
                 this.decayValue = decayvalue / n_of_species;
