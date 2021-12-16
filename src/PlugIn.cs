@@ -294,11 +294,21 @@ namespace Landis.Extension.Succession.NECN
                 foliarInput -= (float)live_foliarFireConsumption;
             }
 
-            ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
-            ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
+            if (SpeciesData.Grass[cohort.Species])
+            {
+                ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
 
-            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
-            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, (cohort.WoodBiomass + cohort.LeafBiomass) * fractionPartialMortality), cohort, cohort.Species, site);
+            }
+            else
+            {
+                ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
+                ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
+
+                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+            }
+            
 
             //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
             //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
@@ -373,13 +383,25 @@ namespace Landis.Extension.Succession.NECN
             }
 
 
-            //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
-            ForestFloor.AddWoodLitter(woodInput, cohort.Species, eventArgs.Site);
-            ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, eventArgs.Site);
+            if (SpeciesData.Grass[cohort.Species])
+            {
+                //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
+                ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, eventArgs.Site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
 
-            // Assume that ALL dead root biomass stays on site.
-            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
-            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+                // Assume that ALL dead root biomass stays on site.
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.WoodBiomass + cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+            }
+            else
+            {
+                //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
+                ForestFloor.AddWoodLitter(woodInput, cohort.Species, eventArgs.Site);
+                ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, eventArgs.Site);
+
+                // Assume that ALL dead root biomass stays on site.
+                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+            }
+            
 
             if (disturbanceType != null)
                 Disturbed[site] = true;

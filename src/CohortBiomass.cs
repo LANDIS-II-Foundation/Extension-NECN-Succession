@@ -384,13 +384,21 @@ namespace Landis.Extension.Succession.NECN
             //  Add mortality to dead biomass pools.
             //  Coarse root mortality is assumed proportional to aboveground woody mortality
             //    mass is assumed 25% of aboveground wood (White et al. 2000, Niklas & Enquist 2002)
-            if(mortality_wood > 0.0)
+            if(mortality_wood > 0.0 && !SpeciesData.Grass[cohort.Species])
             {
                 ForestFloor.AddWoodLitter(mortality_wood, cohort.Species, site);
                 Roots.AddCoarseRootLitter(mortality_wood, cohort, cohort.Species, site);
             }
 
-            if(mortality_nonwood > 0.0)
+            //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
+            if (mortality_wood > 0.0 && SpeciesData.Grass[cohort.Species])
+            {
+                AvailableN.AddResorbedN(cohort, totalMortality[0], site); //ignoring input from scorching, which is rare, but not resorbed.             
+                ForestFloor.AddResorbedFoliageLitter(mortality_wood, cohort.Species, site);
+                Roots.AddFineRootLitter(mortality_wood, cohort, cohort.Species, site);
+            }
+
+            if (mortality_nonwood > 0.0)
             {
                 AvailableN.AddResorbedN(cohort, totalMortality[1], site); //ignoring input from scorching, which is rare, but not resorbed.             
                 ForestFloor.AddResorbedFoliageLitter(mortality_nonwood, cohort.Species, site);
