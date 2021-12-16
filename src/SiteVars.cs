@@ -112,8 +112,6 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyLAI_Trees;
         public static ISiteVar<double[]> MonthlyLAI_Grasses; // Chihiro, 2021.03.30: tentative
         public static ISiteVar<double> MonthlyLAI_GrassesLastMonth; // Chihiro, 2021.03.30: tentative
-        // Chihiro 2020.1.22
-        private static ISiteVar<double> laiTree;
         public static ISiteVar<double[]> MonthlyHeteroResp;
         public static ISiteVar<double[]> MonthlySoilWaterContent;
 
@@ -214,7 +212,6 @@ namespace Landis.Extension.Succession.NECN
             monthlymineralN     = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             frassC              = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             lai                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            laiTree = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); // LAI for tree spp; Chihiro 2020.01.22
             AnnualWaterBalance       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualClimaticWaterDeficit  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualPotentialEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -376,7 +373,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.ResorbedN[site] = 0.0;
             SiteVars.FrassC[site] = 0.0;
             SiteVars.LAI[site] = 0.0;
-            SiteVars.LAITree[site] = 0.0; // LAI for tree spp; Chihiro 2020.01.22
             SiteVars.AnnualWaterBalance[site] = 0.0;
             SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
             SiteVars.AnnualPotentialEvapotranspiration[site] = 0.0;
@@ -1047,23 +1043,6 @@ namespace Landis.Extension.Succession.NECN
         }
 
         // --------------------------------------------------------------------
-        /// <summary>
-        /// A summary of LAI for tree spp (m2/m2)
-        /// </summary>
-        // Chihiro 2020.01.22
-        public static ISiteVar<double> LAITree
-        {
-            get
-            {
-                return laiTree;
-            }
-            set
-            {
-                laiTree = value;
-            }
-        }
-        
-        //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Annual Water Budget (PPT - AET)
         /// </summary>

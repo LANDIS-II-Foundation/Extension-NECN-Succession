@@ -235,40 +235,7 @@ namespace Landis.Extension.Succession.NECN
 
             return finalShade;
         }
-        //---------------------------------------------------------------------
         
-
-        /// <summary>
-        /// Compute site shade above the grass species
-        /// </summary>
-        // Chihiro 2020.01.22
-        //
-        // Description:
-        //     We just copied ComputeShade method and replaced SiteVars.LAI[site] to SiteVars.LAITree[site]
-        //     to ignore grass species.
-        //
-        public static byte ComputeShadeTree(ActiveSite site)
-        {
-            IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-            byte finalShade = 0;
-            if (!ecoregion.Active)
-                return 0;
-            for (byte shade = 5; shade >= 1; shade--)
-            {
-                if (PlugIn.ShadeLAI[shade] <= 0)
-                {
-                    string mesg = string.Format("Maximum LAI has not been defined for shade class {0}", shade);
-                    throw new System.ApplicationException(mesg);
-                }
-                if (SiteVars.LAITree[site] >= PlugIn.ShadeLAI[shade])
-                {
-                    finalShade = shade;
-                    break;
-                }
-            }
-            return finalShade;
-        }
-        //---------------------------------------------------------------------
 
 
         protected override void InitializeSite(ActiveSite site)
@@ -448,11 +415,8 @@ namespace Landis.Extension.Succession.NECN
 
             //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
             byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
-            byte siteShadeTree = ComputeShadeTree(site); // Shade by tree species excluding grass species; Chihiro
             bool isSufficientlight = false;
-
             double lightProbability = 0.0;
-            double lightProbabilityTree = 0.0; // Light probability considering LAI of tree species only; Chihiro
             bool found = false;
 
             int bestShadeClass = 0; // the best shade class for the species; Chihiro
@@ -471,19 +435,6 @@ namespace Landis.Extension.Succession.NECN
                     if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
                     if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
                     
-                    // Light probability considering LAI of only tree species; Chihiro
-                    if (siteShadeTree == 0) lightProbabilityTree = lights.ProbabilityLight0;
-                    if (siteShadeTree == 1) lightProbabilityTree = lights.ProbabilityLight1;
-                    if (siteShadeTree == 2) lightProbabilityTree = lights.ProbabilityLight2;
-                    if (siteShadeTree == 3) lightProbabilityTree = lights.ProbabilityLight3;
-                    if (siteShadeTree == 4) lightProbabilityTree = lights.ProbabilityLight4;
-                    if (siteShadeTree == 5) lightProbabilityTree = lights.ProbabilityLight5;
-
-                    // Identify the best shade class for the species; Chihiro
-                    bestShadeClass = ComputeBestShadeClass(lights);
-                    // if (PlugIn.ModelCore.CurrentTime == 1)
-                    //     PlugIn.ModelCore.UI.WriteLine("MaxLight:{0},{1}",species.Name, bestShadeClass);
-
                     found = true;
                 }
             }
@@ -506,7 +457,7 @@ namespace Landis.Extension.Succession.NECN
             if (OtherData.CalibrateMode)
             {
                 PlugIn.ModelCore.UI.WriteLine("original_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
-                PlugIn.ModelCore.UI.WriteLine("siteShade:{0},{1}", siteShade, siteShadeTree);
+                PlugIn.ModelCore.UI.WriteLine("siteShade:{0}", siteShade);
                 PlugIn.ModelCore.UI.WriteLine("siteLAI:{0}", SiteVars.LAI[site]);
             }
 
@@ -529,8 +480,8 @@ namespace Landis.Extension.Succession.NECN
                 else
                 {
                     // 2. If (1) the site shade is darker than the best shade class for the species and 
-                    //       (2) the light availability above grass species layer meets the species requirement,
-                    if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbabilityTree)
+                    //       (2) the light availability meets the species requirement,
+                    if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
                     {
                         // 3. check if threre are sufficient amounts of downed logs?
                         isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
