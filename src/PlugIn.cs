@@ -442,52 +442,7 @@ namespace Landis.Extension.Succession.NECN
         //     - Modify light probability based on the amount of nursery log on the site
         //
         //
-        // Psudo-code:
-        // 
-        //     double siteShade = site shade calculated by original NECN // This siteShade includes both tree and grass species
-        //     double siteShadeTree = ComputeShadeTree(site)             // Only tree species, excluding grass species
-        //     bool isSufficientlight = false
-        //     
-        //     double lightProbability = light probability of original NECN // This lightProbability includes both tree and grass species
-        //     double lightProbabilityTree = light probability ignoring grass layer
-        //     bool found = false
-        //     
-        //     int bestShadeClass = 0      // the most suitable shade class for the species 
-        //     string regenType = 'failed' // Identify where the cohort established
-        //                                 // 'failed', 'nlog', or 'surface'
-        //     
-        //     // Compute the light probabilities on the site
-        //     foreach lights in sufficientLight:
-        //         identify lightProbability, lightProbabilityTree, and bestShadeClass for the species on the site
-        //     
-        //     // Compute the availability of nursery log on the site (nurseryLogAvailability)
-        //     double nurseryLogAvailabilityModifier = 1.0;                    // user defined tuning parameter
-        //     double nurseryLogAvailability = nurseryLogAvailabilityModifier 
-        //                                     * ComputeNurseryLogAreaRatio(species, site);
-        //     
-        //     // Determine if the species can establish or not
-        //     if The species is CWD-dependent: (Case 1)
-        //         if there is sufficient light & enough nursery logs:
-        //             // establish on the nursery log
-        //             isSufficientlight = true
-        //             regenType = 'nlog'
-        //     
-        //     else The species can establish on both forest floors & nursery logs (CWD independent): (Case 2)
-        //         if there is sufficient light on forest floor considering both Tree and Grass species LAI:
-        //             // establish on the surface soil
-        //             isSufficientlight = true
-        //             regenType = 'surface'
-        //             
-        //         else If (1) the site shade is darker than the best shade class for the species and 
-        //                 (2) the light availability above grass species layer meets the species requirement:
-        //             if Threre are sufficient amounts of downed logs:
-        //                 // establish on the nursery log
-        //                 isSufficientlight = true
-        //                 regenType = 'nlog'
-        //
-        //     return isSufficientlight;
-        //
-        //
+        
         public bool SufficientLight(ICohort cohort, ISpecies species, ActiveSite site)
         {
 
@@ -668,29 +623,7 @@ namespace Landis.Extension.Succession.NECN
         //         - The shape of downed logs were assumed to be an elliptical cylinder
         //
         //
-        // Psudo-code:
-        //
-        //     double hight_of_downed_logs      // static value from field observation  // Units: cm
-        //     double density_of_decay_class_XX // Wood density (g cm^-3) of dead wood for each decay class.
-        //                                      // XX ranges from 3-5
-        //                                      // Decay class 3-5 is suitable for establishment.
-        //                                      //   Reference: Unidentified spp category in Table 3 of Ugawa et al. (2012)
-        //                                      //              https://www.ffpri.affrc.go.jp/pubs/bulletin/425/documents/425-2.pdf
-        //     double decayClassXXAreaRatio     // the amount of downed logs which is suitable for tree establishment
-        //                                      // computed by ComputeNurseryLogC function
-        //                                      // XX ranges from 3-5
-        //     
-        //     // Compute the area of the downed logs which decay class is XX (XX ranges from 3 to 5)
-        //     double Projected_area_of_the_downed_logs
-        //       = 2 * biomass_of_the_downed_logs_which_decay_class_is_XX / (Math.PI * hight_of_downed_logs * density_of_decay_class_XX)
-        //     
-        //     // Compute the area occupancy of downed logs which decay class is XX
-        //     double decayClassXXAreaRatio = Projected_area_of_the_downed_logs / Area_of_the_grid
-        //       
-        //     // Compute the sum of area occupancy of decay class 3-5
-        //     return Math.Min(1.0, decayClass3AreaRatio + decayClass4AreaRatio + decayClass5AreaRatio) // decayClassAreaRatio should be 0-1
-        //
-        //
+        
         private static double ComputeNurseryLogAreaRatio(ISpecies species, ActiveSite site)
         {
             // Hight of downed logs
@@ -737,36 +670,7 @@ namespace Landis.Extension.Succession.NECN
         //     - In the process of decomposition of downed logs, 
         //       the volume remains the same, only the density changes.
         //
-        //
-        // Psudo-code:
-        //
-        //     // Define thresholds to identify decay class
-        //     double retentionRatioThreshold3 = densityDecayClass3 / densityDecayClass0
-        //     double retentionRatioThreshold4 = densityDecayClass4 / densityDecayClass0
-        //     double retentionRatioThreshold5 = densityDecayClass5 / densityDecayClass0
-        //     
-        //     // Initialize nursery log carbon for each decay class
-        //     double decayClass3 = 0.0;
-        //     double decayClass4 = 0.0;
-        //     double decayClass5 = 0.0;
-        //     
-        //     // Update the amount of carbon for each decayClass
-        //     for (int i = 0; i < SiteVars.CurrentDeadWoodC[site].Length; i++):
-        //         // Compute the ratio of the current dead wood C to the origindal dead wood carbon (i.e. the amount of carbon just after the focused dead wood was generated.)
-        //         double retentionRatio = SiteVars.CurrentDeadWoodC[site][i] / SiteVars.OriginalDeadWoodC[site][i];
-        //     
-        //         // Identify the decay class of the current dead wood carbon 
-        //         // and update the amount of C of each decay class
-        //         if (retentionRatio >= retentionRatioThreshold4) and (retentionRatio < retentionRatioThreshold3):
-        //             decayClass3 += SiteVars.CurrentDeadWoodC[site][i]
-        //         elif (retentionRatio >= retentionRatioThreshold5) and (retentionRatio < retentionRatioThreshold4):
-        //             decayClass4 += SiteVars.CurrentDeadWoodC[site][i]
-        //         elif retentionRatio < retentionRatioThreshold5:
-        //             decayClass5 += SiteVars.CurrentDeadWoodC[site][i]
-        //     
-        //     return new double[3] { decayClass3, decayClass4, decayClass5 }
-        //
-        //
+        
         private static double[] ComputeNurseryLogC(ActiveSite site, double densityDecayClass0, double densityDecayClass3, double densityDecayClass4, double densityDecayClass5)
         {
             // Define thresholds to identify decay class
