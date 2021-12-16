@@ -63,9 +63,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> soilWaterContent;
         private static ISiteVar<double> liquidSnowPack;  
         private static ISiteVar<double> decayFactor;
-        private static ISiteVar<double> decayFactordeadwood; // Added by W.Hotta (2020.10.25)
         private static ISiteVar<double> soilTemperature;
-        private static ISiteVar<double> deadWoodTemperature; // Added by W.Hotta (2020.10.25)
         private static ISiteVar<double> anaerobicEffect;
         
         // Annual accumulators for reporting purposes.
@@ -180,9 +178,7 @@ namespace Landis.Extension.Succession.NECN
             liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             decayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            decayFactordeadwood = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); // Added by W.Hotta (2020.10.25)
             soilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            deadWoodTemperature = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); // Added by W.Hotta (2020.10.25)
             anaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             dryDays             = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             
@@ -672,23 +668,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         
-        // Added by W.Hotta (2020.10.25)
-        /// <summary>
-        /// A generic decay factor determined by soil water and deadwood temperature.
-        /// </summary>
-        public static ISiteVar<double> DecayFactorDeadWood
-        {
-            get
-            {
-                return decayFactordeadwood;
-            }
-            set
-            {
-                decayFactordeadwood = value;
-            }
-        }
-        //---------------------------------------------------------------------
-
         /// <summary>
         /// Soil temperature (C)
         /// </summary>
@@ -703,23 +682,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         
-        // Added by W.Hotta (2020.10.25)
-        /// <summary>
-        /// DeadWood temperature (C)
-        /// </summary>
-        public static ISiteVar<double> DeadWoodTemperature
-        {
-            get
-            {
-                return deadWoodTemperature;
-            }
-            set
-            {
-                deadWoodTemperature = value;
-            }
-        }
-        //---------------------------------------------------------------------
-
         /// <summary>
         /// A generic decay factor determined by soil water and soil temperature.
         /// </summary>
