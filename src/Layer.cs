@@ -651,7 +651,6 @@ namespace Landis.Extension.Succession.NECN
 
         public static double BelowgroundDecompositionRatio(ActiveSite site, double minCNenter, double maxCNenter, double minContentN)
         {
-            //Originally from bgdrat.f
             //BelowGround Decomposition RATio computation.
             double bgdrat = 0.0;
 
@@ -672,28 +671,27 @@ namespace Landis.Extension.Succession.NECN
         }
 
         public static double AbovegroundDecompositionRatio(double abovegroundN, double abovegroundC)
-        {       //Originally from agdrat.f.
+        {       
 
             double Ncontent, agdrat;
             double biomassConversion = 2.0;
-            // cemicb = slope of the regression line for C/N of som1
+            
+            // CNmicrobialB = slope of the regression line for C/N of som1
+            double CNmicrobial_b = (OtherData.MinCNSurfMicrobes - OtherData.MaxCNSurfMicrobes) / OtherData.MinNContentCNSurfMicrobes;
 
-            double cemicb = (OtherData.MinCNSurfMicrobes - OtherData.MaxCNSurfMicrobes) / OtherData.MinNContentCNSurfMicrobes;
+            // The ratios for metabolic and som1 may vary and must be recomputed each time step
 
-
-            //The C/E ratios for structural and wood can be computed once;
-            //they then remain fixed throughout the run.  The ratios for
-            //metabolic and som1 may vary and must be recomputed each time step
-
-            if ((abovegroundC * biomassConversion) <= 0.00000000001)  Ncontent = 0.0;
-            else  Ncontent = abovegroundN / (abovegroundC * biomassConversion);
+            if ((abovegroundC * biomassConversion) <= 0.00000000001)  
+                Ncontent = 0.0;
+            else  
+                Ncontent = abovegroundN / (abovegroundC * biomassConversion);
 
             //tca is multiplied by biomassConversion to give biomass
 
             if (Ncontent > OtherData.MinNContentCNSurfMicrobes)
                 agdrat = OtherData.MinCNSurfMicrobes;
             else
-                agdrat = OtherData.MaxCNSurfMicrobes + Ncontent * cemicb;
+                agdrat = OtherData.MaxCNSurfMicrobes + Ncontent * CNmicrobial_b;
 
             return agdrat;
         }
