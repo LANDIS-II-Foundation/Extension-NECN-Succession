@@ -418,9 +418,9 @@ namespace Landis.Extension.Succession.NECN
             PlugIn.ModelCore.UI.WriteLine("   Begin parsing NECN SPECIES table.");
 
             InputVar<string> csv = new InputVar<string>("Species_CSV_File");
-            ReadName("SpeciesParameters");
-            if (ReadOptionalVar(csv))
-            {
+            //ReadName("SpeciesParameters");
+            ReadVar(csv);
+            //{
                 CSVParser speciesParser = new CSVParser();
                 DataTable speciesTable = speciesParser.ParseToDataTable(csv.Value);
                 foreach (DataRow row in speciesTable.Rows)
@@ -449,100 +449,100 @@ namespace Landis.Extension.Succession.NECN
                     parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 
                 }
-            }
-            else
-            {
+            //}
+            //else
+            //{
 
-                speciesLineNums.Clear();  //  If parser re-used (i.e., for testing purposes)
+            //    speciesLineNums.Clear();  //  If parser re-used (i.e., for testing purposes)
 
-                InputVar<int> ft = new InputVar<int>("Functional Type");
-                InputVar<bool> nt = new InputVar<bool>("Nitrogen Fixer");
-                InputVar<int> gddmn = new InputVar<int>("Growing Degree Day Minimum");
-                InputVar<int> gddmx = new InputVar<int>("Growing Degree Day Maximum");
-                InputVar<int> mjt = new InputVar<int>("Minimum January Temperature");
-                InputVar<double> maxd = new InputVar<double>("Maximum Allowable Drought");
-                InputVar<double> leafLongevity = new InputVar<double>("Leaf Longevity");
-                InputVar<bool> epicorm = new InputVar<bool>("Epicormic:  Y/N");
-                InputVar<double> leafLignin = new InputVar<double>("Leaf Percent Lignin");
-                InputVar<double> wLignin = new InputVar<double>("Wood Percent Lignin");
-                InputVar<double> crLignin = new InputVar<double>("Coarse Root Percent Lignin");
-                InputVar<double> frLignin = new InputVar<double>("Fine Root Percent Lignin");
-                InputVar<double> leafCN = new InputVar<double>("Leaf CN Ratio");
-                InputVar<double> woodCN = new InputVar<double>("Wood CN Ratio");
-                InputVar<double> cRootCN = new InputVar<double>("Coarse Root CN Ratio");
-                InputVar<double> foliarCN = new InputVar<double>("Foliage CN Ratio");
-                InputVar<double> fRootCN = new InputVar<double>("Fine Root CN Ratio");
-                InputVar<int> maxANPP = new InputVar<int>("Maximum ANPP");
-                InputVar<int> maxBiomass = new InputVar<int>("Maximum Aboveground Biomass");
-                string lastColumn = "the " + maxBiomass.Name + " column";
+            //    InputVar<int> ft = new InputVar<int>("Functional Type");
+            //    InputVar<bool> nt = new InputVar<bool>("Nitrogen Fixer");
+            //    InputVar<int> gddmn = new InputVar<int>("Growing Degree Day Minimum");
+            //    InputVar<int> gddmx = new InputVar<int>("Growing Degree Day Maximum");
+            //    InputVar<int> mjt = new InputVar<int>("Minimum January Temperature");
+            //    InputVar<double> maxd = new InputVar<double>("Maximum Allowable Drought");
+            //    InputVar<double> leafLongevity = new InputVar<double>("Leaf Longevity");
+            //    InputVar<bool> epicorm = new InputVar<bool>("Epicormic:  Y/N");
+            //    InputVar<double> leafLignin = new InputVar<double>("Leaf Percent Lignin");
+            //    InputVar<double> wLignin = new InputVar<double>("Wood Percent Lignin");
+            //    InputVar<double> crLignin = new InputVar<double>("Coarse Root Percent Lignin");
+            //    InputVar<double> frLignin = new InputVar<double>("Fine Root Percent Lignin");
+            //    InputVar<double> leafCN = new InputVar<double>("Leaf CN Ratio");
+            //    InputVar<double> woodCN = new InputVar<double>("Wood CN Ratio");
+            //    InputVar<double> cRootCN = new InputVar<double>("Coarse Root CN Ratio");
+            //    InputVar<double> foliarCN = new InputVar<double>("Foliage CN Ratio");
+            //    InputVar<double> fRootCN = new InputVar<double>("Fine Root CN Ratio");
+            //    InputVar<int> maxANPP = new InputVar<int>("Maximum ANPP");
+            //    InputVar<int> maxBiomass = new InputVar<int>("Maximum Aboveground Biomass");
+            //    string lastColumn = "the " + maxBiomass.Name + " column";
 
-                while (!AtEndOfInput && CurrentName != Names.FunctionalGroupParameters)
-                {
-                    StringReader currentLine = new StringReader(CurrentLine);
-                    ISpecies species = ReadSpecies(currentLine);
+            //    while (!AtEndOfInput && CurrentName != Names.FunctionalGroupParameters)
+            //    {
+            //        StringReader currentLine = new StringReader(CurrentLine);
+            //        ISpecies species = ReadSpecies(currentLine);
 
-                    ReadValue(ft, currentLine);
-                    parameters.SetFunctionalType(species, ft.Value);
+            //        ReadValue(ft, currentLine);
+            //        parameters.SetFunctionalType(species, ft.Value);
 
-                    ReadValue(nt, currentLine);
-                    parameters.NFixer[species] = nt.Value;
+            //        ReadValue(nt, currentLine);
+            //        parameters.NFixer[species] = nt.Value;
 
-                    ReadValue(gddmn, currentLine);
-                    parameters.SetGDDmin(species, gddmn.Value);
+            //        ReadValue(gddmn, currentLine);
+            //        parameters.SetGDDmin(species, gddmn.Value);
 
-                    ReadValue(gddmx, currentLine);
-                    parameters.SetGDDmax(species, gddmx.Value);
+            //        ReadValue(gddmx, currentLine);
+            //        parameters.SetGDDmax(species, gddmx.Value);
 
-                    ReadValue(mjt, currentLine);
-                    parameters.SetMinJanTemp(species, mjt.Value);
+            //        ReadValue(mjt, currentLine);
+            //        parameters.SetMinJanTemp(species, mjt.Value);
 
-                    ReadValue(maxd, currentLine);
-                    parameters.SetMaxDrought(species, maxd.Value);
+            //        ReadValue(maxd, currentLine);
+            //        parameters.SetMaxDrought(species, maxd.Value);
 
-                    ReadValue(leafLongevity, currentLine);
-                    parameters.SetLeafLongevity(species, leafLongevity.Value);
+            //        ReadValue(leafLongevity, currentLine);
+            //        parameters.SetLeafLongevity(species, leafLongevity.Value);
 
-                    ReadValue(epicorm, currentLine);
-                    parameters.Epicormic[species] = epicorm.Value;
+            //        ReadValue(epicorm, currentLine);
+            //        parameters.Epicormic[species] = epicorm.Value;
 
-                    ReadValue(leafLignin, currentLine);
-                    parameters.SetLeafLignin(species, leafLignin.Value);
+            //        ReadValue(leafLignin, currentLine);
+            //        parameters.SetLeafLignin(species, leafLignin.Value);
 
-                    ReadValue(frLignin, currentLine);
-                    parameters.SetFineRootLignin(species, frLignin.Value);
+            //        ReadValue(frLignin, currentLine);
+            //        parameters.SetFineRootLignin(species, frLignin.Value);
 
-                    ReadValue(wLignin, currentLine);
-                    parameters.SetWoodLignin(species, wLignin.Value);
+            //        ReadValue(wLignin, currentLine);
+            //        parameters.SetWoodLignin(species, wLignin.Value);
 
-                    ReadValue(crLignin, currentLine);
-                    parameters.SetCoarseRootLignin(species, crLignin.Value);
+            //        ReadValue(crLignin, currentLine);
+            //        parameters.SetCoarseRootLignin(species, crLignin.Value);
 
-                    ReadValue(leafCN, currentLine);
-                    parameters.SetLeafCN(species, leafCN.Value);
+            //        ReadValue(leafCN, currentLine);
+            //        parameters.SetLeafCN(species, leafCN.Value);
 
-                    ReadValue(fRootCN, currentLine);
-                    parameters.SetFineRootCN(species, fRootCN.Value);
+            //        ReadValue(fRootCN, currentLine);
+            //        parameters.SetFineRootCN(species, fRootCN.Value);
 
-                    ReadValue(woodCN, currentLine);
-                    parameters.SetWoodCN(species, woodCN.Value);
+            //        ReadValue(woodCN, currentLine);
+            //        parameters.SetWoodCN(species, woodCN.Value);
 
-                    ReadValue(cRootCN, currentLine);
-                    parameters.SetCoarseRootCN(species, cRootCN.Value);
+            //        ReadValue(cRootCN, currentLine);
+            //        parameters.SetCoarseRootCN(species, cRootCN.Value);
 
-                    ReadValue(foliarCN, currentLine);
-                    parameters.SetFoliageLitterCN(species, foliarCN.Value);
+            //        ReadValue(foliarCN, currentLine);
+            //        parameters.SetFoliageLitterCN(species, foliarCN.Value);
 
-                    ReadValue(maxANPP, currentLine);
-                    parameters.SetMaxANPP(species, maxANPP.Value);
+            //        ReadValue(maxANPP, currentLine);
+            //        parameters.SetMaxANPP(species, maxANPP.Value);
 
-                    ReadValue(maxBiomass, currentLine);
-                    parameters.SetMaxBiomass(species, maxBiomass.Value);
+            //        ReadValue(maxBiomass, currentLine);
+            //        parameters.SetMaxBiomass(species, maxBiomass.Value);
 
-                    CheckNoDataAfter(lastColumn, currentLine);
-                    GetNextLine();
-                }
+            //        CheckNoDataAfter(lastColumn, currentLine);
+            //        GetNextLine();
+            //    }
 
-            }
+            //}
 
             //--------- Read In Functional Group Table -------------------------------
             PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
