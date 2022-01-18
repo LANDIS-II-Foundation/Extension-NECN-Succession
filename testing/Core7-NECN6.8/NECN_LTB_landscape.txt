@@ -66,11 +66,9 @@ LightEstablishmentTable
 	4	1.0	1.0	1.0	1.0	0.1	0.05
 	5	0.1	0.5	1.0	1.0	1.0	1.0
 
-SpeciesParameters
-Species_CSV_File NECN_Spp_Table.csv
+SpeciesParameters NECN_Spp_Table.csv
 
-FunctionalGroupParameters 
-Functional_CSV_File NECN_Functional_Table.csv
+FunctionalGroupParameters NECN_Functional_Table.csv
 
 FireReductionParameters
 >>	Severity	WoodLitter	Litter	CohortWood	CohortFoliar	SOM

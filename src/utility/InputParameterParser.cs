@@ -547,9 +547,9 @@ namespace Landis.Extension.Succession.NECN
             //--------- Read In Functional Group Table -------------------------------
             PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
 
-            InputVar<string> func_csv = new InputVar<string>("Functional_CSV_File");
-            ReadName("FunctionalGroupParameters");
+            InputVar<string> func_csv = new InputVar<string>("FunctionalGroupParameters");
             ReadVar(func_csv);
+            //ReadVar(func_csv);
             //if (ReadOptionalVar(func_csv))
             //{
                 CSVParser functionalParser = new CSVParser();
