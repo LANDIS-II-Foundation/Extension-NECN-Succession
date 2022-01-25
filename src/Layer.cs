@@ -10,7 +10,8 @@ using Landis.SpatialModeling;
 namespace Landis.Extension.Succession.NECN
 {
 
-    public enum LayerName {Leaf, FineRoot, Wood, CoarseRoot, Metabolic, Structural, SOM1, SOM2, SOM3, Other};
+    // Chihiro; add grass layer to track dead wood in grass species
+    public enum LayerName { Leaf, FineRoot, Wood, CoarseRoot, Metabolic, Structural, SOM1, SOM2, SOM3, Other };
     public enum LayerType {Surface, Soil, Other} 
 
     /// <summary>
@@ -36,7 +37,46 @@ namespace Landis.Extension.Succession.NECN
             this.carbon = 0.0;
             this.nitrogen = 0.0;
 
-            this.decayValue = 0.0;
+            // Initial decay value of Wood is set to mean decay rate of all tree species.
+            // 
+            // 
+            // if this.name is LayerName.Wood:
+            //     double decayvalue = 0.0
+            //     double N_of_species = len(sppnames)
+            //     // Compute mean wood decay rate
+            //     for sppname in tree-sppnames:
+            //         decayrate += decayrate(sppname)
+            //     this.decayVlaue = decayvalue / N_of_species
+            //
+            // elif this.name is LayerName.Grass:
+            //     double decayvalue = 0.0
+            //     double N_of_species = len(sppnames)
+            //     // Compute mean wood decay rate
+            //     for sppname in grass-sppnames:
+            //         decayrate += decayrate(sppname)
+            //     this.decayVlaue = decayvalue / N_of_species
+            //
+            // else:
+            //     this.decayValue = 0.0
+            //
+            if (this.name == LayerName.Wood)
+            {
+                // Compute mean decay value
+                double decayvalue = 0.0;
+                double n_of_tree_species = 0.0;
+                foreach (ISpecies species in PlugIn.ModelCore.Species)
+                {
+                    if (!SpeciesData.Grass[species])
+                        decayvalue += FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate;
+                        n_of_tree_species += 1;
+                }
+                this.decayValue = decayvalue / n_of_tree_species;
+            }
+            else
+            {
+                this.decayValue = 0.0;
+            }
+            //this.decayValue = 0.0;
             this.fractionLignin = 0.0;
 
             this.netMineralization = 0.0;
