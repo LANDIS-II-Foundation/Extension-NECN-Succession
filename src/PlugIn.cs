@@ -43,7 +43,7 @@ namespace Landis.Extension.Succession.NECN
         public static double StormFlowOverride = 0.0;
 
         public static int FutureClimateBaseYear;
-        public static int B_MAX;
+        //public static int B_MAX;
         private ICommunity initialCommunity;
 
         public static int[] SpeciesByPlant;
@@ -140,20 +140,21 @@ namespace Landis.Extension.Succession.NECN
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
-            //if (Parameters.CalibrateMode)
-            //    Outputs.CreateCalibrateLogFile();
 
-            B_MAX = 0;
-            foreach (ISpecies species in ModelCore.Species)
-            {
-                if (SpeciesData.Max_Biomass[species] > B_MAX)
-                    B_MAX = SpeciesData.Max_Biomass[species];
-            }
+            //B_MAX = 0;
+            //foreach (ISpecies species in ModelCore.Species)
+            //{
+            //    if (SpeciesData.Max_Biomass[species] > B_MAX)
+            //        B_MAX = SpeciesData.Max_Biomass[species];
+            //}
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
+            {
                 Main.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
+                SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
+            }
 
-            Outputs.WritePrimaryLogFile(0);
+                Outputs.WritePrimaryLogFile(0);
             Outputs.WriteShortPrimaryLogFile(0);
 
 

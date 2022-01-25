@@ -18,6 +18,8 @@ namespace Landis.Extension.Succession.NECN
         double BiomassToLAI{get;set;}
         double KLAI{get;set;}
         double MaxLAI{get;set;}
+        double MinLAI { get; set; }
+        //double GrowthLAI { get; set; }
         double MoistureCurve2 {get;set;}
         double MoistureCurve3 { get; set; }
         double MonthlyWoodMortality{get;set;}
@@ -37,9 +39,9 @@ namespace Landis.Extension.Succession.NECN
         private double tempcurve3;
         private double tempcurve4;
         private double fcfracLeaf;
-        private double btolai;
-        private double klai;
-        private double maxlai;
+        private double btoLAI;
+        private double kLAI;
+        private double maxLAI;
         private double moisturecurve2;
         private double moisturecurve3;
         private double monthlyWoodMortality;
@@ -48,6 +50,8 @@ namespace Landis.Extension.Succession.NECN
         private int leafNeedleDrop;
         private double coarseRootFraction;
         private double fineRootFraction;
+        private double minLAI;
+        //private double growthLAI;
 
         public static FunctionalTypeTable Table;
         
@@ -148,13 +152,13 @@ namespace Landis.Extension.Succession.NECN
         public double BiomassToLAI
         {
             get {
-                return btolai;
+                return btoLAI;
             }
             set {
                     if (value  < -3.0 || value  > 1000.0)
                         throw new InputValueException(value.ToString(),
                             "BTOLAI must be between -3 and 1000");
-                btolai = value;
+                btoLAI = value;
             }
         }
         //---------------------------------------------------------------------
@@ -166,31 +170,53 @@ namespace Landis.Extension.Succession.NECN
         public double KLAI
         {
             get {
-                return klai;
+                return kLAI;
             }
             set {
                     if (value  < 1.0 || value  > 50000.0)
                         throw new InputValueException(value.ToString(),
                             "K LAI must be between 1 and 50000");
-                klai = value;
+                kLAI = value;
             }
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// The Century manual recommends a maximum of 20 (?)
+        /// The Century manual recommends a maximum of 20
         /// </summary>
         public double MaxLAI
         {
             get {
-                return maxlai;
+                return maxLAI;
             }
             set {
-                    if (value  < 0 || value  > 50.0)
+                    if (value  < 0 || value  > 20.0)
                         throw new InputValueException(value.ToString(),
-                            "Max LAI must be between 1 and 100");
-                maxlai = value;
+                            "Max LAI must be between 0 and 50");
+                maxLAI = value;
             }
         }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Suppression is sensitive to the minimum LAI.  Below 0.3 and a cohort can be permanently suppressed without any growth.
+        /// </summary>
+        public double MinLAI
+        {
+            get
+            {
+                return minLAI;
+            }
+            set
+            {
+                if (value < 0 || value > 5.0)
+                    throw new InputValueException(value.ToString(),
+                        "Max LAI must be between 0 and 5");
+                minLAI = value;
+            }
+        }
+
+      
+
         //---------------------------------------------------------------------
         // 'PPRPTS(2)': The effect of water content on the intercept, allows the user to 
         //              increase the value of the intercept and thereby increase the slope of the line. MoistureCurve has replaced PPRPTS naming convention in NECN
@@ -323,7 +349,6 @@ namespace Landis.Extension.Succession.NECN
         public static void Initialize(IInputParameters parameters)
         {
             Table = parameters.FunctionalTypes;
-            //PlugIn.ModelCore.UI.WriteLine("  Functional Table [1].PPDF1={0}.", parameters.FunctionalTypeTable[1].PPDF1);
         }
 
         //---------------------------------------------------------------------

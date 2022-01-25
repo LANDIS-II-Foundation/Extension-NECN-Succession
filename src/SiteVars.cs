@@ -100,7 +100,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<string> HarvestPrescriptionName;
         public static ISiteVar<int> HarvestTime;
         public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
-        public static ISiteVar<double> FineFuels;
+        public static ISiteVar<double> fineFuels;
         public static ISiteVar<double> SmolderConsumption;
         public static ISiteVar<double> FlamingConsumption;
         public static ISiteVar<double> AnnualClimaticWaterDeficit; //Annual soil moisture calculation, defined as pet - aet
@@ -126,7 +126,7 @@ namespace Landis.Extension.Succession.NECN
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<Library.LeafBiomassCohorts.SiteCohorts>();
             biomassCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.BiomassCohorts.ISiteCohorts>.Wrap(cohorts);
             baseCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.AgeOnlyCohorts.ISiteCohorts>.Wrap(cohorts);
-            FineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             
@@ -216,7 +216,6 @@ namespace Landis.Extension.Succession.NECN
             SmolderConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FlamingConsumption = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); 
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-            //HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
             HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
@@ -225,7 +224,7 @@ namespace Landis.Extension.Succession.NECN
             PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
             PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.AgeCohorts");
             PlugIn.ModelCore.RegisterSiteVar(biomassCohortsSiteVar, "Succession.BiomassCohorts");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.FineFuels, "Succession.FineFuels");
+            PlugIn.ModelCore.RegisterSiteVar(fineFuels, "Succession.FineFuels");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.SmolderConsumption, "Succession.SmolderConsumption");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.FlamingConsumption, "Succession.FlamingConsumption");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.AnnualClimaticWaterDeficit, "Succession.CWD");
@@ -532,17 +531,17 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Fine Fuels biomass
         /// </summary>
-        //public static ISiteVar<double> FineFuels
-        //{
-        //    get
-        //    {
-        //        return fineFuels;
-        //    }
-        //    set
-        //    {
-        //        fineFuels = value;
-        //    }
-        //}
+        public static ISiteVar<double> FineFuels
+        {
+            get
+            {
+                return fineFuels;
+            }
+            set
+            {
+                fineFuels = value;
+            }
+        }
         //---------------------------------------------------------------------
 
         /// <summary>

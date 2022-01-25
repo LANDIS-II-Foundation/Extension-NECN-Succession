@@ -75,12 +75,18 @@ namespace Landis.Extension.Succession.NECN
             double fieldCapacity = SiteVars.SoilFieldCapacity[site];
             double stormFlowFraction = SiteVars.SoilStormFlowFraction[site]; 
             double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];
-            double drain = SiteVars.SoilDrain[site]; 
-           
-                      
+            double drain = SiteVars.SoilDrain[site];
+
+            double waterFull = soilDepth * fieldCapacity;  //units of cm
+            double waterEmpty = wiltingPoint * soilDepth;  // cm
+            if (waterFull == waterEmpty || wiltingPoint > fieldCapacity)
+            {
+                throw new ApplicationException(string.Format("Field Capacity and Wilting Point EQUAL or wilting point {0} > field capacity {1}.  Row={2}, Column={3}", wiltingPoint, fieldCapacity, site.Location.Row, site.Location.Column));
+            }
+
             //...Calculating snow pack first. Occurs when mean monthly air temperature is equal to or below freezing,
             //     precipitation is in the form of snow.
-            
+
             if (tmin <= 0.0) // Use tmin to dictate whether it snows or rains. 
             {
                 snow = Precipitation; 
@@ -140,8 +146,6 @@ namespace Landis.Extension.Succession.NECN
             }
 
             //Allow excess water to run off during storm events (stormflow)
-            double waterFull = soilDepth * fieldCapacity;  //units of cm
-            
             double waterMovement = 0.0;            
 
             if (soilWaterContent > waterFull)
@@ -184,8 +188,6 @@ namespace Landis.Extension.Succession.NECN
                      
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
             //  Bergström, 1992
-
-            double waterEmpty = wiltingPoint * soilDepth;
 
             if (soilWaterContent > waterFull)
                 AET = remainingPET;
@@ -248,7 +250,7 @@ namespace Landis.Extension.Succession.NECN
             double actualET = 0.0;
             double remainingPET = 0.0;
             double priorWaterAvail = SiteVars.AvailableWater[site];
-            double waterFull = 0.0;
+            //double waterFull = 0.0;
 
             //...Calculate external inputs
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
@@ -280,6 +282,12 @@ namespace Landis.Extension.Succession.NECN
             double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
             double availableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
 
+            double waterFull = soilDepth * fieldCapacity;  //units of cm
+            double waterEmpty = wiltingPoint * soilDepth;  // cm
+            if (waterFull == waterEmpty || wiltingPoint > fieldCapacity)
+            {
+                throw new ApplicationException(string.Format("Field Capacity and Wilting Point EQUAL or wilting point {0} > field capacity {1}.  Row={2}, Column={3}", wiltingPoint, fieldCapacity, site.Location.Row, site.Location.Column));
+            }
 
             //...Calculating snow pack first. Occurs when mean monthly air temperature is equal to or below freezing,
             //     precipitation is in the form of snow.
@@ -399,10 +407,9 @@ namespace Landis.Extension.Succession.NECN
             // less complex because it does not require partitioning the evaporation if evapotranspiration exceeds addToSoil.
             // ********************************************************
 
-            double waterEmpty = wiltingPoint * soilDepth;
-            waterFull = soilDepth * fieldCapacity;  //units of cm
+            //double waterEmpty = wiltingPoint * soilDepth;
+            //waterFull = soilDepth * fieldCapacity;  //units of cm
             availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
-
 
             //if (soilWaterContent > waterFull)
             //    actualET = remainingPET;
