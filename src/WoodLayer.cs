@@ -26,6 +26,7 @@ namespace Landis.Extension.Succession.NECN
             {
 
                 double ligninFactor = System.Math.Exp(-1 * OtherData.LigninDecayEffect * SiteVars.SurfaceDeadWood[site].FractionLignin);
+
                 double decayRate = Math.Min(1.0, SiteVars.DecayFactor[site]
                                                 * SiteVars.SurfaceDeadWood[site].DecayValue
                                                 * ligninFactor
@@ -37,14 +38,25 @@ namespace Landis.Extension.Succession.NECN
                 if (totalCFlow > wood2c)
                 {
                     string mesg = string.Format("Error: Wood decay > wood mass. WoodC={0}, DecayFactor={1}, DecayValue={2}, LigninFactor={3}", wood2c, SiteVars.DecayFactor[site], SiteVars.SurfaceDeadWood[site].DecayValue, ligninFactor);
-                    throw new ApplicationException(mesg);
                 }
+
+                
+                // Decompose dead wood C according to the decayRate
+                // TODO: need psudocode here!
+                // Chihiro 2020.01.14
+                // Console.WriteLine(SiteVars.CurrentDeadWoodC[site].Length);
+                for (int i = 0; i < SiteVars.CurrentDeadWoodC[site].Length; i++)
+                {
+                    SiteVars.CurrentDeadWoodC[site][i] *= (1 - decayRate); // Apply the same decayRate
+                }
+                
+
 
                 // Decompose large wood into SOM1 and SOM2 with CO2 loss.
                 SiteVars.SurfaceDeadWood[site].DecomposeLignin(totalCFlow, site);
             }
 
-
+            
                 //....COARSE ROOTS (SoilDeadWood)....
             double wood3c = SiteVars.SoilDeadWood[site].Carbon;
 
@@ -137,6 +149,10 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.SurfaceDeadWood[site].Nitrogen += totalNitrogen;
                 SiteVars.SurfaceDeadWood[site].AdjustLignin(totalC, fracLignin);
                 SiteVars.SurfaceDeadWood[site].AdjustDecayRate(totalC, inputDecayValue);
+                // Update dead wood carbon
+                // Chihiro 2020.01.14
+                SiteVars.OriginalDeadWoodC[site][PlugIn.ModelCore.CurrentTime - 1] += totalC;
+                SiteVars.CurrentDeadWoodC[site][PlugIn.ModelCore.CurrentTime - 1] += totalC;
             }
             else  // Dead Coarse Roots
             {

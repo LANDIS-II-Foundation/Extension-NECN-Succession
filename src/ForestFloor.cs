@@ -23,15 +23,15 @@ namespace Landis.Extension.Succession.NECN
                                     ISpecies   species,
                                     ActiveSite site)
         {
-        
-            if(woodBiomass > 0)
-            WoodLayer.PartitionResidue(woodBiomass,  
-                            FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate,
-                            SpeciesData.WoodCN[species], 
-                            SpeciesData.WoodLignin[species], 
-                            LayerName.Wood,
-                            LayerType.Surface,
-                            site);
+            
+            if (woodBiomass > 0)
+                WoodLayer.PartitionResidue(woodBiomass,
+                                FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate,
+                                SpeciesData.WoodCN[species],
+                                SpeciesData.WoodLignin[species],
+                                LayerName.Wood,
+                                LayerType.Surface,
+                                site);
             
         }
 

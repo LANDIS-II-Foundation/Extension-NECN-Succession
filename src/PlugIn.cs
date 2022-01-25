@@ -64,7 +64,7 @@ namespace Landis.Extension.Succession.NECN
                                             ICore mCore)
         {
             modelCore = mCore;
-            SiteVars.Initialize();
+            //SiteVars.Initialize(); // this use functional type parameter
             InputParametersParser parser = new InputParametersParser();
             Parameters = Landis.Data.Load<IInputParameters>(dataFile, parser);
 
@@ -94,6 +94,7 @@ namespace Landis.Extension.Succession.NECN
 
             FunctionalType.Initialize(Parameters);
             SpeciesData.Initialize(Parameters);
+            SiteVars.Initialize(); // chihiro; this method use functional type data for initializing decay value
             ReadMaps.ReadSoilDepthMap(Parameters.SoilDepthMapName);
             ReadMaps.ReadSoilDrainMap(Parameters.SoilDrainMapName);
             ReadMaps.ReadSoilBaseFlowMap(Parameters.SoilBaseFlowMapName);
@@ -235,7 +236,8 @@ namespace Landis.Extension.Succession.NECN
 
             return finalShade;
         }
-        //---------------------------------------------------------------------
+        
+
 
         protected override void InitializeSite(ActiveSite site)
         {
@@ -293,11 +295,21 @@ namespace Landis.Extension.Succession.NECN
                 foliarInput -= (float)live_foliarFireConsumption;
             }
 
-            ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
-            ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
+            if (SpeciesData.Grass[cohort.Species])
+            {
+                ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
 
-            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
-            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, (cohort.WoodBiomass + cohort.LeafBiomass) * fractionPartialMortality), cohort, cohort.Species, site);
+            }
+            else
+            {
+                ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
+                ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
+
+                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+            }
+            
 
             //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
             //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
@@ -372,13 +384,25 @@ namespace Landis.Extension.Succession.NECN
             }
 
 
-            //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
-            ForestFloor.AddWoodLitter(woodInput, cohort.Species, eventArgs.Site);
-            ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, eventArgs.Site);
+            if (SpeciesData.Grass[cohort.Species])
+            {
+                //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
+                ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, eventArgs.Site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
 
-            // Assume that ALL dead root biomass stays on site.
-            Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
-            Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+                // Assume that ALL dead root biomass stays on site.
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.WoodBiomass + cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+            }
+            else
+            {
+                //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
+                ForestFloor.AddWoodLitter(woodInput, cohort.Species, eventArgs.Site);
+                ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, eventArgs.Site);
+
+                // Assume that ALL dead root biomass stays on site.
+                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+            }
+            
 
             if (disturbanceType != null)
                 Disturbed[site] = true;
@@ -401,14 +425,25 @@ namespace Landis.Extension.Succession.NECN
         /// germinate/resprout.
         /// This is a Delegate method to base succession.
         /// </summary>
+        /// 
+        // W.Hotta and Chihiro modified
+        // 
+        // Description:
+        //     - Modify light probability based on the amount of nursery log on the site
+        //
+        //
+        
         public bool SufficientLight(ISpecies species, ActiveSite site)
         {
 
             //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
             byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
-
+            bool isSufficientlight = false;
             double lightProbability = 0.0;
             bool found = false;
+
+            int bestShadeClass = 0; // the best shade class for the species; Chihiro
+            string regenType = "failed"; // Identify where the cohort established; Chihiro
 
             foreach (ISufficientLight lights in sufficientLight)
             {
@@ -422,6 +457,7 @@ namespace Landis.Extension.Succession.NECN
                     if (siteShade == 3) lightProbability = lights.ProbabilityLight3;
                     if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
                     if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
+                    
                     found = true;
                 }
             }
@@ -429,9 +465,224 @@ namespace Landis.Extension.Succession.NECN
             if (!found)
                 PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
 
-            return modelCore.GenerateUniform() < lightProbability;
+
+            // ------------------------------------------------------------------------
+            // Modify light probability based on the amount of nursery log on the site
+            // W.Hotta 2020.01.22
+            //
+            // Compute the availability of nursery log on the site
+            //   Option1: function type is linear
+            // double nurseryLogAvailabilityModifier = 1.0; // tuning parameter
+            // double nurseryLogAvailability = nurseryLogAvailabilityModifier * ComputeNurseryLogAreaRatio(species, site);
+            //   Option2: function type is power
+            double nurseryLogAvailabilityModifier = 2.0; // tuning parameter (only even)
+            double nurseryLogAvailability = 1 - Math.Pow(ComputeNurseryLogAreaRatio(species, site) - 1, nurseryLogAvailabilityModifier);
+            if (OtherData.CalibrateMode)
+            {
+                PlugIn.ModelCore.UI.WriteLine("original_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
+                PlugIn.ModelCore.UI.WriteLine("siteShade:{0}", siteShade);
+                PlugIn.ModelCore.UI.WriteLine("siteLAI:{0}", SiteVars.LAI[site]);
+            }
+
+            // Case 1. CWD-dependent species (species which can only be established on nursery log)
+            if (SpeciesData.Nlog_depend[species]) // W.Hotta (2021.08.01)
+            {
+                lightProbability *= nurseryLogAvailability;
+                isSufficientlight = modelCore.GenerateUniform() < lightProbability;
+                if (isSufficientlight) regenType = "nlog";
+            }
+            // Case 2. CWD-independent species (species which can be established on both forest floor & nursery log)
+            else
+            {
+                // 1. Can the cohort establish on forest floor? (lightProbability is considering both Tree and Grass species)
+                if (modelCore.GenerateUniform() < lightProbability)
+                {
+                    isSufficientlight = true;
+                    regenType = "surface";
+                }
+                else
+                {
+                    // 2. If (1) the site shade is darker than the best shade class for the species and 
+                    //       (2) the light availability meets the species requirement,
+                    if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
+                    {
+                        // 3. check if threre are sufficient amounts of downed logs?
+                        isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
+                        if (isSufficientlight) regenType = "nlog";
+                    }
+                }
+            }
+
+            if (OtherData.CalibrateMode)
+            {
+                PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
+                PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
+                PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
+            }
+            // ---------------------------------------------------------------------
+
+            return isSufficientlight;
+            //return modelCore.GenerateUniform() < lightProbability;
+        }
+        // Original SufficientLight method
+        //public bool SufficientLight(ISpecies species, ActiveSite site)
+        //{
+
+        //    //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
+        //    byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
+
+        //    double lightProbability = 0.0;
+        //    bool found = false;
+
+        //    foreach (ISufficientLight lights in sufficientLight)
+        //    {
+
+        //        //PlugIn.ModelCore.UI.WriteLine("Sufficient Light:  ShadeClass={0}, Prob0={1}.", lights.ShadeClass, lights.ProbabilityLight0);
+        //        if (lights.ShadeClass == species.ShadeTolerance)
+        //        {
+        //            if (siteShade == 0) lightProbability = lights.ProbabilityLight0;
+        //            if (siteShade == 1) lightProbability = lights.ProbabilityLight1;
+        //            if (siteShade == 2) lightProbability = lights.ProbabilityLight2;
+        //            if (siteShade == 3) lightProbability = lights.ProbabilityLight3;
+        //            if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
+        //            if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
+        //            found = true;
+        //        }
+        //    }
+
+        //    if (!found)
+        //        PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
+
+        //    return modelCore.GenerateUniform() < lightProbability;
+
+        //}
+
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Compute the most suitable shade class for the species
+        /// This function identifies the peak of the light establishment table.
+        /// </summary>
+        // Chihiro 2020.01.22
+        //
+        private static int ComputeBestShadeClass(ISufficientLight lights)
+        {
+            int bestShadeClass = 0;
+            double maxProbabilityLight = 0.0;
+            if (lights.ProbabilityLight0 > maxProbabilityLight) bestShadeClass = 0;
+            if (lights.ProbabilityLight1 > maxProbabilityLight) bestShadeClass = 1;
+            if (lights.ProbabilityLight2 > maxProbabilityLight) bestShadeClass = 2;
+            if (lights.ProbabilityLight3 > maxProbabilityLight) bestShadeClass = 3;
+            if (lights.ProbabilityLight4 > maxProbabilityLight) bestShadeClass = 4;
+            if (lights.ProbabilityLight5 > maxProbabilityLight) bestShadeClass = 5;
+            return bestShadeClass;
 
         }
+
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Compute the ratio of projected area (= occupancy area) of nursery logs to the grid area.
+        /// </summary>
+        // W.Hotta & Chihiro;
+        //
+        // Description: 
+        //     - Every SiteVars.CurrentDeadWoodC[site] is downed logs.
+        //     - Only the downed logs (SiteVars.CurrentDeadWoodC[site]) which decay class is between 3 to 5 
+        //       are suitable for establishment and treated as nursery logs.
+        //     - The carbon stocks of the nursery logs are converted to volume 
+        //       using a wood density of each decay class.
+        //     - Then, the volume is converted to the projected area (occupation area) 
+        //       using the mean height of downed logs derived from field data.
+        //         - The shape of downed logs were assumed to be an elliptical cylinder
+        //
+        //
+        
+        private static double ComputeNurseryLogAreaRatio(ISpecies species, ActiveSite site)
+        {
+            // Hight of downed logs
+            double hight = 28.64; // Units: cm
+
+            // Wood density (g cm^-3) of dead wood for each decay class.
+            // Decay class 3-5 is suitable for establishment.
+            // Reference: Unidentified spp category in Table 3 of Ugawa et al. (2012)
+            //            https://www.ffpri.affrc.go.jp/pubs/bulletin/425/documents/425-2.pdf
+            double densityDecayClass0 = 0.421;
+            double densityDecayClass3 = 0.255;
+            double densityDecayClass4 = 0.178;
+            double densityDecayClass5 = 0.112;
+
+            // Compute the amount of nursery log carbon (gC m^-2)
+            double[] nurseryLogC = ComputeNurseryLogC(site, densityDecayClass0, densityDecayClass3, densityDecayClass4, densityDecayClass5);
+
+            // Compute the area ratio in the site of the nursery log occupies.
+            // The shape of downed logs were assumed to be an elliptical cylinder
+            // Variables:
+            //   decayClassXAreaRatio (-)
+            //   nurseryLogC[X] (gC m^-2)
+            //   height (cm)
+            //   densityDecayClass[X] (gC cm^-3)
+            double decayClass3AreaRatio = 4 * 2 * nurseryLogC[0] / (Math.PI * hight * densityDecayClass3) * Math.Pow(10, -4); // Decay class 3
+            double decayClass4AreaRatio = 4 * 2 * nurseryLogC[1] / (Math.PI * hight * densityDecayClass4) * Math.Pow(10, -4); // Decay class 4
+            double decayClass5AreaRatio = 4 * 2 * nurseryLogC[2] / (Math.PI * hight * densityDecayClass5) * Math.Pow(10, -4); // Decay class 5
+            if (OtherData.CalibrateMode && species.Index == 0)
+            {
+                PlugIn.ModelCore.UI.WriteLine("nurseryLogC:{0},{1},{2},{3}", PlugIn.ModelCore.CurrentTime, nurseryLogC[0], nurseryLogC[1], nurseryLogC[2]);
+                PlugIn.ModelCore.UI.WriteLine("decayClassAreaRatios:{0},{1},{2},{3}", PlugIn.ModelCore.CurrentTime, decayClass3AreaRatio, decayClass4AreaRatio, decayClass5AreaRatio);
+            }
+            return Math.Min(1.0, decayClass3AreaRatio + decayClass4AreaRatio + decayClass5AreaRatio);
+        }
+
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Compute the amount of nursery log carbon based on its decay ratio
+        /// </summary>
+        // W.Hotta & Chihiro; 
+        //
+        // Description: 
+        //     - In the process of decomposition of downed logs, 
+        //       the volume remains the same, only the density changes.
+        //
+        
+        private static double[] ComputeNurseryLogC(ActiveSite site, double densityDecayClass0, double densityDecayClass3, double densityDecayClass4, double densityDecayClass5)
+        {
+            // Define thresholds to identify decay class
+            double retentionRatioThreshold3 = densityDecayClass3 / densityDecayClass0;
+            double retentionRatioThreshold4 = densityDecayClass4 / densityDecayClass0;
+            double retentionRatioThreshold5 = densityDecayClass5 / densityDecayClass0;
+
+            // Initialize nursery log carbon for each decay class
+            double decayClass3 = 0.0;
+            double decayClass4 = 0.0;
+            double decayClass5 = 0.0;
+
+            // Update the amount of carbon for each decayClass
+            for (int i = 0; i < SiteVars.CurrentDeadWoodC[site].Length; i++)
+            {
+                // Compute the ratio of the current dead wood C to the origindal dead wood C
+                double retentionRatio = SiteVars.CurrentDeadWoodC[site][i] / SiteVars.OriginalDeadWoodC[site][i];
+                // PlugIn.ModelCore.UI.WriteLine("decayRatio:{0},{1}", PlugIn.ModelCore.CurrentTime, decayRatio);
+
+                // Identify the decay class of the current dead wood carbon & update the amount of C of each decay class (i.e. the amount of carbon just after the focused dead wood was generated.)
+                if (retentionRatio >= retentionRatioThreshold4 & retentionRatio < retentionRatioThreshold3)
+                {
+                    decayClass3 += SiteVars.CurrentDeadWoodC[site][i];
+                }
+                else if (retentionRatio >= retentionRatioThreshold5 & retentionRatio < retentionRatioThreshold4)
+                {
+                    decayClass4 += SiteVars.CurrentDeadWoodC[site][i];
+                }
+                else if (retentionRatio < retentionRatioThreshold5)
+                {
+                    decayClass5 += SiteVars.CurrentDeadWoodC[site][i];
+                }
+            }
+            // PlugIn.ModelCore.UI.WriteLine("decayClasses:{0},{1},{2},{3}", PlugIn.ModelCore.CurrentTime, decayClass3, decayClass4, decayClass5);
+            return new double[3] { decayClass3, decayClass4, decayClass5 };
+        }
+
+
         //---------------------------------------------------------------------
         /// <summary>
         /// Add a new cohort to a site following reproduction or planting.  Does not include initial communities.

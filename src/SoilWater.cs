@@ -651,6 +651,7 @@ namespace Landis.Extension.Succession.NECN
             return r;
         }
         //---------------------------------------------------------------------------
+
         private static double CalculateAnaerobicEffect(double drain, double ratioPrecipPET, double pet, double tave)
         {
 
@@ -720,7 +721,7 @@ namespace Landis.Extension.Succession.NECN
 
             return soilTemp;
         }
-        //--------------------------------------------------------------------------
+
         public static void Leach(Site site, double baseFlow, double stormFlow)
         {
            

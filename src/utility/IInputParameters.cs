@@ -86,6 +86,7 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<int> SppFunctionalType{get;}
         Landis.Library.Parameters.Species.AuxParm<bool> NFixer{get;}
         Landis.Library.Parameters.Species.AuxParm<bool> Grass { get; }
+        Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend { get; } // W.Hotta (2021.08.01)
         Landis.Library.Parameters.Species.AuxParm<int> GDDmin{get;}
         Landis.Library.Parameters.Species.AuxParm<int> GDDmax{get;}
         Landis.Library.Parameters.Species.AuxParm<int> MinJanTemp{get;}
