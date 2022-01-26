@@ -1,0 +1,56 @@
+2022-01-26 09:10:23,426 - LANDIS-II 7.0 (7)
+2022-01-26 09:10:23,430 - 
+2022-01-26 09:10:23,465 - Loading scenario from file "scenario_landscape.txt" ...
+2022-01-26 09:10:23,504 - Initialized random number generator with seed = 1,618,560,260
+2022-01-26 09:10:23,504 - Loading species data from file "species_LTB.txt" ...
+2022-01-26 09:10:23,515 - Loading ecoregions from file "./ecoregions.txt" ...
+2022-01-26 09:10:23,523 - Initializing landscape from ecoregions map "./ecoregions.gis" ...
+2022-01-26 09:10:23,533 - Cell length = 100 m, cell area = 1 ha
+2022-01-26 09:10:23,534 - Map dimensions: 99 rows by 99 columns = 9,801 cells
+2022-01-26 09:10:23,539 - Sites: 9,801 active (100.0%), 0 inactive (0.0%)
+2022-01-26 09:10:23,544 - Loading NECN Succession extension ...
+2022-01-26 09:10:23,554 -    Registering Data:  Succession.LeafBiomassCohorts.
+2022-01-26 09:10:23,555 -    Registering Data:  Succession.AgeCohorts.
+2022-01-26 09:10:23,555 -    Registering Data:  Succession.BiomassCohorts.
+2022-01-26 09:10:23,555 -    Registering Data:  Succession.FineFuels.
+2022-01-26 09:10:23,555 -    Registering Data:  Succession.SmolderConsumption.
+2022-01-26 09:10:23,555 -    Registering Data:  Succession.FlamingConsumption.
+2022-01-26 09:10:23,555 -    Registering Data:  Succession.CWD.
+2022-01-26 09:10:23,555 -    Registering Data:  Succession.PET.
+2022-01-26 09:10:23,613 -    Begin parsing NECN SPECIES table.
+2022-01-26 09:10:23,625 -    Begin parsing FUNCTIONAL GROUP table.
+2022-01-26 09:10:23,627 -    Begin reading FIRE REDUCTION parameters.
+2022-01-26 09:10:23,628 -    Begin reading HARVEST REDUCTION parameters.
+2022-01-26 09:10:23,630 - Initializing NECN Succession ...
+2022-01-26 09:10:23,652 -   Read in data from random110.img
+2022-01-26 09:10:23,663 -   Read in data from constantpoint75.img
+2022-01-26 09:10:23,671 -   Read in data from constantpoint4.img
+2022-01-26 09:10:23,679 -   Read in data from constantpoint4.img
+2022-01-26 09:10:23,681 -   Read in data from random_point1_point2.img
+2022-01-26 09:10:23,689 -   Read in data from random_point05_point099.img
+2022-01-26 09:10:23,697 -   Read in data from random_point01_point5.img
+2022-01-26 09:10:23,704 -   Read in data from random_point01_point5.img
+2022-01-26 09:10:23,708 -   Read in data from random110.img
+2022-01-26 09:10:23,712 -   Read in data from random6.img
+2022-01-26 09:10:23,720 -   Read in data from random110.img
+2022-01-26 09:10:23,722 -   Read in data from random9.img
+2022-01-26 09:10:23,729 -   Read in data from random4500.img
+2022-01-26 09:10:23,737 -   Read in data from random145.img
+2022-01-26 09:10:23,745 -   Read in data from random1294.img
+2022-01-26 09:10:23,753 -   Read in data from random50.img
+2022-01-26 09:10:23,761 -   Read in data from random110.img
+2022-01-26 09:10:23,764 -   Read in data from random50.img
+2022-01-26 09:10:23,776 -    Loading weather data ...
+2022-01-26 09:10:44,154 -    Registering Data:  TimeOfLastSuccession.
+2022-01-26 09:10:44,154 -    Registering Data:  Shade.
+2022-01-26 09:10:44,155 -    Creating Dispersal Neighborhood List.
+2022-01-26 09:10:44,155 -    Dispersal:  NeighborRadius=5050, CellLength=100, numCellRadius=50
+2022-01-26 09:10:44,161 -    Loading initial communities from file "./initial-communities_LTB.txt" ...
+2022-01-26 09:10:44,181 -    Reading initial communities map "./initial-communities.gis" ...
+2022-01-26 09:10:44,400 - Using the following extensions ...
+   Extension Name            Extension Filename       
+   --------------            ------------------       
+   NECN Succession           NECN_LTB_landscape.txt   
+
+2022-01-26 09:10:44,401 - Current time: 5
+2022-01-26 09:10:44,401 - Running NECN Succession ...

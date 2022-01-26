@@ -1,0 +1,85 @@
+2022-01-26 09:09:55,879 - LANDIS-II 7.0 (7)
+2022-01-26 09:09:55,883 - 
+2022-01-26 09:09:55,919 - Loading scenario from file "scenario-single-cell.txt" ...
+2022-01-26 09:09:55,952 - Initialized random number generator with seed = 40,054,549
+2022-01-26 09:09:55,952 - Loading species data from file "species_LTB.txt" ...
+2022-01-26 09:09:55,962 - Loading ecoregions from file "./ecoregions.txt" ...
+2022-01-26 09:09:55,970 - Initializing landscape from ecoregions map "./single3.tif" ...
+2022-01-26 09:09:55,976 - Cell length = 100 m, cell area = 1 ha
+2022-01-26 09:09:55,977 - Map dimensions: 1 row by 1 column = 1 cell
+2022-01-26 09:09:55,980 - Sites: 1 active (100.0%), 0 inactive (0.0%)
+2022-01-26 09:09:55,985 - Loading NECN Succession extension ...
+2022-01-26 09:09:55,993 -    Registering Data:  Succession.LeafBiomassCohorts.
+2022-01-26 09:09:55,993 -    Registering Data:  Succession.AgeCohorts.
+2022-01-26 09:09:55,993 -    Registering Data:  Succession.BiomassCohorts.
+2022-01-26 09:09:55,993 -    Registering Data:  Succession.FineFuels.
+2022-01-26 09:09:55,993 -    Registering Data:  Succession.SmolderConsumption.
+2022-01-26 09:09:55,993 -    Registering Data:  Succession.FlamingConsumption.
+2022-01-26 09:09:55,993 -    Registering Data:  Succession.CWD.
+2022-01-26 09:09:55,994 -    Registering Data:  Succession.PET.
+2022-01-26 09:09:56,010 -    Begin parsing NECN SPECIES table.
+2022-01-26 09:09:56,020 -    Begin parsing FUNCTIONAL GROUP table.
+2022-01-26 09:09:56,022 -    Begin reading FIRE REDUCTION parameters.
+2022-01-26 09:09:56,023 -    Begin reading HARVEST REDUCTION parameters.
+2022-01-26 09:09:56,025 - Initializing NECN Succession ...
+2022-01-26 09:09:56,043 -   Read in data from single75.tif
+2022-01-26 09:09:56,044 -   Read in data from single0.691.tif
+2022-01-26 09:09:56,048 -   Read in data from single0.4.tif
+2022-01-26 09:09:56,048 -   Read in data from single0.4.tif
+2022-01-26 09:09:56,049 -   Read in data from single0.109.tif
+2022-01-26 09:09:56,050 -   Read in data from single0.055.tif
+2022-01-26 09:09:56,051 -   Read in data from single0.714.tif
+2022-01-26 09:09:56,051 -   Read in data from single0.07.tif
+2022-01-26 09:09:56,054 -   Read in data from single75.tif
+2022-01-26 09:09:56,055 -   Read in data from single3.tif
+2022-01-26 09:09:56,055 -   Read in data from single100.tif
+2022-01-26 09:09:56,055 -   Read in data from single10.tif
+2022-01-26 09:09:56,056 -   Read in data from single3000.tif
+2022-01-26 09:09:56,056 -   Read in data from single50.tif
+2022-01-26 09:09:56,056 -   Read in data from single300.tif
+2022-01-26 09:09:56,057 -   Read in data from single15.tif
+2022-01-26 09:09:56,058 -   Read in data from single110.tif
+2022-01-26 09:09:56,059 -   Read in data from single50.tif
+2022-01-26 09:09:56,066 -    Loading weather data ...
+2022-01-26 09:09:57,365 -    Registering Data:  TimeOfLastSuccession.
+2022-01-26 09:09:57,366 -    Registering Data:  Shade.
+2022-01-26 09:09:57,367 -    Creating Dispersal Neighborhood List.
+2022-01-26 09:09:57,367 -    Dispersal:  NeighborRadius=5050, CellLength=100, numCellRadius=50
+2022-01-26 09:09:57,371 -    Loading initial communities from file "initial-communities_LTBselect.txt" ...
+2022-01-26 09:09:57,386 -    Reading initial communities map "single3.tif" ...
+2022-01-26 09:09:57,407 - Using the following extensions ...
+   Extension Name            Extension Filename       
+   --------------            ------------------       
+   NECN Succession           NECN-succession-singlecell.txt
+
+2022-01-26 09:09:57,408 - Current time: 1
+2022-01-26 09:09:57,408 - Running NECN Succession ...
+2022-01-26 09:09:57,546 - Current time: 2
+2022-01-26 09:09:57,546 - Running NECN Succession ...
+2022-01-26 09:09:57,613 - Current time: 3
+2022-01-26 09:09:57,614 - Running NECN Succession ...
+2022-01-26 09:09:57,688 - Current time: 4
+2022-01-26 09:09:57,689 - Running NECN Succession ...
+2022-01-26 09:09:57,759 - Current time: 5
+2022-01-26 09:09:57,759 - Running NECN Succession ...
+2022-01-26 09:09:57,832 - Current time: 6
+2022-01-26 09:09:57,833 - Running NECN Succession ...
+2022-01-26 09:09:57,908 - Current time: 7
+2022-01-26 09:09:57,908 - Running NECN Succession ...
+2022-01-26 09:09:57,980 - Current time: 8
+2022-01-26 09:09:57,980 - Running NECN Succession ...
+2022-01-26 09:09:58,055 - Current time: 9
+2022-01-26 09:09:58,055 - Running NECN Succession ...
+2022-01-26 09:09:58,130 - Current time: 10
+2022-01-26 09:09:58,130 - Running NECN Succession ...
+2022-01-26 09:09:58,204 - Current time: 11
+2022-01-26 09:09:58,204 - Running NECN Succession ...
+2022-01-26 09:09:58,278 - Current time: 12
+2022-01-26 09:09:58,278 - Running NECN Succession ...
+2022-01-26 09:09:58,354 - Current time: 13
+2022-01-26 09:09:58,354 - Running NECN Succession ...
+2022-01-26 09:09:58,458 - Current time: 14
+2022-01-26 09:09:58,458 - Running NECN Succession ...
+2022-01-26 09:09:58,543 - Current time: 15
+2022-01-26 09:09:58,543 - Running NECN Succession ...
+2022-01-26 09:09:58,617 - Model run is complete.

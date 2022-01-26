@@ -1,7 +1,7 @@
 LandisData   Extension
 
 Name         "NECN Succession"
-Version      6.8
+Version      6.9
 Type         succession
 Assembly     Landis.Extension.Succession.NECN-v6
 Class        Landis.Extension.Succession.NECN.PlugIn
