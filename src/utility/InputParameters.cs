@@ -87,7 +87,7 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
 
         private List<ISufficientLight> sufficientLight;
-        private Landis.Library.Parameters.Species.AuxParm<bool> grass;
+        //private Landis.Library.Parameters.Species.AuxParm<bool> grass;
         private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }

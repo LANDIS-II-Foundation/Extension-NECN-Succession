@@ -55,6 +55,7 @@ namespace Landis.Extension.Succession.NECN
             double avgAGNPPtc = 0.0;
             double avgMineralN = 0.0;
             double avgDeadWoodC = 0.0;
+            double transpir = 0.0;
 
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -65,6 +66,7 @@ namespace Landis.Extension.Succession.NECN
                 avgAGNPPtc += SiteVars.AGNPPcarbon[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;
                 avgMineralN += SiteVars.MineralN[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;
                 avgDeadWoodC += SiteVars.SurfaceDeadWood[site].Carbon / PlugIn.ModelCore.Landscape.ActiveSiteCount;
+                transpir += SiteVars.Transpiration[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;   
 
             }
 
@@ -78,6 +80,7 @@ namespace Landis.Extension.Succession.NECN
             pl.AG_NPPC = avgAGNPPtc;
             pl.MineralN = avgMineralN;
             pl.C_DeadWood = avgDeadWoodC;
+            pl.AnnualTrans = transpir;
 
             primaryLogShort.AddObject(pl);
             primaryLogShort.WriteToFile();
@@ -87,6 +90,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         public static void WritePrimaryLogFile(int CurrentTime)
         {
+            double[] transpir = new double[PlugIn.ModelCore.Ecoregions.Count]; 
 
             double[] avgAnnualPPT = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avgJJAtemp = new double[PlugIn.ModelCore.Ecoregions.Count];
@@ -238,7 +242,7 @@ namespace Landis.Extension.Succession.NECN
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
                 IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-
+                transpir[ecoregion.Index] += SiteVars.Transpiration[site];
                 avgNEEc[ecoregion.Index] += SiteVars.AnnualNEE[site];
                 avgSOMtc[ecoregion.Index] += GetOrganicCarbon(site);
                 avgAGB[ecoregion.Index] += Main.ComputeLivingBiomass(SiteVars.Cohorts[site]);
@@ -321,6 +325,7 @@ namespace Landis.Extension.Succession.NECN
                 pl.ClimateRegionIndex = ecoregion.Index;
                 pl.NumSites = ClimateRegionData.ActiveSiteCount[ecoregion]; 
 
+                pl.AnnualTrans = (transpir[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.NEEC = (avgNEEc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.SOMTC = (avgSOMtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.AGB = (avgAGB[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
@@ -402,6 +407,7 @@ namespace Landis.Extension.Succession.NECN
             double[] nitrogenDeposition = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] streamN = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] soilWaterContent = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] transpiration = new double[PlugIn.ModelCore.Ecoregions.Count];
 
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
@@ -415,6 +421,7 @@ namespace Landis.Extension.Succession.NECN
                 nitrogenDeposition[ecoregion.Index] = 0.0;
                 streamN[ecoregion.Index] = 0.0;
                 soilWaterContent[ecoregion.Index] = 0.0;
+                transpiration[ecoregion.Index] = 0.0;  
             }
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -434,6 +441,7 @@ namespace Landis.Extension.Succession.NECN
                 nitrogenDeposition[ecoregion.Index] = ClimateRegionData.MonthlyNDeposition[ecoregion][month];
                 streamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
                 soilWaterContent[ecoregion.Index] += SiteVars.MonthlySoilWaterContent[site][month];
+                transpiration[ecoregion.Index] += SiteVars.monthlyTranspiration[site][month];  
 
             }
             
@@ -461,6 +469,7 @@ namespace Landis.Extension.Succession.NECN
                     ml.Ndep = nitrogenDeposition[ecoregion.Index];
                     ml.StreamN = (streamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.SoilWaterContent = (soilWaterContent[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AvgTranspiration = (transpiration[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);  // Katie M.
 
                     monthlyLog.AddObject(ml);
                     monthlyLog.WriteToFile();
@@ -712,6 +721,27 @@ namespace Landis.Extension.Succession.NECN
                         outputRaster.WriteBufferPixel();
                     }
                 }
+
+                string pathTransp = MapNames.ReplaceTemplateVars(@"NECN\Transpiration-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathTransp, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = (int)((SiteVars.Transpiration[site]));
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+
+                } 
+
             }
         }
 

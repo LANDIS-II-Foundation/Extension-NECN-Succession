@@ -113,6 +113,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> MonthlyLAI_GrassesLastMonth; // Chihiro, 2021.03.30: tentative
         public static ISiteVar<double[]> MonthlyHeteroResp;
         public static ISiteVar<double[]> MonthlySoilWaterContent;
+        public static ISiteVar<double> AnnualTranspiration;
+        public static ISiteVar<double[]> MonthlyTranspiration;
 
 
 
@@ -177,6 +179,9 @@ namespace Landis.Extension.Succession.NECN
             soilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             anaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             dryDays             = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
+
+            AnnualTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            MonthlyTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             
             // Annual accumulators
             grossMineralization = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -263,6 +268,8 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyLAI_Trees[site] = new double[12];
                 MonthlyLAI_Grasses[site] = new double[12];
                 MonthlySoilWaterContent[site]       = new double[12];
+
+                MonthlyTranspiration[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
             }
@@ -372,6 +379,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
             SiteVars.AnnualPotentialEvapotranspiration[site] = 0.0;
             SiteVars.WoodMortality[site] = 0.0;
+            SiteVars.Transpiration[site] = 0.0;   // Katie M. 
             //SiteVars.DryDays[site] = 0;
 
             //SiteVars.FireEfflux[site] = 0.0;
@@ -1023,6 +1031,34 @@ namespace Landis.Extension.Succession.NECN
 
 
         }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of Transpiration (mm)
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double> Transpiration
+        {
+            get {
+                return AnnualTranspiration;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of monthly transpiration (mm/mo)
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyTranspiration
+        {
+            get {
+                return MonthlyTranspiration;
+            }
+            set {
+                MonthlyTranspiration = value;
+            }
+        }
+
 
         // --------------------------------------------------------------------
         /// <summary>

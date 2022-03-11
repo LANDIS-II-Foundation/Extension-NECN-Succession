@@ -23,6 +23,8 @@ namespace Landis.Extension.Succession.NECN
         public static double mortalityBIOwood, mortalityBIOleaf;
         //    CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
         public static double resorbedNused, mineralNused, demand_N;
+        public static double Transpiration;
+
 
         public static void WriteLogFile()
         {
@@ -65,6 +67,7 @@ namespace Landis.Extension.Succession.NECN
             clog.DeltaWood = deltaWood;
             clog.DeltaLeaf = deltaLeaf;
             clog.TotalNDemand = demand_N;
+            clog.transpiration = Transpiration;
 
 
             Outputs.calibrateLog.AddObject(clog);
@@ -185,6 +188,10 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Total N Demand", Format = "0.000")]
         public double TotalNDemand { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "mm", Desc = "Transpiration", Format = "0.00")]
+        public double transpiration { set; get; }
+
 
     }
 }
