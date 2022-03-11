@@ -1,0 +1,9 @@
+LandisData   Extension
+
+Name         "NECN Succession"
+Version      6.4
+Type         succession
+Assembly     Landis.Extension.Succession.NECN-v6
+Class        Landis.Extension.Succession.NECN.PlugIn
+Description  "Succession with complete Carbon and Nitrogen cycling"
+CoreVersion  7.0
