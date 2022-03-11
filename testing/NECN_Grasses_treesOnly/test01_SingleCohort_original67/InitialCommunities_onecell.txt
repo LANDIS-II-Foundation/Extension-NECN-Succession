@@ -1,9 +1,0 @@
-LandisData	"Initial Communities"	
-
->>
->> Date: 2021/04/20
->> Note: testing grass branch
->>
-
-MapCode	3
-abiesach	50	(5000)

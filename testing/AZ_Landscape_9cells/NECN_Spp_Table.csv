@@ -1,2 +1,0 @@
-SpeciesCode,FunctionalType,NitrogenFixer,GDDMinimum,GDDMaximum,MinJanuaryT,MaxDrought,LeafLongevity,Epicormic,LeafLignin,FineRootLignin,WoodLignin,CoarseRootLignin,LeafCN,FineRootCN,WoodCN,CoarseRootCN,FoliageLitterCN,MaximumANPP,MaximumBiomass
-PinuPond,1,FALSE,155,4000,-5,0.92,4.5,FALSE,0.28,0.2,0.25,0.25,48,48,250,170,100,150,21413
