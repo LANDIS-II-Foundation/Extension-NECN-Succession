@@ -105,8 +105,6 @@ namespace Landis.Extension.Succession.NECN
             
             if (inputFrassBiomass > 0)
             {
-                //SiteVars.LitterfallC[site] += defoliatedLeafBiomass * 0.47;
-
                 //double frassBiomass = Math.Max(0.0, OtherData.frassdepk * defoliatedLeafBiomass);
                 // Frass C added is a function of defoliated leaf biomass, but adjusted for the CN of litter and frass
                 // Any C lost is due to insect metabolism
