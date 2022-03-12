@@ -85,12 +85,10 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<int> maxBiomass;
         private Landis.Library.Parameters.Species.AuxParm<bool> grass;  // optional
         private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
-
-        private List<ISufficientLight> sufficientLight;
-        private Landis.Library.Parameters.Species.AuxParm<bool> grass;
         private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
-        public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
+
+        private List<ISufficientLight> sufficientLight;
 
 
         //---------------------------------------------------------------------
@@ -336,6 +334,8 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double>  MaxDrought { get { return maxDrought; }}
         public Landis.Library.Parameters.Species.AuxParm<double>  LeafLongevity {get {return leafLongevity;}}
         public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
+        public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
+
 
 
         //---------------------------------------------------------------------
