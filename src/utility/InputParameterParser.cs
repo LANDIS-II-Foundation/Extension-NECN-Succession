@@ -186,6 +186,22 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.SoilWater_Henne = false;
 
+            InputVar<bool> monthly_SWA = new InputVar<bool>("Write_Monthly_SWA");
+            if (ReadOptionalVar(monthly_SWA))
+            {
+                parameters.writeMonthlySWA = monthly_SWA.Value;
+            }
+            else
+                parameters.writeMonthlySWA = false;
+
+            InputVar<bool> use_Drought = new InputVar<bool>("Use_Drought_Mortality");
+            if (ReadOptionalVar(use_Drought))
+            {
+                parameters.useDrought = use_Drought.Value;
+            }
+            else
+                parameters.useDrought = false;
+
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
             parameters.WType = WParse(wt.Value);

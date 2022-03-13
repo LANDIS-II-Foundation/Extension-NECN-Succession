@@ -114,7 +114,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyHeteroResp;
         public static ISiteVar<double[]> MonthlySoilWaterContent;
 
-
+        public List<double> soilWater10;
+        public List<double> temp10;
 
         //---------------------------------------------------------------------
 
@@ -1025,6 +1026,41 @@ namespace Landis.Extension.Succession.NECN
         }
 
         // --------------------------------------------------------------------
+        /// <summary>
+        /// Keep track of minimum soil water values
+        /// </summary>
+        public static List<double> soilWater10
+        {
+            get
+            {
+                return soilWater10;
+            }
+            set
+            {
+                soilWater10 = value;
+            }
+
+
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Keep track of maximum temperatures
+        /// </summary>
+        public static List<double> temp10
+        {
+            get
+            {
+                return temp10;
+            }
+            set
+            {
+                temp10 = value;
+            }
+
+
+        }
+        //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Annual Water Budget (PPT - AET)
         /// </summary>

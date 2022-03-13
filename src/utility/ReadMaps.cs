@@ -456,5 +456,55 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
+
+        //TODO make sure these maps are referenced 
+        public static void ReadClimateNormalMaps(string 
+            Path, string tempPath)
+        {
+            IInputRaster<DoublePixel> map = MakeDoubleMap(swaPath);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    double mapValue = pixel.MapCode.Value;
+                    if (site.IsActive)
+                    {
+                        if (mapValue < 0.0 || mapValue > 75000.0)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "SoilWaterAvailabilityNormal value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0.0, 75000.0, site.Location.Row, site.Location.Column); //TODO set values
+                        SiteVars.ClimateNormal[site].SoilWaterAvailabilityNormal = mapValue;
+                        
+
+                    }
+                }
+            }
+
+            map = MakeDoubleMap(tempPath);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    double mapValue = pixel.MapCode.Value;
+                    if (site.IsActive)
+                    {
+                        if (mapValue < 0.0 || mapValue > 75000.0)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "TempNormal value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0.0, 75000.0, site.Location.Row, site.Location.Column); //TODO set values
+                        SiteVars.ClimateNormal[site].TempNormal = mapValue;
+
+
+                    }
+                }
+            }
+        }
+        //---------------------------------------------------------------------
     }
 }

@@ -40,10 +40,13 @@ namespace Landis.Extension.Succession.NECN
         private string initialSOM3NMapName;
         private string initialDeadSurfaceMapName;
         private string initialDeadSoilMapName;
+        //TODO SWA and Temp normal rasters
 
         private bool calibrateMode;
         private bool smokeModelOutputs;
         private bool henne_watermode;
+        private bool writeMonthlySWA;
+        private bool useDrought;
         private WaterType wtype;
         private double probEstablishAdjust;
         private double atmosNslope;
@@ -85,8 +88,19 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<int> maxBiomass;
         private Landis.Library.Parameters.Species.AuxParm<bool> grass;  // optional
         private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
+<<<<<<< Updated upstream
         private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
+=======
+        private Landis.Library.Parameters.Species.AuxParm<double> droughtIntercept; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaAge; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaBiomass; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaSWA; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaTemp; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaSWAAnom; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaTempAnom; // optional
+        //TODO add parameters to parser, SpeciesData?
+>>>>>>> Stashed changes
 
         private List<ISufficientLight> sufficientLight;
 
@@ -208,6 +222,40 @@ namespace Landis.Extension.Succession.NECN
                 henne_watermode = value;
             }
         }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should monthly rasters of SWA be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool WriteMonthlySWA
+        {
+            get
+            {
+                return writeMonthlySWA;
+            }
+            set
+            {
+                writeMonthlySWA = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should drought mortality be simulated?
+        /// </summary>
+        public bool UseDrought
+        {
+            get
+            {
+                return useDrought;
+            }
+            set
+            {
+                useDrought = value;
+            }
+        }
+
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -1124,6 +1172,8 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
+        //TODO add drought variables
+
         public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
         {
             this.speciesDataset = speciesDataset;
@@ -1154,6 +1204,8 @@ namespace Landis.Extension.Succession.NECN
             maxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             growthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+
+            //TODO add drought variables
 
             maximumShadeLAI = new double[6];
             sufficientLight         = new List<ISufficientLight>();

@@ -195,7 +195,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 AET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0);
             }
-
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWaterContent = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWaterContent, waterFull, waterEmpty);
             //Subtract transpiration from soil water content
             soilWaterContent -= AET;
 
@@ -211,7 +211,7 @@ namespace Landis.Extension.Succession.NECN
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
             availableWater = (availableWaterMax + availableWaterMin)/ 2.0;
 
-            // Compute the ratio of precipitation to PET
+            // Compute the ratio of precipitation to PETf
             double ratioPrecipPET = 0.0;
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
@@ -304,7 +304,7 @@ namespace Landis.Extension.Succession.NECN
                 //PH: Accumulate precipitation and snowmelt before adding to soil so that interception and soil evaporation can come out first
                 addToSoil += Precipitation;
                 //soilWaterContent += H2Oinputs;
-                //PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", H2Oinputs, soilWaterContent);
+                //PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", addToSoil, soilWaterContent);
             }
 
 
@@ -420,6 +420,7 @@ namespace Landis.Extension.Succession.NECN
 
             //if (actualET < 0.0)
             //    actualET = 0.0;
+            PlugIn.ModelCore.UI.WriteLine("Before calculating AET: Month={0}, soilWaterContent = {1}, remainingPET = {2}, waterFull = {3}, waterEmpty = {4}.", month, remainingPET, soilWaterContent, waterFull, waterEmpty);
             if ((soilWaterContent - waterEmpty) >= remainingPET)
             {
                 actualET = remainingPET;
@@ -495,7 +496,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
+            PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, actualET);
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
@@ -525,7 +526,7 @@ namespace Landis.Extension.Succession.NECN
             else
                 oldJulianDay = julianMidMonth[11];
             double dryDayInterp = 0.0;
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}, wiltPt={3:0.0}, waterAvail={4:0.0}, priorWater={5:0.0}.", month, beginGrowing, endGrowing, wiltingPoint, waterAvail, priorWaterAvail);
+            PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}, wiltPt={3:0.0}, waterAvail={4:0.0}, priorWater={5:0.0}.", month, beginGrowing, endGrowing, wiltingPoint, waterAvail, priorWaterAvail);
             
             //Increment number of dry days, truncate at end of growing season
                 if ((julianDay > beginGrowing) && (oldJulianDay < endGrowing)) 
@@ -717,7 +718,7 @@ namespace Landis.Extension.Succession.NECN
             //         take into account the effect of snow (AKM)
             double soilTemp = (maxSoilTemp + minSoilTemp) / 2.0;
 
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, Soil Temperature = {1}.", month+1, soilTemp);
+            PlugIn.ModelCore.UI.WriteLine("Month={0}, Soil Temperature = {1}.", month+1, soilTemp);
 
             return soilTemp;
         }
@@ -745,7 +746,7 @@ namespace Landis.Extension.Succession.NECN
 
             double amtNLeached = 0.0;
 
-            //PlugIn.ModelCore.UI.WriteLine("WaterMove={0:0}, ", waterMove);         
+            PlugIn.ModelCore.UI.WriteLine("WaterMove={0:0}, ", waterMove);         
            
             //...waterMove > 0. indicates a saturated water flow out of layer lyr
             if (waterMove > 0.0 && SiteVars.MineralN[site] > 0.0)
@@ -766,6 +767,10 @@ namespace Landis.Extension.Succession.NECN
             return;
         }
 
-    }
+        public static void CalculateDroughtClimateHistory(int year, Site site)
+        {
+            //put SWA array here
+        }
+
 }
 

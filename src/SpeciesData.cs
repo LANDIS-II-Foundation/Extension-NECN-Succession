@@ -42,6 +42,13 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend; // W.Hotta (2021.08.01)
         public static Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI;
 
+<<<<<<< Updated upstream
+=======
+        //TODO parameters for drought
+
+        //DecadalSurv = Intercept + Age + biomass +
+        //MEAN + TEMPMEAN + SWA8YMIN.anomaly+ TEMP7YMAX.anomaly
+>>>>>>> Stashed changes
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
@@ -68,6 +75,7 @@ namespace Landis.Extension.Succession.NECN
             Grass               = parameters.Grass;
             Nlog_depend         = parameters.Nlog_depend; // W.Hotta (2021.08.01)
             GrowthLAI           = parameters.GrowthLAI;
+            //TODO parameters for drought
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {
