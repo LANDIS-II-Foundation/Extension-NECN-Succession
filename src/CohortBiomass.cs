@@ -831,6 +831,12 @@ namespace Landis.Extension.Succession.NECN
             // add to overall site monthly and annual transpiration 
             SiteVars.Transpiration[site] += transpiration;
             SiteVars.monthlyTranspiration[site][Main.Month] += transpiration;
+
+            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+                {
+                    CalibrateLog.Transpiration = transpiration;
+
+                }
         }
 
 

@@ -187,7 +187,7 @@ namespace Landis.Extension.Succession.NECN
             }
                      
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
-            //  Bergström, 1992
+            //  Bergstrï¿½m, 1992
 
             if (soilWaterContent > waterFull)
                 AET = remainingPET;
@@ -233,31 +233,31 @@ namespace Landis.Extension.Succession.NECN
             return;
         }
 
-        public static void Run_Henne(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
-        {
-            //     Original Water Submodel for Century - written by Bill Parton
+        public static void Run_Henne_One(int year, int month, double liveBiomass, Site site, out double availableWaterMax, out double soilWaterContent, out double actualET) /// fix the inputs and outputs 
+       {
+           //     Original Water Submodel for Century - written by Bill Parton
             //     Updated from Fortran 4 - rm 2/92
             //     Rewritten by Bill Pulliam - 9/94
             //     Rewritten by Melissa Lucash - 11/2014
             //     Rewritten by Paul Henne, USGS - 6/2020
+            //     Rewritten by Katie McQuillan, NCSU - 3/2022
 
             //...Initialize Local Variables
             double addToSoil = 0.0;
             double bareSoilEvap = 0.0;
-            baseFlow = 0.0;
             double snow = 0.0;
-            stormFlow = 0.0;
-            double actualET = 0.0;
-            double remainingPET = 0.0;
             double priorWaterAvail = SiteVars.AvailableWater[site];
-            //double waterFull = 0.0;
+            actualET = 0.0;
+            double remainingPET = 0.0;
+            availableWaterMax = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
+
 
             //...Calculate external inputs
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
             double litterBiomass = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
             double deadBiomass = SiteVars.SurfaceDeadWood[site].Carbon / 0.47;
-            double soilWaterContent = SiteVars.SoilWaterContent[site];
+            soilWaterContent = SiteVars.SoilWaterContent[site];
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
             Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
@@ -278,12 +278,10 @@ namespace Landis.Extension.Succession.NECN
             double stormFlowFraction = SiteVars.SoilStormFlowFraction[site];
             double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];
             double drain = SiteVars.SoilDrain[site];
-            double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
-            double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
-            double availableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
 
             double waterFull = soilDepth * fieldCapacity;  //units of cm
             double waterEmpty = wiltingPoint * soilDepth;  // cm
+
             if (waterFull == waterEmpty || wiltingPoint > fieldCapacity)
             {
                 throw new ApplicationException(string.Format("Field Capacity and Wilting Point EQUAL or wilting point {0} > field capacity {1}.  Row={2}, Column={3}", wiltingPoint, fieldCapacity, site.Location.Row, site.Location.Column));
@@ -401,7 +399,7 @@ namespace Landis.Extension.Succession.NECN
 
             // ********************************************************
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
-            // Bergström, 1992
+            // Bergstrï¿½m, 1992
             // PH: Moved up to take evapotranspiration out before excess drains away. This is different from the CENTURY approach, 
             // where evaporation is taken out of the add first, but is 
             // less complex because it does not require partitioning the evaporation if evapotranspiration exceeds addToSoil.
@@ -431,10 +429,44 @@ namespace Landis.Extension.Succession.NECN
             actualET = Math.Min(soilWaterContent - waterEmpty, actualET);
 
 
-            AET = actualET;
             if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, AET);
-            // ********************************************************
+                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, actualET);
+
+            SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
+            SiteVars.LiquidSnowPack[site] = liquidSnowpack;
+
+            return;
+       }
+
+       public static void Run_Henne_Two(int year, int month, Site site, double liveBiomass, double availableWaterMax, double soilWaterContent, double actualET, out double baseFlow, out double stormFlow, out double AET) /// fix the inputs and outputs 
+       {
+
+           //...Calculate external inputs
+            IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+            
+            AET = actualET;
+            baseFlow = 0.0;
+            stormFlow = 0.0;
+            double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
+            double availableWater = 0.0;
+
+            double litterBiomass = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
+            tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
+            tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
+            PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
+            beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
+            endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
+            double priorWaterAvail = SiteVars.AvailableWater[site];
+
+            double wiltingPoint = SiteVars.SoilWiltingPoint[site];
+            double soilDepth = SiteVars.SoilDepth[site];
+            double fieldCapacity = SiteVars.SoilFieldCapacity[site];
+            double stormFlowFraction = SiteVars.SoilStormFlowFraction[site];
+            double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];
+            double drain = SiteVars.SoilDrain[site];
+            double waterFull = soilDepth * fieldCapacity;  //units of cm
+            double waterEmpty = wiltingPoint * soilDepth;  // cm
+
 
             //Subtract transpiration from soil water content
             soilWaterContent -= actualET;
@@ -494,15 +526,10 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
-            SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, pet, actualET);
-
-            SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
-
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
@@ -512,7 +539,9 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
 
             return;
-        }
+       }
+
+
         private static int CalculateDryDays(int month, int beginGrowing, int endGrowing, double wiltingPoint, double waterAvail, double priorWaterAvail)
         {
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}.", month, beginGrowing, endGrowing);
