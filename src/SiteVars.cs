@@ -59,6 +59,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> resorbedN;
         private static ISiteVar<double> waterMovement;  
         private static ISiteVar<double> availableWater;  
+        private static ISiteVar<double> availableWaterTranspiration;
         private static ISiteVar<double> soilWaterContent;
         private static ISiteVar<double> liquidSnowPack;  
         private static ISiteVar<double> decayFactor;
@@ -173,6 +174,7 @@ namespace Landis.Extension.Succession.NECN
             resorbedN           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             waterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            availableWaterTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             decayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -576,6 +578,20 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 availableWater = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> AvailableWaterTranspiration
+        {
+            get {
+                return availableWaterTranspiration;
+            }
+            set {
+                availableWaterTranspiration = value;
             }
         }
         //---------------------------------------------------------------------

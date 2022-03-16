@@ -14,6 +14,7 @@ namespace Landis.Extension.Succession.NECN
         public static string speciesName;
         public static double mortalityAGEwood, mortalityAGEleaf;
         public static double availableWater;
+        public static double availableWaterTranspiration;
         public static double actual_LAI, actual_LAI_tree, base_lai, seasonal_adjustment, siteLAI;
         public static double mineralNalloc, resorbedNalloc;
         public static double limitLAI, limitH20, limitT, limitN, limitLAIcompetition;
@@ -43,6 +44,7 @@ namespace Landis.Extension.Succession.NECN
             clog.MortalityTHINwoodBiomass = mortalityBIOwood;
             clog.MortalityTHINleafBiomass = mortalityBIOleaf;
             clog.AvailableWater = availableWater;
+            clog.AvailableWaterTranspiration = availableWaterTranspiration;
             clog.ActualLAI = actual_LAI; // Chihiro, 2021.03.26: renamed
             clog.TreeLAI = actual_LAI_tree;
             clog.SiteLAI = siteLAI; // Chihiro, 2021.03.26: added
@@ -170,6 +172,9 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water", Format = "0.0")]
         public double AvailableWater { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration", Format = "0.0")]
+        public double AvailableWaterTranspiration { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Soil Temperature", Format = "0.0")]
         public double SoilTemperature { set; get; }

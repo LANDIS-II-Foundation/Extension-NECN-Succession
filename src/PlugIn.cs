@@ -713,7 +713,7 @@ namespace Landis.Extension.Succession.NECN
         public bool Establish(ISpecies species, ActiveSite site)
         {
             double establishProbability = Establishment.Calculate(species, site);
-
+             
             return modelCore.GenerateUniform() < establishProbability;
         }
 

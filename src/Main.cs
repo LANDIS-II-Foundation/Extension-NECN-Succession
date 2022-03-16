@@ -97,7 +97,6 @@ namespace Landis.Extension.Succession.NECN
                     double availableWaterMax, soilWaterContent, actualET;
 
                     SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent, out actualET);
-                    SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, actualET, out baseFlow, out stormFlow, out AET);
                     //SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
                     //if(OtherData.SoilWaterVersion_Henne)
@@ -106,8 +105,6 @@ namespace Landis.Extension.Succession.NECN
                     //else
                     //    SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
-                    PlugIn.AnnualWaterBalance += ppt - AET;
-
                     // Calculate N allocation for each cohort
                     AvailableN.SetMineralNallocation(site);
 
@@ -115,6 +112,9 @@ namespace Landis.Extension.Succession.NECN
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
                     else
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
+
+                    SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, actualET, out baseFlow, out stormFlow, out AET);
+                    PlugIn.AnnualWaterBalance += ppt - AET;
 
                     // Track the grasses species LAI on the site
                     // Chihiro 2021.03.30: tentative

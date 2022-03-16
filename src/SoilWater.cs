@@ -434,6 +434,10 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
+            SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
+
+            // add in a new available water for sp transpiration calculations 
+            SiteVars.AvailableWaterTranspiration[site] = soilWaterContent - waterEmpty;
 
             return;
        }
@@ -530,7 +534,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
-            SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             if (month == 0)
@@ -606,7 +609,7 @@ namespace Landis.Extension.Succession.NECN
       
                     dryDays += (int) dryDayInterp;
                 }
-                return dryDays;
+            return dryDays;
         }
         
         //---------------------------------------------------------------------------
