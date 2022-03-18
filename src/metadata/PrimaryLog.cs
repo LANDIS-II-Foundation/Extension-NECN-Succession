@@ -193,7 +193,7 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Frass C", Format = "0.0")]
         public double FrassC { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_C_m2_yr1, Desc = "Transpiration", Format = "0.0")] // this should actually be mm/yr
+        [DataFieldAttribute(Unit = "mm/yr", Desc = "Transpiration", Format = "0.0")]
         public double AnnualTrans { get; set; }
 
     }

@@ -178,7 +178,7 @@ namespace Landis.Extension.Succession.NECN
 
             double limitT   = calculateTemp_Limit(site, cohort.Species);
 
-            double limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            double limitH20 = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
 
             double limitLAI = calculateLAI_Limit(cohort, site);
 
@@ -678,7 +678,7 @@ namespace Landis.Extension.Succession.NECN
         //                 thereby increase the slope of the line.
         //     pprpts(3):  The lowest ratio of available water to pet at which
         //                 there is no restriction on production.
-        private static double calculateWater_Limit(ActiveSite site, IEcoregion ecoregion, ISpecies species)
+        private static double calculateWater_Limit(ActiveSite site, ICohort cohort, IEcoregion ecoregion, ISpecies species)
         {
 
             // Ratio_AvailWaterToPET used to be pptprd and WaterLimit used to be pprdwc
@@ -688,9 +688,12 @@ namespace Landis.Extension.Succession.NECN
             double H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
             double pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[Main.Month];
             
+
+            double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
+
             if (pet >= 0.01)
             {   
-                Ratio_AvailWaterToPET = (SiteVars.AvailableWaterTranspiration[site] / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
+                Ratio_AvailWaterToPET = (availableSW / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
             }
             else Ratio_AvailWaterToPET = 0.01;
 
@@ -714,13 +717,6 @@ namespace Landis.Extension.Succession.NECN
             if (WaterLimit < 0.01) WaterLimit = 0.01;
 
             //PlugIn.ModelCore.UI.WriteLine("Intercept={0}, Slope={1}, WaterLimit={2}.", intcpt, slope, WaterLimit);     
-
-            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-            {
-                CalibrateLog.availableWaterTranspiration = SiteVars.AvailableWaterTranspiration[site];
-                //Outputs.CalibrateLog.Write("{0:0.00},", SiteVars.AvailableWater[site]);
-            }
-
             return WaterLimit;
         }
 
@@ -805,7 +801,7 @@ namespace Landis.Extension.Succession.NECN
             double VPD = Calculate_VPD(Tday, tmin);
 
             // Calculate the moisture limitation 
-            double CiModifier = calculateWater_Limit(site, ecoregion, cohort.Species);
+            double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
 
             // calculate gross photosynthesis 
             double GrossPsn = 2*(NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot);
@@ -826,15 +822,23 @@ namespace Landis.Extension.Succession.NECN
             double JH2O = JH2Osp * CiModifier;
 
             // calculate transpiraiton 
-            double transpiration = (double)(0.01227 * (GrossPsn / (JCO2 / JH2O)));
+            double transpiration = (double)(0.01227 * (GrossPsn / (JCO2 / JH2O)) /10); // the 10 at the end is to convert it to cm 
+
+             // cap transpiration at available water 
+            double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
+            double availableSWfraction = AvailableSoilWater.GetSWFraction(cohort);
+
+            double actual_transpiration = Math.Min(availableSW, transpiration);
 
             // add to overall site monthly and annual transpiration 
-            SiteVars.Transpiration[site] += transpiration;
-            SiteVars.monthlyTranspiration[site][Main.Month] += transpiration;
+            SiteVars.Transpiration[site] += actual_transpiration;
+            SiteVars.monthlyTranspiration[site][Main.Month] += actual_transpiration;
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
                 {
-                    CalibrateLog.Transpiration = transpiration;
+                    CalibrateLog.Transpiration = actual_transpiration;
+                    CalibrateLog.availableSW = availableSW;
+                    CalibrateLog.availableSWFraction = availableSWfraction;
 
                 }
         }

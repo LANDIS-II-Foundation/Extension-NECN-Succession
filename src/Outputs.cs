@@ -408,6 +408,7 @@ namespace Landis.Extension.Succession.NECN
             double[] streamN = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] soilWaterContent = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] transpiration = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] addToSoil = new double[PlugIn.ModelCore.Ecoregions.Count];
 
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
@@ -421,7 +422,8 @@ namespace Landis.Extension.Succession.NECN
                 nitrogenDeposition[ecoregion.Index] = 0.0;
                 streamN[ecoregion.Index] = 0.0;
                 soilWaterContent[ecoregion.Index] = 0.0;
-                transpiration[ecoregion.Index] = 0.0;  
+                transpiration[ecoregion.Index] = 0.0; 
+                addToSoil[ecoregion.Index] = 0.0; 
             }
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -442,6 +444,7 @@ namespace Landis.Extension.Succession.NECN
                 streamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
                 soilWaterContent[ecoregion.Index] += SiteVars.MonthlySoilWaterContent[site][month];
                 transpiration[ecoregion.Index] += SiteVars.monthlyTranspiration[site][month];  
+                addToSoil[ecoregion.Index] += SiteVars.monthlyAddToSoil[site][month];
 
             }
             
@@ -470,6 +473,7 @@ namespace Landis.Extension.Succession.NECN
                     ml.StreamN = (streamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.SoilWaterContent = (soilWaterContent[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgTranspiration = (transpiration[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);  // Katie M.
+                    ml.AvgAddToSoil = (addToSoil[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]); 
 
                     monthlyLog.AddObject(ml);
                     monthlyLog.WriteToFile();

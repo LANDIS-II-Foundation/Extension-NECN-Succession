@@ -233,7 +233,7 @@ namespace Landis.Extension.Succession.NECN
             return;
         }
 
-        public static void Run_Henne_One(int year, int month, double liveBiomass, Site site, out double availableWaterMax, out double soilWaterContent, out double actualET) /// fix the inputs and outputs 
+        public static void Run_Henne_One(int year, int month, double liveBiomass, Site site, out double availableWaterMax, out double soilWaterContent) /// fix the inputs and outputs 
        {
            //     Original Water Submodel for Century - written by Bill Parton
             //     Updated from Fortran 4 - rm 2/92
@@ -247,7 +247,6 @@ namespace Landis.Extension.Succession.NECN
             double bareSoilEvap = 0.0;
             double snow = 0.0;
             double priorWaterAvail = SiteVars.AvailableWater[site];
-            actualET = 0.0;
             double remainingPET = 0.0;
             availableWaterMax = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
 
@@ -407,7 +406,7 @@ namespace Landis.Extension.Succession.NECN
 
             //double waterEmpty = wiltingPoint * soilDepth;
             //waterFull = soilDepth * fieldCapacity;  //units of cm
-            availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
+            //availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
 
             //if (soilWaterContent > waterFull)
             //    actualET = remainingPET;
@@ -418,36 +417,44 @@ namespace Landis.Extension.Succession.NECN
 
             //if (actualET < 0.0)
             //    actualET = 0.0;
-            if ((soilWaterContent - waterEmpty) >= remainingPET)
-            {
-                actualET = remainingPET;
-            }
-            else
-            {
-                actualET = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
-            }
-            actualET = Math.Min(soilWaterContent - waterEmpty, actualET);
+            //if ((soilWaterContent - waterEmpty) >= remainingPET)
+            //{
+            //    actualET = remainingPET;
+            //}
+            //else
+            //{
+            //    actualET = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
+            //}
+            //actualET = Math.Min(soilWaterContent - waterEmpty, actualET);
 
 
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, actualET);
+            //if (OtherData.CalibrateMode)
+            //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, actualET);
 
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
+            SiteVars.MonthlyAddToSoil[site][Main.Month] = addToSoil;
 
             // add in a new available water for sp transpiration calculations 
             SiteVars.AvailableWaterTranspiration[site] = soilWaterContent - waterEmpty;
 
+            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            {
+                CalibrateLog.availableWaterTranspiration = soilWaterContent - waterEmpty;
+
+            }
+
             return;
        }
 
-       public static void Run_Henne_Two(int year, int month, Site site, double liveBiomass, double availableWaterMax, double soilWaterContent, double actualET, out double baseFlow, out double stormFlow, out double AET) /// fix the inputs and outputs 
+       public static void Run_Henne_Two(int year, int month, Site site, double liveBiomass, double availableWaterMax, double soilWaterContent, out double baseFlow, out double stormFlow, out double AET) /// fix the inputs and outputs 
        {
 
            //...Calculate external inputs
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
             
+            double actualET = SiteVars.monthlyTranspiration[site][month];
             AET = actualET;
             baseFlow = 0.0;
             stormFlow = 0.0;
@@ -519,6 +526,8 @@ namespace Landis.Extension.Succession.NECN
 
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
             availableWater = (availableWaterMax + availableWaterMin) / 2.0;
+
+            // we're not even using available water at this point 
 
             // Calculate the final amount of available water to the trees, which is the average of the max and min          
             // PH: availableWater is affected by my changes, and soilWaterContent should be higher now.  

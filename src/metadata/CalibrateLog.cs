@@ -13,7 +13,8 @@ namespace Landis.Extension.Succession.NECN
         public static double cohortWoodB, cohortLeafB;
         public static string speciesName;
         public static double mortalityAGEwood, mortalityAGEleaf;
-        public static double availableWater;
+        public static double availableSW;
+        public static double availableSWFraction;
         public static double availableWaterTranspiration;
         public static double actual_LAI, actual_LAI_tree, base_lai, seasonal_adjustment, siteLAI;
         public static double mineralNalloc, resorbedNalloc;
@@ -43,7 +44,8 @@ namespace Landis.Extension.Succession.NECN
             clog.MortalityAGEleafBiomass = mortalityAGEleaf;
             clog.MortalityTHINwoodBiomass = mortalityBIOwood;
             clog.MortalityTHINleafBiomass = mortalityBIOleaf;
-            clog.AvailableWater = availableWater;
+            clog.AvailableSW = availableSW;
+            clog.AvailableSWFraction = availableSWFraction;
             clog.AvailableWaterTranspiration = availableWaterTranspiration;
             clog.ActualLAI = actual_LAI; // Chihiro, 2021.03.26: renamed
             clog.TreeLAI = actual_LAI_tree;
@@ -170,10 +172,13 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Total Site Biomass")]
         public double TotalSiteBiomass { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water", Format = "0.0")]
-        public double AvailableWater { set; get; }
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration cohort", Format = "0.0")]
+        public double AvailableSW { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration", Format = "0.0")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.0")]
+        public double AvailableSWFraction { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.0")]
         public double AvailableWaterTranspiration { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Soil Temperature", Format = "0.0")]
@@ -194,7 +199,7 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Total N Demand", Format = "0.000")]
         public double TotalNDemand { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = "mm", Desc = "Transpiration", Format = "0.00")]
+        [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.00")]
         public double transpiration { set; get; }
 
 

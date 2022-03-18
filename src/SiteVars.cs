@@ -116,6 +116,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlySoilWaterContent;
         public static ISiteVar<double> AnnualTranspiration;
         public static ISiteVar<double[]> MonthlyTranspiration;
+        public static ISiteVar<double[]> MonthlyAddToSoil;
 
 
 
@@ -184,6 +185,7 @@ namespace Landis.Extension.Succession.NECN
 
             AnnualTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             MonthlyTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyAddToSoil = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             
             // Annual accumulators
             grossMineralization = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -272,6 +274,7 @@ namespace Landis.Extension.Succession.NECN
                 MonthlySoilWaterContent[site]       = new double[12];
 
                 MonthlyTranspiration[site] = new double[12];
+                MonthlyAddToSoil[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
             }
@@ -1050,7 +1053,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of Transpiration (mm)
+        /// A summary of Transpiration (cm)
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double> Transpiration
@@ -1062,7 +1065,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of monthly transpiration (mm/mo)
+        /// A summary of monthly transpiration (cm/mo)
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyTranspiration
@@ -1075,6 +1078,20 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of monthly transpiration (mm/mo)
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyAddToSoil
+        {
+            get {
+                return MonthlyAddToSoil;
+            }
+            set {
+                MonthlyAddToSoil = value;
+            }
+        }
 
         // --------------------------------------------------------------------
         /// <summary>

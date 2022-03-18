@@ -50,7 +50,11 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Soil Water Content", Format = "0.00")]
         public double SoilWaterContent { get; set; }
 
-        [DataFieldAttribute(Unit = "mm_m2_month1", Desc = "Total Transpiration", Format = "0.00")] //
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Total Transpiration", Format = "0.00")] //
         public double AvgTranspiration { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Add To Soil", Format = "0.00")] //
+        public double AvgAddToSoil { get; set; } //
+
     }
 }
