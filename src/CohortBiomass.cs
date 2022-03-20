@@ -810,7 +810,8 @@ namespace Landis.Extension.Succession.NECN
             double folN = 47/SpeciesData.LeafCN[cohort.Species];
 
             // Calculate leaf internal co2 concentration 
-            double CO2 = 380; // this is a constant for the moment but will change later 
+            //double CO2 = 418; // this is a constant right now 
+            double CO2 = ClimateRegionData.AnnualWeather[ecoregion].MonthlyCO2[Main.Month];
             double cicaRatio = (-0.075f * folN) + 0.875f;
             double modCiCaRatio = cicaRatio * CiModifier;
             double ciElev = CO2 * modCiCaRatio;
