@@ -117,6 +117,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> AnnualTranspiration;
         public static ISiteVar<double[]> MonthlyTranspiration;
         public static ISiteVar<double[]> MonthlyAddToSoil;
+        public static ISiteVar<double[]> MonthlyEvaporation;
 
 
 
@@ -186,6 +187,7 @@ namespace Landis.Extension.Succession.NECN
             AnnualTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             MonthlyTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyAddToSoil = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyEvaporation = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             
             // Annual accumulators
             grossMineralization = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -275,6 +277,7 @@ namespace Landis.Extension.Succession.NECN
 
                 MonthlyTranspiration[site] = new double[12];
                 MonthlyAddToSoil[site] = new double[12];
+                MonthlyEvaporation[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
             }
@@ -1090,6 +1093,21 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 MonthlyAddToSoil = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of monthly transpiration (mm/mo)
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyEvaporation
+        {
+            get {
+                return MonthlyEvaporation;
+            }
+            set {
+                MonthlyEvaporation = value;
             }
         }
 

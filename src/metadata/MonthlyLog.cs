@@ -56,5 +56,8 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Add To Soil", Format = "0.00")] //
         public double AvgAddToSoil { get; set; } //
 
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Soil Evaporation", Format = "0.00")] //
+        public double AvgEvaporation { get; set; } //
+
     }
 }

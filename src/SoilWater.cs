@@ -260,7 +260,6 @@ namespace Landis.Extension.Succession.NECN
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
             Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
-            //Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]; 
             tave = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
             tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
             tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
@@ -383,6 +382,7 @@ namespace Landis.Extension.Succession.NECN
                     PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
 
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
+                SiteVars.MonthlyEvaporation[site][Main.Month] = soilEvaporation;
 
                 //Subtract soil evaporation from soil water content
                 //PH: Subtract soilEvaporation from addToSoil so it won't drive down soil water. 
@@ -435,6 +435,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.MonthlyAddToSoil[site][Main.Month] = addToSoil;
+            
 
             // add in a new available water for sp transpiration calculations 
             SiteVars.AvailableWaterTranspiration[site] = soilWaterContent - waterEmpty;
