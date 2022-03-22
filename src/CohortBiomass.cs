@@ -178,7 +178,7 @@ namespace Landis.Extension.Succession.NECN
 
             double limitT   = calculateTemp_Limit(site, cohort.Species);
 
-            double limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            double limitH20 = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
 
             double limitLAI = calculateLAI_Limit(cohort, site);
 
@@ -454,6 +454,10 @@ namespace Landis.Extension.Succession.NECN
                     NPPfineRoot = 0.0;
             }
 
+            // calculate transpiration within the npp function to make sure growth and water use are happening together 
+            // also we need npp for transpiration calculations 
+            IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+            Calculate_Transpiration(cohort, site, ecoregion, NPPleaf, NPPwood, NPPcoarseRoot, NPPfineRoot);
 
             SiteVars.AGNPPcarbon[site] += NPPwood + NPPleaf;
             SiteVars.BGNPPcarbon[site] += NPPcoarseRoot + NPPfineRoot;
@@ -674,7 +678,7 @@ namespace Landis.Extension.Succession.NECN
         //                 thereby increase the slope of the line.
         //     pprpts(3):  The lowest ratio of available water to pet at which
         //                 there is no restriction on production.
-        private static double calculateWater_Limit(ActiveSite site, IEcoregion ecoregion, ISpecies species)
+        private static double calculateWater_Limit(ActiveSite site, ICohort cohort, IEcoregion ecoregion, ISpecies species)
         {
 
             // Ratio_AvailWaterToPET used to be pptprd and WaterLimit used to be pprdwc
@@ -684,9 +688,12 @@ namespace Landis.Extension.Succession.NECN
             double H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
             double pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[Main.Month];
             
+
+            double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
+
             if (pet >= 0.01)
             {   
-                Ratio_AvailWaterToPET = (SiteVars.AvailableWater[site] / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
+                Ratio_AvailWaterToPET = (availableSW / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
             }
             else Ratio_AvailWaterToPET = 0.01;
 
@@ -710,13 +717,6 @@ namespace Landis.Extension.Succession.NECN
             if (WaterLimit < 0.01) WaterLimit = 0.01;
 
             //PlugIn.ModelCore.UI.WriteLine("Intercept={0}, Slope={1}, WaterLimit={2}.", intcpt, slope, WaterLimit);     
-
-            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-            {
-                CalibrateLog.availableWater = SiteVars.AvailableWater[site];
-                //Outputs.CalibrateLog.Write("{0:0.00},", SiteVars.AvailableWater[site]);
-            }
-
             return WaterLimit;
         }
 
@@ -763,6 +763,88 @@ namespace Landis.Extension.Succession.NECN
                             grassTotal += cohort.WoodBiomass;
             return grassTotal;
         }
+
+        // Add in Katie M. VPD to be used in transpiration calculations 
+        private static double Calculate_VP(double a, double b, double c, double T)
+        {
+            return a * (double)Math.Exp(b * T / (T + c));
+        }
+
+        private static double Calculate_VPD(double Tday, double TMin)
+        {
+
+            double emean;
+
+            //saturated vapor pressure
+            double es = Calculate_VP(0.61078f, 17.26939f, 237.3f, Tday);
+
+            if (Tday < 0)
+            {
+                es = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tday);
+            }
+
+            emean = Calculate_VP(0.61078f, 17.26939f, 237.3f, TMin);
+            if (TMin < 0) emean = Calculate_VP(0.61078f, 21.87456f, 265.5f, TMin);
+
+            return es - emean;
+        }
+
+        // Add in Katie M. cohort level transpiration 
+        private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
+        {
+
+            //calculate the vpd 
+            double tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[Main.Month];
+            double tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[Main.Month];
+            double Tave = (double)0.5 * (tmin + tmax);
+            double Tday = (double)0.5 * (tmax + Tave);
+            double VPD = Calculate_VPD(Tday, tmin);
+
+            // Calculate the moisture limitation 
+            double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
+
+            // calculate gross photosynthesis 
+            double GrossPsn = 2*(NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot);
+
+            // calculate foliar nitrogen assuming C 47% of leaf mass 
+            double folN = 47/SpeciesData.LeafCN[cohort.Species];
+
+            // Calculate leaf internal co2 concentration 
+            //double CO2 = 418; // this is a constant right now 
+            double CO2 = ClimateRegionData.AnnualWeather[ecoregion].MonthlyCO2[Main.Month];
+            double cicaRatio = (-0.075f * folN) + 0.875f;
+            double modCiCaRatio = cicaRatio * CiModifier;
+            double ciElev = CO2 * modCiCaRatio;
+
+            // calculate mass flux of co2 and h20 
+            double V = (double)(8314.47 * ((tmin + 273) / 101.3));
+            double JCO2 = (double)(0.139 * ((CO2 - ciElev) / V) * 0.00001);
+            double JH2Osp = (double)(0.239 * (VPD / (8314.47 * (tmin + 273))));
+            double JH2O = JH2Osp * CiModifier;
+
+            // calculate transpiraiton 
+            double transpiration = (double)(0.01227 * (GrossPsn / (JCO2 / JH2O)) /10); // the 10 at the end is to convert it to cm 
+
+             // cap transpiration at available water 
+            double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
+            double availableSWfraction = AvailableSoilWater.GetSWFraction(cohort);
+
+            double actual_transpiration = Math.Min(availableSW, transpiration);
+
+            // add to overall site monthly and annual transpiration 
+            SiteVars.Transpiration[site] += actual_transpiration;
+            SiteVars.monthlyTranspiration[site][Main.Month] += actual_transpiration;
+
+            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+                {
+                    CalibrateLog.Transpiration = actual_transpiration;
+                    CalibrateLog.availableSW = availableSW;
+                    CalibrateLog.availableSWFraction = availableSWfraction;
+
+                }
+        }
+
+
 
     }
 }

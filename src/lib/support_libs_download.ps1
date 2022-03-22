@@ -1,6 +1,8 @@
 # LANDIS-II support library GitHub URL
 $master = "https://github.com/LANDIS-II-Foundation/Support-Library-Dlls-v7/raw/master/"
 
+#cd C:\Users\kmcquil\Documents\necn_libs
+
 
 #************************************************
 # LANDIS-II support library dependencies
