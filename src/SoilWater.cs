@@ -240,7 +240,9 @@ namespace Landis.Extension.Succession.NECN
             //     Rewritten by Bill Pulliam - 9/94
             //     Rewritten by Melissa Lucash - 11/2014
             //     Rewritten by Paul Henne, USGS - 6/2020
-            //     Rewritten by Katie McQuillan, NCSU - 3/2022
+            //     Rewritten by Katie McQuillan, NCSU - 3/2022 
+            //          KM: Split the Henne soil water routine into two parts to faciliate cohort specific transpiration calculations. 
+            //          KM: Outputs from the first part are used for transpiration calculations. Total transpiration is input to the second part.  
 
             //...Initialize Local Variables
             double addToSoil = 0.0;
@@ -248,8 +250,7 @@ namespace Landis.Extension.Succession.NECN
             double snow = 0.0;
             double priorWaterAvail = SiteVars.AvailableWater[site];
             double remainingPET = 0.0;
-            availableWaterMax = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
-
+            availableWaterMax = 0.0; 
 
             //...Calculate external inputs
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
@@ -273,10 +274,6 @@ namespace Landis.Extension.Succession.NECN
             double wiltingPoint = SiteVars.SoilWiltingPoint[site];
             double soilDepth = SiteVars.SoilDepth[site];
             double fieldCapacity = SiteVars.SoilFieldCapacity[site];
-            double stormFlowFraction = SiteVars.SoilStormFlowFraction[site];
-            double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];
-            double drain = SiteVars.SoilDrain[site];
-
             double waterFull = soilDepth * fieldCapacity;  //units of cm
             double waterEmpty = wiltingPoint * soilDepth;  // cm
 
@@ -395,54 +392,21 @@ namespace Landis.Extension.Succession.NECN
 
             //PH: Add liquid water to soil
             soilWaterContent += addToSoil;
+            availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
 
-            // ********************************************************
-            // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
-            // Bergstr�m, 1992
-            // PH: Moved up to take evapotranspiration out before excess drains away. This is different from the CENTURY approach, 
-            // where evaporation is taken out of the add first, but is 
-            // less complex because it does not require partitioning the evaporation if evapotranspiration exceeds addToSoil.
-            // ********************************************************
-
-            //double waterEmpty = wiltingPoint * soilDepth;
-            //waterFull = soilDepth * fieldCapacity;  //units of cm
-            //availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
-
-            //if (soilWaterContent > waterFull)
-            //    actualET = remainingPET;
-            //else
-            //{
-            //    actualET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0);
-            //}
-
-            //if (actualET < 0.0)
-            //    actualET = 0.0;
-            //if ((soilWaterContent - waterEmpty) >= remainingPET)
-            //{
-            //    actualET = remainingPET;
-            //}
-            //else
-            //{
-            //    actualET = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
-            //}
-            //actualET = Math.Min(soilWaterContent - waterEmpty, actualET);
-
-
-            //if (OtherData.CalibrateMode)
-            //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, actualET);
-
+            // KM: Transpiration calculations moved to a new script (cohortBiomass.cs) to be done at the species cohort level 
+            // KM: Output the plant available water for species cohort transpiration calculations 
+            SiteVars.AvailableWaterTranspiration[site] = soilWaterContent - waterEmpty;
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
+            // KM: Tracking the water for testing purposes 
             SiteVars.MonthlyAddToSoil[site][Main.Month] = addToSoil;
-            
-
-            // add in a new available water for sp transpiration calculations 
-            SiteVars.AvailableWaterTranspiration[site] = soilWaterContent - waterEmpty;
-
+            // KM:Tracking the water for testing purposes 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
                 CalibrateLog.availableWaterTranspiration = soilWaterContent - waterEmpty;
+                CalibrateLog.precipitation =  Precipitation;
 
             }
 
@@ -527,21 +491,15 @@ namespace Landis.Extension.Succession.NECN
 
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
             availableWater = (availableWaterMax + availableWaterMin) / 2.0;
-
-            // we're not even using available water at this point 
-
-            // Calculate the final amount of available water to the trees, which is the average of the max and min          
             // PH: availableWater is affected by my changes, and soilWaterContent should be higher now.  
             // Therefore, calculating using soilWaterContent directly instead
 
             // Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
-
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.WaterMovement[site] = waterMovement;
-            SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);

@@ -92,23 +92,18 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MineralN[site] += monthlyNdeposition;
                     //PlugIn.ModelCore.UI.WriteLine("Ndeposition={0},MineralN={1:0.00}.", monthlyNdeposition, SiteVars.MineralN[site]);
 
+                    // KM: move variables up 
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET;
                     double availableWaterMax, soilWaterContent;
 
+                    // KM: Run the first half of the soil water routine necessary for growth/transpiration calcs 
                     SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent);
-                    //SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
-
-                    //if(OtherData.SoilWaterVersion_Henne)
-                    //    SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent, out actualET);
-                    //    SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, actualET, out baseFlow, out stormFlow, out AET);
-                    //else
-                    //    SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
-
-                    // Calculate N allocation for each cohort
+                    
+                    // KM: Calculate N allocation for each cohort
                     AvailableN.SetMineralNallocation(site);
                     
-                    // Calculate soil water allocation for each cohort
+                    // KM: Calculate soil water allocation for each cohort
                     AvailableSoilWater.CalculateSWFraction(site);
                     AvailableSoilWater.SetSWAllocation(site);
 
@@ -117,8 +112,9 @@ namespace Landis.Extension.Succession.NECN
                     else
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
 
+                    // KM: After the growth/transpiration, we can run the second half of the soil water routine where water moves out of the cell 
                     SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out stormFlow, out AET);
-                    
+                    // KM: Moved this down after transpiration has been calculated and output from the second half of the soil water routine 
                     PlugIn.AnnualWaterBalance += ppt - AET;
 
                     // Track the grasses species LAI on the site

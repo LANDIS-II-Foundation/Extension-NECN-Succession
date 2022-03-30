@@ -26,6 +26,12 @@ namespace Landis.Extension.Succession.NECN
         //    CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
         public static double resorbedNused, mineralNused, demand_N;
         public static double Transpiration;
+        public static double AWS_cohortAddYear;
+        public static double AWS_monthcount;
+        public static double AWS_SWallocation;
+        public static double AWS_SWfraction;
+        public static double AWS_AvailableSW;
+        public static double precipitation;
 
 
         public static void WriteLogFile()
@@ -72,6 +78,12 @@ namespace Landis.Extension.Succession.NECN
             clog.DeltaLeaf = deltaLeaf;
             clog.TotalNDemand = demand_N;
             clog.transpiration = Transpiration;
+            clog.aws_CohortAddYear = AWS_cohortAddYear;
+            clog.aws_MonthCount = AWS_monthcount;
+            clog.aws_SWallocation = AWS_SWallocation;
+            clog.aws_SWfraction = AWS_SWfraction;
+            clog.aws_AvailableSW = AWS_AvailableSW;
+            clog.Precipitation = precipitation;
 
 
             Outputs.calibrateLog.AddObject(clog);
@@ -172,13 +184,13 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Total Site Biomass")]
         public double TotalSiteBiomass { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration cohort", Format = "0.0")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration cohort", Format = "0.00")]
         public double AvailableSW { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.0")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.00")]
         public double AvailableSWFraction { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.0")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.00")]
         public double AvailableWaterTranspiration { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Soil Temperature", Format = "0.0")]
@@ -201,6 +213,24 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.00")]
         public double transpiration { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "aws_monthcount", Format = "0.00")]
+        public double aws_MonthCount { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "aws_cohort_add_year", Format = "0.00")]
+        public double aws_CohortAddYear { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "aws_swallocation", Format = "0.00")]
+        public double aws_SWallocation { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "aws_swfraction", Format = "0.00")]
+        public double aws_SWfraction { set; get; }
+         // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "aws_availableSW", Format = "0.00")]
+        public double aws_AvailableSW { set; get; }
+         // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "precip", Format = "0.00")]
+        public double Precipitation { set; get; }
 
 
     }
