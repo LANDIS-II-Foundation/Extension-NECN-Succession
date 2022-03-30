@@ -1,4 +1,5 @@
-//  Author: Robert Scheller, Melissa Lucash
+// Author: Katie McQuillan
+// Based on procedure in the AvailableN.cs (Scheller and Lucash) to distribute available soil water between cohorts 
 
 using Landis.Utilities;
 using System.Collections.Generic;
@@ -13,13 +14,17 @@ namespace Landis.Extension.Succession.NECN
     /// </summary>
     public class AvailableSoilWater
     {
-        public static Dictionary<int, Dictionary<int, double>> CohortSWallocation;  
-        public static Dictionary<int, Dictionary<int, double>> CohortSWFraction;
+        public static Dictionary<int, Dictionary<int, double>> CohortSWallocation;  // Dictionary of soil water allocation (cm) on a monthly basis 
+        public static Dictionary<int, Dictionary<int, double>> CohortSWFraction;    // Dictionary of the fraction of total available water each cohort can access on a monthly basis 
+
+        // Function allocates plant available water to each cohort on a site for a given month  
         public static void SetSWAllocation(Site site)
         {
+            // create a new dictionary for the sw allocation
             AvailableSoilWater.CohortSWallocation = new Dictionary<int, Dictionary<int, double>>();
+            // this is the total water available to plants for growth/transpiration
             double availableSW = SiteVars.AvailableWaterTranspiration[site];
-
+            //loop through cohorts and set the allocation in the dictionary 
             foreach(ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
             {
                 foreach(ICohort cohort in speciesCohorts)
@@ -27,10 +32,20 @@ namespace Landis.Extension.Succession.NECN
                     int cohortAddYear = GetAddYear(cohort);
                     if (Main.MonthCnt == 11)
                         cohortAddYear--;
-                    
-                    
+                
                     double SWfraction = GetSWFraction(cohort);
-                    double SWallocation = Math.Max(0.01, SWfraction * availableSW); // basically 0.01 cm is the minimum soil water a plant would have access to even if it was a really small cohort or really droughty or something
+                    double SWallocation = Math.Max(0.05, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
+
+                    // Write to the calibrate log for water tracking/testing purposes 
+                    if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+                {
+                    CalibrateLog.AWS_AvailableSW = availableSW;
+                    CalibrateLog.AWS_SWfraction = SWfraction;
+                    CalibrateLog.AWS_SWallocation = SWallocation;
+                    CalibrateLog.AWS_cohortAddYear = cohortAddYear;
+                    CalibrateLog.AWS_monthcount = Main.MonthCnt;
+
+                }
 
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
                     newEntry.Add(cohortAddYear, SWallocation);
@@ -49,25 +64,30 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-
+        // Function calculates the fraction of plant available water that each cohort receives on a site for a given month 
         public static void CalculateSWFraction(Site site)
-        {
+        {   
+            // start a new dictionary for fraction of water for each cohort 
             AvailableSoilWater.CohortSWFraction = new Dictionary<int, Dictionary<int, double>>();
+            // initialize counter for total swallocation to be used to calculate fractions at the end 
             double SWAllocTotal = 0.0;
+            // loop thorugh each cohort to calculate fraction
             foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
             {
                 foreach (ICohort cohort in speciesCohorts)
                 {
                     int cohortAddYear = GetAddYear(cohort);
-                    if (Main.MonthCnt == 11)
-                        cohortAddYear--;
+                    // fractional based on cohort biomass. Use an exponential function so that fractions are more even between cohorts. 
+                    // The 0.02 produces a 'reasonable' allocation that does not give all N to the largest cohorts.
                     double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.02);
 
                     if(SWallocation <= 0.0)
-                        SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.001); // basically ensuring no cohort is left with nothing allocated 
+                        SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.01); // Need a minimum for each cohort so they no cohort ends up with nothing. 
                     
+                    // allocations are summed so we can relativize in the next step to get the actual fractions
                     SWAllocTotal += SWallocation;
                     
+                    // add to dictionary 
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
                     newEntry.Add(cohortAddYear, SWallocation);
 
@@ -83,14 +103,13 @@ namespace Landis.Extension.Succession.NECN
                 }
             }
 
-            // Next relativize 
+            // Next relativize to get the actual fraction
             foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
             {
                 foreach (ICohort cohort in speciesCohorts)
                 {
                     int cohortAddYear = GetAddYear(cohort);
-                    if (Main.MonthCnt == 11)
-                        cohortAddYear--;
+                    
                     double SWallocation = CohortSWFraction[cohort.Species.Index][cohortAddYear];
                     double relativeSWallocation = SWallocation/SWAllocTotal;
                     CohortSWFraction[cohort.Species.Index][cohortAddYear] = relativeSWallocation;
@@ -101,7 +120,7 @@ namespace Landis.Extension.Succession.NECN
 
 
 
-
+        // function to retrieve the allocated soil water of a given cohort 
         public static double GetSWAllocation(ICohort cohort)
         {
             int cohortAddYear = GetAddYear(cohort);
@@ -112,7 +131,7 @@ namespace Landis.Extension.Succession.NECN
                 cohortDict.TryGetValue(cohortAddYear, out SWAllocation);
             return SWAllocation;
         }
-
+        // function to retrieve the fraction of soil water a given cohort can access 
         public static double GetSWFraction(ICohort cohort)
         {
             int cohortAddYear = GetAddYear(cohort);
@@ -123,7 +142,9 @@ namespace Landis.Extension.Succession.NECN
                 cohortDict.TryGetValue(cohortAddYear, out SWFraction);
             return SWFraction;
         }
-
+        // function to retrieve the year 
+        // This is the SIMULATION year that a cohort was born (not its age).
+        // The number can be negative if the cohort was added with the initial community.
         private static int GetAddYear(ICohort cohort)
         {
             int currentYear = PlugIn.ModelCore.CurrentTime;

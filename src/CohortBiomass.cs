@@ -454,8 +454,8 @@ namespace Landis.Extension.Succession.NECN
                     NPPfineRoot = 0.0;
             }
 
-            // calculate transpiration within the npp function to make sure growth and water use are happening together 
-            // also we need npp for transpiration calculations 
+            // KM: calculate transpiration within the npp function to make sure growth and water use are happening together 
+            // KM: and because npp is necessary for transpiration calculations 
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
             Calculate_Transpiration(cohort, site, ecoregion, NPPleaf, NPPwood, NPPcoarseRoot, NPPfineRoot);
 
@@ -764,7 +764,8 @@ namespace Landis.Extension.Succession.NECN
             return grassTotal;
         }
 
-        // Add in Katie M. VPD to be used in transpiration calculations 
+        // KM: VPD to be used in transpiration calculations 
+        // KM: Copied from PnET source code 
         private static double Calculate_VP(double a, double b, double c, double T)
         {
             return a * (double)Math.Exp(b * T / (T + c));
@@ -789,7 +790,8 @@ namespace Landis.Extension.Succession.NECN
             return es - emean;
         }
 
-        // Add in Katie M. cohort level transpiration 
+        //  KM: Function to calculate cohort level transpiration 
+        //  KM: Based on PnET source code with the same theoretical princples
         private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
         {
 
@@ -803,7 +805,7 @@ namespace Landis.Extension.Succession.NECN
             // Calculate the moisture limitation 
             double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
 
-            // calculate gross photosynthesis 
+            // calculate gross photosynthesis estimated as 2x the NPP 
             double GrossPsn = 2*(NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot);
 
             // calculate foliar nitrogen assuming C 47% of leaf mass 
@@ -834,7 +836,8 @@ namespace Landis.Extension.Succession.NECN
             // add to overall site monthly and annual transpiration 
             SiteVars.Transpiration[site] += actual_transpiration;
             SiteVars.monthlyTranspiration[site][Main.Month] += actual_transpiration;
-
+            
+            // write to the calibration log for testing purposes 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
                 {
                     CalibrateLog.Transpiration = actual_transpiration;
