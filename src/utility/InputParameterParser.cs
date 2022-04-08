@@ -166,6 +166,14 @@ namespace Landis.Extension.Succession.NECN
             ReadVar(deadSoilMapName);
             parameters.InitialDeadSoilMapName = deadSoilMapName.Value;
 
+            InputVar<string> normalSWAMapName = new InputVar<string>("NormalSWAMapName");
+            ReadVar(normalSWAMapName);
+            parameters.NormalSWAMapName = normalSWAMapName.Value;
+
+            InputVar<string> normalCWDMapName = new InputVar<string>("NormalCWDMapName");
+            ReadVar(normalCWDMapName);
+            parameters.NormalCWDMapName = normalCWDMapName.Value;
+
             InputVar<bool> calimode = new InputVar<bool>("CalibrateMode");
             if (ReadOptionalVar(calimode))
                 parameters.CalibrateMode = calimode.Value;
@@ -186,21 +194,34 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.SoilWater_Henne = false;
 
-            InputVar<bool> monthly_SWA = new InputVar<bool>("Write_Monthly_SWA");
-            if (ReadOptionalVar(monthly_SWA))
-            {
-                parameters.writeMonthlySWA = monthly_SWA.Value;
-            }
-            else
-                parameters.writeMonthlySWA = false;
-
             InputVar<bool> use_Drought = new InputVar<bool>("Use_Drought_Mortality");
+            
             if (ReadOptionalVar(use_Drought))
             {
-                parameters.useDrought = use_Drought.Value;
+                parameters.UseDrought = use_Drought.Value;
             }
             else
-                parameters.useDrought = false;
+                parameters.UseDrought = false;
+
+            InputVar<bool> write_SWA = new InputVar<bool>("Write_SWA_Maps");
+
+            if (ReadOptionalVar(write_SWA))
+            {
+                parameters.WriteSWA= write_SWA.Value;
+            }
+            else
+                parameters.WriteSWA = false;
+
+            InputVar<bool> write_CWD = new InputVar<bool>("Write_CWD_Maps");
+
+            if (ReadOptionalVar(write_CWD))
+            {
+                parameters.WriteCWD = write_CWD.Value;
+            }
+            else
+                parameters.WriteCWD = false;
+
+            //PlugIn.ModelCore.UI.WriteLine("Input value of Use_Drought_Mortality = {0}", parameters.UseDrought);
 
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
@@ -461,10 +482,23 @@ namespace Landis.Extension.Succession.NECN
                     parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
                     parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
                     parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
+
+                    parameters.SetCWDThreshold(species, System.Convert.ToInt32(row["CWDThreshold"]));
+                    parameters.SetMortalityAboveThreshold(species, System.Convert.ToDouble(row["MortalityAboveThreshold"]));
+                    
+                    parameters.SetIntercept(species, System.Convert.ToDouble(row["Intercept"]));
+                    parameters.SetBetaAge(species, System.Convert.ToDouble(row["BetaAge"]));
+                    parameters.SetBetaTemp(species, System.Convert.ToDouble(row["BetaTemp"]));
+                    parameters.SetBetaSWAAnom(species, System.Convert.ToDouble(row["BetaSWAAnom"]));
+                    parameters.SetBetaBiomass(species, System.Convert.ToDouble(row["BetaBiomass"]));
+                    parameters.SetBetaCWD(species, System.Convert.ToDouble(row["BetaCWD"]));
+                    parameters.SetBetaNormCWD(species, System.Convert.ToDouble(row["BetaNormCWD"]));
+                    parameters.SetIntxnCWD_Biomass(species, System.Convert.ToDouble(row["IntxnCWD_Biomass"]));
+
                     parameters.Grass[species] = ReadGrass(row);
                     parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 
-                }
+            }
             //}
             //else
             //{

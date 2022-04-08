@@ -35,6 +35,8 @@ namespace Landis.Extension.Succession.NECN
         string InitialSOM3NMapName { get; set; }
         string InitialDeadSurfaceMapName { get; set; }
         string InitialDeadSoilMapName { get; set; }
+        string NormalSWAMapName { get; set; }
+        string NormalCWDMapName { get; set; }
 
         bool CalibrateMode { get; set; }
         WaterType WType {get;set;}
@@ -43,6 +45,9 @@ namespace Landis.Extension.Succession.NECN
         bool SmokeModelOutputs { get; set; }
         bool SoilWater_Henne { get; set; }
         double GrassThresholdMultiplier { get; }
+        bool UseDrought { get; set; }
+        bool WriteSWA { get; set; }
+        bool WriteCWD { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -105,6 +110,20 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<int> MaxANPP { get; }
         Landis.Library.Parameters.Species.AuxParm<int> MaxBiomass { get; }
         Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get; }
+        //Drought threshold parameters
+        Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get; }
+        //Multiple regression parameters
+        Landis.Library.Parameters.Species.AuxParm<double> Intercept { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get; }
+
+
 
         double AtmosNslope {get;}
         double AtmosNintercept {get;}

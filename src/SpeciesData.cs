@@ -41,14 +41,18 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<bool> Grass;
         public static Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend; // W.Hotta (2021.08.01)
         public static Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI;
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;
 
-<<<<<<< Updated upstream
-=======
-        //TODO parameters for drought
 
-        //DecadalSurv = Intercept + Age + biomass +
-        //MEAN + TEMPMEAN + SWA8YMIN.anomaly+ TEMP7YMAX.anomaly
->>>>>>> Stashed changes
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
@@ -75,7 +79,18 @@ namespace Landis.Extension.Succession.NECN
             Grass               = parameters.Grass;
             Nlog_depend         = parameters.Nlog_depend; // W.Hotta (2021.08.01)
             GrowthLAI           = parameters.GrowthLAI;
-            //TODO parameters for drought
+            //parameters for drought
+            CWDThreshold        = parameters.CWDThreshold;
+            MortalityAboveThreshold = parameters.MortalityAboveThreshold;
+            Intercept           = parameters.Intercept;
+            BetaAge             = parameters.BetaAge;
+            BetaTemp            = parameters.BetaTemp;
+            BetaSWAAnom         = parameters.BetaSWAAnom;
+            BetaBiomass         = parameters.BetaBiomass;
+            BetaCWD             = parameters.BetaCWD;
+            BetaNormCWD         = parameters.BetaNormCWD;
+            IntxnCWD_Biomass    = parameters.IntxnCWD_Biomass;
+
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {

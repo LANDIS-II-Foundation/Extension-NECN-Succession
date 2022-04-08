@@ -89,6 +89,7 @@ namespace Landis.Extension.Succession.NECN
         //private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. 
         private static ISiteVar<int> dryDays;
 
+        //TODO why are some upper and some lower case?
         public static ISiteVar<double> AnnualNEE;
         public static ISiteVar<double> FireCEfflux;
         public static ISiteVar<double> FireNEfflux;
@@ -114,8 +115,14 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyHeteroResp;
         public static ISiteVar<double[]> MonthlySoilWaterContent;
 
-        public List<double> soilWater10;
-        public List<double> temp10;
+        //Drought params
+        public static ISiteVar<double> droughtMort;
+        public static ISiteVar<List<double>> swa10;
+        public static ISiteVar<List<double>> temp10;
+        public static ISiteVar<List<double>> cwd10;
+        public static ISiteVar<double> normalSWA;
+        public static ISiteVar<double> normalCWD;
+
 
         //---------------------------------------------------------------------
 
@@ -220,6 +227,14 @@ namespace Landis.Extension.Succession.NECN
             HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
+            droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+            temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+            cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+
+            normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
             PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
@@ -266,6 +281,10 @@ namespace Landis.Extension.Succession.NECN
                 MonthlySoilWaterContent[site]       = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
+
+                swa10[site] = new List<double>(10);
+                temp10[site] = new List<double>(10);
+                cwd10[site] = new List<double>(10);
             }
             
         }
@@ -373,10 +392,25 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
             SiteVars.AnnualPotentialEvapotranspiration[site] = 0.0;
             SiteVars.WoodMortality[site] = 0.0;
+
+            SiteVars.DroughtMort[site] = 0.0;
+
             //SiteVars.DryDays[site] = 0;
 
             //SiteVars.FireEfflux[site] = 0.0;
-                        
+            if (OtherData.UseDrought | OtherData.WriteSWA | OtherData.WriteCWD)
+            {
+                if (PlugIn.ModelCore.CurrentTime >= 11)
+                {
+                    //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                    //Pop the first element (oldest year's data) from soilwater and temp trackers
+                    //Do before the 11th timestep TODO check
+                    //PlugIn.ModelCore.UI.WriteLine("number of elements in SWA10 = {0}", SiteVars.SoilWater10[site].Count);
+                    SiteVars.SoilWater10[site].RemoveAt(0);
+                    SiteVars.Temp10[site].RemoveAt(0);
+                    SiteVars.CWD10[site].RemoveAt(0);
+                }
+            }
 
         }
 
@@ -1028,26 +1062,46 @@ namespace Landis.Extension.Succession.NECN
         // --------------------------------------------------------------------
         /// <summary>
         /// Keep track of minimum soil water values
+        /// //TODO sam
         /// </summary>
-        public static List<double> soilWater10
+        public static ISiteVar<double> DroughtMort
         {
             get
             {
-                return soilWater10;
+                return droughtMort;
             }
             set
             {
-                soilWater10 = value;
+                droughtMort = value;
             }
 
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Keep track of minimum soil water values
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<List<double>> SoilWater10
+        {
+            get
+            {
+                return swa10;
+            }
+            set
+            {
+                swa10 = value;
+            }
 
         }
 
         //---------------------------------------------------------------------
         /// <summary>
         /// Keep track of maximum temperatures
+        /// //TODO sam
         /// </summary>
-        public static List<double> temp10
+        public static ISiteVar<List<double>> Temp10 //list of doubles
         {
             get
             {
@@ -1060,6 +1114,61 @@ namespace Landis.Extension.Succession.NECN
 
 
         }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Keep track of cwd
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<List<double>> CWD10 //list of doubles
+        {
+            get
+            {
+                return cwd10;
+            }
+            set
+            {
+                cwd10 = value;
+            }
+
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Normal SWA
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> NormalSWA
+        {
+            get
+            {
+                return normalSWA;
+            }
+            set
+            {
+                normalSWA = value;
+            }
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Normal SWA
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> NormalCWD
+        {
+            get
+            {
+                return normalCWD;
+            }
+            set
+            {
+                normalCWD = value;
+            }
+
+        }
+
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Annual Water Budget (PPT - AET)

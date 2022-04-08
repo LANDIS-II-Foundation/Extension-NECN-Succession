@@ -187,6 +187,53 @@ namespace Landis.Extension.Succession.NECN
                 Extension.OutputMetadatas.Add(mapOut_TotalC);
             }
 
+            if (OtherData.UseDrought)
+            {
+                string[] paths = { @"NECN", "DroughtMortality-{timestep}.img" };
+                OutputMetadata mapOut_DroughtMort = new OutputMetadata()
+                {
+                    Type = OutputType.Map,
+                    Name = "Drought Mortality",
+                    FilePath = Path.Combine(paths),
+                    Map_DataType = MapDataType.Continuous,
+                    Map_Unit = FieldUnits.g_C_m2,
+                    Visualize = true,
+                };
+                Extension.OutputMetadatas.Add(mapOut_DroughtMort);
+            }
+
+            if (OtherData.WriteSWA)
+            {
+                string[] paths = { @"NECN", "SWA-{timestep}.img" };
+                OutputMetadata mapOut_SWA = new OutputMetadata()
+                {
+                    Type = OutputType.Map,
+                    Name = "Summer Soil Water Availability",
+                    FilePath = Path.Combine(paths),
+                    Map_DataType = MapDataType.Continuous,
+                    Map_Unit = FieldUnits.cm,
+                    Visualize = true,
+                };
+                Extension.OutputMetadatas.Add(mapOut_SWA);
+            }
+
+            if (OtherData.WriteCWD)
+            {
+                string[] paths = { @"NECN", "CWD-{timestep}.img" };
+                OutputMetadata mapOut_CWD = new OutputMetadata()
+                {
+                    Type = OutputType.Map,
+                    Name = "Drought Mortality",
+                    //FilePath = @"NECN\TotalC-{timestep}.img",
+                    FilePath = Path.Combine(paths),
+                    Map_DataType = MapDataType.Continuous,
+                    Map_Unit = FieldUnits.cm,
+                    Visualize = true,
+                };
+                Extension.OutputMetadatas.Add(mapOut_CWD);
+            }
+
+
 
             //---------------------------------------
             MetadataProvider mp = new MetadataProvider(Extension);

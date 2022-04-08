@@ -1,0 +1,75 @@
+2022-03-24 14:55:36,920 - LANDIS-II 7.0 (7)
+2022-03-24 14:55:36,932 - 
+2022-03-24 14:55:37,034 - Loading scenario from file "scenario_landscape.txt" ...
+2022-03-24 14:55:37,134 - Initialized random number generator with seed = 1,294,965,084
+2022-03-24 14:55:37,135 - Loading species data from file "species_LTB.txt" ...
+2022-03-24 14:55:37,172 - Loading ecoregions from file "./ecoregions.txt" ...
+2022-03-24 14:55:37,203 - Initializing landscape from ecoregions map "./ecoregions.gis" ...
+2022-03-24 14:55:37,230 - Cell length = 100 m, cell area = 1 ha
+2022-03-24 14:55:37,232 - Map dimensions: 99 rows by 99 columns = 9,801 cells
+2022-03-24 14:55:37,244 - Sites: 9,801 active (100.0%), 0 inactive (0.0%)
+2022-03-24 14:55:37,259 - Loading NECN Succession extension ...
+2022-03-24 14:55:37,413 -    Begin parsing NECN SPECIES table.
+2022-03-24 14:55:37,442 -    Begin parsing FUNCTIONAL GROUP table.
+2022-03-24 14:55:37,447 -    Begin reading FIRE REDUCTION parameters.
+2022-03-24 14:55:37,448 -    Begin reading HARVEST REDUCTION parameters.
+2022-03-24 14:55:37,459 - Initializing NECN Succession ...
+2022-03-24 14:55:37,531 -    Registering Data:  Succession.LeafBiomassCohorts.
+2022-03-24 14:55:37,532 -    Registering Data:  Succession.AgeCohorts.
+2022-03-24 14:55:37,532 -    Registering Data:  Succession.BiomassCohorts.
+2022-03-24 14:55:37,532 -    Registering Data:  Succession.FineFuels.
+2022-03-24 14:55:37,533 -    Registering Data:  Succession.SmolderConsumption.
+2022-03-24 14:55:37,533 -    Registering Data:  Succession.FlamingConsumption.
+2022-03-24 14:55:37,534 -    Registering Data:  Succession.CWD.
+2022-03-24 14:55:37,534 -    Registering Data:  Succession.PET.
+2022-03-24 14:55:37,609 -   Read in data from random110.img
+2022-03-24 14:55:37,637 -   Read in data from constantpoint75.img
+2022-03-24 14:55:37,659 -   Read in data from constantpoint4.img
+2022-03-24 14:55:37,677 -   Read in data from constantpoint4.img
+2022-03-24 14:55:37,684 -   Read in data from random_point1_point2.img
+2022-03-24 14:55:37,722 -   Read in data from random_point05_point099.img
+2022-03-24 14:55:37,754 -   Read in data from random_point01_point5.img
+2022-03-24 14:55:37,772 -   Read in data from random_point01_point5.img
+2022-03-24 14:55:37,784 -   Read in data from random110.img
+2022-03-24 14:55:37,791 -   Read in data from random6.img
+2022-03-24 14:55:37,843 -   Read in data from random110.img
+2022-03-24 14:55:37,848 -   Read in data from random9.img
+2022-03-24 14:55:37,875 -   Read in data from random4500.img
+2022-03-24 14:55:37,894 -   Read in data from random145.img
+2022-03-24 14:55:37,915 -   Read in data from random1294.img
+2022-03-24 14:55:37,934 -   Read in data from random50.img
+2022-03-24 14:55:37,954 -   Read in data from random110.img
+2022-03-24 14:55:37,962 -   Read in data from random50.img
+2022-03-24 14:55:38,014 -    Loading weather data ...
+2022-03-24 14:57:27,979 -    Registering Data:  TimeOfLastSuccession.
+2022-03-24 14:57:27,982 -    Registering Data:  Shade.
+2022-03-24 14:57:27,988 -    Creating Dispersal Neighborhood List.
+2022-03-24 14:57:27,989 -    Dispersal:  NeighborRadius=5050, CellLength=100, numCellRadius=50
+2022-03-24 14:57:28,011 -    Loading initial communities from file "./initial-communities_LTB.txt" ...
+2022-03-24 14:57:28,047 -    Reading initial communities map "./initial-communities.gis" ...
+2022-03-24 14:57:28,410 - Using the following extensions ...
+   Extension Name            Extension Filename       
+   --------------            ------------------       
+   NECN Succession           NECN_LTB_landscape.txt   
+
+2022-03-24 14:57:28,411 - Current time: 5
+2022-03-24 14:57:28,412 - Running NECN Succession ...
+2022-03-24 14:59:01,511 - Current time: 10
+2022-03-24 14:59:01,512 - Running NECN Succession ...
+2022-03-24 15:00:41,674 - Current time: 15
+2022-03-24 15:00:41,677 - Running NECN Succession ...
+2022-03-24 15:02:14,731 - Current time: 20
+2022-03-24 15:02:14,732 - Running NECN Succession ...
+2022-03-24 15:03:56,548 - Current time: 25
+2022-03-24 15:03:56,550 - Running NECN Succession ...
+2022-03-24 15:05:28,111 - Current time: 30
+2022-03-24 15:05:28,112 - Running NECN Succession ...
+2022-03-24 15:07:08,147 - Current time: 35
+2022-03-24 15:07:08,148 - Running NECN Succession ...
+2022-03-24 15:08:47,492 - Current time: 40
+2022-03-24 15:08:47,493 - Running NECN Succession ...
+2022-03-24 15:10:19,908 - Current time: 45
+2022-03-24 15:10:19,909 - Running NECN Succession ...
+2022-03-24 15:11:49,235 - Current time: 50
+2022-03-24 15:11:49,236 - Running NECN Succession ...
+2022-03-24 15:13:21,331 - Model run is complete.

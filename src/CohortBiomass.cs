@@ -6,6 +6,7 @@ using Landis.SpatialModeling;
 using System.Collections.Generic;
 using Landis.Library.LeafBiomassCohorts;
 using System;
+using System.Linq;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -73,9 +74,24 @@ namespace Landis.Extension.Succession.NECN
             //  Growth-related mortality
             double[] mortalityGrowth = ComputeGrowthMortality(cohort, site, siteBiomass, actualANPP);
 
-            double[] totalMortality = new double[2] { Math.Min(cohort.WoodBiomass, mortalityAge[0] + mortalityGrowth[0]), Math.Min(cohort.LeafBiomass, mortalityAge[1] + mortalityGrowth[1]) };
-            double nonDisturbanceLeafFall = totalMortality[1];
+            // Drought mortality
+            //Calculate drought mortality just in May, after annual CWD has been calculated
+            double[] mortalityDrought = new double[2] { 0, 0 };
 
+            //PlugIn.ModelCore.UI.WriteLine("Use_Drought = {0}", OtherData.UseDrought);
+
+            if (Main.Month == 5)
+            {
+                if (OtherData.UseDrought)
+                {
+                    //PlugIn.ModelCore.UI.WriteLine("Running drought mortality");
+                    
+                    mortalityDrought = ComputeDroughtMortality(cohort, site);
+                }
+            }
+                                             
+            double[] totalMortality = new double[2] { Math.Min(cohort.WoodBiomass, mortalityAge[0] + mortalityGrowth[0] + mortalityDrought[0]), Math.Min(cohort.LeafBiomass, mortalityAge[1] + mortalityGrowth[1] + mortalityDrought[1]) };
+            double nonDisturbanceLeafFall = totalMortality[1];
 
             double scorch = 0.0;
             defoliatedLeafBiomass = 0.0;
@@ -111,6 +127,7 @@ namespace Landis.Extension.Succession.NECN
                     ForestFloor.AddFrassLitter(defoliatedLeafBiomass, cohort.Species, site);
 
                 }
+             
             }
             else
             {
@@ -361,63 +378,188 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------
-
         /// <summary>
         /// Mortality caused by drought
         /// Calculated every year or once per decade?
         /// Rescale by timestep -- annualize 
+        /// TODO sam
         /// </summary>
-        
-       private double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site, double droughtIntercept, double betaAge,
-            double betaBiomass, double betaSWA, double betaTemp, double betaSWAAnom, double betaTempAnom) //TODO put all parameters in one vector?
+        //---------------------------------------------------------------------
+
+        private double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
 
-            double swaNorm = SiteVars.ClimateNormal[site].SoilWaterAvailabilityNormal; 
-            double tempNorm = SiteVars.ClimateNormal[site].TempNormal;
+            //TODO compute site-level swa and temp once, not each time for each cohort
 
-            double SWAAnom = SiteVars.minSoilWater8 - swaNorm; //TODO where to calculate MinSoilWater8 and Maxtemp7? Can be done after each year
-                                                               // from the vector of soil water and temperatures
-            double tempAnom = SiteVars.maxTemp7 - tempNorm;
-
-            double droughtIntercept = SpeciesData.DroughtIntercept[cohort.Species];
-
-            //TODO:
-            // get species for each cohort
-            // get drought parameters for that species
-
-            //This function calculates mortality as a function of 
-            double survivalDecade = droughtIntercept + betaAge * cohort.Age + betaBiomass * cohort.WoodBiomass +
-            betaSWA * SiteVars.SoilWaterContent[site] + betaTemp * ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month] + //TODO fix these
-            betaSWAAnom * SWAAnom +
-            betaTempAnom * tempAnom;
+            int timestep = PlugIn.ModelCore.CurrentTime;
+            
+            //TODO why not use the PlugIn.TotalCohortMortality() function?
+            double waterDeficit = SiteVars.AnnualClimaticWaterDeficit[site];
+            //PlugIn.ModelCore.UI.WriteLine("curernt year CWD is {0}", waterDeficit);
 
 
-            //DecadalSurv = Intercept + Age + biomass + SWAMEAN + TEMPMEAN + SWA8YMIN.anomaly+ TEMP7YMAX.anomaly
+            double[] soilWater = new double[0];
+            double[] tempValue = new double[0];
+            double[] cwdValue = new double[0];
 
-            //PlugIn.ModelCore.UI.WriteLine("Mwood={0}, M_wood_relative={1}, NPPwood={2}, Spp={3}, Age={4}.", M_wood, M_wood_NPP, NPPwood, cohort.Species.Name, cohort.Age);
+            //For the first few years, use all of the temp and soilwater data, until lags can start to be used
+            //Really not ideal! TODO fix this
+
+            //TODO have adjustable timelags as input variable?
+            int N = timestep + 1;
+            //PlugIn.ModelCore.UI.WriteLine("N is ", N);
+            int k = N;
+            int j = N;
+            int h = N;
+            if(N >= 10)
+            {
+                N = 10;
+                k = 8;
+                j = 7;
+                h = 10;
+            } else if (N == 9 | N==8)
+            {
+                k = 8;
+                j = 7;
+                h = 10;
+            }
+
+            //PlugIn.ModelCore.UI.WriteLine("N is {0}; k is {1}; j is {2}", N, k, j);
+
+            //PlugIn.ModelCore.UI.WriteLine("SoilWater10 is {0}", SiteVars.SoilWater10[site]);
+
+            //soilWater should already have just 10 elements
+            soilWater = SiteVars.SoilWater10[site].OrderByDescending(s => s).Reverse().Take(k).ToArray();
+            tempValue = SiteVars.Temp10[site].OrderByDescending(s => s).Take(j).ToArray();
+            cwdValue = SiteVars.cwd10[site].OrderByDescending(s => s).Take(h).ToArray();
+
+            //PlugIn.ModelCore.UI.WriteLine("Time-lagged CWD is {0}", cwdValue);
+
+            //get SWA8yrs and Temp7yrs           
+
+            //initialize variables for lowest SWA of highest 8 years of 10 and highest temperature for 7 years out of 10
+            double SWA8years = 0;
+            double Temp7years = 0;
+            double CWD10years = 0;
+
+            //Sum values selected above 
+            Array.ForEach(soilWater, i => SWA8years += i);
+            Array.ForEach(tempValue, i => Temp7years += i);
+            Array.ForEach(cwdValue, i => CWD10years += i);
+
+            SWA8years /= k;
+            Temp7years /= j;
+            CWD10years /= h;
+
+            //PlugIn.ModelCore.UI.WriteLine("temp is {0}", Temp7years);
+
+            //Predictor variables
+            double normalSWA = SiteVars.NormalSWA[site];
+            //double normalSWA = 16.8; //placeholder -- mean of ponderosa meanSWA. Replace with normal SWA from map
+
+            double normalCWD = SiteVars.NormalCWD[site];
+            //PlugIn.ModelCore.UI.WriteLine("normalCWD is {0}", normalCWD);
+
+            double swaAnom = SWA8years - normalSWA;
+            //PlugIn.ModelCore.UI.WriteLine("swaAnom is {0}", swaAnom);
+            
+            double cohortAge = cohort.Age;
+            double siteBiomass = SiteVars.ActualSiteBiomass(site);
+            
 
 
-            double[] M_BIO = new double[2] { M_wood, M_leaf };
+            //Equation parameters
+            int cwdThreshold = SpeciesData.CWDThreshold[cohort.Species];
+            //PlugIn.ModelCore.UI.WriteLine("cwdThreshold is {0}", cwdThreshold);
 
-          if (M_wood < 0.0 || M_leaf < 0.0)
-          {
-              PlugIn.ModelCore.UI.WriteLine("Mwood={0}, Mleaf={1}.", M_wood, M_leaf);
-              throw new ApplicationException("Error: Wood or Leaf Growth Mortality is < 0");
-          }
+            double mortalityAboveThreshold = SpeciesData.MortalityAboveThreshold[cohort.Species];
 
-          if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-          {
-              CalibrateLog.mortalityDrought = M_wood; //TODO add to calibrate log
-                                                      //CalibrateLog.mortalityBIOleaf = M_leaf;
-          }
+            double intercept = SpeciesData.Intercept[cohort.Species];
+            double betaAge = SpeciesData.BetaAge[cohort.Species];
+            double betaTemp = SpeciesData.BetaTemp[cohort.Species];
+            double betaSWAAnom = SpeciesData.BetaSWAAnom[cohort.Species];
+            double betaBiomass = SpeciesData.BetaBiomass[cohort.Species];
+            double betaCWD = SpeciesData.BetaCWD[cohort.Species];
+            double betaNormCWD = SpeciesData.BetaNormCWD[cohort.Species];
+            double intxnCWD_Biomass = SpeciesData.IntxnCWD_Biomass[cohort.Species];
+            //PlugIn.ModelCore.UI.WriteLine("Regression parameters are: intercept {0}, age {1}, temp {2}, SWAAnom {3}, biomass {4}", 
+            //    intercept, betaAge, betaTemp, betaSWAAnom, betaBiomass);
 
-          SiteVars.WoodMortality[site] += (M_wood);
+            // double mortalitySlope = 0.005; //TODO make this a species-level param
 
-          return M_BIO;
+            double p_mort = 0;
+            double p_surv = 0;
+            double M_leaf = 0;
+            double M_wood = 0;
+
+            if (waterDeficit > cwdThreshold & cwdThreshold != 0)
+            {
+                //p_mort = mortalityAboveThreshold + mortalitySlope * (waterDeficit - cwdThreshold); TODO implement
+                p_mort = mortalityAboveThreshold;
+                //PlugIn.ModelCore.UI.WriteLine("p_mort from CWD is", p_mort);
+            }
+
+
+            if (intercept != 0)
+            {
+                //calculate decadal log odds of survival
+                double logOdds = intercept + betaAge * cohortAge + betaTemp * Temp7years + betaSWAAnom * swaAnom + betaBiomass * siteBiomass + 
+                    betaCWD * CWD10years + betaNormCWD * normalCWD + intxnCWD_Biomass * CWD10years * siteBiomass;
+                p_surv = Math.Exp(logOdds) / (Math.Exp(logOdds) + 1);
+                p_mort = (1 - Math.Pow(p_surv, 0.1));
+
+                //PlugIn.ModelCore.UI.WriteLine("p_mort from regression is", p_mort);
+
+            }
+
+
+            double random = PlugIn.ModelCore.GenerateUniform();
+
+            //PlugIn.ModelCore.UI.WriteLine("p_mort is {0}", p_mort);
+            //PlugIn.ModelCore.UI.WriteLine("random is {0}", random);
+
+
+            if (p_mort > random)
+            {
+                
+                M_leaf = cohort.LeafBiomass;
+                M_wood = cohort.WoodBiomass;
+                double aboveground_Biomass_Died = M_leaf + M_wood;
+
+                SiteVars.DroughtMort[site] += aboveground_Biomass_Died;
+
+            }
+          
+            //SiteVars.Cohorts[site].ReduceOrKillBiomassCohorts(this);
+            //PlugIn.ModelCore.UI.WriteLine("CWD is {0}", waterDeficit);
+            //PlugIn.ModelCore.UI.WriteLine("Drought wood mortality = {0}. Leaf mortality = {0}.", M_leaf, M_wood);
+
+            double[] M_DROUGHT = new double[2] { M_wood, M_leaf };
+
+            return M_DROUGHT;                                             
 
         }
-                       
-        //---------------------------------------------------------------------
+
+        // TODO Modify for drought-induced leaf shedding
+        public static double CrownScorching(ICohort cohort, byte siteSeverity)
+        {
+
+            int difference = (int)siteSeverity - cohort.Species.FireTolerance;
+            double ageFraction = 1.0 - ((double)cohort.Age / (double)cohort.Species.Longevity);
+
+            if (SpeciesData.Epicormic[cohort.Species])
+            {
+                if (difference < 0)
+                    return 0.5 * ageFraction;
+                if (difference == 0)
+                    return 0.75 * ageFraction;
+                if (difference > 0)
+                    return 1.0 * ageFraction;
+            }
+
+            return 0.0;
+        }
+
 
         private void UpdateDeadBiomass(ICohort cohort, ActiveSite site, double[] totalMortality)
         {

@@ -112,6 +112,8 @@ namespace Landis.Extension.Succession.NECN
                 Parameters.InitialSOM3CMapName,
                 Parameters.InitialSOM3NMapName);
             ReadMaps.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
+            ReadMaps.ReadNormalSWAMap(Parameters.NormalSWAMapName);
+            ReadMaps.ReadNormalCWDMap(Parameters.NormalCWDMapName);
 
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
