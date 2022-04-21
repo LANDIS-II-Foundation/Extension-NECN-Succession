@@ -688,12 +688,14 @@ namespace Landis.Extension.Succession.NECN
             double H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
             double pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[Main.Month];
             
-
+            // update the plant available water and the pet to be cohort specific 
             double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
+            double fractionSW = AvailableSoilWater.GetSWFraction(cohort);
+            double cohort_pet = pet*fractionSW;
 
             if (pet >= 0.01)
             {   
-                Ratio_AvailWaterToPET = (availableSW / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
+                Ratio_AvailWaterToPET = (availableSW / cohort_pet);  //Modified by ML so that we weren't double-counting precip as in above equation
             }
             else Ratio_AvailWaterToPET = 0.01;
 
