@@ -1,6 +1,6 @@
 ; LANDIS-II Extension infomation
 #define CoreRelease "LANDIS-II-V7"
-#define ExtensionName "NECN Succession transpiration baby"
+#define ExtensionName "NECN Succession transpiration baby- took out the maps"
 #define AppVersion "6.9"
 #define AppPublisher "LANDIS-II Foundation"
 #define AppURL "http://www.landis-ii.org/"

@@ -251,6 +251,7 @@ namespace Landis.Extension.Succession.NECN
             double priorWaterAvail = SiteVars.AvailableWater[site];
             double remainingPET = 0.0;
             availableWaterMax = 0.0; 
+            double priorAvailableWaterMin = SiteVars.AvailableWaterMin[site]; // updating available water in new transpiration code 
 
             //...Calculate external inputs
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
@@ -332,6 +333,9 @@ namespace Landis.Extension.Succession.NECN
             {
                 //...Calculate cm of snow that remaining pet energy can evaporate:
                 double evaporatedSnow = PET * 0.87;
+                // calculate the monthly evaporationi when there is snow 
+                SiteVars.MonthlyEvaporation[site][Main.Month] = evaporatedSnow;
+                SiteVars.AnnualEvaporation[site] += evaporatedSnow;
 
                 //...Don't evaporate more snow than actually exists:
                 if (evaporatedSnow > liquidSnowpack)
@@ -379,7 +383,9 @@ namespace Landis.Extension.Succession.NECN
                     PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
 
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
+                // this is the monthly evaporation is there is no snowpack 
                 SiteVars.MonthlyEvaporation[site][Main.Month] = soilEvaporation;
+                SiteVars.AnnualEvaporation[site] += soilEvaporation;
 
                 //Subtract soil evaporation from soil water content
                 //PH: Subtract soilEvaporation from addToSoil so it won't drive down soil water. 
@@ -393,21 +399,28 @@ namespace Landis.Extension.Succession.NECN
             //PH: Add liquid water to soil
             soilWaterContent += addToSoil;
             availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
+            // the additional addToSoil doesn't make sense because it's taken out already in the line above 
+            //availableWaterMax = soilWaterContent - waterEmpty;
 
             // KM: Transpiration calculations moved to a new script (cohortBiomass.cs) to be done at the species cohort level 
             // KM: Output the plant available water for species cohort transpiration calculations 
-            SiteVars.AvailableWaterTranspiration[site] = soilWaterContent - waterEmpty;
+            //SiteVars.AvailableWaterTranspiration[site] = soilWaterContent - waterEmpty;
+            // use a new available water that is closer to the original model intent of findings the average of an over and under estimate
+            SiteVars.AvailableWaterTranspiration[site] = (availableWaterMax + priorAvailableWaterMin) / 2.0; 
+
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             // KM: Tracking the water for testing purposes 
             SiteVars.MonthlyAddToSoil[site][Main.Month] = addToSoil;
+            SiteVars.MonthlyPriorAvailableWaterMin[site][Main.Month] = priorAvailableWaterMin;
+            SiteVars.MonthlyAvailableWaterMax[site][Main.Month] = availableWaterMax;
+
             // KM:Tracking the water for testing purposes 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
-                CalibrateLog.availableWaterTranspiration = soilWaterContent - waterEmpty;
-                CalibrateLog.precipitation =  Precipitation;
-
+                CalibrateLog.availableWaterTranspiration = (availableWaterMax + priorAvailableWaterMin) / 2.0;
+                CalibrateLog.precipitation = Precipitation;
             }
 
             return;
@@ -488,6 +501,7 @@ namespace Landis.Extension.Succession.NECN
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
             //availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
             availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0);
+            SiteVars.AvailableWaterMin[site] = availableWaterMin; // updating available water in new transpiration code 
 
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
             availableWater = (availableWaterMax + availableWaterMin) / 2.0;
@@ -504,10 +518,11 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
+            SiteVars.MonthlyAvailableWaterMin[site][Main.Month] = availableWaterMin;
             if (month == 0)
                 SiteVars.DryDays[site] = 0;
             else
-                SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
+                SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);           
 
             return;
        }
