@@ -59,5 +59,23 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Soil Evaporation", Format = "0.00")] //
         public double AvgEvaporation { get; set; } //
 
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Prior month available water min", Format = "0.00")] //
+        public double AvgPriorAvailableWaterMin { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Available water min ", Format = "0.00")] //
+        public double AvgAvailableWaterMin { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Available water max", Format = "0.00")] //
+        public double AvgAvailableWaterMax { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "evaporated snow", Format = "0.00")] //
+        public double AvgEvaporatedSnow { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "stormflow", Format = "0.00")] //
+        public double AvgStormflow { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "swc-waterEmpty", Format = "0.00")] //
+        public double AvgMaxWaterUse { get; set; } //
+
     }
 }

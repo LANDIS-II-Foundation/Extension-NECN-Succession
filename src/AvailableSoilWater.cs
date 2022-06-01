@@ -36,17 +36,6 @@ namespace Landis.Extension.Succession.NECN
                     double SWfraction = GetSWFraction(cohort);
                     double SWallocation = Math.Max(0.05, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
 
-                    // Write to the calibrate log for water tracking/testing purposes 
-                    if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-                {
-                    CalibrateLog.AWS_AvailableSW = availableSW;
-                    CalibrateLog.AWS_SWfraction = SWfraction;
-                    CalibrateLog.AWS_SWallocation = SWallocation;
-                    CalibrateLog.AWS_cohortAddYear = cohortAddYear;
-                    CalibrateLog.AWS_monthcount = Main.MonthCnt;
-
-                }
-
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
                     newEntry.Add(cohortAddYear, SWallocation);
 
@@ -79,7 +68,7 @@ namespace Landis.Extension.Succession.NECN
                     int cohortAddYear = GetAddYear(cohort);
                     // fractional based on cohort biomass. Use an exponential function so that fractions are more even between cohorts. 
                     // The 0.02 produces a 'reasonable' allocation that does not give all N to the largest cohorts.
-                    double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.02);
+                    double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.001);  // 0.02 originally 
 
                     if(SWallocation <= 0.0)
                         SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.01); // Need a minimum for each cohort so they no cohort ends up with nothing. 
