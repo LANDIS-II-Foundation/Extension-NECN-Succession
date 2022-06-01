@@ -99,6 +99,7 @@ namespace Landis.Extension.Succession.NECN
 
                     // KM: Run the first half of the soil water routine necessary for growth/transpiration calcs 
                     SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent);
+                    //SoilWater.Run_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent, out stormFlow);
                     
                     // KM: Calculate N allocation for each cohort
                     AvailableN.SetMineralNallocation(site);
@@ -114,6 +115,7 @@ namespace Landis.Extension.Succession.NECN
 
                     // KM: After the growth/transpiration, we can run the second half of the soil water routine where water moves out of the cell 
                     SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out stormFlow, out AET);
+                    //SoilWater.Run_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out AET);
                     // KM: Moved this down after transpiration has been calculated and output from the second half of the soil water routine 
                     PlugIn.AnnualWaterBalance += ppt - AET;
 

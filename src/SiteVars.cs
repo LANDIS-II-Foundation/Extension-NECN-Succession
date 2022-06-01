@@ -60,6 +60,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> waterMovement;  
         private static ISiteVar<double> availableWater;  
         private static ISiteVar<double> availableWaterTranspiration;
+        private static ISiteVar<double> maxWaterUse;
         private static ISiteVar<double> soilWaterContent;
         private static ISiteVar<double> availableWaterMin;
         private static ISiteVar<double> liquidSnowPack;  
@@ -123,6 +124,10 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyPriorAvailableWaterMin;
         public static ISiteVar<double[]> MonthlyAvailableWaterMin;
         public static ISiteVar<double[]> MonthlyAvailableWaterMax;
+        public static ISiteVar<double[]> MonthlyEvaporatedSnow;
+        public static ISiteVar<double[]> MonthlyStormflow;
+        public static ISiteVar<double[]> MonthlyMaxWaterUse;
+
 
 
         //---------------------------------------------------------------------
@@ -181,6 +186,7 @@ namespace Landis.Extension.Succession.NECN
             waterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWaterTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            maxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWaterMin   = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -197,6 +203,9 @@ namespace Landis.Extension.Succession.NECN
             MonthlyPriorAvailableWaterMin = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyAvailableWaterMin = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyAvailableWaterMax = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyEvaporatedSnow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyStormflow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyMaxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
 
             // Annual accumulators
@@ -291,6 +300,9 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyPriorAvailableWaterMin[site] = new double[12];
                 MonthlyAvailableWaterMin[site] = new double[12];
                 MonthlyAvailableWaterMax[site] = new double[12];
+                MonthlyEvaporatedSnow[site] = new double[12];
+                MonthlyStormflow[site] = new double[12];
+                MonthlyMaxWaterUse[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
             }
@@ -612,6 +624,21 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 availableWaterTranspiration = value;
+            }
+        }
+
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> MaxWaterUse
+        {
+            get {
+                return maxWaterUse;
+            }
+            set {
+                maxWaterUse = value;
             }
         }
         //---------------------------------------------------------------------
@@ -1191,8 +1218,50 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyAvailableWaterMax = value;
             }
         }
-        
+    
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of available water 
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyEvaporatedSnow
+        {
+            get {
+                return MonthlyEvaporatedSnow;
+            }
+            set {
+                MonthlyEvaporatedSnow = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of available water 
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyStormflow
+        {
+            get {
+                return MonthlyStormflow;
+            }
+            set {
+                MonthlyStormflow = value;
+            }
+        }
 
+                //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of available water 
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyMaxWaterUse
+        {
+            get {
+                return MonthlyMaxWaterUse;
+            }
+            set {
+                MonthlyMaxWaterUse = value;
+            }
+        }
         // --------------------------------------------------------------------
         /// <summary>
         /// A summary of Annual Water Budget (PPT - AET)

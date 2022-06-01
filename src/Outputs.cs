@@ -421,6 +421,9 @@ namespace Landis.Extension.Succession.NECN
             double[] priorAvailableWaterMin = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] availableWaterMin = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] availableWaterMax = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] evaporatedSnow = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] stormflow = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] maxWaterUse = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
@@ -439,6 +442,9 @@ namespace Landis.Extension.Succession.NECN
                 priorAvailableWaterMin[ecoregion.Index] = 0.0;
                 availableWaterMin[ecoregion.Index] = 0.0;
                 availableWaterMax[ecoregion.Index] = 0.0;
+                evaporatedSnow[ecoregion.Index] = 0.0;
+                stormflow[ecoregion.Index] = 0.0;
+                maxWaterUse[ecoregion.Index] = 0.0;
 
             }
 
@@ -465,6 +471,9 @@ namespace Landis.Extension.Succession.NECN
                 priorAvailableWaterMin[ecoregion.Index] += SiteVars.monthlyPriorAvailableWaterMin[site][month];
                 availableWaterMin[ecoregion.Index] += SiteVars.monthlyAvailableWaterMin[site][month];
                 availableWaterMax[ecoregion.Index] += SiteVars.monthlyAvailableWaterMax[site][month];
+                evaporatedSnow[ecoregion.Index] += SiteVars.monthlyEvaporatedSnow[site][month];
+                stormflow[ecoregion.Index] += SiteVars.monthlyStormflow[site][month];
+                maxWaterUse[ecoregion.Index] += SiteVars.monthlyMaxWaterUse[site][month];
 
 
             }
@@ -500,6 +509,9 @@ namespace Landis.Extension.Succession.NECN
                     ml.AvgPriorAvailableWaterMin = (priorAvailableWaterMin[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgAvailableWaterMin = (availableWaterMin[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgAvailableWaterMax = (availableWaterMax[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AvgEvaporatedSnow = (evaporatedSnow[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AvgStormflow = (stormflow[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AvgMaxWaterUse = (maxWaterUse[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
 
                     monthlyLog.AddObject(ml);
                     monthlyLog.WriteToFile();
