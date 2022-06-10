@@ -5,9 +5,9 @@
     <AssemblyName>Landis.Extension.Succession.NECN-v6</AssemblyName>
     <AssemblyTitle>Landis.Extension.Succession.NECN-v6</AssemblyTitle>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
-    <AssemblyVersion>6.10</AssemblyVersion>
-    <Version>6.10</Version>
-    <FileVersion>6.10</FileVersion>
+    <AssemblyVersion>6.10.1</AssemblyVersion>
+    <Version>6.10.1</Version>
+    <FileVersion>6.10.1</FileVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession</RepositoryUrl>
