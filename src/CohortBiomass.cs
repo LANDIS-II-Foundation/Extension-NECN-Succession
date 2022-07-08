@@ -767,7 +767,8 @@ namespace Landis.Extension.Succession.NECN
         }
 
         // KM: VPD to be used in transpiration calculations 
-        // KM: Copied from PnET source code 
+        // KM: Copied from PnET source code developed by Mark Kubiske
+        // KM: de Bruijna et al. 2014 
         private static double Calculate_VP(double a, double b, double c, double T)
         {
             return a * (double)Math.Exp(b * T / (T + c));
@@ -793,7 +794,8 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //  KM: Function to calculate cohort level transpiration 
-        //  KM: Based on PnET source code with the same theoretical princples
+        //  KM: Based on PnET source code with the same theoretical princples developed by Mark Kubiske
+        //  KM: de Bruijna et al. 2014 
         private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
         {
 
