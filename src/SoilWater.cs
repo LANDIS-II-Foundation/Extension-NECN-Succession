@@ -464,15 +464,8 @@ namespace Landis.Extension.Succession.NECN
             // KM: Output the plant available water for species cohort transpiration calculations 
             //SiteVars.AvailableWaterTranspiration[site] = soilWaterContent - waterEmpty;
             // use a new available water that is closer to the original model intent of findings the average of an over and under estimate
-            //SiteVars.AvailableWaterTranspiration[site] = (availableWaterMax + priorAvailableWaterMin) / 2.0; 
             SiteVars.AvailableWaterTranspiration[site] = System.Math.Min(((availableWaterMax + priorAvailableWaterMin) / 2.0), soilWaterContent - waterEmpty);
-
-            // changng this to see if it will help the soil moisture limitation. 
-            // basically i think the second argument is what is being thrown in which is what is making it less wate rlimited
-            // i included it becuase it is supposed to stop soil water from ever going negative but we'll see if it just works out anyways 
-            //SiteVars.AvailableWaterTranspiration[site] = ((availableWaterMax + priorAvailableWaterMin) / 2.0);
-
-            // say that the avg was 10, and then 
+            SiteVars.CapWater[site] = soilWaterContent - waterEmpty;
 
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
@@ -556,9 +549,7 @@ namespace Landis.Extension.Succession.NECN
             //Leaching occurs. Drain baseflow fraction from holding tank.
             //PH: Now baseflow comes from holding tank.
             baseFlow = holdingTank * baseFlowFraction;
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, baseflow={1}.", month, baseFlow);
-
+            
             //Subtract baseflow from soil water
             //PH: Subtract from holding tank instead. To not deplete soil water but still allow estimation of baseFlow.
             holdingTank -= baseFlow;

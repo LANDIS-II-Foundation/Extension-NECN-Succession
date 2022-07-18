@@ -71,7 +71,7 @@ namespace Landis.Extension.Succession.NECN
                     double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.001);  // 0.02 originally 
 
                     if(SWallocation <= 0.0)
-                        SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.01); // Need a minimum for each cohort so they no cohort ends up with nothing. 
+                        SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.00001); // Need a minimum for each cohort so they no cohort ends up with nothing. 
                     
                     // allocations are summed so we can relativize in the next step to get the actual fractions
                     SWAllocTotal += SWallocation;
@@ -141,6 +141,59 @@ namespace Landis.Extension.Succession.NECN
             if (Main.MonthCnt == 11)
                 cohortAddYear++; 
             return cohortAddYear;
+        }
+
+
+
+
+        // trial 
+        public static Dictionary<int, Dictionary<int, double>> CohortCapWater; 
+
+        // Function allocates the swc-water empty as a cap on transpiration between cohorts each month
+        public static void SetCapWater(Site site)
+        {
+            // create a new dictionary for the sw allocation
+            AvailableSoilWater.CohortCapWater = new Dictionary<int, Dictionary<int, double>>();
+            // this is the total water available to plants for growth/transpiration
+            double availableSW = SiteVars.CapWater[site];
+            //loop through cohorts and set the allocation in the dictionary 
+            foreach(ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
+            {
+                foreach(ICohort cohort in speciesCohorts)
+                {
+                    int cohortAddYear = GetAddYear(cohort);
+                    if (Main.MonthCnt == 11)
+                        cohortAddYear--;
+                
+                    double SWfraction = GetSWFraction(cohort);
+                    double CapAllocation = Math.Max(0.05, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
+
+                    Dictionary<int, double> newEntry = new Dictionary<int, double>();
+                    newEntry.Add(cohortAddYear, CapAllocation);
+
+                    if (CohortCapWater.ContainsKey(cohort.Species.Index))
+                    {
+                        if (!CohortCapWater[cohort.Species.Index].ContainsKey(cohortAddYear))
+                            CohortCapWater[cohort.Species.Index][cohortAddYear] = CapAllocation;
+                    }
+                    else
+                    {
+                        CohortCapWater.Add(cohort.Species.Index, newEntry);
+                    }
+                }
+            }
+
+        }
+        // function to retrieve the allocated soil water of a given cohort 
+        public static double GetCapWater(ICohort cohort)
+        {
+            int cohortAddYear = GetAddYear(cohort);
+            double SWAllocation = 0.0;
+            Dictionary<int, double> cohortDict;
+
+            if (AvailableSoilWater.CohortCapWater.TryGetValue(cohort.Species.Index, out cohortDict))
+                cohortDict.TryGetValue(cohortAddYear, out SWAllocation);
+            return SWAllocation;
         }
   
 

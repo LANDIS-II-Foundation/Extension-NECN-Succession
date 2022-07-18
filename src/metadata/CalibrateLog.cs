@@ -15,6 +15,8 @@ namespace Landis.Extension.Succession.NECN
         public static double mortalityAGEwood, mortalityAGEleaf;
         public static double availableSW;
         public static double availableSWFraction;
+        public static double wueScalar;
+        public static double wue;
         public static double availableWaterTranspiration;
         public static double actual_LAI, actual_LAI_tree, base_lai, seasonal_adjustment, siteLAI;
         public static double mineralNalloc, resorbedNalloc;
@@ -47,6 +49,8 @@ namespace Landis.Extension.Succession.NECN
             clog.MortalityTHINleafBiomass = mortalityBIOleaf;
             clog.AvailableSW = availableSW;
             clog.AvailableSWFraction = availableSWFraction;
+            clog.WUEScalar = wueScalar;
+            clog.WUE = wue;
             clog.AvailableWaterTranspiration = availableWaterTranspiration;
             clog.ActualLAI = actual_LAI; // Chihiro, 2021.03.26: renamed
             clog.TreeLAI = actual_LAI_tree;
@@ -180,6 +184,9 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.00")]
         public double AvailableSWFraction { set; get; }
         // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "wue scalar", Format = "0.00")]
+        public double WUEScalar { set; get; }
+        // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.00")]
         public double AvailableWaterTranspiration { set; get; }
         // ********************************************************************
@@ -207,6 +214,9 @@ namespace Landis.Extension.Succession.NECN
          // ********************************************************************
         [DataFieldAttribute(Unit = "cm", Desc = "precip", Format = "0.00")]
         public double Precipitation { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "unitless", Desc = "wue", Format = "0.00")]
+        public double WUE { set; get; }
 
 
     }
