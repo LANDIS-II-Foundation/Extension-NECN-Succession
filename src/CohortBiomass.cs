@@ -806,9 +806,17 @@ namespace Landis.Extension.Succession.NECN
 
             // Calculate the moisture limitation 
             double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
-
+            
             // calculate gross photosynthesis estimated as 2x the NPP 
             double GrossPsn = 2*(NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot);
+            
+            // Get the WUE tuning parameter based on a logistic function 
+            double WUEScalar = 0.0;
+            double C = 5.0;
+            double YIntercept = 1.0;
+            double A = (C - YIntercept)/YIntercept;
+            double B = 500.0;
+            WUEScalar = C/(1 + A*Math.Exp(-1*B*(1-CiModifier)));
 
             // calculate foliar nitrogen assuming C 47% of leaf mass 
             double folN = 47/SpeciesData.LeafCN[cohort.Species];
@@ -824,14 +832,15 @@ namespace Landis.Extension.Succession.NECN
             double V = (double)(8314.47 * ((tmin + 273) / 101.3));
             double JCO2 = (double)(0.139 * ((CO2 - ciElev) / V) * 0.00001);
             double JH2Osp = (double)(0.239 * (VPD / (8314.47 * (tmin + 273))));
-            double JH2O = JH2Osp * CiModifier;
+            double JH2O = JH2Osp * CiModifier * WUEScalar;
 
             // calculate transpiraiton 
             double transpiration = (double)(0.01227 * (GrossPsn / (JCO2 / JH2O)) /10); // the 10 at the end is to convert it to cm 
 
-             // cap transpiration at available water 
-            double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
-            double availableSWfraction = AvailableSoilWater.GetSWFraction(cohort);
+            // cap transpiration at available water 
+            //double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
+            double availableSW = AvailableSoilWater.GetCapWater(cohort);
+            double availableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
 
             double actual_transpiration = Math.Min(availableSW, transpiration);
 
@@ -845,6 +854,8 @@ namespace Landis.Extension.Succession.NECN
                     CalibrateLog.Transpiration = actual_transpiration;
                     CalibrateLog.availableSW = availableSW;
                     CalibrateLog.availableSWFraction = availableSWfraction;
+                    CalibrateLog.wueScalar = WUEScalar;
+                    CalibrateLog.wue = (JCO2 / JH2O);
 
                 }
         }
