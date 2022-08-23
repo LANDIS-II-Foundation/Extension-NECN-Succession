@@ -207,7 +207,7 @@ namespace Landis.Extension.Succession.NECN
 
             // Growth can be reduced by another extension via this method.
             // To date, no extension has been written to utilize this hook.
-            double growthReduction = CohortGrowthReduction.Compute(cohort, site);
+            double growthReduction = Landis.Library.BiomassCohorts.CohortGrowthReduction.Compute(cohort, site);
 
             if (growthReduction > 0.0)
             {
