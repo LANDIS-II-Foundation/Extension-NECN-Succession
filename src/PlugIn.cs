@@ -294,7 +294,39 @@ namespace Landis.Extension.Succession.NECN
                 woodInput -= (float)live_woodFireConsumption;
                 foliarInput -= (float)live_foliarFireConsumption;
             }
+            if (disturbanceType.IsMemberOf("disturbance:browse"))
+            {
+                //SF Initial effort to account for browsed biomass nutrient cycling
+                foliarInput += woodInput;
+                woodInput = 0;
 
+                double inputDecayValue = 1.0;   // Decay value is calculated for surface/soil layers (leaf/fine root), 
+                                                // therefore, this is just a dummy value.
+
+                if (foliarInput > 0)
+                {
+                    SiteVars.LitterfallC[site] += foliarInput * 0.47;
+                    //PlugIn.ModelCore.UI.WriteLine("waste input is {0}, CN ratio of waste is {1}", foliarInput, 50);
+
+                    LitterLayer.PartitionResidue(
+                                foliarInput,
+                                inputDecayValue,
+                                1, //CN ratio for browse waste -- metabolic
+                                0, //"lignin" content of waste
+                                50, //CN ratio for browse waste -- structural
+                                LayerName.Leaf,
+                                LayerType.Surface,
+                                site);
+                    //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
+                    //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
+                    //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
+
+                    Disturbed[site] = true;
+
+                    return;
+                }
+            }
+            
             if (SpeciesData.Grass[cohort.Species])
             {
                 ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
@@ -308,9 +340,9 @@ namespace Landis.Extension.Succession.NECN
 
                 Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
                 Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                
             }
             
-
             //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
             //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
             //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
