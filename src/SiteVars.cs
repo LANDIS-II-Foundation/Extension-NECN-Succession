@@ -60,6 +60,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> waterMovement;  
         private static ISiteVar<double> availableWater;  
         private static ISiteVar<double> availableWaterTranspiration;
+        private static ISiteVar<double> capWater;
         private static ISiteVar<double> maxWaterUse;
         private static ISiteVar<double> soilWaterContent;
         private static ISiteVar<double> availableWaterMin;
@@ -127,6 +128,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyEvaporatedSnow;
         public static ISiteVar<double[]> MonthlyStormflow;
         public static ISiteVar<double[]> MonthlyMaxWaterUse;
+        public static ISiteVar<double[]> MonthlyVPD;
 
 
 
@@ -186,6 +188,7 @@ namespace Landis.Extension.Succession.NECN
             waterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWaterTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            capWater = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             maxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -206,6 +209,7 @@ namespace Landis.Extension.Succession.NECN
             MonthlyEvaporatedSnow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyStormflow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMaxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyVPD = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
 
             // Annual accumulators
@@ -303,6 +307,7 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyEvaporatedSnow[site] = new double[12];
                 MonthlyStormflow[site] = new double[12];
                 MonthlyMaxWaterUse[site] = new double[12];
+                MonthlyVPD[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
             }
@@ -626,8 +631,20 @@ namespace Landis.Extension.Succession.NECN
                 availableWaterTranspiration = value;
             }
         }
+        //---------------------------------------------------------------------
 
-
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> CapWater
+        {
+            get {
+                return capWater;
+            }
+            set {
+                capWater = value;
+            }
+        }
         //---------------------------------------------------------------------
         /// <summary>
         /// Water loss
@@ -1248,7 +1265,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-                //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
         /// <summary>
         /// A summary of available water 
         /// Katie M. 
@@ -1260,6 +1277,20 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 MonthlyMaxWaterUse = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// VPD
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyVPD
+        {
+            get {
+                return MonthlyVPD;
+            }
+            set {
+                MonthlyVPD = value;
             }
         }
         // --------------------------------------------------------------------

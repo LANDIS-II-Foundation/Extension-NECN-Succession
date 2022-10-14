@@ -77,5 +77,7 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "swc-waterEmpty", Format = "0.00")] //
         public double AvgMaxWaterUse { get; set; } //
 
+        [DataFieldAttribute(Unit = "kpa", Desc = "vpd", Format = "0.00")] //
+        public double AvgVPD { get; set; } //
     }
 }

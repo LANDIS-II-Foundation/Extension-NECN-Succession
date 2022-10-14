@@ -13,9 +13,6 @@ namespace Landis.Extension.Succession.NECN
         public static double cohortWoodB, cohortLeafB;
         public static string speciesName;
         public static double mortalityAGEwood, mortalityAGEleaf;
-        public static double availableSW;
-        public static double availableSWFraction;
-        public static double availableWaterTranspiration;
         public static double actual_LAI, actual_LAI_tree, base_lai, seasonal_adjustment, siteLAI;
         public static double mineralNalloc, resorbedNalloc;
         public static double limitLAI, limitH20, limitT, limitN, limitLAIcompetition;
@@ -23,10 +20,22 @@ namespace Landis.Extension.Succession.NECN
         public static double actualWoodNPP, actualLeafNPP;
         public static double deltaWood, deltaLeaf;
         public static double mortalityBIOwood, mortalityBIOleaf;
-        //    CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
         public static double resorbedNused, mineralNused, demand_N;
-        public static double Transpiration;
+
+        // KM added variables for tracking water 
         public static double precipitation;
+        public static double vpd;
+        public static double availableSW;
+        public static double availableSWFraction;
+        public static double availableWaterTranspiration;  //  (availableWaterMax + priorAvailableWaterMin) / 2.0;
+        public static double cimodifier;
+        public static double jh2o;
+        public static double jco2;
+        public static double wuescalar;
+        public static double wue; // JCO2 / JH2O
+        public static double grosspsn;
+        public static double transpiration;
+        public static double co2;
 
 
         public static void WriteLogFile()
@@ -45,9 +54,6 @@ namespace Landis.Extension.Succession.NECN
             clog.MortalityAGEleafBiomass = mortalityAGEleaf;
             clog.MortalityTHINwoodBiomass = mortalityBIOwood;
             clog.MortalityTHINleafBiomass = mortalityBIOleaf;
-            clog.AvailableSW = availableSW;
-            clog.AvailableSWFraction = availableSWFraction;
-            clog.AvailableWaterTranspiration = availableWaterTranspiration;
             clog.ActualLAI = actual_LAI; // Chihiro, 2021.03.26: renamed
             clog.TreeLAI = actual_LAI_tree;
             clog.SiteLAI = siteLAI; // Chihiro, 2021.03.26: added
@@ -72,10 +78,22 @@ namespace Landis.Extension.Succession.NECN
             clog.DeltaWood = deltaWood;
             clog.DeltaLeaf = deltaLeaf;
             clog.TotalNDemand = demand_N;
-            clog.transpiration = Transpiration;
+
+            // KM added variables for tracking water 
             clog.Precipitation = precipitation;
-
-
+            clog.VPD = vpd;
+            clog.AvailableSW = availableSW;
+            clog.AvailableSWFraction = availableSWFraction;
+            clog.AvailableWaterTranspiration = availableWaterTranspiration;
+            clog.CiModifier = cimodifier;
+            clog.JH2O = jh2o;
+            clog.JCO2 = jco2;
+            clog.WUEScalar = wuescalar;
+            clog.WUE = wue;
+            clog.GrossPsn = grosspsn;
+            clog.Transpiration = transpiration;
+            clog.CO2 = co2;
+            
             Outputs.calibrateLog.AddObject(clog);
             Outputs.calibrateLog.WriteToFile();
 
@@ -174,15 +192,6 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Total Site Biomass")]
         public double TotalSiteBiomass { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration cohort", Format = "0.00")]
-        public double AvailableSW { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.00")]
-        public double AvailableSWFraction { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.00")]
-        public double AvailableWaterTranspiration { set; get; }
-        // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Soil Temperature", Format = "0.0")]
         public double SoilTemperature { set; get; }
         // ********************************************************************
@@ -200,13 +209,49 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Total N Demand", Format = "0.000")]
         public double TotalNDemand { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.00")]
-        public double transpiration { set; get; }
 
-         // ********************************************************************
+
+        // KM added variables for water tracking 
+        // ********************************************************************
         [DataFieldAttribute(Unit = "cm", Desc = "precip", Format = "0.00")]
         public double Precipitation { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "kPa", Desc = "VPD", Format = "0.00")]
+        public double VPD { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration cohort", Format = "0.00")]
+        public double AvailableSW { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.00")]
+        public double AvailableSWFraction { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.00")]
+        public double AvailableWaterTranspiration { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "unitless", Desc = "CiModifier water limitation", Format = "0.00")]
+        public double CiModifier { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "unitless", Desc = "JH2O", Format = "0.000000000000")]
+        public double JH2O { set; get; }
+                // ********************************************************************
+        [DataFieldAttribute(Unit = "unitless", Desc = "JCO2", Format = "0.000000000000")]
+        public double JCO2 { set; get; }
+        // ********************************************************************
+        
+        [DataFieldAttribute(Unit = "unitless", Desc = "wue scalar", Format = "0.00")]
+        public double WUEScalar { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "unitless", Desc = "wue", Format = "0.00")]
+        public double WUE { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "gC m2 mo-1", Desc = "Gross Photosynthesis", Format = "0.00")]
+        public double GrossPsn { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.00")]
+        public double Transpiration { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "ppm", Desc = "co2", Format = "0.00")]
+        public double CO2 { set; get; }
 
 
     }

@@ -107,6 +107,7 @@ namespace Landis.Extension.Succession.NECN
                     // KM: Calculate soil water allocation for each cohort
                     AvailableSoilWater.CalculateSWFraction(site);
                     AvailableSoilWater.SetSWAllocation(site);
+                    AvailableSoilWater.SetCapWater(site);
 
                     if (MonthCnt==11)
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);

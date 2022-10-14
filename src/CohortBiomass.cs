@@ -767,86 +767,133 @@ namespace Landis.Extension.Succession.NECN
         }
 
         // KM: VPD to be used in transpiration calculations 
+        // KM: From PnET source code 
         // KM: Copied from PnET source code developed by Mark Kubiske
         // KM: de Bruijna et al. 2014 
         private static double Calculate_VP(double a, double b, double c, double T)
         {
-            return a * (double)Math.Exp(b * T / (T + c));
+            return A * (double)Math.Exp(B * T / (T + C));
         }
 
-        private static double Calculate_VPD(double Tday, double TMin)
+//       private static double Calculate_VPD(double Tday, double Tmin)
+//       {
+//
+//           double Emean;
+//
+//            //saturated vapor pressure
+//            double Es = Calculate_VP(0.61078f, 17.26939f, 237.3f, Tday);
+//
+//            if (Tday < 0)
+//            {
+//                Es = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tday);
+//            }
+
+//            Emean = Calculate_VP(0.61078f, 17.26939f, 237.3f, Tmin);
+//            if (Tmin < 0) Emean = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tmin);
+
+//            return Es - Emean;
+//        }
+
+        private static double Calculate_VPD(double Tday, double Tmin, IEcoregion ecoregion)
         {
 
-            double emean;
-
             //saturated vapor pressure
-            double es = Calculate_VP(0.61078f, 17.26939f, 237.3f, Tday);
+            double Es = Calculate_VP(0.61078f, 17.26939f, 237.3f, Tday);
 
             if (Tday < 0)
             {
-                es = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tday);
+                Es = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tday);
             }
-
-            emean = Calculate_VP(0.61078f, 17.26939f, 237.3f, TMin);
-            if (TMin < 0) emean = Calculate_VP(0.61078f, 21.87456f, 265.5f, TMin);
-
-            return es - emean;
+            double rh = (ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxRH[Main.Month] + ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinRH[Main.Month])/2;
+            return Es * (1-(rh/100));
         }
 
         //  KM: Function to calculate cohort level transpiration 
-        //  KM: Based on PnET source code with the same theoretical princples developed by Mark Kubiske
-        //  KM: de Bruijna et al. 2014 
+        //  KM: Based on PnET source code
         private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
         {
 
             //calculate the vpd 
-            double tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[Main.Month];
-            double tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[Main.Month];
-            double Tave = (double)0.5 * (tmin + tmax);
-            double Tday = (double)0.5 * (tmax + Tave);
-            double VPD = Calculate_VPD(Tday, tmin);
+            double Tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[Main.Month];
+            double Tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[Main.Month];
+            double Tave = (double)0.5 * (Tmin + Tmax);
+            double Tday = (double)0.5 * (Tmax + Tave);
+            //double VPD = Calculate_VPD(Tday, Tmin);
+            double VPD = Calculate_VPD(Tday, Tmin, ecoregion);
 
             // Calculate the moisture limitation 
-            double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
+            //double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
+            double CiModifier = 1;
+            
+            // calculate gross photosynthesis which is basically the same as gross primary productivity 
+            // Respiration is a fraction of npp, we've gone with 0.1 following Aber and Federer (1992) and de Bruijn et al., 2014 
+            // Using the 0.1 was the first iteration of PnET-Succession so there is room to adjust that probably 
+            // NPP = GPP - R 
+            // GPP = NPP + R 
+            double RespFrac = 1;
+            double GrossPsn = (NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot) * (1 + RespFrac);
+ 
+            // Calculate WUE scalar tuning parameter using power function 
+            double WUEscalar = 0.0;
+            double M = 2; // setting M = 2 essentially turns off the WUE scalar because is will always be 1 and multiplying by 1 doesn't change anything 
+            //double M = 0.1;
+            double A = 5;
+            if((1-CiModifier) <= M)
+            {
+                WUEscalar = 1.0;
+            }
+            else
+            {
+                WUEscalar = 1/(Math.Exp(A*((1-CiModifier)-M)));
+            }
 
-            // calculate gross photosynthesis estimated as 2x the NPP 
-            double GrossPsn = 2*(NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot);
-
-            // calculate foliar nitrogen assuming C 47% of leaf mass 
-            double folN = 47/SpeciesData.LeafCN[cohort.Species];
+            // calculate foliar nitrogen assuming C 47% of leaf mass
+            double FolN = 47/SpeciesData.LeafCN[cohort.Species];
 
             // Calculate leaf internal co2 concentration 
-            //double CO2 = 418; // this is a constant right now 
             double CO2 = ClimateRegionData.AnnualWeather[ecoregion].MonthlyCO2[Main.Month];
-            double cicaRatio = (-0.075f * folN) + 0.875f;
-            double modCiCaRatio = cicaRatio * CiModifier;
-            double ciElev = CO2 * modCiCaRatio;
+            double CicaRatio = (-0.075f * FolN) + 0.875f;
+            double ModCiCaRatio = CicaRatio * CiModifier;
+            double CiElev = CO2 * ModCiCaRatio;
 
             // calculate mass flux of co2 and h20 
-            double V = (double)(8314.47 * ((tmin + 273) / 101.3));
-            double JCO2 = (double)(0.139 * ((CO2 - ciElev) / V) * 0.00001);
-            double JH2Osp = (double)(0.239 * (VPD / (8314.47 * (tmin + 273))));
+            double V = (double)(8314.47 * ((Tmin + 273) / 101.3));
+            double JCO2 = (double)(0.139 * ((CO2 - CiElev) / V) * 0.00001);
+            double JH2Osp = (double)(0.239 * (VPD / (8314.47 * (Tmin + 273))));
             double JH2O = JH2Osp * CiModifier;
+            double WUE = (JCO2/JH2O) * WUEscalar;
 
             // calculate transpiraiton 
-            double transpiration = (double)(0.01227 * (GrossPsn / (JCO2 / JH2O)) /10); // the 10 at the end is to convert it to cm 
+            double Transpiration = (double)(0.01227 * (GrossPsn / WUE) /10); // the 10 at the end is to convert it to cm 
 
-             // cap transpiration at available water 
-            double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
-            double availableSWfraction = AvailableSoilWater.GetSWFraction(cohort);
+            // cap transpiration at available water 
+            //double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
+            double AvailableSW = AvailableSoilWater.GetCapWater(cohort);
+            double AvailableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
 
-            double actual_transpiration = Math.Min(availableSW, transpiration);
+            double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
 
             // add to overall site monthly and annual transpiration 
-            SiteVars.Transpiration[site] += actual_transpiration;
-            SiteVars.monthlyTranspiration[site][Main.Month] += actual_transpiration;
+            SiteVars.Transpiration[site] += ActualTranspiration;
+            SiteVars.monthlyTranspiration[site][Main.Month] += ActualTranspiration;
+            
+            // Make VPD a monthly variable. Can just assign it because it will be the same for each cohort
+            SiteVars.monthlyVPD[site][Main.Month] = VPD;
             
             // write to the calibration log for testing purposes 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
                 {
-                    CalibrateLog.Transpiration = actual_transpiration;
-                    CalibrateLog.availableSW = availableSW;
-                    CalibrateLog.availableSWFraction = availableSWfraction;
+                    CalibrateLog.transpiration = ActualTranspiration;
+                    CalibrateLog.availableSW = AvailableSW;
+                    CalibrateLog.availableSWFraction = AvailableSWfraction;
+                    CalibrateLog.wuescalar = WUEscalar;
+                    CalibrateLog.wue = (JCO2 / JH2O);
+                    CalibrateLog.vpd = VPD;
+                    CalibrateLog.cimodifier = CiModifier;
+                    CalibrateLog.jh2o = JH2O;
+                    CalibrateLog.jco2 = JCO2;
+                    CalibrateLog.grosspsn = GrossPsn;
+                    CalibrateLog.co2 = CO2;
 
                 }
         }
