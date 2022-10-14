@@ -544,16 +544,19 @@ namespace Landis.Extension.Succession.NECN
             holdingTank += waterMovement;
             // ********************************************************
 
-
             // ********************************************************
             //Leaching occurs. Drain baseflow fraction from holding tank.
             //PH: Now baseflow comes from holding tank.
-            baseFlow = holdingTank * baseFlowFraction;
+            //baseFlow = holdingTank * baseFlowFraction;  // ***EDIT KM REMEMBER THIS !!!!!!!!!!!!!!!!!!
             
             //Subtract baseflow from soil water
             //PH: Subtract from holding tank instead. To not deplete soil water but still allow estimation of baseFlow.
-            holdingTank -= baseFlow;
+            //holdingTank -= baseFlow;   // ***EDIT KM REMEMBER THIS  !!!!!!!!!!!!!!!!!!!!!!
             // ********************************************************
+
+            // ***EDIT KM REMEMBER THIS 
+            baseFlow = soilWaterContent * baseFlowFraction;
+            soilWaterContent -= baseFlow;
 
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
             //availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);

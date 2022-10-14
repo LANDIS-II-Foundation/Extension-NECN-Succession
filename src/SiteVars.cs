@@ -128,6 +128,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyEvaporatedSnow;
         public static ISiteVar<double[]> MonthlyStormflow;
         public static ISiteVar<double[]> MonthlyMaxWaterUse;
+        public static ISiteVar<double[]> MonthlyVPD;
 
 
 
@@ -208,6 +209,7 @@ namespace Landis.Extension.Succession.NECN
             MonthlyEvaporatedSnow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyStormflow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMaxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyVPD = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
 
             // Annual accumulators
@@ -305,6 +307,7 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyEvaporatedSnow[site] = new double[12];
                 MonthlyStormflow[site] = new double[12];
                 MonthlyMaxWaterUse[site] = new double[12];
+                MonthlyVPD[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
             }
@@ -1262,7 +1265,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-                //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
         /// <summary>
         /// A summary of available water 
         /// Katie M. 
@@ -1274,6 +1277,20 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 MonthlyMaxWaterUse = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// VPD
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyVPD
+        {
+            get {
+                return MonthlyVPD;
+            }
+            set {
+                MonthlyVPD = value;
             }
         }
         // --------------------------------------------------------------------

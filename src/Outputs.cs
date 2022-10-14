@@ -424,6 +424,7 @@ namespace Landis.Extension.Succession.NECN
             double[] evaporatedSnow = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] stormflow = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] maxWaterUse = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] vpd = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
@@ -445,6 +446,7 @@ namespace Landis.Extension.Succession.NECN
                 evaporatedSnow[ecoregion.Index] = 0.0;
                 stormflow[ecoregion.Index] = 0.0;
                 maxWaterUse[ecoregion.Index] = 0.0;
+                vpd[ecoregion.Index] = 0.0;
 
             }
 
@@ -474,7 +476,7 @@ namespace Landis.Extension.Succession.NECN
                 evaporatedSnow[ecoregion.Index] += SiteVars.monthlyEvaporatedSnow[site][month];
                 stormflow[ecoregion.Index] += SiteVars.monthlyStormflow[site][month];
                 maxWaterUse[ecoregion.Index] += SiteVars.monthlyMaxWaterUse[site][month];
-
+                vpd[ecoregion.Index] += SiteVars.monthlyVPD[site][month];
 
             }
             
@@ -512,6 +514,7 @@ namespace Landis.Extension.Succession.NECN
                     ml.AvgEvaporatedSnow = (evaporatedSnow[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgStormflow = (stormflow[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgMaxWaterUse = (maxWaterUse[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AvgVPD = (vpd[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
 
                     monthlyLog.AddObject(ml);
                     monthlyLog.WriteToFile();
