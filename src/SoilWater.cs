@@ -324,7 +324,7 @@ namespace Landis.Extension.Succession.NECN
             tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
             PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
             if(OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, PET={1}.", month, PET);
+               // PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, PET={1}.", month, PET);
             daysInMonth = AnnualClimate.DaysInMonth(month, year);
             beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
             endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
@@ -436,8 +436,8 @@ namespace Landis.Extension.Succession.NECN
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
                 remainingPET = PET;
-                if (OtherData.CalibrateMode)
-                    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
+                //if (OtherData.CalibrateMode)
+                //PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
 
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
                 // this is the monthly evaporation is there is no snowpack 
@@ -449,8 +449,8 @@ namespace Landis.Extension.Succession.NECN
                 //PH: SoilEvaporation represents water that evaporates before reaching soil, so should not be subtracted from soil.
                 addToSoil -= soilEvaporation;
                 remainingPET -= soilEvaporation;
-                if (OtherData.CalibrateMode)
-                    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, addToSoil={1}.", month, addToSoil);
+                //if (OtherData.CalibrateMode)
+                    //PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, addToSoil={1}.", month, addToSoil);
             }
 
             //PH: Add liquid water to soil
@@ -522,26 +522,28 @@ namespace Landis.Extension.Succession.NECN
             //Allow excess water to run off during storm events (stormflow)
             double waterMovement = 0.0;
 
-            if (soilWaterContent > waterFull)
-            {
+            //if (soilWaterContent > waterFull)
+            //{
 
-                waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
-                soilWaterContent = waterFull;
+              //  waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
+              //  soilWaterContent = waterFull;
 
                 //...Compute storm flow.
-                stormFlow = waterMovement * stormFlowFraction;
+              //  stormFlow = waterMovement * stormFlowFraction;
 
                 // ********************************************************
                 // Subtract stormflow from soil water
                 // PH: Stormflow comes out of excess water
                 // ********************************************************
-            }
+            //}
+
+            //*******************************
 
             // ********************************************************
             //PH: add new variable to track excess water and calclulate baseFlow
             //PH: Remove stormFlow from from excess water
-            waterMovement -= stormFlow;
-            holdingTank += waterMovement;
+           // waterMovement -= stormFlow;
+           // holdingTank += waterMovement;
             // ********************************************************
 
             // ********************************************************
@@ -554,9 +556,41 @@ namespace Landis.Extension.Succession.NECN
             //holdingTank -= baseFlow;   // ***EDIT KM REMEMBER THIS  !!!!!!!!!!!!!!!!!!!!!!
             // ********************************************************
 
+            // ************************************************************************************************************
+            // ************************************************************************************************************
+            // KM: Test out a different method for the soil water, stormflow, baseflow that might help track things better 
+            if (soilWaterContent > waterFull)
+            {
+
+                waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
+                //soilWaterContent = waterFull;
+
+                //...Compute storm flow and subtract from soil water content 
+                stormFlow = waterMovement * stormFlowFraction;
+                soilWaterContent -= stormFlow;
+
+                // Compute baseflow and subtract from soil water content 
+                baseFlow = soilWaterContent * baseFlowFraction;
+                soilWaterContent -= baseFlow;
+
+                // If soil water content is still greater than the amount the soil can hold, drop soil water content to water full 
+                if(soilWaterContent > waterFull)
+                {
+                    soilWaterContent = waterFull;
+                }
+
+            }
+            else
+            {
+                baseFlow = soilWaterContent * baseFlowFraction;
+                soilWaterContent -= baseFlow;
+            }
+            // ************************************************************************************************************     
+            // ************************************************************************************************************
+
             // ***EDIT KM REMEMBER THIS 
-            baseFlow = soilWaterContent * baseFlowFraction;
-            soilWaterContent -= baseFlow;
+            //baseFlow = soilWaterContent * baseFlowFraction;
+            //soilWaterContent -= baseFlow;
 
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
             //availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);

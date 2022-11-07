@@ -156,10 +156,10 @@ namespace Landis.Extension.Succession.NECN
 
                     if (Double.IsNaN(relativeNallocation) || Double.IsNaN(Nallocation) || Double.IsNaN(NAllocTotal))
                     {
-                        PlugIn.ModelCore.UI.WriteLine("  N ALLOCATION CALCULATION = NaN!  ");
-                        PlugIn.ModelCore.UI.WriteLine("  Site_Row={0:0}, Site_Column={1:0}.", site.Location.Row, site.Location.Column);
-                        PlugIn.ModelCore.UI.WriteLine("  Nallocation={0:0.00}, NAllocTotal={1:0.00}, relativeNallocation={2:0.00}.", Nallocation, NAllocTotal, relativeNallocation);
-                        PlugIn.ModelCore.UI.WriteLine("  Wood={0:0.00}, Leaf={1:0.00}.", cohort.WoodBiomass, cohort.LeafBiomass);
+                        //PlugIn.ModelCore.UI.WriteLine("  N ALLOCATION CALCULATION = NaN!  ");
+                        //PlugIn.ModelCore.UI.WriteLine("  Site_Row={0:0}, Site_Column={1:0}.", site.Location.Row, site.Location.Column);
+                        //PlugIn.ModelCore.UI.WriteLine("  Nallocation={0:0.00}, NAllocTotal={1:0.00}, relativeNallocation={2:0.00}.", Nallocation, NAllocTotal, relativeNallocation);
+                        //PlugIn.ModelCore.UI.WriteLine("  Wood={0:0.00}, Leaf={1:0.00}.", cohort.WoodBiomass, cohort.LeafBiomass);
                     }                    
                 }
             }
@@ -193,9 +193,9 @@ namespace Landis.Extension.Succession.NECN
                    
                     if (Double.IsNaN(Nallocation) || Double.IsNaN(Nfraction) || Double.IsNaN(availableN))
                     {
-                        PlugIn.ModelCore.UI.WriteLine("  LIMIT N CALCULATION = NaN!  ");
-                        PlugIn.ModelCore.UI.WriteLine("  Site_Row={0:0}, Site_Column={1:0}.", site.Location.Row, site.Location.Column);
-                        PlugIn.ModelCore.UI.WriteLine("  Nallocation={0:0.00}, Nfraction={1:0.00}, availableN={2:0.00}.", Nallocation, Nfraction, availableN);
+                        //PlugIn.ModelCore.UI.WriteLine("  LIMIT N CALCULATION = NaN!  ");
+                        //PlugIn.ModelCore.UI.WriteLine("  Site_Row={0:0}, Site_Column={1:0}.", site.Location.Row, site.Location.Column);
+                        //PlugIn.ModelCore.UI.WriteLine("  Nallocation={0:0.00}, Nfraction={1:0.00}, availableN={2:0.00}.", Nallocation, Nfraction, availableN);
                     }
 
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
@@ -277,7 +277,7 @@ namespace Landis.Extension.Succession.NECN
             
             if(Ndemand < 0.0)
             {
-                PlugIn.ModelCore.UI.WriteLine("   ERROR:  TotalANPP-C={0:0.00} Nreduction={1:0.00}.", totalANPP_C, Ndemand);
+               // PlugIn.ModelCore.UI.WriteLine("   ERROR:  TotalANPP-C={0:0.00} Nreduction={1:0.00}.", totalANPP_C, Ndemand);
                 throw new ApplicationException("Error: N Reduction is < 0.  See AvailableN.cs");
             }
             

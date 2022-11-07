@@ -68,7 +68,7 @@ namespace Landis.Extension.Succession.NECN
                     int cohortAddYear = GetAddYear(cohort);
                     // fractional based on cohort biomass. Use an exponential function so that fractions are more even between cohorts. 
                     // The 0.02 produces a 'reasonable' allocation that does not give all N to the largest cohorts.
-                    double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.001);  // 0.02 originally 
+                    double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.02);  // 0.02 originally 
 
                     if(SWallocation <= 0.0)
                         SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.00001); // Need a minimum for each cohort so they no cohort ends up with nothing. 

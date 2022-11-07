@@ -415,7 +415,7 @@ namespace Landis.Extension.Succession.NECN
 
             //-------------------------
             //  Read Species Parameters table
-            PlugIn.ModelCore.UI.WriteLine("   Begin parsing NECN SPECIES table.");
+            //PlugIn.ModelCore.UI.WriteLine("   Begin parsing NECN SPECIES table.");
 
             InputVar<string> csv = new InputVar<string>("SpeciesParameters");
             ReadVar(csv);
@@ -545,7 +545,7 @@ namespace Landis.Extension.Succession.NECN
             //}
 
             //--------- Read In Functional Group Table -------------------------------
-            PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
+            //PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
 
             InputVar<string> func_csv = new InputVar<string>("FunctionalGroupParameters");
             ReadVar(func_csv);
@@ -682,7 +682,7 @@ namespace Landis.Extension.Succession.NECN
             //    }
             //}
             //--------- Read In Fire Reductions Table ---------------------------
-            PlugIn.ModelCore.UI.WriteLine("   Begin reading FIRE REDUCTION parameters.");
+            //PlugIn.ModelCore.UI.WriteLine("   Begin reading FIRE REDUCTION parameters.");
             ReadName(Names.FireReductionParameters);
 
             InputVar<int> frindex = new InputVar<int>("Fire Severity Index MUST = 1-5");
@@ -731,7 +731,7 @@ namespace Landis.Extension.Succession.NECN
             //--------- Read In Harvest Reductions Table ---------------------------
             InputVar<string> hreds = new InputVar<string>("HarvestReductions");
             ReadName(Names.HarvestReductionParameters);
-            PlugIn.ModelCore.UI.WriteLine("   Begin reading HARVEST REDUCTION parameters.");
+            //PlugIn.ModelCore.UI.WriteLine("   Begin reading HARVEST REDUCTION parameters.");
 
             InputVar<string> prescriptionName = new InputVar<string>("Prescription");
             InputVar<double> wred_pr = new InputVar<double>("Coarse Litter Reduction");

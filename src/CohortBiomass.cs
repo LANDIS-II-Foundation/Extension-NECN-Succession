@@ -126,15 +126,15 @@ namespace Landis.Extension.Succession.NECN
 
             if ((totalMortality[0]) > cohort.WoodBiomass)
             {
-                PlugIn.ModelCore.UI.WriteLine("Warning: WOOD Mortality exceeds cohort wood biomass. M={0:0.0}, B={1:0.0}", (totalMortality[0]), cohort.WoodBiomass);
-                PlugIn.ModelCore.UI.WriteLine("Warning: If M>B, then list mortality. Mage={0:0.0}, Mgrow={1:0.0},", mortalityAge[0], mortalityGrowth[0]);
+                //PlugIn.ModelCore.UI.WriteLine("Warning: WOOD Mortality exceeds cohort wood biomass. M={0:0.0}, B={1:0.0}", (totalMortality[0]), cohort.WoodBiomass);
+                //PlugIn.ModelCore.UI.WriteLine("Warning: If M>B, then list mortality. Mage={0:0.0}, Mgrow={1:0.0},", mortalityAge[0], mortalityGrowth[0]);
                 throw new ApplicationException("Error: WOOD Mortality exceeds cohort biomass");
 
             }
             if ((totalMortality[1] + defoliatedLeafBiomass - cohort.LeafBiomass) > 0.01)
             {
-                PlugIn.ModelCore.UI.WriteLine("Warning: LEAF Mortality exceeds cohort biomass. Mortality={0:0.000}, Leafbiomass={1:0.000}", (totalMortality[1] + defoliatedLeafBiomass), cohort.LeafBiomass);
-                PlugIn.ModelCore.UI.WriteLine("Warning: If M>B, then list mortality. Mage={0:0.00}, Mgrow={1:0.00}, Mdefo={2:0.000},", mortalityAge[1], mortalityGrowth[1], defoliatedLeafBiomass);
+                //PlugIn.ModelCore.UI.WriteLine("Warning: LEAF Mortality exceeds cohort biomass. Mortality={0:0.000}, Leafbiomass={1:0.000}", (totalMortality[1] + defoliatedLeafBiomass), cohort.LeafBiomass);
+                //PlugIn.ModelCore.UI.WriteLine("Warning: If M>B, then list mortality. Mage={0:0.00}, Mgrow={1:0.00}, Mdefo={2:0.000},", mortalityAge[1], mortalityGrowth[1], defoliatedLeafBiomass);
                 throw new ApplicationException("Error: LEAF Mortality exceeds cohort biomass");
 
             }
@@ -219,9 +219,9 @@ namespace Landis.Extension.Succession.NECN
                         
             if (Double.IsNaN(leafNPP) || Double.IsNaN(woodNPP))
             {
-                PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP = NaN!  Will set to zero.");
-                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
-                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     WoodNPP={2:0.00}, LeafNPP={3:0.00}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, woodNPP, leafNPP);
+                //PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP = NaN!  Will set to zero.");
+                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
+                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     WoodNPP={2:0.00}, LeafNPP={3:0.00}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, woodNPP, leafNPP);
                 if (Double.IsNaN(leafNPP))
                     leafNPP = 0.0;
                 if (Double.IsNaN(woodNPP))
@@ -280,7 +280,7 @@ namespace Landis.Extension.Succession.NECN
 
             if(M_AGE_wood < 0.0 || M_AGE_leaf < 0.0)
             {
-                PlugIn.ModelCore.UI.WriteLine("Mwood={0}, Mleaf={1}.", M_AGE_wood, M_AGE_leaf);
+                //PlugIn.ModelCore.UI.WriteLine("Mwood={0}, Mleaf={1}.", M_AGE_wood, M_AGE_leaf);
                 throw new ApplicationException("Error: Woody or Leaf Age Mortality is < 0");
             }
 
@@ -343,7 +343,7 @@ namespace Landis.Extension.Succession.NECN
 
             if(M_wood < 0.0 || M_leaf < 0.0)
             {
-                PlugIn.ModelCore.UI.WriteLine("Mwood={0}, Mleaf={1}.", M_wood, M_leaf);
+                //PlugIn.ModelCore.UI.WriteLine("Mwood={0}, Mleaf={1}.", M_wood, M_leaf);
                 throw new ApplicationException("Error: Wood or Leaf Growth Mortality is < 0");
             }
 
@@ -442,8 +442,8 @@ namespace Landis.Extension.Succession.NECN
 
             if (Double.IsNaN(NPPwood) || Double.IsNaN(NPPleaf) || Double.IsNaN(NPPcoarseRoot) || Double.IsNaN(NPPfineRoot))
             {
-                PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP or COARSE ROOT or FINE ROOT = NaN!  Will set to zero.");
-                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     WoodNPP={0}, LeafNPP={1}, CRootNPP={2}, FRootNPP={3}.", NPPwood, NPPleaf, NPPcoarseRoot, NPPfineRoot);
+               // PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP or COARSE ROOT or FINE ROOT = NaN!  Will set to zero.");
+               // PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     WoodNPP={0}, LeafNPP={1}, CRootNPP={2}, FRootNPP={3}.", NPPwood, NPPleaf, NPPcoarseRoot, NPPfineRoot);
                 if (Double.IsNaN(NPPleaf))
                     NPPleaf = 0.0;
                 if (Double.IsNaN(NPPwood))
@@ -458,6 +458,8 @@ namespace Landis.Extension.Succession.NECN
             // KM: and because npp is necessary for transpiration calculations 
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
             Calculate_Transpiration(cohort, site, ecoregion, NPPleaf, NPPwood, NPPcoarseRoot, NPPfineRoot);
+            //double NPP = AGNPP[0] + AGNPP[1];
+            //Calculate_Transpiration(cohort, site, ecoregion, NPP);
 
             SiteVars.AGNPPcarbon[site] += NPPwood + NPPleaf;
             SiteVars.BGNPPcarbon[site] += NPPcoarseRoot + NPPfineRoot;
@@ -809,6 +811,7 @@ namespace Landis.Extension.Succession.NECN
         //  KM: Function to calculate cohort level transpiration 
         //  KM: Based on PnET source code
         private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
+        //private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
         {
 
             //calculate the vpd 
@@ -830,6 +833,7 @@ namespace Landis.Extension.Succession.NECN
             // GPP = NPP + R 
             double RespFrac = 1;
             double GrossPsn = (NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot) * (1 + RespFrac);
+            //double GrossPsn = (npp) * (1 + RespFrac);
  
             // Calculate WUE scalar tuning parameter using power function 
             double WUEscalar = 0.0;
