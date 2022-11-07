@@ -770,7 +770,9 @@ namespace Landis.Extension.Succession.NECN
 
         // KM: VPD to be used in transpiration calculations 
         // KM: From PnET source code 
-        private static double Calculate_VP(double A, double B, double C, double T)
+        // KM: Copied from PnET source code developed by Mark Kubiske
+        // KM: de Bruijna et al. 2014 
+        private static double Calculate_VP(double a, double b, double c, double T)
         {
             return A * (double)Math.Exp(B * T / (T + C));
         }
