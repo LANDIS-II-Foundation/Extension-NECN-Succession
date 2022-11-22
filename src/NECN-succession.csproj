@@ -22,6 +22,10 @@
     <PackageTags>NECN;LANDIS-II;Landis;Extension;Succession;Carbon;Nitrogen</PackageTags>
     <PackageLicenseUrl>https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>http://www.landis-ii.org</PackageProjectUrl>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\build\extensions</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
