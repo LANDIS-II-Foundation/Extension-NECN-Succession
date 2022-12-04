@@ -382,7 +382,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         private static IInputRaster<DoublePixel> MakeDoubleMap(string path)
         {
-            PlugIn.ModelCore.UI.WriteLine("  Read in data from {0}", path);
+            //PlugIn.ModelCore.UI.WriteLine("  Read in data from {0}", path);
 
             IInputRaster<DoublePixel> map;
 

@@ -79,5 +79,11 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Unit = "kpa", Desc = "vpd", Format = "0.00")] //
         public double AvgVPD { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm", Desc = "accumulted precipitation", Format = "0.00")] //
+        public double AccumPrecip { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm", Desc = "avg swc", Format = "0.00")] //
+        public double SWC_Mid { get; set; } //
     }
 }

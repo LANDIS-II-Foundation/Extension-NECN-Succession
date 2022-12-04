@@ -28,6 +28,8 @@ namespace Landis.Extension.Succession.NECN
         int FoliageDropMonth{get;set;}
         double CoarseRootFraction { get; set; }
         double FineRootFraction { get; set; }
+        double Fwue1 { get ;set; }
+        double Fwue2 { get; set; }
 
     }
     
@@ -52,6 +54,8 @@ namespace Landis.Extension.Succession.NECN
         private double fineRootFraction;
         private double minLAI;
         //private double growthLAI;
+        private double fwue1;
+        private double fwue2;
 
         public static FunctionalTypeTable Table;
         
@@ -340,6 +344,44 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------
+        
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Determines the fraction of leaf biomass that is fine roots
+        /// </summary>
+        public double Fwue1
+        {
+            get
+            {
+                return fwue1;
+            }
+            set
+            {
+                if (value < 0 || value > 1)
+                    throw new InputValueException(value.ToString(),
+                        "Fwue1 must be expressed as a fraction, 0-1");
+                fwue1 = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Determines the fraction of leaf biomass that is fine roots
+        /// </summary>
+        public double Fwue2
+        {
+            get
+            {
+                return fwue2;
+            }
+            set
+            {
+                if (value < 0 || value > 1000000)
+                    throw new InputValueException(value.ToString(),
+                        "Fwue1 must be expressed as a number, 0-1000000");
+                fwue2 = value;
+            }
+        }
 
        public FunctionalType()
         {

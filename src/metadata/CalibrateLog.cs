@@ -219,13 +219,13 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "kPa", Desc = "VPD", Format = "0.00")]
         public double VPD { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration cohort", Format = "0.00")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration cohort", Format = "0.0000")]
         public double AvailableSW { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.00")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.0000")]
         public double AvailableSWFraction { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.00")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.0000")]
         public double AvailableWaterTranspiration { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = "unitless", Desc = "CiModifier water limitation", Format = "0.00")]
@@ -247,10 +247,10 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "gC m2 mo-1", Desc = "Gross Photosynthesis", Format = "0.00")]
         public double GrossPsn { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.00")]
+        [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.0000")]
         public double Transpiration { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = "ppm", Desc = "co2", Format = "0.00")]
+        [DataFieldAttribute(Unit = "ppm", Desc = "co2", Format = "0.0000")]
         public double CO2 { set; get; }
 
 

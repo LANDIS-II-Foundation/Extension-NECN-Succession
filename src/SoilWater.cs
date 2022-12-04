@@ -478,7 +478,7 @@ namespace Landis.Extension.Succession.NECN
             // KM:Tracking the water for testing purposes 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
-                CalibrateLog.availableWaterTranspiration = (availableWaterMax + priorAvailableWaterMin) / 2.0;
+                CalibrateLog.availableWaterTranspiration = System.Math.Min(((availableWaterMax + priorAvailableWaterMin) / 2.0), soilWaterContent - waterEmpty);
                 CalibrateLog.precipitation = Precipitation;
             }
 
@@ -522,26 +522,28 @@ namespace Landis.Extension.Succession.NECN
             //Allow excess water to run off during storm events (stormflow)
             double waterMovement = 0.0;
 
-            if (soilWaterContent > waterFull)
-            {
+            //if (soilWaterContent > waterFull)
+            //{
 
-                waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
-                soilWaterContent = waterFull;
+              //  waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
+              //  soilWaterContent = waterFull;
 
                 //...Compute storm flow.
-                stormFlow = waterMovement * stormFlowFraction;
+              //  stormFlow = waterMovement * stormFlowFraction;
 
                 // ********************************************************
                 // Subtract stormflow from soil water
                 // PH: Stormflow comes out of excess water
                 // ********************************************************
-            }
+            //}
+
+            //*******************************
 
             // ********************************************************
             //PH: add new variable to track excess water and calclulate baseFlow
             //PH: Remove stormFlow from from excess water
-            waterMovement -= stormFlow;
-            holdingTank += waterMovement;
+           // waterMovement -= stormFlow;
+           // holdingTank += waterMovement;
             // ********************************************************
 
             // ********************************************************
@@ -554,9 +556,41 @@ namespace Landis.Extension.Succession.NECN
             //holdingTank -= baseFlow;   // ***EDIT KM REMEMBER THIS  !!!!!!!!!!!!!!!!!!!!!!
             // ********************************************************
 
+            // ************************************************************************************************************
+            // ************************************************************************************************************
+            // KM: Test out a different method for the soil water, stormflow, baseflow that might help track things better 
+            if (soilWaterContent > waterFull)
+            {
+
+                waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
+                //soilWaterContent = waterFull;
+
+                //...Compute storm flow and subtract from soil water content 
+                stormFlow = waterMovement * stormFlowFraction;
+                soilWaterContent -= stormFlow;
+
+                // Compute baseflow and subtract from soil water content 
+                baseFlow = soilWaterContent * baseFlowFraction;
+                soilWaterContent -= baseFlow;
+
+                // If soil water content is still greater than the amount the soil can hold, drop soil water content to water full 
+                if(soilWaterContent > waterFull)
+                {
+                    soilWaterContent = waterFull;
+                }
+
+            }
+            else
+            {
+                baseFlow = soilWaterContent * baseFlowFraction;
+                soilWaterContent -= baseFlow;
+            }
+            // ************************************************************************************************************     
+            // ************************************************************************************************************
+
             // ***EDIT KM REMEMBER THIS 
-            baseFlow = soilWaterContent * baseFlowFraction;
-            soilWaterContent -= baseFlow;
+            //baseFlow = soilWaterContent * baseFlowFraction;
+            //soilWaterContent -= baseFlow;
 
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
             //availableWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
@@ -568,6 +602,10 @@ namespace Landis.Extension.Succession.NECN
             // PH: availableWater is affected by my changes, and soilWaterContent should be higher now.  
             // Therefore, calculating using soilWaterContent directly instead
 
+
+            // output the mean soil water content of the beginning and end of the month to compare with measured soil water content 
+            // this has to go before we reassign the soil water content 
+            SiteVars.MonthlySoilWaterContentMiddle[site][Main.Month] = ((SiteVars.SoilWaterContent[site] + ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]) + soilWaterContent)/2;
             // Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
@@ -579,6 +617,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             SiteVars.MonthlyAvailableWaterMin[site][Main.Month] = availableWaterMin;
+
             if (month == 0)
                 SiteVars.DryDays[site] = 0;
             else

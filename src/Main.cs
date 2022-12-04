@@ -41,14 +41,15 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.ResetAnnualValues(site);
 
                 // Next, Grow and Decompose each month
-                int[] months = new int[12]{6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
+                //int[] months = new int[12]{6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
+                int[] months = new int[12]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
                 if(OtherData.CalibrateMode)
-                    //months = new int[12]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; This output will not match normal mode due to differences in initialization
-                    months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+                    months = new int[12]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; ///This output will not match normal mode due to differences in initialization
+                    //months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
                 PlugIn.AnnualWaterBalance = 0;
-
+                double accumulated_precipitation = 0.0;
                 for (MonthCnt = 0; MonthCnt < 12; MonthCnt++)
                 {
                     // Calculate mineral N fractions based on coarse root biomass.  Only need to do once per year.
@@ -75,6 +76,8 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.monthlyTranspiration[site][Month] = 0.0;
                                    
                     double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month];
+                    accumulated_precipitation += ppt;
+                    SiteVars.MonthlyAccumPrecip[site][Month] += accumulated_precipitation;
 
                     double monthlyNdeposition;
                     if  (PlugIn.Parameters.AtmosNintercept !=-1 && PlugIn.Parameters.AtmosNslope !=-1)
@@ -128,8 +131,8 @@ namespace Landis.Extension.Succession.NECN
                     WoodLayer.Decompose(site);
                     if (OtherData.CalibrateMode)
                     {
-                        PlugIn.ModelCore.UI.WriteLine("currentDeadWoodC:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, string.Join(", ", SiteVars.CurrentDeadWoodC[site]));
-                        PlugIn.ModelCore.UI.WriteLine("SurfaceDeadWoodC: {0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, SiteVars.SurfaceDeadWood[site].Carbon);
+                        //PlugIn.ModelCore.UI.WriteLine("currentDeadWoodC:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, string.Join(", ", SiteVars.CurrentDeadWoodC[site]));
+                       // PlugIn.ModelCore.UI.WriteLine("SurfaceDeadWoodC: {0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, SiteVars.SurfaceDeadWood[site].Carbon);
                     }
                     LitterLayer.Decompose(site);
                     SoilLayer.Decompose(site);

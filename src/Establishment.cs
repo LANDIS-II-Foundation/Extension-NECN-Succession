@@ -119,7 +119,7 @@ namespace Landis.Extension.Succession.NECN
             growDays = weather.EndGrowing - weather.BeginGrowing + 1.0;
             if (growDays < 2.0)
             {
-                PlugIn.ModelCore.UI.WriteLine("Begin Grow = {0}, End Grow = {1}", weather.BeginGrowing, weather.EndGrowing);
+                //PlugIn.ModelCore.UI.WriteLine("Begin Grow = {0}, End Grow = {1}", weather.BeginGrowing, weather.EndGrowing);
                 throw new System.ApplicationException("Error: Too few growing days.");
             }
             //Calc species soil moisture multipliers

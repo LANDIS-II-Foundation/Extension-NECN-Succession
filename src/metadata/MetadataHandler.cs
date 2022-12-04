@@ -111,7 +111,7 @@ namespace Landis.Extension.Succession.NECN
             //---------------------------------------
             if (ANPPMapNames != null)
             {
-                PlugIn.ModelCore.UI.WriteLine("  ANPP Map Names = \"{0}\" ...", ANPPMapNames);
+                //PlugIn.ModelCore.UI.WriteLine("  ANPP Map Names = \"{0}\" ...", ANPPMapNames);
                 string[] paths = { @"NECN", "AG_NPP-{timestep}.img" };
                 OutputMetadata mapOut_ANPP = new OutputMetadata()
                 {
