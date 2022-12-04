@@ -324,7 +324,7 @@ namespace Landis.Extension.Succession.NECN
             tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
             PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
             if(OtherData.CalibrateMode)
-               // PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, PET={1}.", month, PET);
+                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, PET={1}.", month, PET);
             daysInMonth = AnnualClimate.DaysInMonth(month, year);
             beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
             endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
@@ -436,8 +436,8 @@ namespace Landis.Extension.Succession.NECN
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
                 remainingPET = PET;
-                //if (OtherData.CalibrateMode)
-                //PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
+                if (OtherData.CalibrateMode)
+                    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
 
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
                 // this is the monthly evaporation is there is no snowpack 
@@ -449,8 +449,8 @@ namespace Landis.Extension.Succession.NECN
                 //PH: SoilEvaporation represents water that evaporates before reaching soil, so should not be subtracted from soil.
                 addToSoil -= soilEvaporation;
                 remainingPET -= soilEvaporation;
-                //if (OtherData.CalibrateMode)
-                    //PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, addToSoil={1}.", month, addToSoil);
+                if (OtherData.CalibrateMode)
+                    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, addToSoil={1}.", month, addToSoil);
             }
 
             //PH: Add liquid water to soil
@@ -478,7 +478,7 @@ namespace Landis.Extension.Succession.NECN
             // KM:Tracking the water for testing purposes 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
-                CalibrateLog.availableWaterTranspiration = (availableWaterMax + priorAvailableWaterMin) / 2.0;
+                CalibrateLog.availableWaterTranspiration = System.Math.Min(((availableWaterMax + priorAvailableWaterMin) / 2.0), soilWaterContent - waterEmpty);
                 CalibrateLog.precipitation = Precipitation;
             }
 
@@ -602,6 +602,10 @@ namespace Landis.Extension.Succession.NECN
             // PH: availableWater is affected by my changes, and soilWaterContent should be higher now.  
             // Therefore, calculating using soilWaterContent directly instead
 
+
+            // output the mean soil water content of the beginning and end of the month to compare with measured soil water content 
+            // this has to go before we reassign the soil water content 
+            SiteVars.MonthlySoilWaterContentMiddle[site][Main.Month] = ((SiteVars.SoilWaterContent[site] + ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month]) + soilWaterContent)/2;
             // Compute the ratio of precipitation to PET
             double ratioPrecipPET = 0.0;
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
@@ -613,6 +617,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             SiteVars.MonthlyAvailableWaterMin[site][Main.Month] = availableWaterMin;
+
             if (month == 0)
                 SiteVars.DryDays[site] = 0;
             else

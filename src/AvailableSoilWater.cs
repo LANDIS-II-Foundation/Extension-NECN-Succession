@@ -34,7 +34,7 @@ namespace Landis.Extension.Succession.NECN
                         cohortAddYear--;
                 
                     double SWfraction = GetSWFraction(cohort);
-                    double SWallocation = Math.Max(0.05, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
+                    double SWallocation = Math.Max(0.000001, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
 
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
                     newEntry.Add(cohortAddYear, SWallocation);
@@ -71,7 +71,7 @@ namespace Landis.Extension.Succession.NECN
                     double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.02);  // 0.02 originally 
 
                     if(SWallocation <= 0.0)
-                        SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.00001); // Need a minimum for each cohort so they no cohort ends up with nothing. 
+                        SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.0000001); // Need a minimum for each cohort so they no cohort ends up with nothing. 
                     
                     // allocations are summed so we can relativize in the next step to get the actual fractions
                     SWAllocTotal += SWallocation;
@@ -166,7 +166,7 @@ namespace Landis.Extension.Succession.NECN
                         cohortAddYear--;
                 
                     double SWfraction = GetSWFraction(cohort);
-                    double CapAllocation = Math.Max(0.05, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
+                    double CapAllocation = Math.Max(0, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
 
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
                     newEntry.Add(cohortAddYear, CapAllocation);

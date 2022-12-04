@@ -143,8 +143,8 @@ namespace Landis.Extension.Succession.NECN
 
             float[] deltas = new float[2] { deltaWood, deltaLeaf };
 
-            //if((totalMortality[1] + defoliatedLeafBiomass) > cohort.LeafBiomass)
-            //   PlugIn.ModelCore.UI.WriteLine("Warning: Leaf Mortality exceeds cohort leaf biomass. M={0:0.0}, B={1:0.0}, DefoLeafBiomass={2:0.0}, defoliationIndex={3:0.0}", totalMortality[1], cohort.LeafBiomass, defoliatedLeafBiomass, defoliation);
+            if((totalMortality[1] + defoliatedLeafBiomass) > cohort.LeafBiomass)
+               PlugIn.ModelCore.UI.WriteLine("Warning: Leaf Mortality exceeds cohort leaf biomass. M={0:0.0}, B={1:0.0}, DefoLeafBiomass={2:0.0}, defoliationIndex={3:0.0}", totalMortality[1], cohort.LeafBiomass, defoliatedLeafBiomass, defoliation);
             
             UpdateDeadBiomass(cohort, site, totalMortality);
 
@@ -457,9 +457,9 @@ namespace Landis.Extension.Succession.NECN
             // KM: calculate transpiration within the npp function to make sure growth and water use are happening together 
             // KM: and because npp is necessary for transpiration calculations 
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-            Calculate_Transpiration(cohort, site, ecoregion, NPPleaf, NPPwood, NPPcoarseRoot, NPPfineRoot);
-            //double NPP = AGNPP[0] + AGNPP[1];
-            //Calculate_Transpiration(cohort, site, ecoregion, NPP);
+            //Calculate_Transpiration(cohort, site, ecoregion, NPPleaf, NPPwood, NPPcoarseRoot, NPPfineRoot);
+            double NPP = AGNPP[0] + AGNPP[1];
+            Calculate_Transpiration(cohort, site, ecoregion, NPP);
 
             SiteVars.AGNPPcarbon[site] += NPPwood + NPPleaf;
             SiteVars.BGNPPcarbon[site] += NPPcoarseRoot + NPPfineRoot;
@@ -774,7 +774,7 @@ namespace Landis.Extension.Succession.NECN
         // KM: de Bruijna et al. 2014 
         private static double Calculate_VP(double a, double b, double c, double T)
         {
-            return A * (double)Math.Exp(B * T / (T + C));
+            return a * (double)Math.Exp(b * T / (T + c));
         }
 
 //       private static double Calculate_VPD(double Tday, double Tmin)
@@ -812,8 +812,8 @@ namespace Landis.Extension.Succession.NECN
 
         //  KM: Function to calculate cohort level transpiration 
         //  KM: Based on PnET source code
-        private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
-        //private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
+        //private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
+        private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
         {
 
             //calculate the vpd 
@@ -834,21 +834,24 @@ namespace Landis.Extension.Succession.NECN
             // NPP = GPP - R 
             // GPP = NPP + R 
             double RespFrac = 1;
-            double GrossPsn = (NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot) * (1 + RespFrac);
-            //double GrossPsn = (npp) * (1 + RespFrac);
+            //double GrossPsn = (NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot) * (1 + RespFrac);
+            double GrossPsn = (npp) * (1 + RespFrac);
  
             // Calculate WUE scalar tuning parameter using power function 
             double WUEscalar = 0.0;
-            double M = 2; // setting M = 2 essentially turns off the WUE scalar because is will always be 1 and multiplying by 1 doesn't change anything 
-            //double M = 0.1;
-            double A = 5;
-            if((1-CiModifier) <= M)
+            //double M = 2; // setting M = 2 essentially turns off the WUE scalar because is will always be 1 and multiplying by 1 doesn't change anything 
+            //double M = 0.1; = Fwue1
+            double Fwue1 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue1;
+            //double A = 5; = Fwue2
+            double Fwue2 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue2;
+
+            if((1-CiModifier) <= Fwue1)
             {
                 WUEscalar = 1.0;
             }
             else
             {
-                WUEscalar = 1/(Math.Exp(A*((1-CiModifier)-M)));
+                WUEscalar = 1/(Math.Exp(Fwue2*((1-CiModifier)-Fwue1)));
             }
 
             // calculate foliar nitrogen assuming C 47% of leaf mass

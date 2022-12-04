@@ -185,10 +185,12 @@ namespace Landis.Extension.Succession.NECN
             {
                 // Write monthly log file:
                 // Output must reflect the order of operation:
-                int[] months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+                int[] months = new int[12] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+                //int[] months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
                 if (OtherData.CalibrateMode)
-                    months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+                    //months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+                   months = new int[12] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
                 for (int i = 0; i < 12; i++)
                 {
@@ -436,7 +438,7 @@ namespace Landis.Extension.Succession.NECN
         public bool SufficientLight(ISpecies species, ActiveSite site)
         {
 
-            //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
+            PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
             byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
             bool isSufficientlight = false;
             double lightProbability = 0.0;
@@ -448,7 +450,7 @@ namespace Landis.Extension.Succession.NECN
             foreach (ISufficientLight lights in sufficientLight)
             {
 
-                //PlugIn.ModelCore.UI.WriteLine("Sufficient Light:  ShadeClass={0}, Prob0={1}.", lights.ShadeClass, lights.ProbabilityLight0);
+                PlugIn.ModelCore.UI.WriteLine("Sufficient Light:  ShadeClass={0}, Prob0={1}.", lights.ShadeClass, lights.ProbabilityLight0);
                 if (lights.ShadeClass == species.ShadeTolerance)
                 {
                     if (siteShade == 0) lightProbability = lights.ProbabilityLight0;
@@ -462,8 +464,8 @@ namespace Landis.Extension.Succession.NECN
                 }
             }
 
-            //if (!found)
-                //PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
+            if (!found)
+                PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
 
 
             // ------------------------------------------------------------------------
@@ -515,9 +517,9 @@ namespace Landis.Extension.Succession.NECN
 
             if (OtherData.CalibrateMode)
             {
-                //PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
-                //PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
-                //PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
+                PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
+                PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
+                PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
             }
             // ---------------------------------------------------------------------
 

@@ -585,6 +585,10 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
                     funcTParms.MinLAI = ReadMinLAI(row);
 
+                    // new parameters for ET 
+                    funcTParms.Fwue1 = System.Convert.ToDouble(row["Fwue1"]);
+                    funcTParms.Fwue2 = System.Convert.ToDouble(row["Fwue2"]);
+                    
             }
             //}
             //else

@@ -425,6 +425,8 @@ namespace Landis.Extension.Succession.NECN
             double[] stormflow = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] maxWaterUse = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] vpd = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] ppt_accum = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] swc_mid = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
@@ -447,6 +449,8 @@ namespace Landis.Extension.Succession.NECN
                 stormflow[ecoregion.Index] = 0.0;
                 maxWaterUse[ecoregion.Index] = 0.0;
                 vpd[ecoregion.Index] = 0.0;
+                ppt_accum[ecoregion.Index] = 0.0;
+                swc_mid[ecoregion.Index] = 0.0;
 
             }
 
@@ -456,7 +460,6 @@ namespace Landis.Extension.Succession.NECN
 
                 ppt[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
                 airtemp[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
-
                 avgNPPtc[ecoregion.Index] += SiteVars.MonthlyAGNPPcarbon[site][month] + SiteVars.MonthlyBGNPPcarbon[site][month];
                 avgTotalResp[ecoregion.Index] += SiteVars.MonthlyHeteroResp[site][month];
                 avgSoilResp[ecoregion.Index] += SiteVars.MonthlySoilResp[site][month];
@@ -477,6 +480,9 @@ namespace Landis.Extension.Succession.NECN
                 stormflow[ecoregion.Index] += SiteVars.monthlyStormflow[site][month];
                 maxWaterUse[ecoregion.Index] += SiteVars.monthlyMaxWaterUse[site][month];
                 vpd[ecoregion.Index] += SiteVars.monthlyVPD[site][month];
+
+                ppt_accum[ecoregion.Index] = SiteVars.MonthlyAccumPrecip[site][month];
+                swc_mid[ecoregion.Index] += SiteVars.MonthlySoilWaterContentMiddle[site][month];
 
             }
             
@@ -515,6 +521,9 @@ namespace Landis.Extension.Succession.NECN
                     ml.AvgStormflow = (stormflow[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgMaxWaterUse = (maxWaterUse[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgVPD = (vpd[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AccumPrecip = ppt_accum[ecoregion.Index];
+
+                    ml.SWC_Mid = (swc_mid[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
 
                     monthlyLog.AddObject(ml);
                     monthlyLog.WriteToFile();

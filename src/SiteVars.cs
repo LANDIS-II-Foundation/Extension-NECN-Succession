@@ -129,6 +129,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyStormflow;
         public static ISiteVar<double[]> MonthlyMaxWaterUse;
         public static ISiteVar<double[]> MonthlyVPD;
+        public static ISiteVar<double[]> MonthlyAccumPrecip;
+        public static ISiteVar<double[]> MonthlySoilWaterContentMiddle;
 
 
 
@@ -210,6 +212,8 @@ namespace Landis.Extension.Succession.NECN
             MonthlyStormflow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMaxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyVPD = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyAccumPrecip = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlySoilWaterContentMiddle = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
 
             // Annual accumulators
@@ -310,6 +314,9 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyVPD[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
+
+                MonthlyAccumPrecip[site] = new double[12];
+                MonthlySoilWaterContentMiddle[site] = new double[12];
             }
             
         }
