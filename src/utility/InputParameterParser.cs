@@ -186,6 +186,14 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.SoilWater_Henne = false;
 
+            InputVar<bool> water_limit_DGS = new InputVar<bool>("DGS_waterlimit");
+            if (ReadOptionalVar(water_limit_DGS))
+            {
+                parameters.DGS_waterlimit = water_limit_DGS.Value;
+            }
+            else
+                parameters.DGS_waterlimit = false;
+
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
             parameters.WType = WParse(wt.Value);
@@ -584,6 +592,8 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.CoarseRootFraction = System.Convert.ToDouble(row["CoarseRootFraction"]);
                     funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
                     funcTParms.MinLAI = ReadMinLAI(row);
+                    funcTParms.MoistureCurve1 = ReadMC1(row);
+                    funcTParms.MoistureCurve4 = ReadMC4(row);
 
             }
             //}
@@ -848,6 +858,32 @@ namespace Landis.Extension.Succession.NECN
             try
             {
                 double minLAI = System.Convert.ToDouble(row["MinLAI"]);
+                return minLAI;
+            }
+            catch
+            {
+                return 0.1;
+            }
+        }
+        //Optional MoistureCurve1 -- only used if DGS_waterlimit is set to TRUE
+        private double ReadMC1(DataRow row)
+        {
+            try
+            {
+                double minLAI = System.Convert.ToDouble(row["MoistureCurve1"]);
+                return minLAI;
+            }
+            catch
+            {
+                return 0.1;
+            }
+        }
+        //Optional MoistureCurve4 -- only used if DGS_waterlimit is set to TRUE
+        private double ReadMC4(DataRow row)
+        {
+            try
+            {
+                double minLAI = System.Convert.ToDouble(row["MoistureCurve4"]);
                 return minLAI;
             }
             catch

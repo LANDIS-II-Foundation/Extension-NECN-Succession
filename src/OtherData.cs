@@ -15,6 +15,7 @@ namespace Landis.Extension.Succession.NECN
         public static double ProbEstablishAdjust;
         public static WaterType WaterDecayFunction;
         public static bool SoilWaterVersion_Henne = false;
+        public static bool DGS_waterlimit = false;
 
 
         // NOTE: *****************************************************************
@@ -202,6 +203,7 @@ namespace Landis.Extension.Succession.NECN
 
             CalibrateMode = parameters.CalibrateMode;
             SoilWaterVersion_Henne = parameters.SoilWater_Henne;
+            DGS_waterlimit = parameters.DGS_waterlimit;
             WaterDecayFunction = parameters.WType;
             
             // Structural decomposition rate, the fraction of the pool that turns over each year.

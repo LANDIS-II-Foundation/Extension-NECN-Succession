@@ -175,10 +175,20 @@ namespace Landis.Extension.Succession.NECN
             //double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
             double sitelai          = SiteVars.LAI[site];
             double maxNPP           = SpeciesData.Max_ANPP[cohort.Species];
+            double limitH20 = 1.0;
 
             double limitT   = calculateTemp_Limit(site, cohort.Species);
-
-            double limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            if (OtherData.DGS_waterlimit) 
+            {
+                double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                limitH20 = calculateWater_Limit_versionDGS(volumetric_water, cohort.Species);
+                //PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
+                //    volumetric_water, limitH20);
+            }
+            else
+            {
+                limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            }
 
             double limitLAI = calculateLAI_Limit(cohort, site);
 
@@ -657,6 +667,32 @@ namespace Landis.Extension.Succession.NECN
             double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
 
             return competition_limit;
+
+        }
+
+        public static double calculateWater_Limit_versionDGS(double availableWater, ISpecies species)
+        //public static double WaterLimitEquation(double availableWater, ICohort cohort)
+        {
+            //var vertex = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve1;
+            //var xIntercept = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
+            //var yIntercept = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
+
+            //var waterLimit = vertex * Math.Pow(availableWater - xIntercept, 2) + yIntercept;
+            //if (waterLimit > 1.0) waterLimit = 1.0;
+            //if (waterLimit < 0.01) waterLimit = 0.01;
+
+            //return waterLimit;
+            var A1 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve1;
+            var A2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
+            var A3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
+            var A4 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve4;
+
+            var frac = (A2 - availableWater) / (A2 - A1);
+            var waterLimit = 0.0;
+            if (frac > 0.0)
+                waterLimit = Math.Exp(A3 / A4 * (1.0 - Math.Pow(frac, A4))) * Math.Pow(frac, A3);
+
+            return waterLimit;
 
         }
 
