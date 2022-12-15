@@ -705,7 +705,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
         //---------------------------------------------------------------------
-
         /// <summary>
         /// Determines if a species can establish on a site.
         /// This is a Delegate method to base succession.

@@ -44,8 +44,8 @@ namespace Landis.Extension.Succession.NECN
         private bool calibrateMode;
         private bool smokeModelOutputs;
         private bool henne_watermode;
-        private bool dgs_waterlimit;
-        private WaterType wtype;
+        private WaterType wtype;       
+        private string communityInputMapNames;
         private double probEstablishAdjust;
         private double atmosNslope;
         private double atmosNintercept;
@@ -210,15 +210,15 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-        public bool DGS_waterlimit
+        public string CommunityInputMapNames
         {
             get
             {
-                return dgs_waterlimit;
+                return communityInputMapNames;
             }
             set
             {
-                dgs_waterlimit = value;
+                communityInputMapNames = value;
             }
         }
 

@@ -186,14 +186,6 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.SoilWater_Henne = false;
 
-            InputVar<bool> water_limit_DGS = new InputVar<bool>("DGS_waterlimit");
-            if (ReadOptionalVar(water_limit_DGS))
-            {
-                parameters.DGS_waterlimit = water_limit_DGS.Value;
-            }
-            else
-                parameters.DGS_waterlimit = false;
-
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
             parameters.WType = WParse(wt.Value);
@@ -250,6 +242,17 @@ namespace Landis.Extension.Succession.NECN
             {
                 parameters.SetGrassThresholdMultiplier(grassTMult.Value);
                 //PlugIn.Grasses = true;
+            }
+
+            InputVar<string> inputCommunityMaps = new InputVar<string>("CreateInputCommunityMaps");
+            if (ReadOptionalVar(inputCommunityMaps))
+            {
+                PlugIn.InputCommunityMapNames = inputCommunityMaps.Value;
+
+                InputVar<int> inputMapFreq = new InputVar<int>("InputCommunityMapFrequency");
+                ReadVar(inputMapFreq);
+                PlugIn.InputCommunityMapFrequency = inputMapFreq.Value;
+
             }
 
             InputVar<double> stormFlowOverride = new InputVar<double>("StormFlowOverride");
@@ -324,18 +327,6 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.TotalCMapFrequency = totalCMapFreq.Value;
 
             }
-
-            InputVar<string> inputCommunityMaps = new InputVar<string>("CreateInputCommunityMaps");
-            if (ReadOptionalVar(inputCommunityMaps))
-            {
-                PlugIn.InputCommunityMapNames = inputCommunityMaps.Value;
-
-                InputVar<int> inputMapFreq = new InputVar<int>("InputCommunityMapFrequency");
-                ReadVar(inputMapFreq);
-                PlugIn.InputCommunityMapFrequency = inputMapFreq.Value;
-
-            }
-
             //--------------------------
             //  LAI and light table
 
@@ -594,7 +585,7 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.MinLAI = ReadMinLAI(row);
                     funcTParms.MoistureCurve1 = ReadMC1(row);
                     funcTParms.MoistureCurve4 = ReadMC4(row);
-
+                    funcTParms.MinSoilDrain = ReadMinSoilDrain(row);
             }
             //}
             //else
@@ -865,30 +856,47 @@ namespace Landis.Extension.Succession.NECN
                 return 0.1;
             }
         }
-        //Optional MoistureCurve1 -- only used if DGS_waterlimit is set to TRUE
+        //Optional MoistureCurve1
         private double ReadMC1(DataRow row)
         {
             try
             {
-                double minLAI = System.Convert.ToDouble(row["MoistureCurve1"]);
-                return minLAI;
+                double mc1 = System.Convert.ToDouble(row["MoistureCurve1"]);
+                return mc1;
             }
             catch
             {
-                return 0.1;
+                NewParseException("Error in moisture curve 1");
+                return 0.0;
             }
         }
-        //Optional MoistureCurve4 -- only used if DGS_waterlimit is set to TRUE
+        //Optional MoistureCurve4 -- NECN uses 4-parameter water limit if MoistureCurve4 is present
         private double ReadMC4(DataRow row)
         {
             try
             {
-                double minLAI = System.Convert.ToDouble(row["MoistureCurve4"]);
-                return minLAI;
+                double mc4 = System.Convert.ToDouble(row["MoistureCurve4"]);
+                OtherData.DGS_waterlimit = true;
+                return mc4;
             }
             catch
             {
-                return 0.1;
+                NewParseException("Error in moisture curve 4");
+                return 0.0;
+            }
+        }
+        //Optional minimum soil drainage -- prevents functional types from establishing on poorly drained soils
+        private double ReadMinSoilDrain(DataRow row)
+        {
+            try
+            {
+                double minSoilDrain = System.Convert.ToDouble(row["MinSoilDrain"]);
+                return minSoilDrain;
+            }
+            catch
+            {
+                NewParseException("Error in minimum soil drainage");
+                return 0.0;
             }
         }
         private double ReadGrowthLAI(DataRow row)

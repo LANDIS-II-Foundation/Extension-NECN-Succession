@@ -203,9 +203,8 @@ namespace Landis.Extension.Succession.NECN
 
             CalibrateMode = parameters.CalibrateMode;
             SoilWaterVersion_Henne = parameters.SoilWater_Henne;
-            DGS_waterlimit = parameters.DGS_waterlimit;
             WaterDecayFunction = parameters.WType;
-            
+                
             // Structural decomposition rate, the fraction of the pool that turns over each year.
             litterParmsSurface.DecayRateStrucC = 3.9 / 100.0;//DEC1(1)  
             litterParmsSoil.DecayRateStrucC = 4.9 / 100.0; //DEC1(2)  

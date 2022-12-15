@@ -43,7 +43,8 @@ namespace Landis.Extension.Succession.NECN
         bool SmokeModelOutputs { get; set; }
         bool SoilWater_Henne { get; set; }
         double GrassThresholdMultiplier { get; }
-        bool DGS_waterlimit { get; set; }
+        string CommunityInputMapNames { get; set; }
+
 
         //---------------------------------------------------------------------
         /// <summary>

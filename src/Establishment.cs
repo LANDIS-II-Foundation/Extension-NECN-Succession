@@ -33,6 +33,8 @@ namespace Landis.Extension.Succession.NECN
             double soilMultiplier = 0.0;
             double minJanTempMultiplier = 0.0;
             double establishProbability = 0.0;
+            double soilwaterMultiplier = 0.0;
+            double soilDrainMultiplier = 1.0;
 
             AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[climateRegion];
 
@@ -43,10 +45,18 @@ namespace Landis.Extension.Succession.NECN
             soilMultiplier = SoilMoistureMultiplier(ecoClimate, species, ecoDryDays);
             tempMultiplier = BotkinDegreeDayMultiplier(ecoClimate, species);
             minJanTempMultiplier = MinJanuaryTempModifier(ecoClimate, species);
+            soilwaterMultiplier = CohortBiomass.calculateWater_Limit_versionDGS(SiteVars.AvailableWater[site], species);
+            if(SiteVars.SoilDrain[site] < FunctionalType.Table[SpeciesData.FuncType[species]].MinSoilDrain)
+            {
+                //this stops trees from establishing in wetlands
+                soilDrainEst = 0.0;
+            }
 
             // Liebig's Law of the Minimum is applied to the four multipliers for each year:
             double minMultiplier = System.Math.Min(tempMultiplier, soilMultiplier);
             minMultiplier = System.Math.Min(minJanTempMultiplier, minMultiplier);
+            minMultiplier = System.Math.Min(soilDrainMultiplier, minMultiplier);
+            if (OtherData.DGS_waterlimit) minMultiplier = System.Math.Min(minMultiplier, soilwaterMultiplier);
 
             establishProbability += minMultiplier;
             establishProbability *= PlugIn.ProbEstablishAdjust;

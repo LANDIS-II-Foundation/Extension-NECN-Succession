@@ -24,6 +24,7 @@ namespace Landis.Extension.Succession.NECN
         double MoistureCurve2 {get;set;}
         double MoistureCurve3 { get; set; }
         double MoistureCurve4 { get; set; }
+        double MinSoilDrain { get; set; }
         double MonthlyWoodMortality{get;set;}
         double WoodDecayRate{get;set;}
         double LongevityMortalityShape{get;set;}
@@ -48,6 +49,7 @@ namespace Landis.Extension.Succession.NECN
         private double moisturecurve2;
         private double moisturecurve3;
         private double moisturecurve4;
+        private double minSoilDrain;
         private double monthlyWoodMortality;
         private double woodDecayRate;
         private double mortCurveShape;
@@ -247,7 +249,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
-        // 'PPRPTS(3)': The lowest ratio of available water to PET at which there is no restriction on production.
+        // 
         public double MoistureCurve3
         {
             get {
@@ -258,7 +260,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
-        // 'PPRPTS(3)': The lowest ratio of available water to PET at which there is no restriction on production.
+        // 
         public double MoistureCurve4
         {
             get
@@ -268,6 +270,19 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 moisturecurve4 = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        // 
+        public double MinSoilDrain
+        {
+            get
+            {
+                return minSoilDrain;
+            }
+            set
+            {
+                minSoilDrain = value;
             }
         }
         //---------------------------------------------------------------------

@@ -178,9 +178,14 @@ namespace Landis.Extension.Succession.NECN
             double limitH20 = 1.0;
 
             double limitT   = calculateTemp_Limit(site, cohort.Species);
+
             if (OtherData.DGS_waterlimit) 
             {
-                double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                //double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / 100; //this works better to separate wetlands
+
+                if (volumetric_water < 0.001) volumetric_water = 0.001;
+
                 limitH20 = calculateWater_Limit_versionDGS(volumetric_water, cohort.Species);
                 //PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
                 //    volumetric_water, limitH20);
