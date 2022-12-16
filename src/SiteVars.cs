@@ -122,6 +122,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<List<double>> cwd10;
         public static ISiteVar<double> normalSWA;
         public static ISiteVar<double> normalCWD;
+        public static ISiteVar<double> slope;
+        public static ISiteVar<double> aspect;
 
 
         //---------------------------------------------------------------------
@@ -234,6 +236,9 @@ namespace Landis.Extension.Succession.NECN
 
             normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
+            slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
@@ -1165,6 +1170,42 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 normalCWD = value;
+            }
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Slope
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> Slope
+        {
+            get
+            {
+                return slope;
+            }
+            set
+            {
+                slope = value;
+            }
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Aspect
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> Aspect
+        {
+            get
+            {
+                return aspect;
+            }
+            set
+            {
+                aspect = value;
             }
 
         }

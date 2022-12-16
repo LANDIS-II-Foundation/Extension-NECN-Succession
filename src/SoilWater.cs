@@ -251,6 +251,8 @@ namespace Landis.Extension.Succession.NECN
             double remainingPET = 0.0;
             double priorWaterAvail = SiteVars.AvailableWater[site];
             //double waterFull = 0.0;
+            double slope = SiteVars.Slope[site];
+            double aspect = SiteVars.Aspect[site];
 
             //...Calculate external inputs
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
@@ -328,6 +330,18 @@ namespace Landis.Extension.Succession.NECN
                 //soilWaterContent += addToSoil;
             }
 
+            //Adjust PET at the pixel scale for slope and aspect following Bugmann 1994, p 82 and Schumacher 2004, p. 114.
+            //First calculate slope and aspect modifier (SlAsp)
+            
+            double SlAsp = CalculateSlopeAspectEffect(slope, aspect);
+
+            if (SlAsp > 0) {
+                PET = PET * (1 + SlAsp * 0.125);
+            } else {
+                PET = PET * (1 + SlAsp * 0.063);
+            }
+
+
             // Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             //PH:  I moved this variable down for now so that soilEvaporation comes out first.
             //availableWaterMax = soilWaterContent;
@@ -381,6 +395,7 @@ namespace Landis.Extension.Succession.NECN
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
                 remainingPET = PET;
+
                 if (OtherData.CalibrateMode)
                     PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
 
@@ -514,6 +529,54 @@ namespace Landis.Extension.Succession.NECN
 
             return;
         }
+
+
+        private static double CalculateSlopeAspectEffect(double slope, double aspect)
+        {
+            double x = 0.0;
+
+            if (slope > 30)
+            {
+                if (aspect >= 0 & aspect <= 90)
+                {
+                    x = (-2 + (aspect / 90));
+                     }
+                else if (aspect > 90 & aspect <= 180)
+                {
+                    x = (-1 + ((aspect - 90) / 30));
+                     }
+                else if (aspect > 180 & aspect <= 270)
+                {
+                    x = (2 - ((aspect - 180) / 90));
+                     }
+                else if (aspect > 270 & aspect <= 360)
+                {
+                    x = (1 - ((aspect - 270) / 30));
+                     }
+                else
+                {
+                    x = 0;
+                     }
+            }
+            else if (slope > 10)
+            {
+                if (aspect >= 0 & aspect <= 180)
+                {
+                    x = (-1 + (aspect) / 90);
+                     }
+                else
+                {
+                    x = (1 - ((aspect - 180) / 90));
+                     }
+            }
+            else
+            {
+                x = 0;
+                   }
+
+            return x;
+        }
+
         private static int CalculateDryDays(int month, int beginGrowing, int endGrowing, double wiltingPoint, double waterAvail, double priorWaterAvail)
         {
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}.", month, beginGrowing, endGrowing);

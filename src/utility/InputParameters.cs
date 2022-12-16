@@ -43,6 +43,8 @@ namespace Landis.Extension.Succession.NECN
         //Drought normals
         private string normalSWAMapName; //TODO how to make map optional?
         private string normalCWDMapName;
+        private string slopeMapName;
+        private string aspectMapName;
 
         private bool calibrateMode;
         private bool smokeModelOutputs;
@@ -926,6 +928,39 @@ namespace Landis.Extension.Succession.NECN
                 normalCWDMapName = value;
             }
         }
+
+        //---------------------------------------------------------------------
+        public string SlopeMapName
+        {
+            get
+            {
+                return slopeMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                slopeMapName = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public string AspectMapName
+        {
+            get
+            {
+                return aspectMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                aspectMapName = value;
+            }
+        }
+
         //---------------------------------------------------------------------
 
         public void SetMaximumShadeLAI(byte                   shadeClass,

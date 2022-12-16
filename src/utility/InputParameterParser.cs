@@ -174,6 +174,14 @@ namespace Landis.Extension.Succession.NECN
             ReadVar(normalCWDMapName);
             parameters.NormalCWDMapName = normalCWDMapName.Value;
 
+            InputVar<string> slopeMapName = new InputVar<string>("SlopeMapName");
+            ReadVar(slopeMapName);
+            parameters.SlopeMapName = slopeMapName.Value;
+
+            InputVar<string> aspectMapName = new InputVar<string>("AspectMapName");
+            ReadVar(aspectMapName);
+            parameters.AspectMapName = aspectMapName.Value;
+
             InputVar<bool> calimode = new InputVar<bool>("CalibrateMode");
             if (ReadOptionalVar(calimode))
                 parameters.CalibrateMode = calimode.Value;

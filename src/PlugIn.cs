@@ -114,6 +114,8 @@ namespace Landis.Extension.Succession.NECN
             ReadMaps.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
             ReadMaps.ReadNormalSWAMap(Parameters.NormalSWAMapName);
             ReadMaps.ReadNormalCWDMap(Parameters.NormalCWDMapName);
+            ReadMaps.ReadSlopeMap(Parameters.SlopeMapName);
+            ReadMaps.ReadAspectMap(Parameters.AspectMapName);
 
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
