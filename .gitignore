@@ -207,3 +207,6 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+testing/Core7-NECN6.8/Climate-annual-log.csv
+testing/Core7-NECN6.8/Climate-future-input-log.csv
+testing/Core7-NECN6.8/Climate-spinup-input-log.csv

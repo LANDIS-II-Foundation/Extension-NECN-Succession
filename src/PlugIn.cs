@@ -298,7 +298,61 @@ namespace Landis.Extension.Succession.NECN
                 woodInput -= (float)live_woodFireConsumption;
                 foliarInput -= (float)live_foliarFireConsumption;
             }
+            if (disturbanceType.IsMemberOf("disturbance:browse"))
+            {
+                //SF Initial effort to account for browsed biomass nutrient cycling
+                //all browser waste treated as leaves with high N content. This overestimates moose waste if 
+                //there is a lot of cohort mortality versus browse eaten. 
 
+                foliarInput += woodInput; 
+                woodInput = 0;
+
+                double inputDecayValue = 1.0;   // Decay value is calculated for surface/soil layers (leaf/fine root), 
+                                                // therefore, this is just a dummy value.
+
+                if (foliarInput > 0)
+                {
+                    SiteVars.LitterfallC[site] += foliarInput * 0.47;
+                    //most carbon is respired
+                    foliarInput = foliarInput * (float)0.1;
+
+                    //PlugIn.ModelCore.UI.WriteLine("waste input is {0}, CN ratio of waste is {1}", foliarInput, 50);
+
+                    //Nitrogen content of feces is approximately 1.6% for deer(Asada and Ochiai 1999),
+                    //between 1.45% and 2.26% for deer (Howery and Pfister, 1990),
+                    //2.5%  for deer (Euan et al. 2020),
+                    //1.33% in winter, 2.44% for moose in summer (Persson et al. 2000),
+                    //2.4% for moose (Kuijper et al. 2016)
+                    //Feces N = 5.7 kg per moose per year (Persson et al. 2000)
+
+                    //Amount of nitrogen in urine is 0.5% in summer (Persson et al. 2000)
+                    //3675 L urine per moose per year (Persson et al. 2000)
+                    //Urine is 0.5% N = 18.375 kg N per year per moose (assuming summer and winter N content is the same)
+
+                    //Total N for moose waste = 24 kg per moose per year
+                    //Each moose eats 2738 kg biomass per year
+                    //Foliar inputs are 2738 * 0.47 * 0.1 kg C  = 128.67 kg C per moose
+                    //CN ratio = 128/24 = 5.33
+
+                    LitterLayer.PartitionResidue(
+                                foliarInput,
+                                inputDecayValue,
+                                5.33, //CN ratio for browse waste -- metabolic
+                                1, //"lignin" content of waste
+                                5.33, //CN ratio for browse waste -- structural
+                                LayerName.Leaf,
+                                LayerType.Surface,
+                                site);
+                    //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
+                    //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
+                    //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
+
+                    //Disturbed[site] = true; //SF should browse count as a "disturbance" for this purpose?
+
+                    return;
+                }
+            }
+            
             if (SpeciesData.Grass[cohort.Species])
             {
                 ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
@@ -312,9 +366,9 @@ namespace Landis.Extension.Succession.NECN
 
                 Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
                 Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                
             }
             
-
             //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
             //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
             //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);

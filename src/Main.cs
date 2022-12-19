@@ -94,7 +94,10 @@ namespace Landis.Extension.Succession.NECN
                     }
 
                     if (monthlyNdeposition < 0)
-                        throw new System.ApplicationException("Error: Nitrogen deposition less than zero.");
+                    {
+                        string mesg = string.Format("Error: Nitrogen deposition = {0}. PPT={1}. Ecoregion={2}, Month={3}", monthlyNdeposition, ppt, ecoregion.Name, Main.Month);
+                        throw new System.ApplicationException(mesg);
+                    }
 
                     ClimateRegionData.MonthlyNDeposition[ecoregion][Month] = monthlyNdeposition;
                     ClimateRegionData.AnnualNDeposition[ecoregion] += monthlyNdeposition;
