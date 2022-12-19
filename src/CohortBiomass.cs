@@ -91,7 +91,7 @@ namespace Landis.Extension.Succession.NECN
                 // Defoliation (index) ranges from 1.0 (total) to none (0.0).
                 if (PlugIn.ModelCore.CurrentTime > 0) //Skip this during initialization
                 {
-                    //defoliation = Landis.Library.LeafBiomassCohorts.CohortDefoliation.Compute(cohort, site,  (int)siteBiomass);
+                    //defoliation = Landis.Library.BiomassCohorts.CohortDefoliation.Compute(cohort, site, (int)siteBiomass); //this line lets defoliation work with Biomass Browse
                     int cohortBiomass = (int)(cohort.LeafBiomass + cohort.WoodBiomass);
                     defoliation = Landis.Library.Biomass.CohortDefoliation.Compute(site, cohort.Species, cohortBiomass, (int)siteBiomass);
                 }
@@ -221,7 +221,7 @@ namespace Landis.Extension.Succession.NECN
             double actualANPP = Math.Max(0.0, potentialNPP - mortalityAge[0] - mortalityAge[1]);
 
             // Growth can be reduced by another extension via this method.
-            // To date, no extension has been written to utilize this hook.
+            // To date, this is only used by Biomass Browse and Biomass Insects
             double growthReduction = Landis.Library.BiomassCohorts.CohortGrowthReduction.Compute(cohort, site);
 
             if (growthReduction > 0.0)
@@ -384,10 +384,11 @@ namespace Landis.Extension.Succession.NECN
             double mortality_wood    = (double) totalMortality[0];
             double mortality_nonwood = (double)totalMortality[1];
 
+
             //  Add mortality to dead biomass pools.
             //  Coarse root mortality is assumed proportional to aboveground woody mortality
             //    mass is assumed 25% of aboveground wood (White et al. 2000, Niklas & Enquist 2002)
-            if(mortality_wood > 0.0 && !SpeciesData.Grass[cohort.Species])
+            if (mortality_wood > 0.0 && !SpeciesData.Grass[cohort.Species])
             {
                 ForestFloor.AddWoodLitter(mortality_wood, cohort.Species, site);
                 Roots.AddCoarseRootLitter(mortality_wood, cohort, cohort.Species, site);
