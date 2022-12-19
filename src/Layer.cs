@@ -405,8 +405,8 @@ namespace Landis.Extension.Succession.NECN
                     //Decompose metabolic into som1
                     double netCFlow = totalCFlow - co2loss;
 
-                    if (netCFlow > litterC)
-                        PlugIn.ModelCore.UI.WriteLine("   ERROR:  Decompose Metabolic:  netCFlow={0:0.000} > layer.Carbon={0:0.000}.", netCFlow, this.Carbon);
+                    //if (netCFlow > litterC)
+                    //    PlugIn.ModelCore.UI.WriteLine("   ERROR:  Decompose Metabolic:  netCFlow={0:0.000} > layer.Carbon={0:0.000}.", netCFlow, this.Carbon);
 
                     // -- CARBON AND NITROGEN ---------------------------
                     // Partition and schedule C flows

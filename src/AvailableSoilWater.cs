@@ -66,9 +66,9 @@ namespace Landis.Extension.Succession.NECN
                 foreach (ICohort cohort in speciesCohorts)
                 {
                     int cohortAddYear = GetAddYear(cohort);
-                    // fractional based on cohort biomass. Use an exponential function so that fractions are more even between cohorts. 
-                    // The 0.02 produces a 'reasonable' allocation that does not give all N to the largest cohorts.
-                    double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.02);  // 0.02 originally 
+                    // fractional based on cohort biomass. Use an exponential function to control how evenly water is distributed among cohorts based on biomass. 
+                    // Transpiration is senstive to this fraction. To minimize water limitation of larger cohorts, allocate water less evenly and more closely by biomass 
+                    double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.000002);  // 0.02 originally. Larger number produces more even allocation
 
                     if(SWallocation <= 0.0)
                         SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.0000001); // Need a minimum for each cohort so they no cohort ends up with nothing. 
@@ -107,8 +107,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-
-
         // function to retrieve the allocated soil water of a given cohort 
         public static double GetSWAllocation(ICohort cohort)
         {
@@ -144,9 +142,7 @@ namespace Landis.Extension.Succession.NECN
         }
 
 
-
-
-        // trial 
+        // Function to make sure transpiration isn't exceeding water in the cell  
         public static Dictionary<int, Dictionary<int, double>> CohortCapWater; 
 
         // Function allocates the swc-water empty as a cap on transpiration between cohorts each month
@@ -166,7 +162,7 @@ namespace Landis.Extension.Succession.NECN
                         cohortAddYear--;
                 
                     double SWfraction = GetSWFraction(cohort);
-                    double CapAllocation = Math.Max(0, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
+                    double CapAllocation = Math.Max(0.000001, SWfraction * availableSW); // stop the SWallocation from being 0. Even the smallest cohort gets some water. 
 
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
                     newEntry.Add(cohortAddYear, CapAllocation);

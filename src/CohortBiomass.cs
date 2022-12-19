@@ -143,8 +143,8 @@ namespace Landis.Extension.Succession.NECN
 
             float[] deltas = new float[2] { deltaWood, deltaLeaf };
 
-            if((totalMortality[1] + defoliatedLeafBiomass) > cohort.LeafBiomass)
-               PlugIn.ModelCore.UI.WriteLine("Warning: Leaf Mortality exceeds cohort leaf biomass. M={0:0.0}, B={1:0.0}, DefoLeafBiomass={2:0.0}, defoliationIndex={3:0.0}", totalMortality[1], cohort.LeafBiomass, defoliatedLeafBiomass, defoliation);
+            //if((totalMortality[1] + defoliatedLeafBiomass) > cohort.LeafBiomass)
+            //   PlugIn.ModelCore.UI.WriteLine("Warning: Leaf Mortality exceeds cohort leaf biomass. M={0:0.0}, B={1:0.0}, DefoLeafBiomass={2:0.0}, defoliationIndex={3:0.0}", totalMortality[1], cohort.LeafBiomass, defoliatedLeafBiomass, defoliation);
             
             UpdateDeadBiomass(cohort, site, totalMortality);
 
@@ -453,10 +453,10 @@ namespace Landis.Extension.Succession.NECN
                 if (Double.IsNaN(NPPfineRoot))
                     NPPfineRoot = 0.0;
             }
-
-            // KM: calculate transpiration within the npp function to make sure growth and water use are happening together 
-            // KM: and because npp is necessary for transpiration calculations 
-            IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+            
+             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+            // KM: calculate transpiration within the npp function to make sure carbon and water are happening together and because npp is necessary for transpiration calculations 
+            // KM: Use aboveground NPP before it has been converted to carbon
             //Calculate_Transpiration(cohort, site, ecoregion, NPPleaf, NPPwood, NPPcoarseRoot, NPPfineRoot);
             double NPP = AGNPP[0] + AGNPP[1];
             Calculate_Transpiration(cohort, site, ecoregion, NPP);
@@ -690,7 +690,7 @@ namespace Landis.Extension.Succession.NECN
             double H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
             double pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[Main.Month];
             
-            // update the plant available water and the pet to be cohort specific 
+            // KM: update the plant available water and the pet to be cohort specific
             double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
             double fractionSW = AvailableSoilWater.GetSWFraction(cohort);
             double cohort_pet = pet*fractionSW;
@@ -768,33 +768,14 @@ namespace Landis.Extension.Succession.NECN
             return grassTotal;
         }
 
-        // KM: VPD to be used in transpiration calculations 
-        // KM: From PnET source code 
-        // KM: Copied from PnET source code developed by Mark Kubiske
+        // KM: VPD used in transpiration calculation 
+        // KM: VPD and transpiration calculations based on pnet approach developed by Mark Kubiske
         // KM: de Bruijna et al. 2014 
+        // KM: Added relative humidity as a climate input for more accurate vpd estiamtion 
         private static double Calculate_VP(double a, double b, double c, double T)
         {
             return a * (double)Math.Exp(b * T / (T + c));
         }
-
-//       private static double Calculate_VPD(double Tday, double Tmin)
-//       {
-//
-//           double Emean;
-//
-//            //saturated vapor pressure
-//            double Es = Calculate_VP(0.61078f, 17.26939f, 237.3f, Tday);
-//
-//            if (Tday < 0)
-//            {
-//                Es = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tday);
-//            }
-
-//            Emean = Calculate_VP(0.61078f, 17.26939f, 237.3f, Tmin);
-//            if (Tmin < 0) Emean = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tmin);
-
-//            return Es - Emean;
-//        }
 
         private static double Calculate_VPD(double Tday, double Tmin, IEcoregion ecoregion)
         {
@@ -810,8 +791,7 @@ namespace Landis.Extension.Succession.NECN
             return Es * (1-(rh/100));
         }
 
-        //  KM: Function to calculate cohort level transpiration 
-        //  KM: Based on PnET source code
+        //  KM: Calculate cohort level transpiration 
         //private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
         private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
         {
@@ -821,28 +801,24 @@ namespace Landis.Extension.Succession.NECN
             double Tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[Main.Month];
             double Tave = (double)0.5 * (Tmin + Tmax);
             double Tday = (double)0.5 * (Tmax + Tave);
-            //double VPD = Calculate_VPD(Tday, Tmin);
             double VPD = Calculate_VPD(Tday, Tmin, ecoregion);
 
-            // Calculate the moisture limitation 
+            // Calculate the moisture limitation scalar
+            // Since npp is already scaled by moisture limitation, set this to 1
             //double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
             double CiModifier = 1;
             
-            // calculate gross photosynthesis which is basically the same as gross primary productivity 
-            // Respiration is a fraction of npp, we've gone with 0.1 following Aber and Federer (1992) and de Bruijn et al., 2014 
-            // Using the 0.1 was the first iteration of PnET-Succession so there is room to adjust that probably 
-            // NPP = GPP - R 
-            // GPP = NPP + R 
+            // Calcualte GPP. Pnet used gross photosynthesis, but it functions similary for the purposes of the algorithm. Especially bc we are using total NPP and not the carbon from NPP 
+            // GPP = NPP + Ra
+            // Asssume Ra is 50% of GPP (Marthews et al., 2012; Chambers et al., 2004; Zhang, Xu, Chen, & Adams, 2009; iao et al., 2010)
             double RespFrac = 1;
             //double GrossPsn = (NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot) * (1 + RespFrac);
             double GrossPsn = (npp) * (1 + RespFrac);
  
             // Calculate WUE scalar tuning parameter using power function 
             double WUEscalar = 0.0;
-            //double M = 2; // setting M = 2 essentially turns off the WUE scalar because is will always be 1 and multiplying by 1 doesn't change anything 
-            //double M = 0.1; = Fwue1
+            //double Fwue1 = 2; // setting Fwue1 = 2 essentially turns off the WUE scalar because is will always be 1 and multiplying by 1 doesn't change anything 
             double Fwue1 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue1;
-            //double A = 5; = Fwue2
             double Fwue2 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue2;
 
             if((1-CiModifier) <= Fwue1)
@@ -871,20 +847,18 @@ namespace Landis.Extension.Succession.NECN
             double WUE = (JCO2/JH2O) * WUEscalar;
 
             // calculate transpiraiton 
-            double Transpiration = (double)(0.01227 * (GrossPsn / WUE) /10); // the 10 at the end is to convert it to cm 
+            double Transpiration = (double)(0.01227 * (GrossPsn / WUE) /10); // the 10 converts to cm
 
             // cap transpiration at available water 
-            //double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
             double AvailableSW = AvailableSoilWater.GetCapWater(cohort);
             double AvailableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
-
             double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
 
             // add to overall site monthly and annual transpiration 
             SiteVars.Transpiration[site] += ActualTranspiration;
             SiteVars.monthlyTranspiration[site][Main.Month] += ActualTranspiration;
             
-            // Make VPD a monthly variable. Can just assign it because it will be the same for each cohort
+            // Make VPD a monthly variable
             SiteVars.monthlyVPD[site][Main.Month] = VPD;
             
             // write to the calibration log for testing purposes 
