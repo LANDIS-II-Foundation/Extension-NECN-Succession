@@ -42,9 +42,11 @@ namespace Landis.Extension.Succession.NECN
 
                 // Next, Grow and Decompose each month
                 //int[] months = new int[12]{6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
+                // KM: switched to running the months from 0 - 11 so that it would be in the right order for comparison with flux tower/ streamflow data 
                 int[] months = new int[12]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
                 if(OtherData.CalibrateMode)
+                    // KM: switched to running the months from 0 - 11 so that it would be in the right order for comparison with flux tower/ streamflow data 
                     months = new int[12]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; ///This output will not match normal mode due to differences in initialization
                     //months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
@@ -102,7 +104,6 @@ namespace Landis.Extension.Succession.NECN
 
                     // KM: Run the first half of the soil water routine necessary for growth/transpiration calcs 
                     SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent);
-                    //SoilWater.Run_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent, out stormFlow);
                     
                     // KM: Calculate N allocation for each cohort
                     AvailableN.SetMineralNallocation(site);
@@ -117,16 +118,15 @@ namespace Landis.Extension.Succession.NECN
                     else
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
 
-                    // KM: After the growth/transpiration, we can run the second half of the soil water routine where water moves out of the cell 
+                    // KM: After the growth/transpiration, run the second half of the soil water routine where water moves out of the cell 
                     SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out stormFlow, out AET);
-                    //SoilWater.Run_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out AET);
-                    // KM: Moved this down after transpiration has been calculated and output from the second half of the soil water routine 
+                    
+                    // KM: Moved this down bc uses outputs from second half of soil water routine
                     PlugIn.AnnualWaterBalance += ppt - AET;
 
                     // Track the grasses species LAI on the site
                     // Chihiro 2021.03.30: tentative
                     SiteVars.MonthlyLAI_GrassesLastMonth[site] = SiteVars.MonthlyLAI_Grasses[site][Month];
-
 
                     WoodLayer.Decompose(site);
                     if (OtherData.CalibrateMode)
@@ -140,7 +140,6 @@ namespace Landis.Extension.Succession.NECN
                     // Volatilization loss as a function of the mineral N which remains after uptake by plants.  
                     // ML added a correction factor for wetlands since their denitrification rate is double that of wetlands
                     // based on a review paper by Seitziner 2006.
-
                     double volatilize = (SiteVars.MineralN[site] * PlugIn.Parameters.DenitrificationRate); 
 
                     //PlugIn.ModelCore.UI.WriteLine("BeforeVol.  MineralN={0:0.00}.", SiteVars.MineralN[site]);
