@@ -97,6 +97,7 @@ namespace Landis.Extension.Succession.NECN
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
       
         //Drought variables
+        //Rob: original implementation
         private Landis.Library.Parameters.Species.AuxParm<double> intercept; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaAge; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaBiomass; // optional
@@ -1359,6 +1360,18 @@ namespace Landis.Extension.Succession.NECN
             maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             growthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             //Drought variables
+            //Rob: how should these be created?
+            cwdThreshold = new Landis.Library.DroughtMortality.SpeciesParm<int>(speciesDataset);
+            mortalityAboveThreshold = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            intercept = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaAge = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaSWAAnom = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaBiomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaNormCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            /*
             cwdThreshold            = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             mortalityAboveThreshold = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intercept               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
@@ -1369,7 +1382,7 @@ namespace Landis.Extension.Succession.NECN
             betaCWD                 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaNormCWD             = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intxnCWD_Biomass        = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-
+            */
             maximumShadeLAI = new double[6];
             sufficientLight         = new List<ISufficientLight>();
 

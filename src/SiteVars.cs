@@ -116,6 +116,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlySoilWaterContent;
 
         //Drought params
+        //drought_todo
         public static ISiteVar<double> droughtMort;
         public static ISiteVar<List<double>> swa10;
         public static ISiteVar<List<double>> temp10;
@@ -229,16 +230,21 @@ namespace Landis.Extension.Succession.NECN
             HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
-            droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
-            temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
-            cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+            //if drought, then create these site vars TODO
+            //drought_todo
+            if (OtherData.UseDrought)
+            {
+                droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+                temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+                cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
 
-            normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
-            slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            }
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
@@ -287,6 +293,7 @@ namespace Landis.Extension.Succession.NECN
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
+                //drought_todo
                 swa10[site] = new List<double>(10);
                 temp10[site] = new List<double>(10);
                 cwd10[site] = new List<double>(10);
@@ -403,13 +410,11 @@ namespace Landis.Extension.Succession.NECN
             //SiteVars.DryDays[site] = 0;
 
             //SiteVars.FireEfflux[site] = 0.0;
+            //drought_todo
             if (OtherData.UseDrought | OtherData.WriteSWA | OtherData.WriteCWD)
             {
                 if (PlugIn.ModelCore.CurrentTime >= 11)
                 {
-                    //TODO fix this so we don't have to always calculate all of these vars when writing maps
-                    //Pop the first element (oldest year's data) from soilwater and temp trackers
-                    //Do before the 11th timestep TODO check
                     //PlugIn.ModelCore.UI.WriteLine("number of elements in SWA10 = {0}", SiteVars.SoilWater10[site].Count);
                     SiteVars.SoilWater10[site].RemoveAt(0);
                     SiteVars.Temp10[site].RemoveAt(0);
@@ -1086,7 +1091,7 @@ namespace Landis.Extension.Succession.NECN
         // --------------------------------------------------------------------
         /// <summary>
         /// Keep track of minimum soil water values
-        /// //TODO sam
+        /// //TODO sam //drought_todo
         /// </summary>
         public static ISiteVar<List<double>> SoilWater10
         {
@@ -1140,8 +1145,8 @@ namespace Landis.Extension.Succession.NECN
 
         // --------------------------------------------------------------------
         /// <summary>
-        /// Input value of Normal SWA
-        /// //TODO sam
+        /// Input value of Normal SWA 
+        /// //TODO sam //drought_todo
         /// </summary>
         public static ISiteVar<double> NormalSWA
         {
@@ -1159,7 +1164,7 @@ namespace Landis.Extension.Succession.NECN
         // --------------------------------------------------------------------
         /// <summary>
         /// Input value of Normal SWA
-        /// //TODO sam
+        /// //TODO sam //drought_todo
         /// </summary>
         public static ISiteVar<double> NormalCWD
         {
@@ -1180,7 +1185,7 @@ namespace Landis.Extension.Succession.NECN
         /// //TODO sam
         /// </summary>
         public static ISiteVar<double> Slope
-        {
+        { //drought_todo
             get
             {
                 return slope;
@@ -1198,7 +1203,7 @@ namespace Landis.Extension.Succession.NECN
         /// //TODO sam
         /// </summary>
         public static ISiteVar<double> Aspect
-        {
+        { //drought_todo
             get
             {
                 return aspect;

@@ -175,12 +175,16 @@ namespace Landis.Extension.Succession.NECN
             parameters.NormalCWDMapName = normalCWDMapName.Value;
 
             InputVar<string> slopeMapName = new InputVar<string>("SlopeMapName");
-            ReadVar(slopeMapName);
-            parameters.SlopeMapName = slopeMapName.Value;
+            if (ReadOptionalVar(slopeMapName))
+            {
+                parameters.SlopeMapName = slopeMapName.Value;
+            }
 
             InputVar<string> aspectMapName = new InputVar<string>("AspectMapName");
-            ReadVar(aspectMapName);
-            parameters.AspectMapName = aspectMapName.Value;
+            if (ReadOptionalVar(aspectMapName))
+            {
+                parameters.AspectMapName = aspectMapName.Value;
+            }
 
             InputVar<bool> calimode = new InputVar<bool>("CalibrateMode");
             if (ReadOptionalVar(calimode))
@@ -203,16 +207,15 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SoilWater_Henne = false;
 
             InputVar<bool> use_Drought = new InputVar<bool>("Use_Drought_Mortality");
-            
             if (ReadOptionalVar(use_Drought))
             {
+                //TODO set to Plugins
                 parameters.UseDrought = use_Drought.Value;
             }
             else
                 parameters.UseDrought = false;
 
             InputVar<bool> write_SWA = new InputVar<bool>("Write_SWA_Maps");
-
             if (ReadOptionalVar(write_SWA))
             {
                 parameters.WriteSWA= write_SWA.Value;
@@ -221,15 +224,12 @@ namespace Landis.Extension.Succession.NECN
                 parameters.WriteSWA = false;
 
             InputVar<bool> write_CWD = new InputVar<bool>("Write_CWD_Maps");
-
             if (ReadOptionalVar(write_CWD))
             {
                 parameters.WriteCWD = write_CWD.Value;
             }
             else
                 parameters.WriteCWD = false;
-
-            //PlugIn.ModelCore.UI.WriteLine("Input value of Use_Drought_Mortality = {0}", parameters.UseDrought);
 
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
@@ -491,6 +491,7 @@ namespace Landis.Extension.Succession.NECN
                     parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
                     parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
 
+                //Rob: this is how parameters were originally parsed
                     parameters.SetCWDThreshold(species, System.Convert.ToInt32(row["CWDThreshold"]));
                     parameters.SetMortalityAboveThreshold(species, System.Convert.ToDouble(row["MortalityAboveThreshold"]));
                     

@@ -15,7 +15,7 @@ namespace Landis.Extension.Succession.NECN
         public static double ProbEstablishAdjust;
         public static WaterType WaterDecayFunction;
         public static bool SoilWaterVersion_Henne = false;
-        public static bool UseDrought;
+        public static bool UseDrought; //Rob: should we move this flag to PlugIn or DroughtMortality, or is it okay here?
         public static bool WriteSWA;
         public static bool WriteCWD;
 
