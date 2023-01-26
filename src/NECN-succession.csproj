@@ -55,10 +55,10 @@
       <HintPath>lib\Landis.Library.Parameters-v2.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Succession-v8">
-      
     </Reference>
     <Reference Include="Landis.Library.InitialCommunity.Biomass">
       <HintPath>lib\Landis.Library.InitialCommunity.Biomass.dll</HintPath>
-    </Reference>  </ItemGroup>
+    </Reference>  
+</ItemGroup>
 </Project>
 
