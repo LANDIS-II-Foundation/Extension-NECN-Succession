@@ -336,7 +336,16 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
-
+    public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get { return betaSWAAnom; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get { return betaBiomass; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get { return betaCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
 
         //---------------------------------------------------------------------
         /// <summary>
