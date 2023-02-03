@@ -7,6 +7,7 @@ using Landis.Library.Succession;
 using Landis.Library.LeafBiomassCohorts;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -15,10 +16,7 @@ namespace Landis.Extension.Succession.NECN
     /// </summary>
     public class DroughtMortality
     {
-        //Drought species params
-        //these are from InputParameters.cs Lines 413-424
-        //We want one value per species to be stored here. I guess we can reuse the AuxParm structure?
-        //I admit I don't really understand what the get and return are doing or how to use them here
+        //Drought species params        
         public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold;
         public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold;
         public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
@@ -29,7 +27,12 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;  // needs better variable name
-            
+
+        public static bool UseDrought = false; //Rob: should we move this flag to PlugIn or DroughtMortality, or is it okay here?
+        public static bool WriteSWA;
+        public static bool WriteCWD;
+
+
         //---------------------------------------------------------------------
         // This initialize will be called from PlugIn, dependent on whether drought=true.
         public static void Initialize(IInputParameters parameters)
@@ -44,22 +47,13 @@ namespace Landis.Extension.Succession.NECN
             BetaCWD           = parameters.BetaCWD;
             BetaNormCWD          = parameters.BetaNormCWD;
             IntxnCWD_Biomass          = parameters.IntxnCWD_Biomass ;
-            CoarseRootLignin    = parameters.CoarseRootLignin ;
-        }
-            
-         // These define the public interface (via the text file) and need to remain in InputParameters.   
-            //public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get { return betaSWAAnom; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get { return betaBiomass; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get { return betaCWD; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
-        //public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
 
-        public double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
+            WriteSWA = parameters.WriteSWA;
+            WriteCWD = parameters.WriteCWD;
+            PlugIn.ModelCore.UI.WriteLine("UseDrought on initialization = {0}", UseDrought); //debug
+        }       
+
+        public static double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
 
             //Predictor variables
@@ -70,8 +64,12 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("normalCWD is {0}", normalCWD);
 
             //TODO ned to divide SoilWater10 by swayear
-            double swaAnom = SiteVars.SoilWater10[site] - normalSWA;
+            double swaAnom = SiteVars.SWALagged[site] - normalSWA;
             //PlugIn.ModelCore.UI.WriteLine("swaAnom is {0}", swaAnom);
+
+            double tempLagged = SiteVars.TempLagged[site];
+
+            double cwdLagged = SiteVars.CWDLagged[site];
 
             double waterDeficit = SiteVars.AnnualClimaticWaterDeficit[site];
 
@@ -80,20 +78,19 @@ namespace Landis.Extension.Succession.NECN
 
 
             //Equation parameters
-            //Rob: am I using "this" corectly here?
-            int cwdThreshold = this.CWDThreshold[cohort.Species];
+            int cwdThreshold = CWDThreshold[cohort.Species];
             //PlugIn.ModelCore.UI.WriteLine("cwdThreshold is {0}", cwdThreshold);
 
-            double mortalityAboveThreshold = this.MortalityAboveThreshold[cohort.Species];
+            double mortalityAboveThreshold = MortalityAboveThreshold[cohort.Species];
 
-            double intercept = this.Intercept[cohort.Species];
-            double betaAge = this.BetaAge[cohort.Species];
-            double betaTemp = this.BetaTemp[cohort.Species];
-            double betaSWAAnom = this.BetaSWAAnom[cohort.Species];
-            double betaBiomass = this.BetaBiomass[cohort.Species];
-            double betaCWD = this.BetaCWD[cohort.Species];
-            double betaNormCWD = this.BetaNormCWD[cohort.Species];
-            double intxnCWD_Biomass = this.IntxnCWD_Biomass[cohort.Species];
+            double intercept = Intercept[cohort.Species];
+            double betaAge = BetaAge[cohort.Species];
+            double betaTemp = BetaTemp[cohort.Species];
+            double betaSWAAnom = BetaSWAAnom[cohort.Species];
+            double betaBiomass = BetaBiomass[cohort.Species];
+            double betaCWD = BetaCWD[cohort.Species];
+            double betaNormCWD = BetaNormCWD[cohort.Species];
+            double intxnCWD_Biomass = IntxnCWD_Biomass[cohort.Species];
             //PlugIn.ModelCore.UI.WriteLine("Regression parameters are: intercept {0}, age {1}, temp {2}, SWAAnom {3}, biomass {4}", 
             //    intercept, betaAge, betaTemp, betaSWAAnom, betaBiomass);
 
@@ -116,8 +113,8 @@ namespace Landis.Extension.Succession.NECN
             {
                 //calculate decadal log odds of survival
                 //TODO we need to get the climate vars from a SiteVar, calculated in ComputeDroughtSiteVars
-                double logOdds = intercept + betaAge * cohortAge + betaTemp * Temp7years + betaSWAAnom * swaAnom + betaBiomass * siteBiomass +
-                    betaCWD * CWD10years + betaNormCWD * normalCWD + intxnCWD_Biomass * CWD10years * siteBiomass;
+                double logOdds = intercept + betaAge * cohortAge + betaTemp * tempLagged + betaSWAAnom * swaAnom + betaBiomass * siteBiomass +
+                    betaCWD * cwdLagged + betaNormCWD * normalCWD + intxnCWD_Biomass * cwdLagged * siteBiomass;
                 p_surv = Math.Exp(logOdds) / (Math.Exp(logOdds) + 1);
                 p_mort = (1 - Math.Pow(p_surv, 0.1));
 
@@ -151,7 +148,7 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        private void ComputeDroughtSiteVars(ActiveSite site)
+        public static void ComputeDroughtLaggedVars(ActiveSite site)
         {
             //TODO this only needs to be computed once per site per year (in month 5)
 
@@ -166,7 +163,7 @@ namespace Landis.Extension.Succession.NECN
             double[] cwdValue = new double[0];
 
             //For the first few years, use all of the temp and soilwater data, until lags can start to be used
-            //Really not ideal! TODO fix this
+            //TODO use spinup climate?
 
             //TODO have adjustable timelags as input variable?
 
@@ -210,11 +207,14 @@ namespace Landis.Extension.Succession.NECN
             Array.ForEach(tempValue, i => Temp7years += i);
             Array.ForEach(cwdValue, i => CWD10years += i);
 
-            //TODO make these SiteVars so that ComputeDroughtMortality can use them
+
             SWA8years /= swayear;
             Temp7years /= tempyear;
             CWD10years /= cwdyear;
 
+            SiteVars.SWALagged[site] = SWA8years; //TODO can we store these in DroughtMortality instead of SiteVars?
+            SiteVars.TempLagged[site] = Temp7years;
+            SiteVars.CWDLagged[site] = CWD10years;
             //PlugIn.ModelCore.UI.WriteLine("temp is {0}", Temp7years);
         }
 

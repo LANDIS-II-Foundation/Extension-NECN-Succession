@@ -15,9 +15,6 @@ namespace Landis.Extension.Succession.NECN
         public static double ProbEstablishAdjust;
         public static WaterType WaterDecayFunction;
         public static bool SoilWaterVersion_Henne = false;
-        public static bool UseDrought; //Rob: should we move this flag to PlugIn or DroughtMortality, or is it okay here?
-        public static bool WriteSWA;
-        public static bool WriteCWD;
 
         // NOTE: *****************************************************************
         // ALL input data comments derived from the Century Model Interface Help -
@@ -206,10 +203,6 @@ namespace Landis.Extension.Succession.NECN
             SoilWaterVersion_Henne = parameters.SoilWater_Henne;
             WaterDecayFunction = parameters.WType;
 
-            UseDrought = parameters.UseDrought;
-            WriteSWA = parameters.WriteSWA;
-            WriteCWD = parameters.WriteCWD;
-            //PlugIn.ModelCore.UI.WriteLine("UseDrought on initialization = {0}", UseDrought);
 
             // Structural decomposition rate, the fraction of the pool that turns over each year.
             litterParmsSurface.DecayRateStrucC = 3.9 / 100.0;//DEC1(1)  

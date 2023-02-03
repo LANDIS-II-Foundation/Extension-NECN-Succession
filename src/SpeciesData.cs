@@ -42,7 +42,7 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend; // W.Hotta (2021.08.01)
         public static Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI;
 
-        //Rob: original drought variable implementation
+        //Drought mortality variables
         public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold;
         public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold;
         public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
@@ -82,24 +82,7 @@ namespace Landis.Extension.Succession.NECN
             Nlog_depend         = parameters.Nlog_depend; // W.Hotta (2021.08.01)
             GrowthLAI           = parameters.GrowthLAI;
 
-            if (OtherData.UseDrought)
-            {
-                //parameters for drought
-                //Rob: I assume we need to set the data for drought mortality parameters here, where the other species parameters are initialized?
-                //Or should they never be stored in parameters and go straight into an object in DroughtMortality?
-                DroughtMortality.CWDThreshold = parameters.CWDThreshold;
-                MortalityAboveThreshold = parameters.MortalityAboveThreshold;
-                Intercept = parameters.Intercept;
-                BetaAge = parameters.BetaAge;
-                BetaTemp = parameters.BetaTemp;
-                BetaSWAAnom = parameters.BetaSWAAnom;
-                BetaBiomass = parameters.BetaBiomass;
-                BetaCWD = parameters.BetaCWD;
-                BetaNormCWD = parameters.BetaNormCWD;
-                IntxnCWD_Biomass = parameters.IntxnCWD_Biomass;
-            }
-
-
+            
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {
                 try

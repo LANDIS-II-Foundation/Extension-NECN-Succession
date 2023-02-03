@@ -112,6 +112,8 @@ namespace Landis.Extension.Succession.NECN
                 Parameters.InitialSOM3CMapName,
                 Parameters.InitialSOM3NMapName);
             ReadMaps.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
+
+            //TODO only read if path isn't null
             ReadMaps.ReadNormalSWAMap(Parameters.NormalSWAMapName);
             ReadMaps.ReadNormalCWDMap(Parameters.NormalCWDMapName);
             ReadMaps.ReadSlopeMap(Parameters.SlopeMapName);
@@ -144,6 +146,10 @@ namespace Landis.Extension.Succession.NECN
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
+            if (DroughtMortality.UseDrought)
+            {
+                DroughtMortality.Initialize(Parameters);
+            }
 
             //B_MAX = 0;
             //foreach (ISpecies species in ModelCore.Species)

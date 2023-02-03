@@ -210,3 +210,4 @@ FakesAssemblies/
 testing/Core7-NECN6.8/Climate-annual-log.csv
 testing/Core7-NECN6.8/Climate-future-input-log.csv
 testing/Core7-NECN6.8/Climate-spinup-input-log.csv
+/deploy/installer/LANDIS-II-V7 NECN Succession 6.10-setup.exe

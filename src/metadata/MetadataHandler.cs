@@ -187,7 +187,7 @@ namespace Landis.Extension.Succession.NECN
                 Extension.OutputMetadatas.Add(mapOut_TotalC);
             }
 
-            if (OtherData.UseDrought)
+            if (DroughtMortality.UseDrought)
             {
                 string[] paths = { @"NECN", "DroughtMortality-{timestep}.img" };
                 OutputMetadata mapOut_DroughtMort = new OutputMetadata()
@@ -202,7 +202,7 @@ namespace Landis.Extension.Succession.NECN
                 Extension.OutputMetadatas.Add(mapOut_DroughtMort);
             }
 
-            if (OtherData.WriteSWA)
+            if (DroughtMortality.WriteSWA)
             {
                 string[] paths = { @"NECN", "SWA-{timestep}.img" };
                 OutputMetadata mapOut_SWA = new OutputMetadata()
@@ -217,7 +217,7 @@ namespace Landis.Extension.Succession.NECN
                 Extension.OutputMetadatas.Add(mapOut_SWA);
             }
 
-            if (OtherData.WriteCWD)
+            if (DroughtMortality.WriteCWD)
             {
                 string[] paths = { @"NECN", "CWD-{timestep}.img" };
                 OutputMetadata mapOut_CWD = new OutputMetadata()

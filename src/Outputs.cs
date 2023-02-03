@@ -723,7 +723,7 @@ namespace Landis.Extension.Succession.NECN
                 }
             }
 
-            if (OtherData.UseDrought)
+            if (DroughtMortality.UseDrought)
             {
                 string pathDrought = MapNames.ReplaceTemplateVars(@"NECN\DroughtMortality-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                 using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDrought, PlugIn.ModelCore.Landscape.Dimensions))
@@ -744,7 +744,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
             }
-            if (OtherData.WriteSWA)
+            if (DroughtMortality.WriteSWA)
             {
                 string pathSWA = MapNames.ReplaceTemplateVars(@"NECN\SWA-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                 using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathSWA, PlugIn.ModelCore.Landscape.Dimensions))
@@ -772,7 +772,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
             }
-            if (OtherData.WriteCWD)
+            if (DroughtMortality.WriteCWD)
             {
                 string pathCWD = MapNames.ReplaceTemplateVars(@"NECN\CWD-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                 using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathCWD, PlugIn.ModelCore.Landscape.Dimensions))

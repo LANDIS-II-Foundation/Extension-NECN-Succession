@@ -121,6 +121,9 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<List<double>> swa10;
         public static ISiteVar<List<double>> temp10;
         public static ISiteVar<List<double>> cwd10;
+        public static ISiteVar<double> swaLagged;
+        public static ISiteVar<double> tempLagged;
+        public static ISiteVar<double> cwdLagged;
         public static ISiteVar<double> normalSWA;
         public static ISiteVar<double> normalCWD;
         public static ISiteVar<double> slope;
@@ -232,12 +235,16 @@ namespace Landis.Extension.Succession.NECN
 
             //if drought, then create these site vars TODO
             //drought_todo
-            if (OtherData.UseDrought)
+            if (DroughtMortality.UseDrought)
             {
                 droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
                 temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
                 cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+
+                swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
                 normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -297,6 +304,7 @@ namespace Landis.Extension.Succession.NECN
                 swa10[site] = new List<double>(10);
                 temp10[site] = new List<double>(10);
                 cwd10[site] = new List<double>(10);
+
             }
             
         }
@@ -411,7 +419,7 @@ namespace Landis.Extension.Succession.NECN
 
             //SiteVars.FireEfflux[site] = 0.0;
             //drought_todo
-            if (OtherData.UseDrought | OtherData.WriteSWA | OtherData.WriteCWD)
+            if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD)
             {
                 if (PlugIn.ModelCore.CurrentTime >= 11)
                 {
@@ -1142,6 +1150,62 @@ namespace Landis.Extension.Succession.NECN
 
 
         }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// SWA calculated for each site with appropriate time-lag
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> SWALagged //list of doubles
+        {
+            get
+            {
+                return swaLagged;
+            }
+            set
+            {
+                swaLagged = value;
+            }
+
+
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Temperature calculated for each site with appropriate time-lag
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> TempLagged //list of doubles
+        {
+            get
+            {
+                return tempLagged;
+            }
+            set
+            {
+                tempLagged = value;
+            }
+
+
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// CWD calculated for each site with appropriate time-lag
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> CWDLagged //list of doubles
+        {
+            get
+            {
+                return cwdLagged;
+            }
+            set
+            {
+                cwdLagged = value;
+            }
+
+
+        }
+
 
         // --------------------------------------------------------------------
         /// <summary>
@@ -1163,7 +1227,7 @@ namespace Landis.Extension.Succession.NECN
 
         // --------------------------------------------------------------------
         /// <summary>
-        /// Input value of Normal SWA
+        /// Input value of Normal CWD
         /// //TODO sam //drought_todo
         /// </summary>
         public static ISiteVar<double> NormalCWD

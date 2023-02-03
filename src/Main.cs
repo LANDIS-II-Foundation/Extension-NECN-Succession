@@ -52,7 +52,7 @@ namespace Landis.Extension.Succession.NECN
 
                 PlugIn.AnnualWaterBalance = 0;
 
-                if (OtherData.UseDrought | OtherData.WriteSWA)
+                if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA)
                 {
                     double[] summer_water = new double[6];
                     double[] summer_temp = new double[6];
@@ -128,7 +128,7 @@ namespace Landis.Extension.Succession.NECN
 
                     //Drought vars
                     //Update monthly temperature and soil water
-                    if (OtherData.UseDrought | OtherData.WriteSWA)
+                    if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA)
                     {
                         int year_index = PlugIn.ModelCore.CurrentTime - 1;
 
@@ -206,7 +206,7 @@ namespace Landis.Extension.Succession.NECN
                 }
 
                 //Do this just once a year, after CWD is calculated above
-                if (OtherData.UseDrought | OtherData.WriteSWA | OtherData.WriteCWD) //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD) //TODO fix this so we don't have to always calculate all of these vars when writing maps
                 {
                     int year_index = PlugIn.ModelCore.CurrentTime - 1;
 
@@ -220,6 +220,11 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.CWD10[site][year_index] = SiteVars.AnnualClimaticWaterDeficit[site];
 
                     //PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
+                }
+
+                if (DroughtMortality.UseDrought)
+                {
+                    DroughtMortality.ComputeDroughtLaggedVars(site);
                 }
 
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;

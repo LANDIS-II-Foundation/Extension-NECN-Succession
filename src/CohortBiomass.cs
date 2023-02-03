@@ -78,17 +78,13 @@ namespace Landis.Extension.Succession.NECN
             //Calculate drought mortality just in May, after annual CWD has been calculated
             double[] mortalityDrought = new double[2] { 0, 0 };
 
-            //PlugIn.ModelCore.UI.WriteLine("Use_Drought = {0}", OtherData.UseDrought);
+            //PlugIn.ModelCore.UI.WriteLine("Use_Drought = {0}", DroughtMortality.UseDrought);
 
             if (Main.Month == 5)
             {
-                if (OtherData.UseDrought)
+                if (DroughtMortality.UseDrought)
                 {
-                    //PlugIn.ModelCore.UI.WriteLine("Running drought mortality");
-                    //Rob: this seems like a dumb way to do this, I just want to use the function from DroughtMortality.cs and
-                    //I don't want to make a new object for every cohort (it seems slow and inelegant, but maybe I'm wrong)
-                    DroughtMortality droughtMortality = new DroughtMortality();
-                    mortalityDrought = droughtMortality.ComputeDroughtMortality(cohort, site);
+                   mortalityDrought = DroughtMortality.ComputeDroughtMortality(cohort, site);
                 }
             }
                                              
@@ -113,7 +109,6 @@ namespace Landis.Extension.Succession.NECN
                     int cohortBiomass = (int)(cohort.LeafBiomass + cohort.WoodBiomass);
                     defoliation = Landis.Library.Biomass.CohortDefoliation.Compute(site, cohort.Species, cohortBiomass, (int)siteBiomass);
 
-                    //TODO defoliation use for drought? SF
                 }
 
                 if (defoliation > 1.0)
@@ -379,17 +374,7 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// Mortality caused by drought
-        /// Calculated every year or once per decade?
-        /// Rescale by timestep -- annualize 
-        /// TODO sam
-        /// </summary>
-        //---------------------------------------------------------------------
-        
-
-        // TODO Modify for drought-induced leaf shedding
+               
         public static double CrownScorching(ICohort cohort, byte siteSeverity)
         {
 
