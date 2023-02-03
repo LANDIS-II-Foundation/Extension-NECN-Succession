@@ -411,10 +411,8 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
-        //Drought variables
-        public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
+    public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
         public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
-
         public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
