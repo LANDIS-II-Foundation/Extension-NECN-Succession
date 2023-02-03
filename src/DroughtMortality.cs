@@ -1,4 +1,4 @@
-﻿//  Authors:  Robert M. Scheller
+﻿//  Authors:  Samuel W. Flake, Robert M. Scheller
 
 using Landis.Core;
 using Landis.SpatialModeling;
@@ -19,16 +19,45 @@ namespace Landis.Extension.Succession.NECN
         //these are from InputParameters.cs Lines 413-424
         //We want one value per species to be stored here. I guess we can reuse the AuxParm structure?
         //I admit I don't really understand what the get and return are doing or how to use them here
-        public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get { return betaSWAAnom; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get { return betaBiomass; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get { return betaCWD; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;  // needs better variable name
+            
+        //---------------------------------------------------------------------
+        // This initialize will be called from PlugIn, dependent on whether drought=true.
+        public static void Initialize(IInputParameters parameters)
+        {
+            CWDThreshold            = parameters.CWDThreshold;
+            MortalityAboveThreshold              = parameters.MortalityAboveThreshold;
+            Intercept              = parameters.Intercept;
+            BetaAge              = parameters.BetaAge;
+            BetaTemp          = parameters.BetaTemp;
+            BetaSWAAnom          = parameters.BetaSWAAnom;
+            BetaBiomass       = parameters.BetaBiomass;
+            BetaCWD           = parameters.BetaCWD;
+            BetaNormCWD          = parameters.BetaNormCWD;
+            IntxnCWD_Biomass          = parameters.IntxnCWD_Biomass ;
+            CoarseRootLignin    = parameters.CoarseRootLignin ;
+        }
+            
+         // These define the public interface (via the text file) and need to remain in InputParameters.   
+            //public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get { return betaSWAAnom; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get { return betaBiomass; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get { return betaCWD; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
+        //public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
 
         public double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
