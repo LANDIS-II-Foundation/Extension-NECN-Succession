@@ -101,7 +101,7 @@ namespace Landis.Extension.Succession.NECN
             double M_leaf = 0;
             double M_wood = 0;
 
-            if (waterDeficit > cwdThreshold & cwdThreshold != 0)
+            if (cwdLagged > cwdThreshold & cwdThreshold != 0)
             {
                 //p_mort = mortalityAboveThreshold + mortalitySlope * (waterDeficit - cwdThreshold); TODO implement
                 p_mort = mortalityAboveThreshold;
