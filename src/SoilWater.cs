@@ -128,7 +128,7 @@ namespace Landis.Extension.Succession.NECN
             double aspect = SiteVars.Aspect[site];
             double SlAsp = CalculateSlopeAspectEffect(slope, aspect);
 
-            PlugIn.ModelCore.UI.WriteLine("Slope = {0}, Aspect = {1}, SlAsp = {2}", slope, aspect, SlAsp);
+            //PlugIn.ModelCore.UI.WriteLine("Slope = {0}, Aspect = {1}, SlAsp = {2}", slope, aspect, SlAsp);
 
             if (SlAsp > 0)
             {
@@ -357,7 +357,7 @@ namespace Landis.Extension.Succession.NECN
             double aspect = SiteVars.Aspect[site];
             double SlAsp = CalculateSlopeAspectEffect(slope, aspect);
 
-            PlugIn.ModelCore.UI.WriteLine("Slope = {0}, Aspect = {1}, SlAsp = {2}", slope, aspect, SlAsp);
+            //PlugIn.ModelCore.UI.WriteLine("Slope = {0}, Aspect = {1}, SlAsp = {2}", slope, aspect, SlAsp);
 
             if (SlAsp > 0)
             {
