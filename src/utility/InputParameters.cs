@@ -96,7 +96,6 @@ namespace Landis.Extension.Succession.NECN
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
       
         //Drought variables
-        //Rob: original implementation
         private Landis.Library.Parameters.Species.AuxParm<double> intercept; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaAge; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaBiomass; // optional
@@ -110,6 +109,10 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> mortalityAboveThreshold; // optional
         
         private List<ISufficientLight> sufficientLight;
+
+        //CWD Establishment
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdBegin;
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdMax;
 
 
         //---------------------------------------------------------------------
@@ -395,6 +398,8 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
+        //Drought variables
+
         public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
         public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
         public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
@@ -406,6 +411,9 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
         public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
 
+        //CWD Establishment
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDBegin { get { return cwdBegin; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDMax { get { return cwdMax; } }
         //---------------------------------------------------------------------
         /// <summary>
         /// Can the species resprout epicormically following a fire?
@@ -1022,16 +1030,40 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public void SetMaxDrought(ISpecies           species,
+        public void SetMaxDrought(ISpecies species,
                                      InputValue<double> newValue)
         {
             Debug.Assert(species != null);
             maxDrought[species] = VerifyRange(newValue, 0.0, 1.0);
         }
-        public void SetMaxDrought(ISpecies species,double newValue)
+        public void SetMaxDrought(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
             maxDrought[species] = VerifyRange(newValue, 0.0, 1.0);
+        }
+        //---------------------------------------------------------------------
+        //CWD Establishment
+        public void SetCWDBegin(ISpecies           species,
+                                     InputValue<int> newValue)
+        {
+            Debug.Assert(species != null);
+            cwdBegin[species] = VerifyRange(newValue, 0, 5000);
+        }
+        public void SetCWDBegin(ISpecies species,int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdBegin[species] = VerifyRange(newValue, 0, 5000);
+        }
+        public void SetCWDMax(ISpecies species,
+                             InputValue<int> newValue)
+        {
+            Debug.Assert(species != null);
+            cwdMax[species] = VerifyRange(newValue, 0, 5000);
+        }
+        public void SetCWDMax(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdMax[species] = VerifyRange(newValue, 0, 5000);
         }
         //---------------------------------------------------------------------
 
@@ -1341,7 +1373,9 @@ namespace Landis.Extension.Succession.NECN
             maxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             growthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-
+            //CWD Establishment
+            cwdBegin = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            cwdMax = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             //Drought variables
             cwdThreshold = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             mortalityAboveThreshold = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);

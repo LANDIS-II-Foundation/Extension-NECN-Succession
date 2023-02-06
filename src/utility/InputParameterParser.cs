@@ -178,6 +178,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.NormalCWDMapName = normalCWDMapName.Value;
             }
 
+           
             InputVar<string> slopeMapName = new InputVar<string>("SlopeMapName");
             if (ReadOptionalVar(slopeMapName))
             {
@@ -487,7 +488,8 @@ namespace Landis.Extension.Succession.NECN
                     parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
                     parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
                     parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
-
+                    parameters.SetCWDBegin(species, System.Convert.ToInt32(row["CWDBegin"]));
+                    parameters.SetCWDMax(species, System.Convert.ToInt32(row["CWDMax"]));
                     parameters.Grass[species] = ReadGrass(row);
                     parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 
@@ -536,10 +538,11 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.MinLAI = ReadMinLAI(row);
 
             }
+
             //-------------------------
             //  Read Drought Mortality Parameters table
             PlugIn.ModelCore.UI.WriteLine("   Begin parsing Drought table.");
-
+                        
             InputVar<string> drought_csv = new InputVar<string>("DroughtMortalityParameters");
 
             if (ReadOptionalVar(drought_csv))
@@ -549,12 +552,15 @@ namespace Landis.Extension.Succession.NECN
 
                 InputVar<int> inputMapFreq = new InputVar<int>("InputCommunityMapFrequency");
                
-                ReadVar(drought_csv);
                 CSVParser droughtParser = new CSVParser();
-                DataTable droughtTable = speciesParser.ParseToDataTable(csv.Value);
-                foreach (DataRow row in speciesTable.Rows)
+                DataTable droughtTable = speciesParser.ParseToDataTable(drought_csv.Value);
+                foreach (DataRow row in droughtTable.Rows)
                 {
-                    ISpecies species = ReadSpecies(System.Convert.ToString(row["SpeciesCode"]));
+                    //TODO Currently, does not check for duplicate or missing species. It should be okay to have missing
+                    // species, but we ought to check for duplicates. It does correctly reject species that aren't present
+                    // in the species table already.
+                    ISpecies species = ReadDroughtSpecies(System.Convert.ToString(row["SpeciesCode"]));
+                    PlugIn.ModelCore.UI.WriteLine("Reading drought parameters for species {0}", species.Name);
 
                     parameters.SetCWDThreshold(species, System.Convert.ToInt32(row["CWDThreshold"]));
                     parameters.SetMortalityAboveThreshold(species, System.Convert.ToDouble(row["MortalityAboveThreshold"]));
@@ -569,6 +575,7 @@ namespace Landis.Extension.Succession.NECN
                     parameters.SetIntxnCWD_Biomass(species, System.Convert.ToDouble(row["IntxnCWD_Biomass"]));
                 }
             }
+
             //--------- Read In Fire Reductions Table ---------------------------
             PlugIn.ModelCore.UI.WriteLine("   Begin reading FIRE REDUCTION parameters.");
             ReadName(Names.FireReductionParameters);
@@ -718,6 +725,23 @@ namespace Landis.Extension.Succession.NECN
             else
                 speciesLineNums[species.Name] = LineNumber;
             return species;
+        }
+        private ISpecies ReadDroughtSpecies(string speciesName)
+        {
+            ISpecies species = speciesDataset[speciesName];
+            if (species == null)
+                throw new InputValueException(speciesName,
+                                              "{0} is not a species name.",
+                                              speciesName);
+            int lineNumber;
+            if (speciesLineNums.TryGetValue(species.Name, out lineNumber))
+            {
+                return species;
+            }            
+            else throw new InputValueException(speciesName,
+                                              "The species {0}, found on the drought table, does not exist in the species table",
+                                              speciesName);
+            
         }
         private bool ReadGrass(DataRow row)
         {

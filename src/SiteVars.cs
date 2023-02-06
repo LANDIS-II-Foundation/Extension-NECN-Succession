@@ -233,8 +233,7 @@ namespace Landis.Extension.Succession.NECN
             HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
-            //if drought, then create these site vars TODO
-            //drought_todo
+            //if drought, then create these site vars
             if (DroughtMortality.UseDrought)
             {
                 droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -248,10 +247,10 @@ namespace Landis.Extension.Succession.NECN
 
                 normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-
-                slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-                aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             }
+
+            slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 

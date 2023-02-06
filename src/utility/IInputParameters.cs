@@ -96,6 +96,10 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<int> GDDmax{get;}
         Landis.Library.Parameters.Species.AuxParm<int> MinJanTemp{get;}
         Landis.Library.Parameters.Species.AuxParm<double> MaxDrought{get;}
+        //CWD Establishment
+        Landis.Library.Parameters.Species.AuxParm<int> CWDBegin { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> CWDMax { get; }
+
         Landis.Library.Parameters.Species.AuxParm<double> LeafLongevity {get;}
         Landis.Library.Parameters.Species.AuxParm<bool> Epicormic {get;}
         Landis.Library.Parameters.Species.AuxParm<double> LeafLignin {get;}

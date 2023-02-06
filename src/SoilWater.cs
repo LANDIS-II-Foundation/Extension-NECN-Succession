@@ -119,16 +119,16 @@ namespace Landis.Extension.Succession.NECN
                 soilWaterContent += addToSoil;
             }
 
-            //if (PlugIn.SlopeMapName != null) //TODO how can we only do this if the slope map name exists?
-
+           
             //Adjust PET at the pixel scale for slope and aspect following Bugmann 1994, p 82 and Schumacher 2004, p. 114.
+            //If slope and aspect are not provided, then SlAsp is zero and has no effect on PET
             //First calculate slope and aspect modifier (SlAsp)
 
-
-            double slope = SiteVars.Slope[site];
+            double slope = SiteVars.Slope[site];            
             double aspect = SiteVars.Aspect[site];
-
             double SlAsp = CalculateSlopeAspectEffect(slope, aspect);
+
+            PlugIn.ModelCore.UI.WriteLine("Slope = {0}, Aspect = {1}, SlAsp = {2}", slope, aspect, SlAsp);
 
             if (SlAsp > 0)
             {
@@ -138,7 +138,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 PET = PET * (1 + SlAsp * 0.063);
             }
-
+            
 
             //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             availableWaterMax = soilWaterContent;
@@ -349,26 +349,25 @@ namespace Landis.Extension.Succession.NECN
                 //soilWaterContent += addToSoil;
             }
 
-            //if (PlugIn.SlopeMapName != null) //TODO how can we only do this if the slope map name exists?
-            
-                //Adjust PET at the pixel scale for slope and aspect following Bugmann 1994, p 82 and Schumacher 2004, p. 114.
-                //First calculate slope and aspect modifier (SlAsp)
+            //Adjust PET at the pixel scale for slope and aspect following Bugmann 1994, p 82 and Schumacher 2004, p. 114.
+            //If slope and aspect are not provided, then SlAsp is zero and has no effect on PET
+            //First calculate slope and aspect modifier (SlAsp)
 
+            double slope = SiteVars.Slope[site];
+            double aspect = SiteVars.Aspect[site];
+            double SlAsp = CalculateSlopeAspectEffect(slope, aspect);
 
-                double slope = SiteVars.Slope[site];
-                double aspect = SiteVars.Aspect[site];
+            PlugIn.ModelCore.UI.WriteLine("Slope = {0}, Aspect = {1}, SlAsp = {2}", slope, aspect, SlAsp);
 
-                double SlAsp = CalculateSlopeAspectEffect(slope, aspect);
+            if (SlAsp > 0)
+            {
+                PET = PET * (1 + SlAsp * 0.125);
+            }
+            else
+            {
+                PET = PET * (1 + SlAsp * 0.063);
+            }
 
-                if (SlAsp > 0)
-                {
-                    PET = PET * (1 + SlAsp * 0.125);
-                }
-                else
-                {
-                    PET = PET * (1 + SlAsp * 0.063);
-                }
-            
 
 
             // Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.

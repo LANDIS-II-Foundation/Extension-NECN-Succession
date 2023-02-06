@@ -54,6 +54,9 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;
 
+        //CWD Establishment
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDBegin;
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDMax;
 
 
         //---------------------------------------------------------------------
@@ -81,8 +84,11 @@ namespace Landis.Extension.Succession.NECN
             Grass               = parameters.Grass;
             Nlog_depend         = parameters.Nlog_depend; // W.Hotta (2021.08.01)
             GrowthLAI           = parameters.GrowthLAI;
+            //CWD Establishment
+            CWDBegin            = parameters.CWDBegin;
+            CWDMax              = parameters.CWDMax;
 
-            
+
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {
                 try

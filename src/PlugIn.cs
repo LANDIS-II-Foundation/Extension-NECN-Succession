@@ -116,8 +116,14 @@ namespace Landis.Extension.Succession.NECN
             //TODO only read if path isn't null
             ReadMaps.ReadNormalSWAMap(Parameters.NormalSWAMapName);
             ReadMaps.ReadNormalCWDMap(Parameters.NormalCWDMapName);
-            ReadMaps.ReadSlopeMap(Parameters.SlopeMapName);
-            ReadMaps.ReadAspectMap(Parameters.AspectMapName);
+            if (Parameters.SlopeMapName != null)
+            {
+                ReadMaps.ReadSlopeMap(Parameters.SlopeMapName);
+            }
+            if (Parameters.AspectMapName != null)
+            {
+                ReadMaps.ReadAspectMap(Parameters.AspectMapName);
+            }
 
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);

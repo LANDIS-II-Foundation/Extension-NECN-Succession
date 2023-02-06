@@ -33,6 +33,7 @@ namespace Landis.Extension.Succession.NECN
             double soilMultiplier = 0.0;
             double minJanTempMultiplier = 0.0;
             double establishProbability = 0.0;
+            double cwdMultiplier = 0.0;
 
             AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[climateRegion];
 
@@ -43,10 +44,12 @@ namespace Landis.Extension.Succession.NECN
             soilMultiplier = SoilMoistureMultiplier(ecoClimate, species, ecoDryDays);
             tempMultiplier = BotkinDegreeDayMultiplier(ecoClimate, species);
             minJanTempMultiplier = MinJanuaryTempModifier(ecoClimate, species);
+            cwdMultiplier = CWDMultiplier(site, species);
 
             // Liebig's Law of the Minimum is applied to the four multipliers for each year:
             double minMultiplier = System.Math.Min(tempMultiplier, soilMultiplier);
             minMultiplier = System.Math.Min(minJanTempMultiplier, minMultiplier);
+            minMultiplier = System.Math.Min(cwdMultiplier, minMultiplier);
 
             establishProbability += minMultiplier;
             establishProbability *= PlugIn.ProbEstablishAdjust;
@@ -137,6 +140,20 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("BeginGrow={0}, EndGrow={1}, dryDays={2}, maxDrought={3}", weather.BeginGrowing, weather.EndGrowing, dryDays, maxDrought);
 
             return Soil_Moist_GF;
+        }
+
+        private static double CWDMultiplier(ActiveSite site, ISpecies species)
+        {
+            double cwd_Begin = SpeciesData.CWDBegin[species];
+            double cwd_Max = SpeciesData.CWDMax[species];
+            double cwd = SiteVars.AnnualClimaticWaterDeficit[site];
+
+            double cwdMultiplier = (cwd - cwd_Begin)/(cwd_Max - cwd_Begin);
+            if (cwd < cwd_Begin) cwdMultiplier = 0;
+            if (cwd > cwd_Max) cwdMultiplier = 1;
+            cwdMultiplier = 1 - cwdMultiplier;
+
+            return (cwdMultiplier);
         }
         
         //---------------------------------------------------------------------------
