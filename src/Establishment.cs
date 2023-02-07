@@ -49,7 +49,7 @@ namespace Landis.Extension.Succession.NECN
             if(SiteVars.SoilDrain[site] < FunctionalType.Table[SpeciesData.FuncType[species]].MinSoilDrain)
             {
                 //this stops trees from establishing in wetlands
-                soilDrainEst = 0.0;
+                soilDrainMultiplier = 0.0;
             }
 
             // Liebig's Law of the Minimum is applied to the four multipliers for each year:
