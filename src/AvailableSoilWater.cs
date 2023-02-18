@@ -66,6 +66,8 @@ namespace Landis.Extension.Succession.NECN
                 foreach (ICohort cohort in speciesCohorts)
                 {
                     int cohortAddYear = GetAddYear(cohort);
+                    if (Main.MonthCnt == 11)
+                        cohortAddYear--;
                     // fractional based on cohort biomass. Use an exponential function to control how evenly water is distributed among cohorts based on biomass. 
                     // Transpiration is senstive to this fraction. To minimize water limitation of larger cohorts, allocate water less evenly and more closely by biomass 
                     double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.000002);  // 0.02 originally. Larger number produces more even allocation
@@ -98,6 +100,8 @@ namespace Landis.Extension.Succession.NECN
                 foreach (ICohort cohort in speciesCohorts)
                 {
                     int cohortAddYear = GetAddYear(cohort);
+                    if (Main.MonthCnt == 11)
+                        cohortAddYear--;
                     
                     double SWallocation = CohortSWFraction[cohort.Species.Index][cohortAddYear];
                     double relativeSWallocation = SWallocation/SWAllocTotal;
