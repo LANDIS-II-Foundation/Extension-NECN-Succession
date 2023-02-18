@@ -805,8 +805,8 @@ namespace Landis.Extension.Succession.NECN
 
             // Calculate the moisture limitation scalar
             // Since npp is already scaled by moisture limitation, set this to 1
-            //double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
-            double CiModifier = 1;
+            double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
+            //double CiModifier = 1;
             
             // Calcualte GPP. Pnet used gross photosynthesis, but it functions similary for the purposes of the algorithm. Especially bc we are using total NPP and not the carbon from NPP 
             // GPP = NPP + Ra
@@ -821,13 +821,14 @@ namespace Landis.Extension.Succession.NECN
             double Fwue1 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue1;
             double Fwue2 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue2;
 
-            if((1-CiModifier) <= Fwue1)
+            double water_stress = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
+            if((1-water_stress) <= Fwue1)
             {
                 WUEscalar = 1.0;
             }
             else
             {
-                WUEscalar = 1/(Math.Exp(Fwue2*((1-CiModifier)-Fwue1)));
+                WUEscalar = 1/(Math.Exp(Fwue2*((1-water_stress)-Fwue1)));
             }
 
             // calculate foliar nitrogen assuming C 47% of leaf mass
@@ -853,6 +854,13 @@ namespace Landis.Extension.Succession.NECN
             double AvailableSW = AvailableSoilWater.GetCapWater(cohort);
             double AvailableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
             double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
+
+            // if it is a non-growing season month, then calculate transpiration using the old method and scale it by fraction of water allocated to each specis to it totals to teh right amount 
+            if(Main.Month == 9 || Main.Month == 10 || Main.Month == 11 || Main.Month == 0 || Main.Month == 1 ||Main.Month == 2){
+                Transpiration = SiteVars.OG_ET[site] * AvailableSWfraction;
+                ActualTranspiration = Transpiration;
+                ActualTranspiration = Math.Min(AvailableSW, Transpiration);
+            }
 
             // add to overall site monthly and annual transpiration 
             SiteVars.Transpiration[site] += ActualTranspiration;

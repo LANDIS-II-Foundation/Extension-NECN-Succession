@@ -61,6 +61,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> availableWater;  
         private static ISiteVar<double> availableWaterTranspiration;
         private static ISiteVar<double> capWater;
+        private static ISiteVar<double> og_et;
         private static ISiteVar<double> maxWaterUse;
         private static ISiteVar<double> soilWaterContent;
         private static ISiteVar<double> availableWaterMin;
@@ -191,6 +192,7 @@ namespace Landis.Extension.Succession.NECN
             availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWaterTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             capWater = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            og_et = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             maxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -650,6 +652,20 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 capWater = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
+              /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> OG_ET
+        {
+            get {
+                return og_et;
+            }
+            set {
+                og_et = value;
             }
         }
         //---------------------------------------------------------------------

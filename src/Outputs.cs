@@ -620,7 +620,8 @@ namespace Landis.Extension.Succession.NECN
 //                         {
 //                             if (site.IsActive)
 //                             {
-//                                 pixel.MapCode.Value = (short)(SiteVars.AnnualNEE[site] + 1000);
+//                                 //pixel.MapCode.Value = (short)(SiteVars.AnnualNEE[site] + 1000);
+//                                 pixel.MapCode.Value = (short)(SiteVars.AnnualNEE[site] + 1000); //KM got rid of the 1000 so i can see the actual nee values
 //                             }
 //                             else
 //                             {
