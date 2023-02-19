@@ -455,9 +455,9 @@ namespace Landis.Extension.Succession.NECN
             }
             
              IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-            // KM: calculate transpiration within the npp function to make sure carbon and water are happening together and because npp is necessary for transpiration calculations 
-            // KM: Use aboveground NPP before it has been converted to carbon
-            //Calculate_Transpiration(cohort, site, ecoregion, NPPleaf, NPPwood, NPPcoarseRoot, NPPfineRoot);
+            
+            // KM: Calculate transpiration within the NPP function to make sure carbon and water fluxes are being calculated together and because npp is necessary for transpiration calculations 
+            // KM: Use aboveground NPP rate
             double NPP = AGNPP[0] + AGNPP[1];
             Calculate_Transpiration(cohort, site, ecoregion, NPP);
 
@@ -791,8 +791,7 @@ namespace Landis.Extension.Succession.NECN
             return Es * (1-(rh/100));
         }
 
-        //  KM: Calculate cohort level transpiration 
-        //private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double NPPleaf, double NPPwood, double NPPcoarseroot, double NPPfineroot)
+        //  KM: Calculate transpiration for a cohort 
         private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
         {
 
@@ -803,66 +802,61 @@ namespace Landis.Extension.Succession.NECN
             double Tday = (double)0.5 * (Tmax + Tave);
             double VPD = Calculate_VPD(Tday, Tmin, ecoregion);
 
-            // Calculate the moisture limitation scalar
-            // Since npp is already scaled by moisture limitation, set this to 1
+            // Calculate the soil water limitation scalar
             double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
-            //double CiModifier = 1;
             
-            // Calcualte GPP. Pnet used gross photosynthesis, but it functions similary for the purposes of the algorithm. Especially bc we are using total NPP and not the carbon from NPP 
-            // GPP = NPP + Ra
+            // Calcualte GPP  (GPP = NPP + Ra)
             // Asssume Ra is 50% of GPP (Marthews et al., 2012; Chambers et al., 2004; Zhang, Xu, Chen, & Adams, 2009; iao et al., 2010)
-            double RespFrac = 1;
-            //double GrossPsn = (NPPwood + NPPleaf + NPPcoarseroot + NPPfineroot) * (1 + RespFrac);
-            double GrossPsn = (npp) * (1 + RespFrac);
- 
+            double GrossPsn = (npp) * 2;
+
             // Calculate WUE scalar tuning parameter using power function 
-            double WUEscalar = 0.0;
-            //double Fwue1 = 2; // setting Fwue1 = 2 essentially turns off the WUE scalar because is will always be 1 and multiplying by 1 doesn't change anything 
-            double Fwue1 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue1;
-            double Fwue2 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue2;
+            //double WUEscalar = 0.0;
+            //double Fwue1 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue1;
+            //double Fwue2 = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].Fwue2;
 
-            double water_stress = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
-            if((1-water_stress) <= Fwue1)
-            {
-                WUEscalar = 1.0;
-            }
-            else
-            {
-                WUEscalar = 1/(Math.Exp(Fwue2*((1-water_stress)-Fwue1)));
-            }
+            //double water_stress = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
+            //if((1-water_stress) <= Fwue1)
+            //{
+            //    WUEscalar = 1.0;
+            //}
+            //else
+            //{
+            //    WUEscalar = 1/(Math.Exp(Fwue2*((1-water_stress)-Fwue1)));
+            //}
 
-            // calculate foliar nitrogen assuming C 47% of leaf mass
+            // Calculate foliar nitrogen assuming C 47% of leaf mass
             double FolN = 47/SpeciesData.LeafCN[cohort.Species];
 
-            // Calculate leaf internal co2 concentration 
+            // Calculate leaf internal CO2 concentration 
             double CO2 = ClimateRegionData.AnnualWeather[ecoregion].MonthlyCO2[Main.Month];
             double CicaRatio = (-0.075f * FolN) + 0.875f;
             double ModCiCaRatio = CicaRatio * CiModifier;
             double CiElev = CO2 * ModCiCaRatio;
 
-            // calculate mass flux of co2 and h20 
+            // Calculate mass flux of co2 and h20 
             double V = (double)(8314.47 * ((Tmin + 273) / 101.3));
             double JCO2 = (double)(0.139 * ((CO2 - CiElev) / V) * 0.00001);
             double JH2Osp = (double)(0.239 * (VPD / (8314.47 * (Tmin + 273))));
             double JH2O = JH2Osp * CiModifier;
-            double WUE = (JCO2/JH2O) * WUEscalar;
+            //double WUE = (JCO2/JH2O) * WUEscalar;
+            double WUE = JCO2/JH2O;
 
-            // calculate transpiraiton 
+            // Calculate transpiraiton 
             double Transpiration = (double)(0.01227 * (GrossPsn / WUE) /10); // the 10 converts to cm
 
-            // cap transpiration at available water 
+            // Cap transpiration at available water 
             double AvailableSW = AvailableSoilWater.GetCapWater(cohort);
             double AvailableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
             double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
 
-            // if it is a non-growing season month, then calculate transpiration using the old method and scale it by fraction of water allocated to each specis to it totals to teh right amount 
+            // If it is a non-growing season month, then calculate transpiration using the original method and scale it by fraction of water allocated to each species so it totals to the right amount 
             if(Main.Month == 9 || Main.Month == 10 || Main.Month == 11 || Main.Month == 0 || Main.Month == 1 ||Main.Month == 2){
                 Transpiration = SiteVars.OG_ET[site] * AvailableSWfraction;
                 ActualTranspiration = Transpiration;
                 ActualTranspiration = Math.Min(AvailableSW, Transpiration);
             }
 
-            // add to overall site monthly and annual transpiration 
+            // Add to overall site monthly and annual transpiration 
             SiteVars.Transpiration[site] += ActualTranspiration;
             SiteVars.monthlyTranspiration[site][Main.Month] += ActualTranspiration;
             
@@ -875,15 +869,7 @@ namespace Landis.Extension.Succession.NECN
                     CalibrateLog.transpiration = ActualTranspiration;
                     CalibrateLog.availableSW = AvailableSW;
                     CalibrateLog.availableSWFraction = AvailableSWfraction;
-                    CalibrateLog.wuescalar = WUEscalar;
-                    CalibrateLog.wue = (JCO2 / JH2O);
                     CalibrateLog.vpd = VPD;
-                    CalibrateLog.cimodifier = CiModifier;
-                    CalibrateLog.jh2o = JH2O;
-                    CalibrateLog.jco2 = JCO2;
-                    CalibrateLog.grosspsn = GrossPsn;
-                    CalibrateLog.co2 = CO2;
-
                 }
         }
 

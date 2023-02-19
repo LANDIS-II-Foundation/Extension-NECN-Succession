@@ -8,7 +8,6 @@ namespace Landis.Extension.Succession.NECN
 {
     public class PrimaryLog
     {
-            //log.WriteLine("");
 
         [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Simulation Year")]
         public int Time {set; get;}
@@ -18,9 +17,6 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Desc = "Climate Region Index")]
         public int ClimateRegionIndex { set; get; }
-
-        //[DataFieldAttribute(Desc = "Soil Water Holding Capacity")]
-        //public int SoilWaterHoldingCapacity { set; get; }
 
         [DataFieldAttribute(Unit = FieldUnits.Count, Desc = "Number of Sites")]
         public int NumSites { set; get; }

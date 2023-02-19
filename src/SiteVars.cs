@@ -58,13 +58,6 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> mineralN;
         private static ISiteVar<double> resorbedN;
         private static ISiteVar<double> waterMovement;  
-        private static ISiteVar<double> availableWater;  
-        private static ISiteVar<double> availableWaterTranspiration;
-        private static ISiteVar<double> capWater;
-        private static ISiteVar<double> og_et;
-        private static ISiteVar<double> maxWaterUse;
-        private static ISiteVar<double> soilWaterContent;
-        private static ISiteVar<double> availableWaterMin;
         private static ISiteVar<double> liquidSnowPack;  
         private static ISiteVar<double> decayFactor;
         private static ISiteVar<double> soilTemperature;
@@ -91,7 +84,6 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlymineralN;
         private static ISiteVar<double> frassC;
         private static ISiteVar<double> lai;
-        //private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. 
         private static ISiteVar<int> dryDays;
 
         public static ISiteVar<double> AnnualNEE;
@@ -126,12 +118,17 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyPriorAvailableWaterMin;
         public static ISiteVar<double[]> MonthlyAvailableWaterMin;
         public static ISiteVar<double[]> MonthlyAvailableWaterMax;
+        public static ISiteVar<double[]> MonthlyVPD;
         public static ISiteVar<double[]> MonthlyEvaporatedSnow;
         public static ISiteVar<double[]> MonthlyStormflow;
         public static ISiteVar<double[]> MonthlyMaxWaterUse;
-        public static ISiteVar<double[]> MonthlyVPD;
-        public static ISiteVar<double[]> MonthlyAccumPrecip;
-        public static ISiteVar<double[]> MonthlySoilWaterContentMiddle;
+        private static ISiteVar<double> availableWater;  
+        private static ISiteVar<double> availableWaterTranspiration;
+        private static ISiteVar<double> capWater;
+        private static ISiteVar<double> og_et;
+        private static ISiteVar<double> maxWaterUse;
+        private static ISiteVar<double> soilWaterContent;
+        private static ISiteVar<double> availableWaterMin;
 
 
 
@@ -214,8 +211,6 @@ namespace Landis.Extension.Succession.NECN
             MonthlyStormflow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMaxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyVPD = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            MonthlyAccumPrecip = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            MonthlySoilWaterContentMiddle = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
 
             // Annual accumulators
@@ -314,11 +309,8 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyStormflow[site] = new double[12];
                 MonthlyMaxWaterUse[site] = new double[12];
                 MonthlyVPD[site] = new double[12];
-
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
-                MonthlyAccumPrecip[site] = new double[12];
-                MonthlySoilWaterContentMiddle[site] = new double[12];
             }
             
         }
@@ -1162,7 +1154,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of Transpiration (cm)
+        /// A summary of evaporation (cm)
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double> Evaporation
@@ -1189,7 +1181,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of monthly transpiration (mm/mo)
+        /// add to soil 
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyAddToSoil
@@ -1204,7 +1196,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of monthly transpiration (mm/mo)
+        /// A summary of monthly evaporation
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyEvaporation
@@ -1218,7 +1210,7 @@ namespace Landis.Extension.Succession.NECN
         }
           //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of available water 
+        /// prior month min available water  
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyPriorAvailableWaterMin
@@ -1232,7 +1224,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of available water 
+        /// min available water  
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyAvailableWaterMin
@@ -1246,7 +1238,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of available water 
+        /// max available water 
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyAvailableWaterMax
@@ -1261,7 +1253,7 @@ namespace Landis.Extension.Succession.NECN
     
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of available water 
+        /// evaporated snow 
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyEvaporatedSnow
@@ -1275,7 +1267,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of available water 
+        ///monthly stormflow 
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyStormflow
@@ -1290,7 +1282,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// A summary of available water 
+        /// max water use 
         /// Katie M. 
         /// </summary>
         public static ISiteVar<double[]> monthlyMaxWaterUse
