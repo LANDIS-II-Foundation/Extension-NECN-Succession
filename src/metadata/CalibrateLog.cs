@@ -82,17 +82,10 @@ namespace Landis.Extension.Succession.NECN
             // KM added variables for tracking water 
             clog.Precipitation = precipitation;
             clog.VPD = vpd;
-            clog.AvailableSW = availableSW;
-            clog.AvailableSWFraction = availableSWFraction;
-            clog.AvailableWaterTranspiration = availableWaterTranspiration;
-            clog.CiModifier = cimodifier;
-            clog.JH2O = jh2o;
-            clog.JCO2 = jco2;
-            clog.WUEScalar = wuescalar;
-            clog.WUE = wue;
-            clog.GrossPsn = grosspsn;
+            clog.AvailableSW = availableSW; // Water available to the cohort based on available SW fraction
+            clog.AvailableSWFraction = availableSWFraction; // Fraction of available water allocated to the cohort
+            clog.AvailableWaterTranspiration = availableWaterTranspiration; // Total water available for transpiration in the cell 
             clog.Transpiration = transpiration;
-            clog.CO2 = co2;
             
             Outputs.calibrateLog.AddObject(clog);
             Outputs.calibrateLog.WriteToFile();
@@ -213,46 +206,22 @@ namespace Landis.Extension.Succession.NECN
 
         // KM added variables for water tracking 
         // ********************************************************************
-        [DataFieldAttribute(Unit = "cm", Desc = "precip", Format = "0.00")]
+        [DataFieldAttribute(Unit = "cm", Desc = "Precipitation", Format = "0.00")]
         public double Precipitation { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = "kPa", Desc = "VPD", Format = "0.00")]
         public double VPD { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration cohort", Format = "0.0000")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "SW available to transpiration in each cohort", Format = "0.0000")]
         public double AvailableSW { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water Transpiration Fraction", Format = "0.0000")]
+        [DataFieldAttribute(Unit = "Unitless fraction", Desc = "Fraction SW available to transpiration in each cohort", Format = "0.0000")]
         public double AvailableSWFraction { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "total water available to transpiration", Format = "0.0000")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Total SW available to transpiration in the cell", Format = "0.0000")]
         public double AvailableWaterTranspiration { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = "unitless", Desc = "CiModifier water limitation", Format = "0.00")]
-        public double CiModifier { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "unitless", Desc = "JH2O", Format = "0.000000000000")]
-        public double JH2O { set; get; }
-                // ********************************************************************
-        [DataFieldAttribute(Unit = "unitless", Desc = "JCO2", Format = "0.000000000000")]
-        public double JCO2 { set; get; }
-        // ********************************************************************
-        
-        [DataFieldAttribute(Unit = "unitless", Desc = "wue scalar", Format = "0.00")]
-        public double WUEScalar { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "unitless", Desc = "wue", Format = "0.00")]
-        public double WUE { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "gC m2 mo-1", Desc = "Gross Photosynthesis", Format = "0.00")]
-        public double GrossPsn { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.0000")]
+        [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.00")]
         public double Transpiration { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "ppm", Desc = "co2", Format = "0.0000")]
-        public double CO2 { set; get; }
-
-
     }
 }

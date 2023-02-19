@@ -416,17 +416,8 @@ namespace Landis.Extension.Succession.NECN
             double[] streamN = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] soilWaterContent = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] transpiration = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] addToSoil = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] evaporation = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] priorAvailableWaterMin = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] availableWaterMin = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] availableWaterMax = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] evaporatedSnow = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] stormflow = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] maxWaterUse = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] vpd = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] ppt_accum = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] swc_mid = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
@@ -440,18 +431,8 @@ namespace Landis.Extension.Succession.NECN
                 streamN[ecoregion.Index] = 0.0;
                 soilWaterContent[ecoregion.Index] = 0.0;
                 transpiration[ecoregion.Index] = 0.0; 
-                addToSoil[ecoregion.Index] = 0.0; 
                 evaporation[ecoregion.Index] = 0.0;
-                priorAvailableWaterMin[ecoregion.Index] = 0.0;
-                availableWaterMin[ecoregion.Index] = 0.0;
-                availableWaterMax[ecoregion.Index] = 0.0;
-                evaporatedSnow[ecoregion.Index] = 0.0;
-                stormflow[ecoregion.Index] = 0.0;
-                maxWaterUse[ecoregion.Index] = 0.0;
                 vpd[ecoregion.Index] = 0.0;
-                ppt_accum[ecoregion.Index] = 0.0;
-                swc_mid[ecoregion.Index] = 0.0;
-
             }
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -471,19 +452,8 @@ namespace Landis.Extension.Succession.NECN
                 streamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
                 soilWaterContent[ecoregion.Index] += SiteVars.MonthlySoilWaterContent[site][month];
                 transpiration[ecoregion.Index] += SiteVars.monthlyTranspiration[site][month];  
-                addToSoil[ecoregion.Index] += SiteVars.monthlyAddToSoil[site][month];
                 evaporation[ecoregion.Index] += SiteVars.monthlyEvaporation[site][month];
-                priorAvailableWaterMin[ecoregion.Index] += SiteVars.monthlyPriorAvailableWaterMin[site][month];
-                availableWaterMin[ecoregion.Index] += SiteVars.monthlyAvailableWaterMin[site][month];
-                availableWaterMax[ecoregion.Index] += SiteVars.monthlyAvailableWaterMax[site][month];
-                evaporatedSnow[ecoregion.Index] += SiteVars.monthlyEvaporatedSnow[site][month];
-                stormflow[ecoregion.Index] += SiteVars.monthlyStormflow[site][month];
-                maxWaterUse[ecoregion.Index] += SiteVars.monthlyMaxWaterUse[site][month];
                 vpd[ecoregion.Index] += SiteVars.monthlyVPD[site][month];
-
-                ppt_accum[ecoregion.Index] = SiteVars.MonthlyAccumPrecip[site][month];
-                swc_mid[ecoregion.Index] += SiteVars.MonthlySoilWaterContentMiddle[site][month];
-
             }
             
 
@@ -511,19 +481,8 @@ namespace Landis.Extension.Succession.NECN
                     ml.StreamN = (streamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.SoilWaterContent = (soilWaterContent[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgTranspiration = (transpiration[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);  // Katie M.
-                    ml.AvgAddToSoil = (addToSoil[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]); 
                     ml.AvgEvaporation = (evaporation[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-
-                    ml.AvgPriorAvailableWaterMin = (priorAvailableWaterMin[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.AvgAvailableWaterMin = (availableWaterMin[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.AvgAvailableWaterMax = (availableWaterMax[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.AvgEvaporatedSnow = (evaporatedSnow[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.AvgStormflow = (stormflow[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.AvgMaxWaterUse = (maxWaterUse[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgVPD = (vpd[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.AccumPrecip = ppt_accum[ecoregion.Index];
-
-                    ml.SWC_Mid = (swc_mid[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
 
                     monthlyLog.AddObject(ml);
                     monthlyLog.WriteToFile();
