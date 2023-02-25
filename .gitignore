@@ -210,3 +210,14 @@ FakesAssemblies/
 testing/Core7-NECN6.8/Climate-annual-log.csv
 testing/Core7-NECN6.8/Climate-future-input-log.csv
 testing/Core7-NECN6.8/Climate-spinup-input-log.csv
+testing/Core7-NECN6.10/Climate-annual-log.csv
+testing/Core7-NECN6.10/Climate-future-input-log.csv
+testing/Core7-NECN6.10/Climate-spinup-input-log.csv
+testing/Core7-NECN6.10/Landis-climate-log.txt
+testing/Core7-NECN6.10/Landis-log.txt
+testing/Core7-NECN6.10/NECN-calibrate-log.csv
+testing/Core7-NECN6.10/NECN-prob-establish-log.csv
+testing/Core7-NECN6.10/NECN-reproduction-log.csv
+testing/Core7-NECN6.10/NECN-succession-log-short.csv
+testing/Core7-NECN6.10/NECN-succession-log.csv
+testing/Core7-NECN6.10/NECN-succession-monthly-log.csv
