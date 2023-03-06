@@ -780,7 +780,8 @@ namespace Landis.Extension.Succession.NECN
                     double newrat = aneref1 + (xh2o / pet);
                     double slope = (1.0 - aneref3) / (aneref1 - aneref2);
                     anerob = 1.0 + slope * (newrat - aneref1);
-                    //PlugIn.ModelCore.UI.WriteLine("If higher threshold. newrat={0:0.0}, slope={1:0.00}, anerob={2:0.00}", newrat, slope, anerob);      
+                    //PlugIn.ModelCore.UI.WriteLine("If higher
+                    //old. newrat={0:0.0}, slope={1:0.00}, anerob={2:0.00}", newrat, slope, anerob);      
                 }
 
                 if (anerob < aneref3)

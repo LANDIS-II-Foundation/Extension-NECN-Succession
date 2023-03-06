@@ -107,7 +107,9 @@ namespace Landis.Extension.Succession.NECN
 
         private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> mortalityAboveThreshold; // optional
-        
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold2; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> mortalityAboveThreshold2; // optional
+
         private List<ISufficientLight> sufficientLight;
 
         //CWD Establishment
@@ -402,6 +404,8 @@ namespace Landis.Extension.Succession.NECN
 
         public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
         public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2 { get { return cwdThreshold2; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2 { get { return mortalityAboveThreshold2; } }
         public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
@@ -1298,6 +1302,18 @@ namespace Landis.Extension.Succession.NECN
             mortalityAboveThreshold[species] = VerifyRange(newValue, 0, 1);
         }
 
+        public void SetCWDThreshold2(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdThreshold2[species] = VerifyRange(newValue, -1000, 1000);
+        }
+
+        public void SetMortalityAboveThreshold2(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            mortalityAboveThreshold2[species] = VerifyRange(newValue, 0, 1);
+        }
+
         public void SetIntercept(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
@@ -1379,6 +1395,8 @@ namespace Landis.Extension.Succession.NECN
             //Drought variables
             cwdThreshold = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             mortalityAboveThreshold = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            cwdThreshold2 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            mortalityAboveThreshold2 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intercept = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaAge = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);

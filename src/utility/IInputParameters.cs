@@ -118,6 +118,8 @@ namespace Landis.Extension.Succession.NECN
         //Drought threshold parameters
         Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get; }
         Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2 { get; }
         //Multiple regression parameters
         Landis.Library.Parameters.Species.AuxParm<double> Intercept { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get; }

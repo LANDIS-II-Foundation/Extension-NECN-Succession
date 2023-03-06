@@ -19,6 +19,8 @@ namespace Landis.Extension.Succession.NECN
         //Drought species params        
         public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold;
         public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2;
         public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
@@ -39,6 +41,8 @@ namespace Landis.Extension.Succession.NECN
         {
             CWDThreshold            = parameters.CWDThreshold;
             MortalityAboveThreshold              = parameters.MortalityAboveThreshold;
+            CWDThreshold2 = parameters.CWDThreshold2;
+            MortalityAboveThreshold2 = parameters.MortalityAboveThreshold2;
             Intercept              = parameters.Intercept;
             BetaAge              = parameters.BetaAge;
             BetaTemp          = parameters.BetaTemp;
@@ -79,9 +83,13 @@ namespace Landis.Extension.Succession.NECN
 
             //Equation parameters
             int cwdThreshold = CWDThreshold[cohort.Species];
-            //PlugIn.ModelCore.UI.WriteLine("cwdThreshold is {0}", cwdThreshold);
+            PlugIn.ModelCore.UI.WriteLine("cwdThreshold is {0}", cwdThreshold);
 
             double mortalityAboveThreshold = MortalityAboveThreshold[cohort.Species];
+            int cwdThreshold2 = CWDThreshold2[cohort.Species];
+            PlugIn.ModelCore.UI.WriteLine("cwdThreshold2 is {0}", cwdThreshold2);
+
+            double mortalityAboveThreshold2 = MortalityAboveThreshold2[cohort.Species];
 
             double intercept = Intercept[cohort.Species];
             double betaAge = BetaAge[cohort.Species];
@@ -101,11 +109,20 @@ namespace Landis.Extension.Succession.NECN
             double M_leaf = 0;
             double M_wood = 0;
 
+            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("lagged CWD is {0}", cwdLagged);
+
             if (cwdLagged > cwdThreshold & cwdThreshold != 0)
             {
                 //p_mort = mortalityAboveThreshold + mortalitySlope * (waterDeficit - cwdThreshold); TODO implement
                 p_mort = mortalityAboveThreshold;
-                //PlugIn.ModelCore.UI.WriteLine("p_mort from CWD is", p_mort);
+                if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("p_mort from CWD is {0}", p_mort);
+            }
+
+            if (cwdLagged > cwdThreshold2 & cwdThreshold2 != 0)
+            {
+                //p_mort = mortalityAboveThreshold + mortalitySlope * (waterDeficit - cwdThreshold); TODO implement
+                p_mort = mortalityAboveThreshold2;
+                if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("p_mort from CWD2 is {0}", p_mort);
             }
 
 
@@ -117,6 +134,7 @@ namespace Landis.Extension.Succession.NECN
                     betaCWD * cwdLagged + betaNormCWD * normalCWD + intxnCWD_Biomass * cwdLagged * siteBiomass;
                 p_surv = Math.Exp(logOdds) / (Math.Exp(logOdds) + 1);
                 p_mort = (1 - Math.Pow(p_surv, 0.1));
+                if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("p_mort from regression is {0}", p_mort);
 
             }
 

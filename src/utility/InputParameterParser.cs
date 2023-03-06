@@ -564,6 +564,8 @@ namespace Landis.Extension.Succession.NECN
 
                     parameters.SetCWDThreshold(species, System.Convert.ToInt32(row["CWDThreshold"]));
                     parameters.SetMortalityAboveThreshold(species, System.Convert.ToDouble(row["MortalityAboveThreshold"]));
+                    parameters.SetCWDThreshold2(species, System.Convert.ToInt32(row["CWDThreshold2"]));
+                    parameters.SetMortalityAboveThreshold2(species, System.Convert.ToDouble(row["MortalityAboveThreshold2"]));
 
                     parameters.SetIntercept(species, System.Convert.ToDouble(row["Intercept"]));
                     parameters.SetBetaAge(species, System.Convert.ToDouble(row["BetaAge"]));

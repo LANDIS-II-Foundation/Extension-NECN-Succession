@@ -45,6 +45,8 @@ namespace Landis.Extension.Succession.NECN
         //Drought mortality variables
         public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold;
         public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2;
         public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
