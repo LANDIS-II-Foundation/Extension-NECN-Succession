@@ -35,7 +35,10 @@ namespace Landis.Extension.Succession.NECN
         string InitialSOM3NMapName { get; set; }
         string InitialDeadSurfaceMapName { get; set; }
         string InitialDeadSoilMapName { get; set; }
-
+        string NormalSWAMapName { get; set; }
+        string NormalCWDMapName { get; set; }
+        string SlopeMapName { get; set; }
+        string AspectMapName { get; set; }
         bool CalibrateMode { get; set; }
         WaterType WType {get;set;}
         double ProbEstablishAdjustment { get; set; }
@@ -43,6 +46,8 @@ namespace Landis.Extension.Succession.NECN
         bool SmokeModelOutputs { get; set; }
         bool SoilWater_Henne { get; set; }
         double GrassThresholdMultiplier { get; }
+        bool WriteSWA { get; set; }
+        bool WriteCWD { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -91,6 +96,10 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<int> GDDmax{get;}
         Landis.Library.Parameters.Species.AuxParm<int> MinJanTemp{get;}
         Landis.Library.Parameters.Species.AuxParm<double> MaxDrought{get;}
+        //CWD Establishment
+        Landis.Library.Parameters.Species.AuxParm<int> CWDBegin { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> CWDMax { get; }
+
         Landis.Library.Parameters.Species.AuxParm<double> LeafLongevity {get;}
         Landis.Library.Parameters.Species.AuxParm<bool> Epicormic {get;}
         Landis.Library.Parameters.Species.AuxParm<double> LeafLignin {get;}
@@ -105,6 +114,23 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<int> MaxANPP { get; }
         Landis.Library.Parameters.Species.AuxParm<int> MaxBiomass { get; }
         Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get; }
+
+        //Drought threshold parameters
+        Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2 { get; }
+        //Multiple regression parameters
+        Landis.Library.Parameters.Species.AuxParm<double> Intercept { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get; }
+
+
 
         double AtmosNslope {get;}
         double AtmosNintercept {get;}

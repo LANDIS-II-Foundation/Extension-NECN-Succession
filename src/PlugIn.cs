@@ -113,6 +113,18 @@ namespace Landis.Extension.Succession.NECN
                 Parameters.InitialSOM3NMapName);
             ReadMaps.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
 
+            //TODO only read if path isn't null
+            ReadMaps.ReadNormalSWAMap(Parameters.NormalSWAMapName);
+            ReadMaps.ReadNormalCWDMap(Parameters.NormalCWDMapName);
+            if (Parameters.SlopeMapName != null)
+            {
+                ReadMaps.ReadSlopeMap(Parameters.SlopeMapName);
+            }
+            if (Parameters.AspectMapName != null)
+            {
+                ReadMaps.ReadAspectMap(Parameters.AspectMapName);
+            }
+
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
             FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
@@ -140,6 +152,10 @@ namespace Landis.Extension.Succession.NECN
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
+            if (DroughtMortality.UseDrought)
+            {
+                DroughtMortality.Initialize(Parameters);
+            }
 
             //B_MAX = 0;
             //foreach (ISpecies species in ModelCore.Species)

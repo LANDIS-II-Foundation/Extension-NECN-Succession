@@ -89,6 +89,7 @@ namespace Landis.Extension.Succession.NECN
         //private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. 
         private static ISiteVar<int> dryDays;
 
+        //TODO why are some upper and some lower case?
         public static ISiteVar<double> AnnualNEE;
         public static ISiteVar<double> FireCEfflux;
         public static ISiteVar<double> FireNEfflux;
@@ -114,6 +115,19 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyHeteroResp;
         public static ISiteVar<double[]> MonthlySoilWaterContent;
 
+        //Drought params
+        //drought_todo
+        public static ISiteVar<double> droughtMort;
+        public static ISiteVar<List<double>> swa10;
+        public static ISiteVar<List<double>> temp10;
+        public static ISiteVar<List<double>> cwd10;
+        public static ISiteVar<double> swaLagged;
+        public static ISiteVar<double> tempLagged;
+        public static ISiteVar<double> cwdLagged;
+        public static ISiteVar<double> normalSWA;
+        public static ISiteVar<double> normalCWD;
+        public static ISiteVar<double> slope;
+        public static ISiteVar<double> aspect;
 
 
         //---------------------------------------------------------------------
@@ -219,6 +233,25 @@ namespace Landis.Extension.Succession.NECN
             HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
+            //if drought, then create these site vars
+            if (DroughtMortality.UseDrought)
+            {
+                droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+                temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+                cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+
+                swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
+                normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            }
+
+            slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
             PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
@@ -265,6 +298,12 @@ namespace Landis.Extension.Succession.NECN
                 MonthlySoilWaterContent[site]       = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
+
+                //drought_todo
+                swa10[site] = new List<double>(10);
+                temp10[site] = new List<double>(10);
+                cwd10[site] = new List<double>(10);
+
             }
             
         }
@@ -372,10 +411,23 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
             SiteVars.AnnualPotentialEvapotranspiration[site] = 0.0;
             SiteVars.WoodMortality[site] = 0.0;
+
+            SiteVars.DroughtMort[site] = 0.0;
+
             //SiteVars.DryDays[site] = 0;
 
             //SiteVars.FireEfflux[site] = 0.0;
-                        
+            //drought_todo
+            if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD)
+            {
+                if (PlugIn.ModelCore.CurrentTime >= 11)
+                {
+                    //PlugIn.ModelCore.UI.WriteLine("number of elements in SWA10 = {0}", SiteVars.SoilWater10[site].Count);
+                    SiteVars.SoilWater10[site].RemoveAt(0);
+                    SiteVars.Temp10[site].RemoveAt(0);
+                    SiteVars.CWD10[site].RemoveAt(0);
+                }
+            }
 
         }
 
@@ -1025,6 +1077,208 @@ namespace Landis.Extension.Succession.NECN
         }
 
         // --------------------------------------------------------------------
+        /// <summary>
+        /// Keep track of minimum soil water values
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> DroughtMort
+        {
+            get
+            {
+                return droughtMort;
+            }
+            set
+            {
+                droughtMort = value;
+            }
+
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Keep track of minimum soil water values
+        /// //TODO sam //drought_todo
+        /// </summary>
+        public static ISiteVar<List<double>> SoilWater10
+        {
+            get
+            {
+                return swa10;
+            }
+            set
+            {
+                swa10 = value;
+            }
+
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Keep track of maximum temperatures
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<List<double>> Temp10 //list of doubles
+        {
+            get
+            {
+                return temp10;
+            }
+            set
+            {
+                temp10 = value;
+            }
+
+
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Keep track of cwd
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<List<double>> CWD10 //list of doubles
+        {
+            get
+            {
+                return cwd10;
+            }
+            set
+            {
+                cwd10 = value;
+            }
+
+
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// SWA calculated for each site with appropriate time-lag
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> SWALagged //list of doubles
+        {
+            get
+            {
+                return swaLagged;
+            }
+            set
+            {
+                swaLagged = value;
+            }
+
+
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Temperature calculated for each site with appropriate time-lag
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> TempLagged //list of doubles
+        {
+            get
+            {
+                return tempLagged;
+            }
+            set
+            {
+                tempLagged = value;
+            }
+
+
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// CWD calculated for each site with appropriate time-lag
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> CWDLagged //list of doubles
+        {
+            get
+            {
+                return cwdLagged;
+            }
+            set
+            {
+                cwdLagged = value;
+            }
+
+
+        }
+
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Normal SWA 
+        /// //TODO sam //drought_todo
+        /// </summary>
+        public static ISiteVar<double> NormalSWA
+        {
+            get
+            {
+                return normalSWA;
+            }
+            set
+            {
+                normalSWA = value;
+            }
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Normal CWD
+        /// //TODO sam //drought_todo
+        /// </summary>
+        public static ISiteVar<double> NormalCWD
+        {
+            get
+            {
+                return normalCWD;
+            }
+            set
+            {
+                normalCWD = value;
+            }
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Slope
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> Slope
+        { //drought_todo
+            get
+            {
+                return slope;
+            }
+            set
+            {
+                slope = value;
+            }
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Aspect
+        /// //TODO sam
+        /// </summary>
+        public static ISiteVar<double> Aspect
+        { //drought_todo
+            get
+            {
+                return aspect;
+            }
+            set
+            {
+                aspect = value;
+            }
+
+        }
+
+        //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Annual Water Budget (PPT - AET)
         /// </summary>

@@ -16,7 +16,6 @@ namespace Landis.Extension.Succession.NECN
         public static WaterType WaterDecayFunction;
         public static bool SoilWaterVersion_Henne = false;
 
-
         // NOTE: *****************************************************************
         // ALL input data comments derived from the Century Model Interface Help -
         // Colorado State University, Fort Collins, CO  80523
@@ -203,7 +202,8 @@ namespace Landis.Extension.Succession.NECN
             CalibrateMode = parameters.CalibrateMode;
             SoilWaterVersion_Henne = parameters.SoilWater_Henne;
             WaterDecayFunction = parameters.WType;
-            
+
+
             // Structural decomposition rate, the fraction of the pool that turns over each year.
             litterParmsSurface.DecayRateStrucC = 3.9 / 100.0;//DEC1(1)  
             litterParmsSoil.DecayRateStrucC = 4.9 / 100.0; //DEC1(2)  
