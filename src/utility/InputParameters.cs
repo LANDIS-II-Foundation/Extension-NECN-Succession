@@ -1047,12 +1047,12 @@ namespace Landis.Extension.Succession.NECN
         public void SetMaxBiomass(ISpecies species, InputValue<int> newValue)
         {
             Debug.Assert(species != null);
-            maxBiomass[species] = VerifyRange(newValue, 2, 100000);
+            maxBiomass[species] = VerifyRange(newValue, 2, 300000);
         }
         public void SetMaxBiomass(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            maxBiomass[species] = VerifyRange(newValue, 2, 100000);
+            maxBiomass[species] = VerifyRange(newValue, 2, 300000);
         }
 
         public void SetGrowthLAI(ISpecies species, double newValue)
@@ -1076,7 +1076,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         public void SetLatitude(InputValue<double> newValue)
         {
-            latitude = VerifyRange(newValue, 0.0, 50.0);
+            latitude = VerifyRange(newValue, 0.0, 70.0);
         }
         //---------------------------------------------------------------------
        
