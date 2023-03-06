@@ -33,7 +33,7 @@ namespace Landis.Extension.Succession.NECN
             double soilMultiplier = 0.0;
             double minJanTempMultiplier = 0.0;
             double establishProbability = 0.0;
-            double soilwaterMultiplier = 0.0;
+            double soilwaterMultiplier = 1.0;
             double soilDrainMultiplier = 1.0;
 
             AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[climateRegion];
@@ -60,6 +60,11 @@ namespace Landis.Extension.Succession.NECN
 
             establishProbability += minMultiplier;
             establishProbability *= PlugIn.ProbEstablishAdjust;
+
+            if (OtherData.CalibrateMode)
+            {
+
+            }
 
             avgSoilMoisturelimit[species.Index, climateRegion.Index] += soilMultiplier;
             avgMATlimit[species.Index, climateRegion.Index] += tempMultiplier;
