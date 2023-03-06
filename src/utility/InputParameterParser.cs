@@ -462,8 +462,6 @@ namespace Landis.Extension.Succession.NECN
 
             InputVar<string> csv = new InputVar<string>("SpeciesParameters");
             ReadVar(csv);
-            //ReadVar(csv);
-            //{
                 CSVParser speciesParser = new CSVParser();
                 DataTable speciesTable = speciesParser.ParseToDataTable(csv.Value);
                 foreach (DataRow row in speciesTable.Rows)
@@ -493,17 +491,11 @@ namespace Landis.Extension.Succession.NECN
                     parameters.Grass[species] = ReadGrass(row);
                     parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 
-            }
-            
-           
             //--------- Read In Functional Group Table -------------------------------
             PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
 
             InputVar<string> func_csv = new InputVar<string>("FunctionalGroupParameters");
             ReadVar(func_csv);
-            //ReadVar(func_csv);
-            //if (ReadOptionalVar(func_csv))
-            //{
                 CSVParser functionalParser = new CSVParser();
                 DataTable functionalTable = functionalParser.ParseToDataTable(func_csv.Value);
                 foreach (DataRow row in functionalTable.Rows)
@@ -538,6 +530,7 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.MinLAI = ReadMinLAI(row);
 
             }
+
 
             //-------------------------
             //  Read Drought Mortality Parameters table
@@ -579,6 +572,7 @@ namespace Landis.Extension.Succession.NECN
             }
 
             //--------- Read In Fire Reductions Table ---------------------------
+
             PlugIn.ModelCore.UI.WriteLine("   Begin reading FIRE REDUCTION parameters.");
             ReadName(Names.FireReductionParameters);
 
