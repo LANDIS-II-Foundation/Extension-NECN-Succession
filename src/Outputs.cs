@@ -511,6 +511,25 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
+            string pathPET = MapNames.ReplaceTemplateVars(@"NECN\PET-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathPET, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = (int)((SiteVars.AnnualPotentialEvapotranspiration[site]));
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+            }
+
             string path = MapNames.ReplaceTemplateVars(@"NECN\SOMTC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path, PlugIn.ModelCore.Landscape.Dimensions))
             {
