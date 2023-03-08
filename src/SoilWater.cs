@@ -80,7 +80,7 @@ namespace Landis.Extension.Succession.NECN
             double waterFull = soilDepth * fieldCapacity;  //units of cm
             double waterEmpty = wiltingPoint * soilDepth;  // cm
 
-            PlugIn.ModelCore.UI.WriteLine("waterFull = {0}, waterEmpty = {1}", waterFull, waterEmpty);
+            //PlugIn.ModelCore.UI.WriteLine("waterFull = {0}, waterEmpty = {1}", waterFull, waterEmpty);
 
             if (waterFull == waterEmpty || wiltingPoint > fieldCapacity)
             {
@@ -95,12 +95,12 @@ namespace Landis.Extension.Succession.NECN
                 snow = Precipitation; 
                 Precipitation = 0.0;  
                 liquidSnowpack += snow;  //only tracking liquidsnowpack (water equivalent) and not the actual amount of snow on the ground (i.e. not snowpack).
-                PlugIn.ModelCore.UI.WriteLine("Let it snow!! snow={0}, liquidsnowpack={1}.", snow, liquidSnowpack);
+                //PlugIn.ModelCore.UI.WriteLine("Let it snow!! snow={0}, liquidsnowpack={1}.", snow, liquidSnowpack);
             }
             else
             {
                 soilWaterContent += Precipitation;
-                PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", Precipitation, soilWaterContent);
+                //PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", Precipitation, soilWaterContent);
             }
 
            
@@ -117,7 +117,7 @@ namespace Landis.Extension.Succession.NECN
 
                addToSoil = liquidSnowpack * snowMeltFraction;  //Amount of liquidsnowpack that melts = liquidsnowpack multiplied by the fraction that melts.
 
-                PlugIn.ModelCore.UI.WriteLine("Snow melts, addToSoil = {0}", addToSoil);
+                //PlugIn.ModelCore.UI.WriteLine("Snow melts, addToSoil = {0}", addToSoil);
 
                 //Subtracted melted snow from snowpack and add it to the soil
                liquidSnowpack = liquidSnowpack - addToSoil;  
@@ -126,7 +126,7 @@ namespace Landis.Extension.Succession.NECN
             
             //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             availableWaterMax = soilWaterContent;
-            PlugIn.ModelCore.UI.WriteLine("Original soilWaterContent = {0}.", soilWaterContent);
+            //PlugIn.ModelCore.UI.WriteLine("Original soilWaterContent = {0}.", soilWaterContent);
 
             //...Evaporate water from the snow pack (rewritten by Pulliam 9/94)
             //...Coefficient 0.87 relates to heat of fusion for ice vs. liquid water
@@ -168,7 +168,7 @@ namespace Landis.Extension.Succession.NECN
                 //Subtract stormflow from soil water
                 soilWaterContent -= stormFlow; //SF why does the water get removed twice? Once at line 161, again here
 
-                PlugIn.ModelCore.UI.WriteLine("Water Runs Off. stormflow={0}. soilWaterContent = {1}", stormFlow, soilWaterContent);
+                //PlugIn.ModelCore.UI.WriteLine("Water Runs Off. stormflow={0}. soilWaterContent = {1}", stormFlow, soilWaterContent);
             }
             
             //...Calculate bare soil water loss and interception  when air temperature is above freezing and no snow cover.
@@ -196,7 +196,7 @@ namespace Landis.Extension.Succession.NECN
                 //Subtract soil evaporation from soil water content
                soilWaterContent -= soilEvaporation; //SF this can reduce SWC to less than zero
 
-               PlugIn.ModelCore.UI.WriteLine("evaporation = {0}, soilWaterContent = {1}.", soilEvaporation, soilWaterContent);
+               //PlugIn.ModelCore.UI.WriteLine("evaporation = {0}, soilWaterContent = {1}.", soilEvaporation, soilWaterContent);
             }
             
 
@@ -209,7 +209,7 @@ namespace Landis.Extension.Succession.NECN
             {//TODO AET can be greater than soil water!!
                 
                 AET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0); //this will only be set to 0 if soilWaterContent < waterEmpty
-                PlugIn.ModelCore.UI.WriteLine("AET = {0}, remainingPET = {1}, soilWaterContent = {2}", AET, remainingPET, soilWaterContent);
+                //PlugIn.ModelCore.UI.WriteLine("AET = {0}, remainingPET = {1}, soilWaterContent = {2}", AET, remainingPET, soilWaterContent);
             }
 
             AET = Math.Min(AET, soilWaterContent); //SF: stops AET from reducing soil moisture to below zero
@@ -217,7 +217,7 @@ namespace Landis.Extension.Succession.NECN
             //Subtract transpiration from soil water content
             soilWaterContent -= AET;
 
-            PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWaterContent = {1}", AET, soilWaterContent);
+            //PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWaterContent = {1}", AET, soilWaterContent);
 
             //Leaching occurs. Drain baseflow fraction from holding tank.
             baseFlow = soilWaterContent * baseFlowFraction; //because SWC can be negative in line 211, baseFlow can be negative and add water to the site
@@ -227,7 +227,7 @@ namespace Landis.Extension.Succession.NECN
             //Subtract baseflow from soil water
             soilWaterContent -= baseFlow;
 
-            PlugIn.ModelCore.UI.WriteLine("Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
+            //PlugIn.ModelCore.UI.WriteLine("Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
 
             double surplus = Math.Max(soilWaterContent - waterFull, 0.0); //SF calculate water in excess of field capacity
             baseFlow += surplus; //SF add runoff to baseFlow to calculate leaching
@@ -246,7 +246,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
-            PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET);
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET);
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
@@ -553,7 +553,7 @@ namespace Landis.Extension.Succession.NECN
             else
                 oldJulianDay = julianMidMonth[11];
             double dryDayInterp = 0.0;
-            PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}, wiltPt={3:0.0}, waterAvail={4:0.0}, priorWater={5:0.0}.", month, beginGrowing, endGrowing, wiltingPoint, waterAvail, priorWaterAvail);
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}, wiltPt={3:0.0}, waterAvail={4:0.0}, priorWater={5:0.0}.", month, beginGrowing, endGrowing, wiltingPoint, waterAvail, priorWaterAvail);
             
             //Increment number of dry days, truncate at end of growing season
                 if ((julianDay > beginGrowing) && (oldJulianDay < endGrowing)) 
