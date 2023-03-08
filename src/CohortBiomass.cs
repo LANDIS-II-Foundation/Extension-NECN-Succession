@@ -680,17 +680,9 @@ namespace Landis.Extension.Succession.NECN
         }
 
         public static double calculateWater_Limit_versionDGS(double availableWater, ISpecies species)
-        //public static double WaterLimitEquation(double availableWater, ICohort cohort)
+     //This implements a 4-parameter water limit calculation, similar to soil T, which allows a unimodal response to 
+     //soil moisture and allows us to prevent rapid growth in wetlands by species that are intolerant of waterlogged soils
         {
-            //var vertex = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve1;
-            //var xIntercept = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
-            //var yIntercept = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
-
-            //var waterLimit = vertex * Math.Pow(availableWater - xIntercept, 2) + yIntercept;
-            //if (waterLimit > 1.0) waterLimit = 1.0;
-            //if (waterLimit < 0.01) waterLimit = 0.01;
-
-            //return waterLimit;
             var A1 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve1;
             var A2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
             var A3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
