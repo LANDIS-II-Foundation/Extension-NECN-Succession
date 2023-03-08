@@ -158,14 +158,16 @@ namespace Landis.Extension.Succession.NECN
             {
 
                 waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
-                soilWaterContent = waterFull;
+                //soilWaterContent = waterFull; //SF: stops stormflow from being removed twice
                 
                 //...Compute storm flow.
                 stormFlow = waterMovement * stormFlowFraction; //SF some of the waterMovement just disappears here -- the waterMovement that isn't part of stormFlow gets removed in line 158,
                 //but not accounted for as runoff
 
+                
                 //Subtract stormflow from soil water
-                soilWaterContent -= stormFlow; //SF why does the water get removed twice? Once at line 61, again here
+                soilWaterContent -= stormFlow; //SF why does the water get removed twice? Once at line 161, again here
+
                 PlugIn.ModelCore.UI.WriteLine("Water Runs Off. stormflow={0}. soilWaterContent = {1}", stormFlow, soilWaterContent);
             }
             
@@ -189,7 +191,7 @@ namespace Landis.Extension.Succession.NECN
                 remainingPET = PET;
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
-                //soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent); //SF: stops soilWaterContent from becoming negative
+                soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent); //SF: stops soilWaterContent from becoming negative
 
                 //Subtract soil evaporation from soil water content
                soilWaterContent -= soilEvaporation; //SF this can reduce SWC to less than zero
@@ -204,11 +206,13 @@ namespace Landis.Extension.Succession.NECN
             if (soilWaterContent > waterFull) //SF: this will never happen, because soil water is reduced to waterFull at line 155
                 AET = remainingPET;
             else
-            {//TODO AET can be greater than available water!!
+            {//TODO AET can be greater than soil water!!
                 
                 AET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0); //this will only be set to 0 if soilWaterContent < waterEmpty
                 PlugIn.ModelCore.UI.WriteLine("AET = {0}, remainingPET = {1}, soilWaterContent = {2}", AET, remainingPET, soilWaterContent);
             }
+
+            AET = Math.Min(AET, soilWaterContent); //SF: stops AET from reducing soil moisture to below zero
 
             //Subtract transpiration from soil water content
             soilWaterContent -= AET;
@@ -217,15 +221,18 @@ namespace Landis.Extension.Succession.NECN
 
             //Leaching occurs. Drain baseflow fraction from holding tank.
             baseFlow = soilWaterContent * baseFlowFraction; //because SWC can be negative in line 211, baseFlow can be negative and add water to the site
-            
+            baseFlow = Math.Max(baseFlow, 0.0); //SF: make sure baseflow > 0
+            baseFlow = Math.Min(baseFlow, soilWaterContent);
+
             //Subtract baseflow from soil water
             soilWaterContent -= baseFlow;
 
             PlugIn.ModelCore.UI.WriteLine("Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
 
-            //double surplus = Math.Max(soilWaterContent - waterFull, 0.0);
-            //baseFlow += surplus; //SF how do we stop soil water from accumulating past waterFull if we stop stormflow from double-removing water?
-                                                         
+            double surplus = Math.Max(soilWaterContent - waterFull, 0.0); //SF calculate water in excess of field capacity
+            baseFlow += surplus; //SF add runoff to baseFlow to calculate leaching
+            soilWaterContent -= surplus;
+            
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
             availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0);
 
