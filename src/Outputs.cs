@@ -433,7 +433,7 @@ namespace Landis.Extension.Succession.NECN
 
                 nitrogenDeposition[ecoregion.Index] = ClimateRegionData.MonthlyNDeposition[ecoregion][month];
                 streamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
-                soilWaterContent[ecoregion.Index] += SiteVars.MonthlySoilWaterContent[site][month];
+                soilWaterContent[ecoregion.Index] += SiteVars.MonthlyMeanSoilWaterContent[site][month]; //SF changed to mean
 
             }
             
@@ -660,7 +660,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (int)((SiteVars.SoilWaterContent[site]));
+                        pixel.MapCode.Value = (int)((SiteVars.MeanSoilWaterContent[site])); //changed to mean
                     }
                     else
                     {

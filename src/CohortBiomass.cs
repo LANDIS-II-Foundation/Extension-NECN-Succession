@@ -181,7 +181,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (OtherData.DGS_waterlimit) 
             {
-                double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
                 //double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / 100; //this works better to separate wetlands
 
                 if (volumetric_water < 0.001) volumetric_water = 0.001;
@@ -679,7 +679,7 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        public static double calculateWater_Limit_versionDGS(double availableWater, ISpecies species)
+        public static double calculateWater_Limit_versionDGS(double volumetricWater, ISpecies species)
      //This implements a 4-parameter water limit calculation, similar to soil T, which allows a unimodal response to 
      //soil moisture and allows us to prevent rapid growth in wetlands by species that are intolerant of waterlogged soils
         {
@@ -688,11 +688,11 @@ namespace Landis.Extension.Succession.NECN
             var A3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
             var A4 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve4;
 
-            var frac = (A2 - availableWater) / (A2 - A1);
+            var frac = (A2 - volumetricWater) / (A2 - A1);
             var waterLimit = 0.0;
             if (frac > 0.0)
                 waterLimit = Math.Exp(A3 / A4 * (1.0 - Math.Pow(frac, A4))) * Math.Pow(frac, A3);
-
+            //PlugIn.ModelCore.UI.WriteLine("soilWater = {0}, soil water limit = {1}", volumetricWater, waterLimit); //debug
             return waterLimit;
 
         }
