@@ -181,6 +181,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (OtherData.DGS_waterlimit) 
             {
+                double wilt_point = SiteVars.SoilWiltingPoint[site];
                 double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
                 //double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / 100; //this works better to separate wetlands
 
@@ -192,6 +193,9 @@ namespace Landis.Extension.Succession.NECN
                     PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
                     volumetric_water, limitH20);
                 }
+
+                if (volumetric_water < wilt_point) limitH20 = 0.001;
+
             }
             else
             {
@@ -682,6 +686,7 @@ namespace Landis.Extension.Succession.NECN
         public static double calculateWater_Limit_versionDGS(double volumetricWater, ISpecies species)
      //This implements a 4-parameter water limit calculation, similar to soil T, which allows a unimodal response to 
      //soil moisture and allows us to prevent rapid growth in wetlands by species that are intolerant of waterlogged soils
+     //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
         {
             var A1 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve1;
             var A2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;

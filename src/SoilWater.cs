@@ -259,12 +259,14 @@ namespace Landis.Extension.Succession.NECN
            // Compute the ratio of precipitation to PET
            double ratioPrecipPET = 0.0;
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET. 
+            //PlugIn.ModelCore.UI.WriteLine("Precip={0}, PET={1}, Ratio={2}.", Precipitation, PET, ratioPrecipPET); //debug
             //SF availableWater is not precip
+            //SF consider chaging to use precip; this would tend to reduce teh anaerobic effect in wet sites but increase it in dry sites
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
+            PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
@@ -279,7 +281,9 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
-            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, Math.Min(availableWaterMax, waterFull), soilWaterContent);//SF changed to use min and max per month. Max was too high, so capped at field capacity. TODO?
+            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, Math.Min(availableWaterMax, waterFull), soilWaterContent);
+            //SF changed to use min and max per month. Max was too high, so capped at field capacity. Same as elements that are averaged to get mean soil water content
+            //TODO
             return;
         }
 
@@ -723,20 +727,22 @@ namespace Landis.Extension.Succession.NECN
             //     pet       - potential evapotranspiration
             //     rprpet    - actual (RAIN+IRRACT+AVH2O[3])/PET ratio
 
-            double aneref1 = OtherData.RatioPrecipPETMaximum;  //This value is 1.5
-            double aneref2 = OtherData.RatioPrecipPETMinimum;   //This value is 3.0
-            double aneref3 = OtherData.AnerobicEffectMinimum;   //This value is 0.3
+            double aneref1 = 0.35;// OtherData.RatioPrecipPETMaximum;  //This value is 1.5
+            double aneref2 = 1.1; // OtherData.RatioPrecipPETMinimum;   //This value is 3.0
+            double aneref3 = 0.008; // OtherData.AnerobicEffectMinimum;   //This value is 0.3
 
             double anerob = 1.0;
 
             //...Determine if RAIN/PET ratio is GREATER than the ratio with
             //     maximum impact.
 
+            //SF this is really seldom active! And it will apply to the whole climate region (mediated by soil drainage)
+
             if ((ratioPrecipPET > aneref1) && (tave > 2.0))
             {
                 double xh2o = (ratioPrecipPET - aneref1) * pet * (1.0 - drain);
 
-                if (xh2o > 0)
+                if (xh2o > 0) //SF this must be true if we're in this loop
                 {
                     double newrat = aneref1 + (xh2o / pet);
                     double slope = (1.0 - aneref3) / (aneref1 - aneref2);
@@ -746,7 +752,7 @@ namespace Landis.Extension.Succession.NECN
 
                 if (anerob < aneref3)
                     anerob = aneref3;
-                //PlugIn.ModelCore.UI.WriteLine("Lower than threshold. Anaerobic={0}", anerob);      
+               //PlugIn.ModelCore.UI.WriteLine("Lower than threshold. Anaerobic={0}", anerob);      
             }
             //PlugIn.ModelCore.UI.WriteLine("ratioPrecipPET={0:0.0}, tave={1:0.00}, pet={2:0.00}, AnaerobicFactor={3:0.00}, Drainage={4:0.00}", ratioPrecipPET, tave, pet, anerob, drain);         
             //PlugIn.ModelCore.UI.WriteLine("Anaerobic Effect = {0:0.00}.", anerob);
