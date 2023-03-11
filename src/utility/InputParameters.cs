@@ -1294,7 +1294,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetCWDThreshold(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            cwdThreshold[species] = VerifyRange(newValue, -1000, 1000);
+            cwdThreshold[species] = VerifyRange(newValue, 0, 100000);
         }
 
         public void SetMortalityAboveThreshold(ISpecies species, double newValue)
@@ -1306,7 +1306,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetCWDThreshold2(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            cwdThreshold2[species] = VerifyRange(newValue, -1000, 1000);
+            cwdThreshold2[species] = VerifyRange(newValue, 0, 100000);
         }
 
         public void SetMortalityAboveThreshold2(ISpecies species, double newValue)
