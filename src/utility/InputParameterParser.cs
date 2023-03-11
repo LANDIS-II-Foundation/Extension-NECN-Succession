@@ -484,7 +484,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
                 parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
                 parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
-                parameters.SetCWDBegin(species, System.Convert.ToInt32(row["CWDBegin"]));
+                parameters.SetCWDBegin(species, System.Convert.ToInt32(row["CWDBegin"]));//TODO make optional
                 parameters.SetCWDMax(species, System.Convert.ToInt32(row["CWDMax"]));
                 parameters.Grass[species] = ReadGrass(row);
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));

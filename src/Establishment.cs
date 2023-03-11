@@ -17,12 +17,14 @@ namespace Landis.Extension.Succession.NECN
         //private static StreamWriter log;
         private static double[,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
         private static double[,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
-        private static double[,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
+        private static double[,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        private static double[,] avgCWDlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static int[,] numberCalculations = new int[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgDryDays = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgBeginGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgEndGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        private static double[,] avgCWD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
 
 
         public static double Calculate(ISpecies species, ActiveSite site)
@@ -57,11 +59,14 @@ namespace Landis.Extension.Succession.NECN
             avgSoilMoisturelimit[species.Index, climateRegion.Index] += soilMultiplier;
             avgMATlimit[species.Index, climateRegion.Index] += tempMultiplier;
             avgJanuaryTlimit[species.Index, climateRegion.Index] += minJanTempMultiplier;
+            avgCWDlimit[species.Index, climateRegion.Index] += cwdMultiplier;
             avgPest[species.Index, climateRegion.Index] += establishProbability;
+            
 
             avgDryDays[species.Index, climateRegion.Index] += ecoDryDays;
             avgBeginGDD[species.Index, climateRegion.Index] += ecoClimate.BeginGrowing;
             avgEndGDD[species.Index, climateRegion.Index] += ecoClimate.EndGrowing;
+            avgCWD[species.Index, climateRegion.Index] += SiteVars.AnnualClimaticWaterDeficit[site];
 
             numberCalculations[species.Index, climateRegion.Index]++;
 
@@ -87,12 +92,14 @@ namespace Landis.Extension.Succession.NECN
                         elog.AvgTempMult = (avgMATlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.AvgMinJanTempMult = (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.AvgSoilMoistureMult = (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.AvgCWDLimit = (avgCWDlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.AvgProbEst = (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.DryDays = (avgDryDays[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.BeginGDD = (avgBeginGDD[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.EndGDD = (avgEndGDD[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.AvgCWD = (avgCWD[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
 
-                        Outputs.establishmentLog.AddObject(elog);
+                    Outputs.establishmentLog.AddObject(elog);
                         Outputs.establishmentLog.WriteToFile();
                 }
             }
@@ -100,14 +107,16 @@ namespace Landis.Extension.Succession.NECN
         avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgCWDlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgPest = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         numberCalculations = new int[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgDryDays = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgBeginGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgEndGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgCWD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
 
 
-    }
+        }
 
 
     //---------------------------------------------------------------------------
