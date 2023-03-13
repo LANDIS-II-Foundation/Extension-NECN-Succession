@@ -200,7 +200,7 @@ namespace Landis.Extension.Succession.NECN
                 bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                remainingPET = PET;
+                remainingPET = PET; //SF why is PET reset here? it should be used to cap AET in line 214
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
                 //Subtract soil evaporation from soil water content
@@ -422,7 +422,7 @@ namespace Landis.Extension.Succession.NECN
                 bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                remainingPET = PET;
+                //remainingPET = PET;
 
                 if (OtherData.CalibrateMode)
                     PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
@@ -472,7 +472,7 @@ namespace Landis.Extension.Succession.NECN
                 actualET = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
             }
             actualET = Math.Min(soilWaterContent - waterEmpty, actualET);
-
+            actualET = Math.Max(actualET, 0.0);
 
             AET = actualET;
             if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, AET);
@@ -537,9 +537,11 @@ namespace Landis.Extension.Succession.NECN
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
-            SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
+            SiteVars.AnnualClimaticWaterDeficit[site] += (remainingPET - actualET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
-            PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, actualET);
+            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, remainingPET = {2}, AET={3}, monthly CWD = {4}," +
+                "cumulative CWD = {5}.", 
+                month, PET, remainingPET, actualET, (remainingPET - actualET) * 10.0, SiteVars.AnnualClimaticWaterDeficit[site]);
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
@@ -550,9 +552,9 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
-            if (month == 0)
-                SiteVars.DryDays[site] = 0;
-            else
+            //if (month == 0) //I think this is dealt with already when annual accumulators are reset
+            //    SiteVars.DryDays[site] = 0;
+            //else
                 SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
 
             return;
