@@ -422,7 +422,7 @@ namespace Landis.Extension.Succession.NECN
                 bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                //remainingPET = PET;
+                remainingPET = PET;
 
                 if (OtherData.CalibrateMode)
                     PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET={1}.", month, remainingPET);
