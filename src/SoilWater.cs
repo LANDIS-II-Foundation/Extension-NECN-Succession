@@ -471,7 +471,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 actualET = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
             }
-            actualET = Math.Min(soilWaterContent - waterEmpty, actualET);
+            //actualET = Math.Min(soilWaterContent - waterEmpty, actualET); //SF removed: redundant with line 472
             actualET = Math.Max(actualET, 0.0);
 
             AET = actualET;
