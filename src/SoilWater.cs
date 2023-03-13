@@ -173,8 +173,8 @@ namespace Landis.Extension.Succession.NECN
             {
 
                 waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
-                soilWaterContent = waterFull;
-
+                //soilWaterContent = waterFull; //SF deleted: original code removes stormflow twice. This change stops stormflow from being removed twice
+                
                 //...Compute storm flow.
                 stormFlow = waterMovement * stormFlowFraction;
 
@@ -202,6 +202,8 @@ namespace Landis.Extension.Succession.NECN
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
                 remainingPET = PET; //SF why is PET reset here? it should be used to cap AET in line 214
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
+
+                soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent); //SF added: stops soilWaterContent from becoming negative
 
                 //Subtract soil evaporation from soil water content
                 soilWaterContent -= soilEvaporation;
