@@ -196,7 +196,7 @@ namespace Landis.Extension.Succession.NECN
                 bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
                 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                remainingPET = PET; //SF why does this reset here?
+                remainingPET = PET;
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
                 soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent); //SF added: stops soilWaterContent from becoming negative
