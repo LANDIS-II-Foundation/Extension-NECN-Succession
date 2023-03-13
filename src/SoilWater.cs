@@ -166,7 +166,7 @@ namespace Landis.Extension.Succession.NECN
             {
 
                 waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); // How much water should move during a storm event, which is based on how much water the soil can hold.
-                //soilWaterContent = waterFull; //SF: original code removes stormflow twice. This change stops stormflow from being removed twice
+                //soilWaterContent = waterFull; //SF deleted: original code removes stormflow twice. This change stops stormflow from being removed twice
                 
                 //...Compute storm flow.
                 stormFlow = waterMovement * stormFlowFraction; //SF some of the waterMovement just disappears here -- the waterMovement that isn't part of stormFlow gets removed in line 158,
@@ -196,10 +196,10 @@ namespace Landis.Extension.Succession.NECN
                 bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
                 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                remainingPET = PET;
+                remainingPET = PET; //SF why does this reset here?
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
-                soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent); //SF: stops soilWaterContent from becoming negative
+                soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent); //SF added: stops soilWaterContent from becoming negative
 
                 //Subtract soil evaporation from soil water content
                soilWaterContent -= soilEvaporation; //SF this can reduce SWC to less than zero
@@ -266,7 +266,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
-            PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
