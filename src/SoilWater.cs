@@ -253,7 +253,7 @@ namespace Landis.Extension.Succession.NECN
 
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
             availableWater = (availableWaterMax + availableWaterMin)/ 2.0;
-            double meanSoilWater = (Math.Min(availableWaterMax, waterFull) + soilWaterContent) / 2.0; //SF added this as relevant variable for physiology. Actual end-of-month soil moisture is tracked in SoilWaterContent
+            double meanSoilWater = (availableWaterMax + soilWaterContent) / 2.0; //SF added this as relevant variable for physiology. Actual end-of-month soil moisture is tracked in SoilWaterContent
             
 
            // Compute the ratio of precipitation to PET
@@ -281,7 +281,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
-            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, Math.Min(availableWaterMax, waterFull), soilWaterContent);
+            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
             //SF changed to use min and max per month. Max was too high, so capped at field capacity. Same as elements that are averaged to get mean soil water content
             //TODO
             return;
