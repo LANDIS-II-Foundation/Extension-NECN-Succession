@@ -28,15 +28,7 @@ namespace Landis.Extension.Succession.NECN
         public static double availableSW;
         public static double availableSWFraction;
         public static double availableWaterTranspiration;  //  (availableWaterMax + priorAvailableWaterMin) / 2.0;
-        public static double cimodifier;
-        public static double jh2o;
-        public static double jco2;
-        public static double wuescalar;
-        public static double wue; // JCO2 / JH2O
-        public static double grosspsn;
         public static double transpiration;
-        public static double co2;
-
 
         public static void WriteLogFile()
         {
