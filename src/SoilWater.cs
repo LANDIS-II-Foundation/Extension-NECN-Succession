@@ -727,6 +727,7 @@ namespace Landis.Extension.Succession.NECN
             //     pet       - potential evapotranspiration
             //     rprpet    - actual (RAIN+IRRACT+AVH2O[3])/PET ratio
 
+            //SF changed to match paper from Rocky Mountain fen sites: 
             double aneref1 = 0.35;// OtherData.RatioPrecipPETMaximum;  //This value is 1.5
             double aneref2 = 1.1; // OtherData.RatioPrecipPETMinimum;   //This value is 3.0
             double aneref3 = 0.008; // OtherData.AnerobicEffectMinimum;   //This value is 0.3

@@ -109,9 +109,9 @@ namespace Landis.Extension.Succession.NECN
                 return tempcurve3;
             }
             set {
-                    if (value  < 0.0 || value  > 5.0)
-                        throw new InputValueException(value.ToString(),
-                            "Decay rate must be between 0 and 5.0");
+                    //if (value  < 0.0 || value  > 5.0)
+                    //    throw new InputValueException(value.ToString(),
+                    //        "Decay rate must be between 0 and 5.0");
                     tempcurve3 = value;
             }
         }
@@ -127,9 +127,9 @@ namespace Landis.Extension.Succession.NECN
                 return tempcurve4;
             }
             set {
-                    if (value  < 0.0 || value  > 10.0)
-                        throw new InputValueException(value.ToString(),
-                            "Decay rate must be between 0 and 10.0");
+                    //if (value  < 0.0 || value  > 10.0)
+                    //    throw new InputValueException(value.ToString(),
+                    //        "Decay rate must be between 0 and 10.0");
                     tempcurve4 = value;
             }
         }
