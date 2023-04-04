@@ -39,7 +39,7 @@ namespace Landis.Extension.Succession.NECN
         bool CalibrateMode { get; set; }
         WaterType WType {get;set;}
         double ProbEstablishAdjustment { get; set; }
-        double[] MaximumShadeLAI { get; }
+        //double[] MaximumShadeLAI { get; }
         bool SmokeModelOutputs { get; set; }
         bool SoilWater_Henne { get; set; }
         double GrassThresholdMultiplier { get; }
@@ -76,10 +76,10 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Definitions of sufficient light probabilities.
         /// </summary>
-        List<ISufficientLight> LightClassProbabilities
-        {
-            get;
-        }
+        //List<ISufficientLight> LightClassProbabilities
+        //{
+        //    get;
+        //}
 
         //---------------------------------------------------------------------
 
@@ -105,6 +105,8 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<int> MaxANPP { get; }
         Landis.Library.Parameters.Species.AuxParm<int> MaxBiomass { get; }
         Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> LightLAIMean { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> LightLAIDispersion { get; }
 
         double AtmosNslope {get;}
         double AtmosNintercept {get;}
