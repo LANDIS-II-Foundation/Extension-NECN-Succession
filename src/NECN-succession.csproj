@@ -27,7 +27,9 @@
   <ItemGroup>
     <PackageReference Include="Landis.Core" Version="2.0.0" />
     <PackageReference Include="Landis.Core.Implementation" Version="2.0.0" />
-  </ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+
+	</ItemGroup>
   
   <ItemGroup>
     <Reference Include="Landis.Library.AgeOnlyCohorts-v3">
