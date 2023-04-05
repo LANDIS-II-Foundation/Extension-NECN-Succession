@@ -486,7 +486,7 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
             byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
             bool isSufficientlight = false;
-            double lightProbability = 0.0;
+            //double lightProbability = 0.0;
             //bool found = false;
 
             int bestShadeClass = 0; // the best shade class for the species; Chihiro
@@ -494,12 +494,13 @@ namespace Landis.Extension.Succession.NECN
 
             var random = new Troschuetz.Random.TRandom();
 
-            //  double  possibleIgnitions=ModelCore.PoissonDistribution.Lambda = Math.Pow(Math.E, (b0 + (b1 * fireWeatherIndex)));
+            ModelCore.WeibullDistribution.Alpha = 2.4;
+            ModelCore.LognormalDistribution.Sigma = 0.0;
+            double randomLAI = PlugIn.ModelCore.NormalDistribution.NextDouble();
+            double actualLAI = SiteVars.LAI[site];
 
-
-            ModelCore.LognormalDistribution = 2.4;
-            ModelCore.LognormalDistribution.Sigma = 2.4;
-            lightProbability = PlugIn.ModelCore.NormalDistribution.La;
+            if (randomLAI > actualLAI)
+                isSufficientlight = true;
 
             //foreach (ISufficientLight lights in sufficientLight)
             //{
