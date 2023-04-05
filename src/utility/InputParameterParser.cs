@@ -331,87 +331,87 @@ namespace Landis.Extension.Succession.NECN
             //--------------------------
             //  LAI and light table
 
-            ReadName("MaximumLAI"); 
-            InputVar<byte> shadeClassVar = new InputVar<byte>("Shade Class");
-            InputVar<double> maxLAI = new InputVar<double>("Maximum LAI");
+            //ReadName("MaximumLAI"); 
+            //InputVar<byte> shadeClassVar = new InputVar<byte>("Shade Class");
+            //InputVar<double> maxLAI = new InputVar<double>("Maximum LAI");
 
-            for (byte shadeClass = 1; shadeClass <= 5; shadeClass++) {
-                if (AtEndOfInput)
-                    throw NewParseException("Expected a line with available light class {0}", shadeClass);
+            //for (byte shadeClass = 1; shadeClass <= 5; shadeClass++) {
+            //    if (AtEndOfInput)
+            //        throw NewParseException("Expected a line with available light class {0}", shadeClass);
 
-                StringReader currentLine = new StringReader(CurrentLine);
-                ReadValue(shadeClassVar, currentLine);
-                if (shadeClassVar.Value.Actual != shadeClass)
-                    throw new InputValueException(shadeClassVar.Value.String,
-                                                  "Expected the available light class {0}", shadeClass);
+            //    StringReader currentLine = new StringReader(CurrentLine);
+            //    ReadValue(shadeClassVar, currentLine);
+            //    if (shadeClassVar.Value.Actual != shadeClass)
+            //        throw new InputValueException(shadeClassVar.Value.String,
+            //                                      "Expected the available light class {0}", shadeClass);
                 
-                ReadValue(maxLAI, currentLine);
-                parameters.SetMaximumShadeLAI(shadeClass, maxLAI.Value);
+            //    ReadValue(maxLAI, currentLine);
+            //    parameters.SetMaximumShadeLAI(shadeClass, maxLAI.Value);
 
-                CheckNoDataAfter("the " + maxLAI + " column", currentLine);
-                GetNextLine();
-            }
+            //    CheckNoDataAfter("the " + maxLAI + " column", currentLine);
+            //    GetNextLine();
+            //}
 
             //----------------------------------------------------------
             //  Read table of sufficient light probabilities.
             //  Available light classes are in increasing order.
-            ReadName("LightEstablishmentTable");
+            //ReadName("LightEstablishmentTable");
 
-            InputVar<byte> sc = new InputVar<byte>("Available Light Class");
-            InputVar<double> pl0 = new InputVar<double>("Probability of Germination - Light Level 0");
-            InputVar<double> pl1 = new InputVar<double>("Probability of Germination - Light Level 1");
-            InputVar<double> pl2 = new InputVar<double>("Probability of Germination - Light Level 2");
-            InputVar<double> pl3 = new InputVar<double>("Probability of Germination - Light Level 3");
-            InputVar<double> pl4 = new InputVar<double>("Probability of Germination - Light Level 4");
-            InputVar<double> pl5 = new InputVar<double>("Probability of Germination - Light Level 5");
+            //InputVar<byte> sc = new InputVar<byte>("Available Light Class");
+            //InputVar<double> pl0 = new InputVar<double>("Probability of Germination - Light Level 0");
+            //InputVar<double> pl1 = new InputVar<double>("Probability of Germination - Light Level 1");
+            //InputVar<double> pl2 = new InputVar<double>("Probability of Germination - Light Level 2");
+            //InputVar<double> pl3 = new InputVar<double>("Probability of Germination - Light Level 3");
+            //InputVar<double> pl4 = new InputVar<double>("Probability of Germination - Light Level 4");
+            //InputVar<double> pl5 = new InputVar<double>("Probability of Germination - Light Level 5");
 
-            int previousNumber = 0;
+            //int previousNumber = 0;
 
-            while (! AtEndOfInput && CurrentName != Names.SpeciesParameters
-                                  && previousNumber != 6) {
-                StringReader currentLine = new StringReader(CurrentLine);
+            //while (! AtEndOfInput && CurrentName != Names.SpeciesParameters
+            //                      && previousNumber != 6) {
+            //    StringReader currentLine = new StringReader(CurrentLine);
 
-                ISufficientLight suffLight = new SufficientLight();
+            //    ISufficientLight suffLight = new SufficientLight();
 
-                ReadValue(sc, currentLine);
-                suffLight.ShadeClass = sc.Value;
+            //    ReadValue(sc, currentLine);
+            //    suffLight.ShadeClass = sc.Value;
 
-                //  Check that the current shade class is 1 more than
-                //  the previous number (numbers are must be in increasing order).
-                if (sc.Value.Actual != (byte) previousNumber + 1)
-                    throw new InputValueException(sc.Value.String,
-                                                  "Expected the severity number {0}",
-                                                  previousNumber + 1);
-                previousNumber = (int) sc.Value.Actual;
+            //    //  Check that the current shade class is 1 more than
+            //    //  the previous number (numbers are must be in increasing order).
+            //    if (sc.Value.Actual != (byte) previousNumber + 1)
+            //        throw new InputValueException(sc.Value.String,
+            //                                      "Expected the severity number {0}",
+            //                                      previousNumber + 1);
+            //    previousNumber = (int) sc.Value.Actual;
 
-                ReadValue(pl0, currentLine);
-                suffLight.ProbabilityLight0 = pl0.Value;
+            //    ReadValue(pl0, currentLine);
+            //    suffLight.ProbabilityLight0 = pl0.Value;
 
-                ReadValue(pl1, currentLine);
-                suffLight.ProbabilityLight1 = pl1.Value;
+            //    ReadValue(pl1, currentLine);
+            //    suffLight.ProbabilityLight1 = pl1.Value;
 
-                ReadValue(pl2, currentLine);
-                suffLight.ProbabilityLight2 = pl2.Value;
+            //    ReadValue(pl2, currentLine);
+            //    suffLight.ProbabilityLight2 = pl2.Value;
 
-                ReadValue(pl3, currentLine);
-                suffLight.ProbabilityLight3 = pl3.Value;
+            //    ReadValue(pl3, currentLine);
+            //    suffLight.ProbabilityLight3 = pl3.Value;
 
-                ReadValue(pl4, currentLine);
-                suffLight.ProbabilityLight4 = pl4.Value;
+            //    ReadValue(pl4, currentLine);
+            //    suffLight.ProbabilityLight4 = pl4.Value;
 
-                ReadValue(pl5, currentLine);
-                suffLight.ProbabilityLight5 = pl5.Value;
+            //    ReadValue(pl5, currentLine);
+            //    suffLight.ProbabilityLight5 = pl5.Value;
 
-                parameters.LightClassProbabilities.Add(suffLight);
+            //    //parameters.LightClassProbabilities.Add(suffLight);
 
-                CheckNoDataAfter("the " + pl5.Name + " column",
-                                 currentLine);
-                GetNextLine();
-            }
-            if (parameters.LightClassProbabilities.Count == 0)
-                throw NewParseException("No sufficient light probabilities defined.");
-            if (previousNumber != 5)
-                throw NewParseException("Expected shade class {0}", previousNumber + 1);
+            //    CheckNoDataAfter("the " + pl5.Name + " column",
+            //                     currentLine);
+            //    GetNextLine();
+            //}
+            //if (parameters.LightClassProbabilities.Count == 0)
+            //    throw NewParseException("No sufficient light probabilities defined.");
+            //if (previousNumber != 5)
+            //    throw NewParseException("Expected shade class {0}", previousNumber + 1);
 
             //-------------------------
             //  Read Species Parameters table
@@ -419,34 +419,36 @@ namespace Landis.Extension.Succession.NECN
 
             InputVar<string> csv = new InputVar<string>("SpeciesParameters");
             ReadVar(csv);
-                CSVParser speciesParser = new CSVParser();
-                DataTable speciesTable = speciesParser.ParseToDataTable(csv.Value);
-                foreach (DataRow row in speciesTable.Rows)
-                {
-                    ISpecies species = ReadSpecies(System.Convert.ToString(row["SpeciesCode"]));
-                    parameters.SetFunctionalType(species, System.Convert.ToInt32(row["FunctionalGroupIndex"]));
-                    parameters.NFixer[species] = System.Convert.ToBoolean(row["NitrogenFixer"]);
-                    parameters.SetGDDmin(species, System.Convert.ToInt32(row["GDDMinimum"]));
-                    parameters.SetGDDmax(species, System.Convert.ToInt32(row["GDDMaximum"]));
-                    parameters.SetMinJanTemp(species, System.Convert.ToInt32(row["MinJanuaryT"]));
-                    parameters.SetMaxDrought(species, System.Convert.ToDouble(row["MaxDrought"]));
-                    parameters.SetLeafLongevity(species, System.Convert.ToDouble(row["LeafLongevity"]));
-                    parameters.Epicormic[species] = System.Convert.ToBoolean(row["Epicormic"]);
-                    parameters.SetLeafLignin(species, System.Convert.ToDouble(row["LeafLignin"]));
-                    parameters.SetFineRootLignin(species, System.Convert.ToDouble(row["FineRootLignin"]));
-                    parameters.SetWoodLignin(species, System.Convert.ToDouble(row["WoodLignin"]));
-                    parameters.SetCoarseRootLignin(species, System.Convert.ToDouble(row["CoarseRootLignin"]));
-                    parameters.SetLeafCN(species, System.Convert.ToDouble(row["LeafCN"]));
-                    parameters.SetFineRootCN(species, System.Convert.ToDouble(row["FineRootCN"]));
-                    parameters.SetWoodCN(species, System.Convert.ToDouble(row["WoodCN"]));
-                    parameters.SetCoarseRootCN(species, System.Convert.ToDouble(row["CoarseRootCN"]));
-                    parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
-                    parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
-                    parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
-                    parameters.Grass[species] = ReadGrass(row);
-                    parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
+            CSVParser speciesParser = new CSVParser();
+            DataTable speciesTable = speciesParser.ParseToDataTable(csv.Value);
+            foreach (DataRow row in speciesTable.Rows)
+            {
+                ISpecies species = ReadSpecies(System.Convert.ToString(row["SpeciesCode"]));
+                parameters.SetFunctionalType(species, System.Convert.ToInt32(row["FunctionalGroupIndex"]));
+                parameters.NFixer[species] = System.Convert.ToBoolean(row["NitrogenFixer"]);
+                parameters.SetGDDmin(species, System.Convert.ToInt32(row["GDDMinimum"]));
+                parameters.SetGDDmax(species, System.Convert.ToInt32(row["GDDMaximum"]));
+                parameters.SetMinJanTemp(species, System.Convert.ToInt32(row["MinJanuaryT"]));
+                parameters.SetMaxDrought(species, System.Convert.ToDouble(row["MaxDrought"]));
+                parameters.SetLeafLongevity(species, System.Convert.ToDouble(row["LeafLongevity"]));
+                parameters.Epicormic[species] = System.Convert.ToBoolean(row["Epicormic"]);
+                parameters.SetLeafLignin(species, System.Convert.ToDouble(row["LeafLignin"]));
+                parameters.SetFineRootLignin(species, System.Convert.ToDouble(row["FineRootLignin"]));
+                parameters.SetWoodLignin(species, System.Convert.ToDouble(row["WoodLignin"]));
+                parameters.SetCoarseRootLignin(species, System.Convert.ToDouble(row["CoarseRootLignin"]));
+                parameters.SetLeafCN(species, System.Convert.ToDouble(row["LeafCN"]));
+                parameters.SetFineRootCN(species, System.Convert.ToDouble(row["FineRootCN"]));
+                parameters.SetWoodCN(species, System.Convert.ToDouble(row["WoodCN"]));
+                parameters.SetCoarseRootCN(species, System.Convert.ToDouble(row["CoarseRootCN"]));
+                parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
+                parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
+                parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
+                parameters.Grass[species] = ReadGrass(row);
+                parameters.SetLightLAImean(species, System.Convert.ToInt32(row["LightLAImean"]));
+                parameters.SetLightLAIdispersion(species, System.Convert.ToInt32(row["LightLAIdispersion"]));
+                parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 
-                }
+            }
 
             //--------- Read In Functional Group Table -------------------------------
             PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");

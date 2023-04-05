@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
+
 namespace Landis.Extension.Succession.NECN
 {
     public class PlugIn
@@ -25,7 +27,7 @@ namespace Landis.Extension.Succession.NECN
         public static double[] ShadeLAI;
         public static double AnnualWaterBalance;
 
-        private List<ISufficientLight> sufficientLight;
+        //private List<ISufficientLight> sufficientLight;
         public static string SoilCarbonMapNames = null;
         public static int SoilCarbonMapFrequency;
         public static string SoilNitrogenMapNames = null;
@@ -64,7 +66,6 @@ namespace Landis.Extension.Succession.NECN
                                             ICore mCore)
         {
             modelCore = mCore;
-            //SiteVars.Initialize(); // this use functional type parameter
             InputParametersParser parser = new InputParametersParser();
             Parameters = Landis.Data.Load<IInputParameters>(dataFile, parser);
 
@@ -88,7 +89,7 @@ namespace Landis.Extension.Succession.NECN
             PlugIn.ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
             Timestep = Parameters.Timestep;
             SuccessionTimeStep = Timestep;
-            sufficientLight = Parameters.LightClassProbabilities;
+            //sufficientLight = Parameters.LightClassProbabilities;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
             MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); 
 
@@ -118,7 +119,7 @@ namespace Landis.Extension.Succession.NECN
             FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
             ClimateRegionData.Initialize(Parameters);
 
-            ShadeLAI = Parameters.MaximumShadeLAI;
+            //ShadeLAI = Parameters.MaximumShadeLAI;
             OtherData.Initialize(Parameters);
             FireEffects.Initialize(Parameters);
 
@@ -140,21 +141,13 @@ namespace Landis.Extension.Succession.NECN
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
-
-            //B_MAX = 0;
-            //foreach (ISpecies species in ModelCore.Species)
-            //{
-            //    if (SpeciesData.Max_Biomass[species] > B_MAX)
-            //        B_MAX = SpeciesData.Max_Biomass[species];
-            //}
-
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
                 Main.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
             }
 
-                Outputs.WritePrimaryLogFile(0);
+            Outputs.WritePrimaryLogFile(0);
             Outputs.WriteShortPrimaryLogFile(0);
 
 
@@ -211,30 +204,30 @@ namespace Landis.Extension.Succession.NECN
 
         public override byte ComputeShade(ActiveSite site)
         {
-            IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+            //IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
-            byte finalShade = 0;
+            //byte finalShade = 0;
 
-            if (!ecoregion.Active)
-                return 0;
+            //if (!ecoregion.Active)
+            //    return 0;
 
-            for (byte shade = 5; shade >= 1; shade--)
-            {
-                if (PlugIn.ShadeLAI[shade] <= 0)
-                {
-                    string mesg = string.Format("Maximum LAI has not been defined for shade class {0}", shade);
-                    throw new System.ApplicationException(mesg);
-                }
-                if (SiteVars.LAI[site] >= PlugIn.ShadeLAI[shade])
-                {
-                    finalShade = shade;
-                    break;
-                }
-            }
+            //for (byte shade = 5; shade >= 1; shade--)
+            //{
+            //    if (PlugIn.ShadeLAI[shade] <= 0)
+            //    {
+            //        string mesg = string.Format("Maximum LAI has not been defined for shade class {0}", shade);
+            //        throw new System.ApplicationException(mesg);
+            //    }
+            //    if (SiteVars.LAI[site] >= PlugIn.ShadeLAI[shade])
+            //    {
+            //        finalShade = shade;
+            //        break;
+            //    }
+            //}
 
             //PlugIn.ModelCore.UI.WriteLine("Yr={0},      Shade Calculation:  B_MAX={1}, B_ACT={2}, Shade={3}.", PlugIn.ModelCore.CurrentTime, B_MAX, B_ACT, finalShade);
 
-            return finalShade;
+            return (byte) SiteVars.LAI[site]; // finalShade;
         }
         
 
@@ -494,30 +487,39 @@ namespace Landis.Extension.Succession.NECN
             byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
             bool isSufficientlight = false;
             double lightProbability = 0.0;
-            bool found = false;
+            //bool found = false;
 
             int bestShadeClass = 0; // the best shade class for the species; Chihiro
             string regenType = "failed"; // Identify where the cohort established; Chihiro
 
-            foreach (ISufficientLight lights in sufficientLight)
-            {
+            var random = new Troschuetz.Random.TRandom();
 
-                //PlugIn.ModelCore.UI.WriteLine("Sufficient Light:  ShadeClass={0}, Prob0={1}.", lights.ShadeClass, lights.ProbabilityLight0);
-                if (lights.ShadeClass == species.ShadeTolerance)
-                {
-                    if (siteShade == 0) lightProbability = lights.ProbabilityLight0;
-                    if (siteShade == 1) lightProbability = lights.ProbabilityLight1;
-                    if (siteShade == 2) lightProbability = lights.ProbabilityLight2;
-                    if (siteShade == 3) lightProbability = lights.ProbabilityLight3;
-                    if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
-                    if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
-                    
-                    found = true;
-                }
-            }
+            //  double  possibleIgnitions=ModelCore.PoissonDistribution.Lambda = Math.Pow(Math.E, (b0 + (b1 * fireWeatherIndex)));
 
-            if (!found)
-                PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
+
+            ModelCore.LognormalDistribution = 2.4;
+            ModelCore.LognormalDistribution.Sigma = 2.4;
+            lightProbability = PlugIn.ModelCore.NormalDistribution.La;
+
+            //foreach (ISufficientLight lights in sufficientLight)
+            //{
+
+            //    //PlugIn.ModelCore.UI.WriteLine("Sufficient Light:  ShadeClass={0}, Prob0={1}.", lights.ShadeClass, lights.ProbabilityLight0);
+            //    if (lights.ShadeClass == species.ShadeTolerance)
+            //    {
+            //        if (siteShade == 0) lightProbability = lights.ProbabilityLight0;
+            //        if (siteShade == 1) lightProbability = lights.ProbabilityLight1;
+            //        if (siteShade == 2) lightProbability = lights.ProbabilityLight2;
+            //        if (siteShade == 3) lightProbability = lights.ProbabilityLight3;
+            //        if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
+            //        if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
+
+            //        found = true;
+            //    }
+            //}
+
+            //if (!found)
+            //    PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
 
 
             // ------------------------------------------------------------------------

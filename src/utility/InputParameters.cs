@@ -54,7 +54,7 @@ namespace Landis.Extension.Succession.NECN
         private double decayRateSOM1;
         private double decayRateSOM2;
         private double decayRateSOM3;
-        private double[] maximumShadeLAI;
+        //private double[] maximumShadeLAI;
         private double initMineralN;
         private double initFineFuels;
 
@@ -87,8 +87,10 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
         private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAImean; 
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIdispersion; 
 
-        private List<ISufficientLight> sufficientLight;
+        //private List<ISufficientLight> sufficientLight;
 
 
         //---------------------------------------------------------------------
@@ -313,13 +315,13 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
-        public double[] MaximumShadeLAI
-        {
-            get
-            {
-                return maximumShadeLAI;
-            }
-        }
+        //public double[] MaximumShadeLAI
+        //{
+        //    get
+        //    {
+        //        return maximumShadeLAI;
+        //    }
+        //}
 
  
         //---------------------------------------------------------------------
@@ -336,6 +338,8 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIMean { get { return lightLAImean; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIDispersion { get { return lightLAIdispersion; } }
 
 
         //---------------------------------------------------------------------
@@ -442,18 +446,18 @@ namespace Landis.Extension.Succession.NECN
 
         /// <summary>
         /// Definitions of sufficient light probabilities.
-        /// </summary>
-        public List<ISufficientLight> LightClassProbabilities
-        {
-            get {
-                return sufficientLight;
-            }
-            set 
-            {
-                Debug.Assert(sufficientLight.Count != 0);
-                sufficientLight = value;
-            }
-        }
+        ///// </summary>
+        //public List<ISufficientLight> LightClassProbabilities
+        //{
+        //    get {
+        //        return sufficientLight;
+        //    }
+        //    set 
+        //    {
+        //        Debug.Assert(sufficientLight.Count != 0);
+        //        sufficientLight = value;
+        //    }
+        //}
         //---------------------------------------------------------------------
         public double Latitude
         {
@@ -811,20 +815,20 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public void SetMaximumShadeLAI(byte                   shadeClass,
-                                          //IEcoregion             ecoregion,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(1 <= shadeClass && shadeClass <= 5);
-            //Debug.Assert(ecoregion != null);
-            if (newValue != null) {
-                if (newValue.Actual < 0.0 || newValue.Actual > 20)
-                    throw new InputValueException(newValue.String,
-                                                  "{0} is not between 0 and 20", newValue.String);
-            }
-            maximumShadeLAI[shadeClass] = newValue;
-            //minRelativeBiomass[shadeClass][ecoregion] = newValue;
-        }
+        //public void SetMaximumShadeLAI(byte                   shadeClass,
+        //                                  //IEcoregion             ecoregion,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(1 <= shadeClass && shadeClass <= 5);
+        //    //Debug.Assert(ecoregion != null);
+        //    if (newValue != null) {
+        //        if (newValue.Actual < 0.0 || newValue.Actual > 20)
+        //            throw new InputValueException(newValue.String,
+        //                                          "{0} is not between 0 and 20", newValue.String);
+        //    }
+        //    maximumShadeLAI[shadeClass] = newValue;
+        //    //minRelativeBiomass[shadeClass][ecoregion] = newValue;
+        //}
         //---------------------------------------------------------------------
 
         public void SetFunctionalType(ISpecies species, InputValue<int> newValue)
@@ -1061,6 +1065,17 @@ namespace Landis.Extension.Succession.NECN
             growthLAI[species] = VerifyRange(newValue, 0.0, 1.0);
         }
 
+        public void SetLightLAImean(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            lightLAImean[species] = VerifyRange(newValue, 0.0, 1.0);
+        }
+        public void SetLightLAIdispersion(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            lightLAIdispersion[species] = VerifyRange(newValue, 0.0, 1.0);
+        }
+
 
         //---------------------------------------------------------------------
 
@@ -1154,9 +1169,11 @@ namespace Landis.Extension.Succession.NECN
             maxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             growthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            lightLAImean = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            lightLAIdispersion = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
 
-            maximumShadeLAI = new double[6];
-            sufficientLight         = new List<ISufficientLight>();
+            //maximumShadeLAI = new double[6];
+            //sufficientLight         = new List<ISufficientLight>();
 
         }
 
