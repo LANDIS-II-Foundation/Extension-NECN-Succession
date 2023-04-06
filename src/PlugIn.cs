@@ -13,6 +13,7 @@ using Landis.Library.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MathNet.Numerics.Distributions;
 
 
 
@@ -204,28 +205,6 @@ namespace Landis.Extension.Succession.NECN
 
         public override byte ComputeShade(ActiveSite site)
         {
-            //IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-
-            //byte finalShade = 0;
-
-            //if (!ecoregion.Active)
-            //    return 0;
-
-            //for (byte shade = 5; shade >= 1; shade--)
-            //{
-            //    if (PlugIn.ShadeLAI[shade] <= 0)
-            //    {
-            //        string mesg = string.Format("Maximum LAI has not been defined for shade class {0}", shade);
-            //        throw new System.ApplicationException(mesg);
-            //    }
-            //    if (SiteVars.LAI[site] >= PlugIn.ShadeLAI[shade])
-            //    {
-            //        finalShade = shade;
-            //        break;
-            //    }
-            //}
-
-            //PlugIn.ModelCore.UI.WriteLine("Yr={0},      Shade Calculation:  B_MAX={1}, B_ACT={2}, Shade={3}.", PlugIn.ModelCore.CurrentTime, B_MAX, B_ACT, finalShade);
 
             return (byte) SiteVars.LAI[site]; // finalShade;
         }
@@ -484,44 +463,26 @@ namespace Landis.Extension.Succession.NECN
         {
 
             //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
-            byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
-            bool isSufficientlight = false;
-            //double lightProbability = 0.0;
+            //byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
+            //int bestShadeClass = 0; // the best shade class for the species; Chihiro
             //bool found = false;
+            bool isSufficientlight = false;
+            double lightProbability = 0.0;
 
-            int bestShadeClass = 0; // the best shade class for the species; Chihiro
             string regenType = "failed"; // Identify where the cohort established; Chihiro
 
             var random = new Troschuetz.Random.TRandom();
 
-            ModelCore.WeibullDistribution.Alpha = 2.4;
-            ModelCore.LognormalDistribution.Sigma = 0.0;
-            double randomLAI = PlugIn.ModelCore.NormalDistribution.NextDouble();
-            double actualLAI = SiteVars.LAI[site];
+            lightProbability = Weibull.PDF(SpeciesData.LightLAIMean[species], SpeciesData.LightLAIMean[species], SiteVars.LAI[site]);
 
-            if (randomLAI > actualLAI)
-                isSufficientlight = true;
 
-            //foreach (ISufficientLight lights in sufficientLight)
-            //{
+            //ModelCore.WeibullDistribution.Alpha = 2.4;
+            //ModelCore.LognormalDistribution.Sigma = 0.0;
+            //double randomLAI = PlugIn.ModelCore.NormalDistribution.NextDouble();
+            //double actualLAI = SiteVars.LAI[site];
 
-            //    //PlugIn.ModelCore.UI.WriteLine("Sufficient Light:  ShadeClass={0}, Prob0={1}.", lights.ShadeClass, lights.ProbabilityLight0);
-            //    if (lights.ShadeClass == species.ShadeTolerance)
-            //    {
-            //        if (siteShade == 0) lightProbability = lights.ProbabilityLight0;
-            //        if (siteShade == 1) lightProbability = lights.ProbabilityLight1;
-            //        if (siteShade == 2) lightProbability = lights.ProbabilityLight2;
-            //        if (siteShade == 3) lightProbability = lights.ProbabilityLight3;
-            //        if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
-            //        if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
-
-            //        found = true;
-            //    }
-            //}
-
-            //if (!found)
-            //    PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
-
+            //if (randomLAI > actualLAI)
+            //    isSufficientlight = true;
 
             // ------------------------------------------------------------------------
             // Modify light probability based on the amount of nursery log on the site
@@ -529,15 +490,13 @@ namespace Landis.Extension.Succession.NECN
             //
             // Compute the availability of nursery log on the site
             //   Option1: function type is linear
-            // double nurseryLogAvailabilityModifier = 1.0; // tuning parameter
-            // double nurseryLogAvailability = nurseryLogAvailabilityModifier * ComputeNurseryLogAreaRatio(species, site);
             //   Option2: function type is power
             double nurseryLogAvailabilityModifier = 2.0; // tuning parameter (only even)
             double nurseryLogAvailability = 1 - Math.Pow(ComputeNurseryLogAreaRatio(species, site) - 1, nurseryLogAvailabilityModifier);
             if (OtherData.CalibrateMode)
             {
                 PlugIn.ModelCore.UI.WriteLine("original_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
-                PlugIn.ModelCore.UI.WriteLine("siteShade:{0}", siteShade);
+                //PlugIn.ModelCore.UI.WriteLine("siteShade:{0}", siteShade);
                 PlugIn.ModelCore.UI.WriteLine("siteLAI:{0}", SiteVars.LAI[site]);
             }
 
@@ -561,12 +520,12 @@ namespace Landis.Extension.Succession.NECN
                 {
                     // 2. If (1) the site shade is darker than the best shade class for the species and 
                     //       (2) the light availability meets the species requirement,
-                    if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
-                    {
+                    //if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
+                    //{
                         // 3. check if threre are sufficient amounts of downed logs?
                         isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
                         if (isSufficientlight) regenType = "nlog";
-                    }
+                    //}
                 }
             }
 
@@ -576,44 +535,8 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
                 PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
             }
-            // ---------------------------------------------------------------------
-
             return isSufficientlight;
-            //return modelCore.GenerateUniform() < lightProbability;
         }
-        // Original SufficientLight method
-        //public bool SufficientLight(ISpecies species, ActiveSite site)
-        //{
-
-        //    //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
-        //    byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
-
-        //    double lightProbability = 0.0;
-        //    bool found = false;
-
-        //    foreach (ISufficientLight lights in sufficientLight)
-        //    {
-
-        //        //PlugIn.ModelCore.UI.WriteLine("Sufficient Light:  ShadeClass={0}, Prob0={1}.", lights.ShadeClass, lights.ProbabilityLight0);
-        //        if (lights.ShadeClass == species.ShadeTolerance)
-        //        {
-        //            if (siteShade == 0) lightProbability = lights.ProbabilityLight0;
-        //            if (siteShade == 1) lightProbability = lights.ProbabilityLight1;
-        //            if (siteShade == 2) lightProbability = lights.ProbabilityLight2;
-        //            if (siteShade == 3) lightProbability = lights.ProbabilityLight3;
-        //            if (siteShade == 4) lightProbability = lights.ProbabilityLight4;
-        //            if (siteShade == 5) lightProbability = lights.ProbabilityLight5;
-        //            found = true;
-        //        }
-        //    }
-
-        //    if (!found)
-        //        PlugIn.ModelCore.UI.WriteLine("A Sufficient Light value was not found for {0}.", species.Name);
-
-        //    return modelCore.GenerateUniform() < lightProbability;
-
-        //}
-
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -622,19 +545,19 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         // Chihiro 2020.01.22
         //
-        private static int ComputeBestShadeClass(ISufficientLight lights)
-        {
-            int bestShadeClass = 0;
-            double maxProbabilityLight = 0.0;
-            if (lights.ProbabilityLight0 > maxProbabilityLight) bestShadeClass = 0;
-            if (lights.ProbabilityLight1 > maxProbabilityLight) bestShadeClass = 1;
-            if (lights.ProbabilityLight2 > maxProbabilityLight) bestShadeClass = 2;
-            if (lights.ProbabilityLight3 > maxProbabilityLight) bestShadeClass = 3;
-            if (lights.ProbabilityLight4 > maxProbabilityLight) bestShadeClass = 4;
-            if (lights.ProbabilityLight5 > maxProbabilityLight) bestShadeClass = 5;
-            return bestShadeClass;
+        //private static int ComputeBestShadeClass(ISufficientLight lights)
+        //{
+        //    int bestShadeClass = 0;
+        //    double maxProbabilityLight = 0.0;
+        //    if (lights.ProbabilityLight0 > maxProbabilityLight) bestShadeClass = 0;
+        //    if (lights.ProbabilityLight1 > maxProbabilityLight) bestShadeClass = 1;
+        //    if (lights.ProbabilityLight2 > maxProbabilityLight) bestShadeClass = 2;
+        //    if (lights.ProbabilityLight3 > maxProbabilityLight) bestShadeClass = 3;
+        //    if (lights.ProbabilityLight4 > maxProbabilityLight) bestShadeClass = 4;
+        //    if (lights.ProbabilityLight5 > maxProbabilityLight) bestShadeClass = 5;
+        //    return bestShadeClass;
 
-        }
+        //}
 
 
         //---------------------------------------------------------------------
