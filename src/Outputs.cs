@@ -672,6 +672,27 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
+//SF added anaerobic effect map for troubleshooting
+            string pathanerb = MapNames.ReplaceTemplateVars(@"NECN\AnaerobicEffect-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(pathanerb, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                ShortPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = (short)(SiteVars.AnaerobicEffect[site]); 
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+
+            }
+
             if (PlugIn.Parameters.SmokeModelOutputs)
             {
                 string pathNeedles = MapNames.ReplaceTemplateVars(@"NECN\ConiferNeedleBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
