@@ -475,14 +475,11 @@ namespace Landis.Extension.Succession.NECN
 
             lightProbability = Weibull.PDF(SpeciesData.LightLAIMean[species], SpeciesData.LightLAIMean[species], SiteVars.LAI[site]);
 
-
-            //ModelCore.WeibullDistribution.Alpha = 2.4;
-            //ModelCore.LognormalDistribution.Sigma = 0.0;
-            //double randomLAI = PlugIn.ModelCore.NormalDistribution.NextDouble();
-            //double actualLAI = SiteVars.LAI[site];
-
-            //if (randomLAI > actualLAI)
-            //    isSufficientlight = true;
+            PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:00}, at LAI = {2:00}", species.Name, lightProbability, SiteVars.LAI[site]);
+            
+            double randomLAI = PlugIn.ModelCore.NormalDistribution.NextDouble();
+            if (modelCore.GenerateUniform() < lightProbability)
+                isSufficientlight = true;
 
             // ------------------------------------------------------------------------
             // Modify light probability based on the amount of nursery log on the site
@@ -491,6 +488,10 @@ namespace Landis.Extension.Succession.NECN
             // Compute the availability of nursery log on the site
             //   Option1: function type is linear
             //   Option2: function type is power
+
+            if (!SpeciesData.Nlog_depend[species])
+                return isSufficientlight;
+
             double nurseryLogAvailabilityModifier = 2.0; // tuning parameter (only even)
             double nurseryLogAvailability = 1 - Math.Pow(ComputeNurseryLogAreaRatio(species, site) - 1, nurseryLogAvailabilityModifier);
             if (OtherData.CalibrateMode)
@@ -527,14 +528,14 @@ namespace Landis.Extension.Succession.NECN
                         if (isSufficientlight) regenType = "nlog";
                     //}
                 }
+                //if (OtherData.CalibrateMode)
+                //{
+                //    PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
+                //    PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
+                //    PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
+                //}
             }
 
-            if (OtherData.CalibrateMode)
-            {
-                PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
-                PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
-                PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
-            }
             return isSufficientlight;
         }
 
