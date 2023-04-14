@@ -475,7 +475,7 @@ namespace Landis.Extension.Succession.NECN
 
             lightProbability = Weibull.PDF(SpeciesData.LightLAIMean[species], SpeciesData.LightLAIMean[species], SiteVars.LAI[site]);
 
-            PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:00}, at LAI = {2:00}", species.Name, lightProbability, SiteVars.LAI[site]);
+            PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:0.000}, at LAI = {2:0.00}", species.Name, lightProbability, SiteVars.LAI[site]);
             
             double randomLAI = PlugIn.ModelCore.NormalDistribution.NextDouble();
             if (modelCore.GenerateUniform() < lightProbability)
