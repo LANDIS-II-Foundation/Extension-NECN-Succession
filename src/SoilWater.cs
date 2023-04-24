@@ -261,7 +261,8 @@ namespace Landis.Extension.Succession.NECN
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET. 
             //PlugIn.ModelCore.UI.WriteLine("Precip={0}, PET={1}, Ratio={2}.", Precipitation, PET, ratioPrecipPET); //debug
             //SF availableWater is not precip
-            //SF consider chaging to use precip; this would tend to reduce teh anaerobic effect in wet sites but increase it in dry sites
+            //SF consider chaging to use precip; this would tend to reduce the
+            //anaerobic effect in wet sites but increase it in dry sites
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
@@ -276,11 +277,13 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
             SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater;
 
+
             //PlugIn.ModelCore.UI.WriteLine("Soil water = {0}, Mean soil water = {1}", soilWaterContent, meanSoilWater); //debug
 
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
+            SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
             //SF changed to use min and max per month. Max was too high, so capped at field capacity. Same as elements that are averaged to get mean soil water content
             //TODO
@@ -728,16 +731,14 @@ namespace Landis.Extension.Succession.NECN
             //     rprpet    - actual (RAIN+IRRACT+AVH2O[3])/PET ratio
 
             //SF changed to match paper from Rocky Mountain fen sites: 
-            double aneref1 = 0.35;// OtherData.RatioPrecipPETMaximum;  //This value is 1.5
-            double aneref2 = 1.1; // OtherData.RatioPrecipPETMinimum;   //This value is 3.0
+            double aneref1 = 0.35;// OtherData.RatioPrecipPETMaximum;  //This value is 1.5   //0.35
+            double aneref2 = 1.1; // OtherData.RatioPrecipPETMinimum;   //This value is 3.0 //1.1
             double aneref3 = 0.008; // OtherData.AnerobicEffectMinimum;   //This value is 0.3
 
             double anerob = 1.0;
 
             //...Determine if RAIN/PET ratio is GREATER than the ratio with
             //     maximum impact.
-
-            //SF this is really seldom active! And it will apply to the whole climate region (mediated by soil drainage)
 
             if ((ratioPrecipPET > aneref1) && (tave > 2.0))
             {

@@ -71,6 +71,7 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyLAI_Grasses[site][Month] = 0.0; // Chihiro, 2020.03.30: tentative
                     SiteVars.MonthlySoilWaterContent[site][Month] = 0.0;
                     SiteVars.MonthlyMeanSoilWaterContent[site][Month] = 0.0;
+                    SiteVars.MonthlyAnaerobicEffect[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);
                                    

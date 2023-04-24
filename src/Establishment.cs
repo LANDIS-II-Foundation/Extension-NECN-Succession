@@ -47,7 +47,7 @@ namespace Landis.Extension.Succession.NECN
             
             tempMultiplier = BotkinDegreeDayMultiplier(ecoClimate, species);
             minJanTempMultiplier = MinJanuaryTempModifier(ecoClimate, species);
-            if (OtherData.DGS_waterlimit)
+            /*if (OtherData.DGS_waterlimit)
             {
                 double volumetric_water = SiteVars.SoilWaterContent[site] / SiteVars.SoilDepth[site];
                 //double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / 100; //this works better to separate wetlands
@@ -59,7 +59,7 @@ namespace Landis.Extension.Succession.NECN
                     PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
                     volumetric_water, soilwaterMultiplier);
                 }
-            }
+            }*/
                
             if(SiteVars.SoilDrain[site] < FunctionalType.Table[SpeciesData.FuncType[species]].MinSoilDrain)
             {

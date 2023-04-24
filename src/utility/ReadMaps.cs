@@ -311,7 +311,7 @@ namespace Landis.Extension.Succession.NECN
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue <= 1.0 || mapValue > 25000.0)
+                        if (mapValue <= 1.0 || mapValue > 40000.0)
                             throw new InputValueException(mapValue.ToString(),
                                                           "SOM2C value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
                                                           mapValue, 1.0, 25000.0, site.Location.Row, site.Location.Column);
@@ -331,7 +331,7 @@ namespace Landis.Extension.Succession.NECN
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue <= 0.0 || mapValue > 1000.0)
+                        if (mapValue <= 0.0 || mapValue > 2000.0)
                             throw new InputValueException(mapValue.ToString(),
                                                           "SOM2N value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
                                                           mapValue, 0.0, 1000.0, site.Location.Row, site.Location.Column);
@@ -350,7 +350,7 @@ namespace Landis.Extension.Succession.NECN
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue <= 1.0 || mapValue > 30000.0)
+                        if (mapValue <= 1.0 || mapValue > 100000.0)
                             throw new InputValueException(mapValue.ToString(),
                                                           "SOM3C value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
                                                           mapValue, 1.0, 20000.0, site.Location.Row, site.Location.Column);
@@ -370,7 +370,7 @@ namespace Landis.Extension.Succession.NECN
                     double mapValue = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (mapValue <= 0.0 || mapValue > 1000.0)
+                        if (mapValue <= 0.0 || mapValue > 2000.0)
                             throw new InputValueException(mapValue.ToString(),
                                                           "SOM3N value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
                                                           mapValue, 0.0, 1000.0, site.Location.Row, site.Location.Column);
