@@ -343,7 +343,7 @@ namespace Landis.Extension.Succession.NECN
                     //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
                     //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
 
-                    //Disturbed[site] = true; //SF should browse count as a "disturbance" for this purpose?
+                    Disturbed[site] = true; //SF should browse count as a "disturbance" for this purpose?
 
                     return;
                 }
