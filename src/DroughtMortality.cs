@@ -30,9 +30,10 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;  // needs better variable name
 
-        public static bool UseDrought = false; //Rob: should we move this flag to PlugIn or DroughtMortality, or is it okay here?
+        public static bool UseDrought = false;
         public static bool WriteSWA;
         public static bool WriteCWD;
+        public static bool WriteSpeciesDroughtMaps;
 
 
         //---------------------------------------------------------------------
@@ -54,8 +55,47 @@ namespace Landis.Extension.Succession.NECN
 
             WriteSWA = parameters.WriteSWA;
             WriteCWD = parameters.WriteCWD;
+            WriteSpeciesDroughtMaps = parameters.WriteSpeciesDroughtMaps;
             PlugIn.ModelCore.UI.WriteLine("UseDrought on initialization = {0}", UseDrought); //debug
-        }       
+        }
+
+        public static class SpeciesMapNames
+        {
+            public const string SpeciesVar = "species";
+            public const string TimestepVar = "timestep";
+
+            private static IDictionary<string, bool> knownVars;
+            private static IDictionary<string, string> varValues;
+
+            //---------------------------------------------------------------------
+
+            static SpeciesMapNames()
+            {
+                knownVars = new Dictionary<string, bool>();
+                knownVars[SpeciesVar] = true;
+                knownVars[TimestepVar] = true;
+
+                varValues = new Dictionary<string, string>();
+            }
+
+            //---------------------------------------------------------------------
+
+            public static void CheckTemplateVars(string template)
+            {
+                OutputPath.CheckTemplateVars(template, knownVars);
+            }
+
+            //---------------------------------------------------------------------
+
+            public static string ReplaceTemplateVars(string template,
+                                                     string species,
+                                                     int timestep)
+            {
+                varValues[SpeciesVar] = species;
+                varValues[TimestepVar] = timestep.ToString();
+                return OutputPath.ReplaceTemplateVars(template, varValues);
+            }
+        }
 
         public static double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
@@ -153,6 +193,7 @@ namespace Landis.Extension.Succession.NECN
                 double aboveground_Biomass_Died = M_leaf + M_wood;
 
                 SiteVars.DroughtMort[site] += aboveground_Biomass_Died;
+                SiteVars.SpeciesDroughtMortality[site][cohort.Species.Index] += aboveground_Biomass_Died;
 
             }
 
@@ -237,5 +278,4 @@ namespace Landis.Extension.Succession.NECN
         }
 
     }
-
 }

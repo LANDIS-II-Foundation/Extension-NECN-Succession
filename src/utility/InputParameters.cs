@@ -51,6 +51,7 @@ namespace Landis.Extension.Succession.NECN
         private bool henne_watermode;
         private bool writeSWA; //write soil water maps, for calculating normal SWA
         private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
+        private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
         private WaterType wtype;
         private double probEstablishAdjust;
         private double atmosNslope;
@@ -272,6 +273,24 @@ namespace Landis.Extension.Succession.NECN
                 writeCWD = value;
             }
         }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of CWD be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool WriteSpeciesDroughtMaps
+        {
+            get
+            {
+                return writeSpeciesDroughtMaps;
+            }
+            set
+            {
+                writeSpeciesDroughtMaps = value;
+            }
+        }
+
 
         //---------------------------------------------------------------------
         /// <summary>

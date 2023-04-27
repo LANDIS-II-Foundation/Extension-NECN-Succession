@@ -227,6 +227,14 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.WriteCWD = false;
 
+            InputVar<bool> write_SpeciesDroughtMaps = new InputVar<bool>("Write_Species_Drought_Maps");
+            if (ReadOptionalVar(write_SpeciesDroughtMaps))
+            {
+                parameters.WriteSpeciesDroughtMaps = write_SpeciesDroughtMaps.Value;
+            }
+            else
+                parameters.WriteSpeciesDroughtMaps = false;
+
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
             parameters.WType = WParse(wt.Value);

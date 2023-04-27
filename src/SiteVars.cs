@@ -118,6 +118,7 @@ namespace Landis.Extension.Succession.NECN
         //Drought params
         //drought_todo
         public static ISiteVar<double> droughtMort;
+        public static ISiteVar<Dictionary<int, double>> speciesDroughtMortality;
         public static ISiteVar<List<double>> swa10;
         public static ISiteVar<List<double>> temp10;
         public static ISiteVar<List<double>> cwd10;
@@ -247,6 +248,10 @@ namespace Landis.Extension.Succession.NECN
 
                 normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
+                speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>(); 
+
+
             }
 
             slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -303,6 +308,9 @@ namespace Landis.Extension.Succession.NECN
                 swa10[site] = new List<double>(10);
                 temp10[site] = new List<double>(10);
                 cwd10[site] = new List<double>(10);
+
+                speciesDroughtMortality[site] =new Dictionary<int, double>();
+
 
             }
             
@@ -413,6 +421,11 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.WoodMortality[site] = 0.0;
 
             SiteVars.DroughtMort[site] = 0.0;
+            foreach(ISpecies species in PlugIn.ModelCore.Species)
+            {
+                SiteVars.SpeciesDroughtMortality[site][species.Index] = 0.0;
+            }
+            
 
             //SiteVars.DryDays[site] = 0;
 
@@ -1090,6 +1103,25 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 droughtMort = value;
+            }
+
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Site-level drought mortality for each species, to map drought impacts
+        /// //drought_todo
+        /// </summary>
+        public static ISiteVar<Dictionary<int, double>> SpeciesDroughtMortality
+        {
+            get
+            {
+                return speciesDroughtMortality;
+            }
+            set
+            {
+                speciesDroughtMortality = value;
             }
 
 

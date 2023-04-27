@@ -48,6 +48,7 @@ namespace Landis.Extension.Succession.NECN
         double GrassThresholdMultiplier { get; }
         bool WriteSWA { get; set; }
         bool WriteCWD { get; set; }
+        bool WriteSpeciesDroughtMaps { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>
