@@ -15,7 +15,8 @@ namespace Landis.Extension.Succession.NECN
     {
 
         //private static StreamWriter log;
-        private static double[,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
+        private static double[,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        private static double[,] avgDryDayslimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
         private static double[,] avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgCWDlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
@@ -35,6 +36,8 @@ namespace Landis.Extension.Succession.NECN
             double soilMultiplier = 0.0;
             double minJanTempMultiplier = 0.0;
             double establishProbability = 0.0;
+            double soilwaterMultiplier = 1.0;
+            double soilDrainMultiplier = 1.0;
             double cwdMultiplier = 0.0;
 
             AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[climateRegion];
@@ -44,19 +47,51 @@ namespace Landis.Extension.Succession.NECN
 
             double ecoDryDays = SiteVars.DryDays[site]; 
             soilMultiplier = SoilMoistureMultiplier(ecoClimate, species, ecoDryDays);
+            
             tempMultiplier = BotkinDegreeDayMultiplier(ecoClimate, species);
             minJanTempMultiplier = MinJanuaryTempModifier(ecoClimate, species);
             cwdMultiplier = CWDMultiplier(site, species);
 
+            /*if (OtherData.DGS_waterlimit)
+            {
+                double volumetric_water = SiteVars.SoilWaterContent[site] / SiteVars.SoilDepth[site];
+                //double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / 100; //this works better to separate wetlands
+            
+
+                if (volumetric_water < 0.001) volumetric_water = 0.001;
+                soilwaterMultiplier = CohortBiomass.calculateWater_Limit_versionDGS(volumetric_water, species);
+                if (OtherData.CalibrateMode)
+                {
+                    PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
+                    volumetric_water, soilwaterMultiplier);
+                }
+            }*/
+
+            if (SiteVars.SoilDrain[site] < FunctionalType.Table[SpeciesData.FuncType[species]].MinSoilDrain)
+            {
+                //this stops trees from establishing in wetlands
+                soilDrainMultiplier = 0.0;
+            }
+
+            //PlugIn.ModelCore.UI.WriteLine("dryDays multiplier = {0}, degree days multiplier = {1}, Jan temp multiplier = {2}, soil water multiplier = {3}," +
+            //    "soil drain multiplier = {4}", soilMultiplier, tempMultiplier, minJanTempMultiplier, soilwaterMultiplier, soilDrainMultiplier); //debug
             // Liebig's Law of the Minimum is applied to the four multipliers for each year:
             double minMultiplier = System.Math.Min(tempMultiplier, soilMultiplier);
             minMultiplier = System.Math.Min(minJanTempMultiplier, minMultiplier);
             minMultiplier = System.Math.Min(cwdMultiplier, minMultiplier);
+            minMultiplier = System.Math.Min(soilDrainMultiplier, minMultiplier);
+            if (OtherData.DGS_waterlimit) minMultiplier = System.Math.Min(minMultiplier, soilwaterMultiplier);
 
             establishProbability += minMultiplier;
             establishProbability *= PlugIn.ProbEstablishAdjust;
 
-            avgSoilMoisturelimit[species.Index, climateRegion.Index] += soilMultiplier;
+            if (OtherData.CalibrateMode)
+            {
+
+            }
+
+            avgDryDayslimit[species.Index, climateRegion.Index] += soilMultiplier;
+            avgSoilMoisturelimit[species.Index, climateRegion.Index] += soilwaterMultiplier;
             avgMATlimit[species.Index, climateRegion.Index] += tempMultiplier;
             avgJanuaryTlimit[species.Index, climateRegion.Index] += minJanTempMultiplier;
             avgCWDlimit[species.Index, climateRegion.Index] += cwdMultiplier;
@@ -93,6 +128,7 @@ namespace Landis.Extension.Succession.NECN
                         elog.AvgMinJanTempMult = (avgJanuaryTlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.AvgSoilMoistureMult = (avgSoilMoisturelimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.AvgCWDLimit = (avgCWDlimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
+                        elog.AvgDryDaysMult = (avgDryDayslimit[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.AvgProbEst = (avgPest[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.DryDays = (avgDryDays[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
                         elog.BeginGDD = (avgBeginGDD[species.Index, ecoregion.Index] / (double)numberCalculations[species.Index, ecoregion.Index]);
@@ -105,6 +141,7 @@ namespace Landis.Extension.Succession.NECN
             }
 
         avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
+        avgDryDayslimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgJanuaryTlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgCWDlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
@@ -146,7 +183,7 @@ namespace Landis.Extension.Succession.NECN
                 Soil_Moist_GF = System.Math.Sqrt((double)(maxDrought - dryDays) / maxDrought);
             }
 
-            //PlugIn.ModelCore.UI.WriteLine("BeginGrow={0}, EndGrow={1}, dryDays={2}, maxDrought={3}", weather.BeginGrowing, weather.EndGrowing, dryDays, maxDrought);
+            //PlugIn.ModelCore.UI.WriteLine("BeginGrow={0}, EndGrow={1}, dryDays={2}, maxDrought={3}", weather.BeginGrowing, weather.EndGrowing, dryDays, maxDrought); //debug
 
             return Soil_Moist_GF;
         }
@@ -183,9 +220,9 @@ namespace Landis.Extension.Succession.NECN
                   (max_Grow_Deg_Days - Deg_Days)) / (totalGDD * totalGDD);
             
            if (Deg_Day_GF < 0) Deg_Day_GF = 0.0;
-           //PlugIn.ModelCore.UI.WriteLine("SppMaxDD={0:0.00}, sppMinGDD={1:0.0}, actualGDD={2:0}, gddM={3:0.00}.", max_Grow_Deg_Days, min_Grow_Deg_Days, Deg_Days, Deg_Day_GF);
-           
-           return Deg_Day_GF;
+            //PlugIn.ModelCore.UI.WriteLine("SppMaxDD={0:0.00}, sppMinGDD={1:0.0}, actualGDD={2:0}, gddM={3:0.00}.", max_Grow_Deg_Days, min_Grow_Deg_Days, Deg_Days, Deg_Day_GF);//debug
+
+            return Deg_Day_GF;
         }
         
         //---------------------------------------------------------------------------

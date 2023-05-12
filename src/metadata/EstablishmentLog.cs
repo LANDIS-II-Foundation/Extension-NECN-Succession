@@ -33,6 +33,9 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Desc = "Average Soil Moisture Multiplier", Format = "0.00")]
         public double AvgSoilMoistureMult { set; get; }
 
+        [DataFieldAttribute(Desc = "Average Dry Days Multiplier", Format = "0.00")]
+        public double AvgDryDaysMult { set; get; }
+
         [DataFieldAttribute(Desc = "Average Probability of Establishment", Format = "0.00")]
         public double AvgProbEst { set; get; }
 

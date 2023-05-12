@@ -188,17 +188,35 @@ namespace Landis.Extension.Succession.NECN
 
             double leafFractionNPP = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FractionANPPtoLeaf;
             //double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
-            double sitelai = SiteVars.LAI[site];
-            double maxNPP = SpeciesData.Max_ANPP[cohort.Species];
+            double sitelai          = SiteVars.LAI[site];
+            double maxNPP           = SpeciesData.Max_ANPP[cohort.Species];
+            double limitH20 = 1.0;
 
             double limitT = calculateTemp_Limit(site, cohort.Species);
 
-            double limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            if (OtherData.DGS_waterlimit) 
+            {
+                double wilt_point = SiteVars.SoilWiltingPoint[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                
+                if (volumetric_water < 0.001) volumetric_water = 0.001;
+
+                limitH20 = calculateWater_Limit_versionDGS(volumetric_water, cohort.Species);
+                if (OtherData.CalibrateMode)
+                {
+                    PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
+                    volumetric_water, limitH20);
+                }
+
+                if (volumetric_water < wilt_point) limitH20 = 0.001;
+
+            }
+            else
+            {
+                limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            }
 
             double limitLAI = calculateLAI_Limit(cohort, site);
-
-            // RMS 03/2016: Testing alternative more similar to how Biomass Succession operates: REMOVE FOR NEXT RELEASE
-            //double limitCapacity = 1.0 - Math.Min(1.0, Math.Exp(siteBiomass / maxBiomass * 5.0) / Math.Exp(5.0));
 
             double competition_limit = calculate_LAI_Competition(cohort, site);
 
@@ -208,12 +226,18 @@ namespace Landis.Extension.Succession.NECN
 
             potentialNPP *= limitN;
 
-            //if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(limitCapacity) || Double.IsNaN(limitN))
-            //{
-            //    PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
-            //    PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Capacity={6:0.0}", PlugIn.ModelCore.CurrentTime, month + 1, limitLAI, limitH20, limitN, limitT, limitCapacity);
-            //    PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, month + 1, maxBiomass, (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
-            //}
+            if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(competition_limit) || Double.IsNaN(limitN))
+            {
+                PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
+
+                double wilt_point = SiteVars.SoilWiltingPoint[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+
+                PlugIn.ModelCore.UI.WriteLine("wilt_point = {0}, volumetric_water = {1}", wilt_point, volumetric_water);
+
+            }
 
 
             //  Age mortality is discounted from ANPP to prevent the over-
@@ -236,7 +260,10 @@ namespace Landis.Extension.Succession.NECN
             {
                 PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP = NaN!  Will set to zero.");
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     species={2}, age={3}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, cohort.Species.Name, cohort.Age);
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     WoodNPP={2:0.00}, LeafNPP={3:0.00}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, woodNPP, leafNPP);
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     actualANPP={2:0.00}, leafFractionNPP={3:0.00}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, actualANPP, leafFractionNPP);
+
                 if (Double.IsNaN(leafNPP))
                     leafNPP = 0.0;
                 if (Double.IsNaN(woodNPP))
@@ -691,6 +718,32 @@ namespace Landis.Extension.Succession.NECN
             double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
 
             return competition_limit;
+
+        }
+
+        public static double calculateWater_Limit_versionDGS(double volumetricWater, ISpecies species)
+     //This implements a 4-parameter water limit calculation, similar to soil T, which allows a unimodal response to 
+     //soil moisture and allows us to prevent rapid growth in wetlands by species that are intolerant of waterlogged soils
+     //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
+        {
+            var A1 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve1;
+            var A2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
+            var A3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
+            var A4 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve4;
+            
+            var frac = (A2 - volumetricWater) / (A2 - A1);
+            var waterLimit = 0.0;
+            if (frac > 0.0)
+                waterLimit = Math.Exp(A3 / A4 * (1.0 - Math.Pow(frac, A4))) * Math.Pow(frac, A3);
+
+            if (Double.IsNaN(waterLimit))
+            {
+                PlugIn.ModelCore.UI.WriteLine("soilWater = {0}, soil water limit = {1}, frac = {2}", volumetricWater, waterLimit, frac); //debug
+                PlugIn.ModelCore.UI.WriteLine("A1 = {0}, A2 = {1}, A3 = {2}, A4 = {3}", A1, A2, A3, A4);
+
+
+            }
+                return waterLimit;
 
         }
 

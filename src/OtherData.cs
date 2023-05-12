@@ -15,6 +15,7 @@ namespace Landis.Extension.Succession.NECN
         public static double ProbEstablishAdjust;
         public static WaterType WaterDecayFunction;
         public static bool SoilWaterVersion_Henne = false;
+        public static bool DGS_waterlimit = false;
 
         // NOTE: *****************************************************************
         // ALL input data comments derived from the Century Model Interface Help -

@@ -52,7 +52,8 @@ namespace Landis.Extension.Succession.NECN
         private bool writeSWA; //write soil water maps, for calculating normal SWA
         private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
         private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
-        private WaterType wtype;
+        private WaterType wtype;       
+        private string communityInputMapNames;
         private double probEstablishAdjust;
         private double atmosNslope;
         private double atmosNintercept;
@@ -236,8 +237,17 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-
-       
+        public string CommunityInputMapNames
+        {
+            get
+            {
+                return communityInputMapNames;
+            }
+            set
+            {
+                communityInputMapNames = value;
+            }
+        }
 
         //---------------------------------------------------------------------
         /// <summary>

@@ -60,6 +60,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> waterMovement;  
         private static ISiteVar<double> availableWater;  
         private static ISiteVar<double> soilWaterContent;
+        private static ISiteVar<double> meanSoilWaterContent;
         private static ISiteVar<double> liquidSnowPack;  
         private static ISiteVar<double> decayFactor;
         private static ISiteVar<double> soilTemperature;
@@ -114,6 +115,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> MonthlyLAI_GrassesLastMonth; // Chihiro, 2021.03.30: tentative
         public static ISiteVar<double[]> MonthlyHeteroResp;
         public static ISiteVar<double[]> MonthlySoilWaterContent;
+        public static ISiteVar<double[]> MonthlyMeanSoilWaterContent;//SF added
+        public static ISiteVar<double[]> MonthlyAnaerobicEffect;//SF added 2023-4-11
 
         //Drought params
         //drought_todo
@@ -129,7 +132,6 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> normalCWD;
         public static ISiteVar<double> slope;
         public static ISiteVar<double> aspect;
-
 
         //---------------------------------------------------------------------
 
@@ -188,6 +190,7 @@ namespace Landis.Extension.Succession.NECN
             availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            meanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             decayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             anaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -204,6 +207,8 @@ namespace Landis.Extension.Succession.NECN
             monthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlySoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyMeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyAnaerobicEffect = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             AnnualNEE           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireCEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireNEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -301,6 +306,8 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyLAI_Trees[site] = new double[12];
                 MonthlyLAI_Grasses[site] = new double[12];
                 MonthlySoilWaterContent[site]       = new double[12];
+                MonthlyMeanSoilWaterContent[site] = new double[12];
+                MonthlyAnaerobicEffect[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
@@ -647,6 +654,22 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 soilWaterContent = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> MeanSoilWaterContent
+        {
+            get
+            {
+                return meanSoilWaterContent;
+            }
+            set
+            {
+                meanSoilWaterContent = value;
             }
         }
 
