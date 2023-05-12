@@ -178,7 +178,13 @@ namespace Landis.Extension.Succession.NECN
                 parameters.NormalCWDMapName = normalCWDMapName.Value;
             }
 
-           
+            InputVar<string> normalTempMapName = new InputVar<string>("NormalCWDMapName");
+            if (ReadOptionalVar(normalTempMapName))
+            {
+                parameters.NormalCWDMapName = normalTempMapName.Value;
+            }
+
+
             InputVar<string> slopeMapName = new InputVar<string>("SlopeMapName");
             if (ReadOptionalVar(slopeMapName))
             {
@@ -226,6 +232,14 @@ namespace Landis.Extension.Succession.NECN
             }
             else
                 parameters.WriteCWD = false;
+
+            InputVar<bool> write_Temp = new InputVar<bool>("Write_Temperature_Maps");
+            if (ReadOptionalVar(write_Temp))
+            {
+                parameters.WriteTemp = write_Temp.Value;
+            }
+            else
+                parameters.WriteTemp = false;
 
             InputVar<bool> write_SpeciesDroughtMaps = new InputVar<bool>("Write_Species_Drought_Maps");
             if (ReadOptionalVar(write_SpeciesDroughtMaps))
@@ -534,8 +548,11 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.CoarseRootFraction = System.Convert.ToDouble(row["CoarseRootFraction"]);
                     funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
                     funcTParms.MinLAI = ReadMinLAI(row);
+                    funcTParms.MoistureCurve1 = ReadMC1(row);
+                    funcTParms.MoistureCurve4 = ReadMC4(row);
+                    funcTParms.MinSoilDrain = ReadMinSoilDrain(row);
 
-                }
+            }
 
 
             //-------------------------
@@ -573,11 +590,10 @@ namespace Landis.Extension.Succession.NECN
                     parameters.SetBetaBiomass(species, System.Convert.ToDouble(row["BetaBiomass"]));
                     parameters.SetBetaCWD(species, System.Convert.ToDouble(row["BetaCWD"]));
                     parameters.SetBetaNormCWD(species, System.Convert.ToDouble(row["BetaNormCWD"]));
+                    parameters.SetBetaNormTemp(species, System.Convert.ToDouble(row["BetaNormTemp"]));
                     parameters.SetIntxnCWD_Biomass(species, System.Convert.ToDouble(row["IntxnCWD_Biomass"]));
                 }
-                    funcTParms.MoistureCurve1 = ReadMC1(row);
-                    funcTParms.MoistureCurve4 = ReadMC4(row);
-                    funcTParms.MinSoilDrain = ReadMinSoilDrain(row);
+               
             }
 
             //--------- Read In Fire Reductions Table ---------------------------

@@ -744,7 +744,7 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-//SF added anaerobic effect map for troubleshooting
+                //SF added anaerobic effect map for troubleshooting
             string pathanerb = MapNames.ReplaceTemplateVars(@"NECN\AnaerobicEffect-{timestep}.img", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(pathanerb, PlugIn.ModelCore.Landscape.Dimensions))
             {

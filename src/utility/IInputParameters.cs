@@ -50,6 +50,7 @@ namespace Landis.Extension.Succession.NECN
 
         bool WriteSWA { get; set; }
         bool WriteCWD { get; set; }
+        bool WriteTemp { get; set; }
         bool WriteSpeciesDroughtMaps { get; set; }
 
         //---------------------------------------------------------------------
@@ -131,6 +132,7 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get; }
         Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get; }
 
 

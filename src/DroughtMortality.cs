@@ -28,11 +28,13 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;  // needs better variable name
 
         public static bool UseDrought = false;
         public static bool WriteSWA;
         public static bool WriteCWD;
+        public static bool WriteTemp;
         public static bool WriteSpeciesDroughtMaps;
 
 
@@ -44,17 +46,19 @@ namespace Landis.Extension.Succession.NECN
             MortalityAboveThreshold              = parameters.MortalityAboveThreshold;
             CWDThreshold2 = parameters.CWDThreshold2;
             MortalityAboveThreshold2 = parameters.MortalityAboveThreshold2;
-            Intercept              = parameters.Intercept;
-            BetaAge              = parameters.BetaAge;
-            BetaTemp          = parameters.BetaTemp;
-            BetaSWAAnom          = parameters.BetaSWAAnom;
-            BetaBiomass       = parameters.BetaBiomass;
-            BetaCWD           = parameters.BetaCWD;
-            BetaNormCWD          = parameters.BetaNormCWD;
-            IntxnCWD_Biomass          = parameters.IntxnCWD_Biomass ;
+            Intercept           = parameters.Intercept;
+            BetaAge             = parameters.BetaAge;
+            BetaTemp            = parameters.BetaTemp;
+            BetaSWAAnom         = parameters.BetaSWAAnom;
+            BetaBiomass         = parameters.BetaBiomass;
+            BetaCWD             = parameters.BetaCWD;
+            BetaNormCWD         = parameters.BetaNormCWD;
+            BetaNormTemp           = parameters.BetaNormTemp;
+            IntxnCWD_Biomass    = parameters.IntxnCWD_Biomass ;
 
             WriteSWA = parameters.WriteSWA;
             WriteCWD = parameters.WriteCWD;
+            WriteTemp = parameters.WriteTemp;
             WriteSpeciesDroughtMaps = parameters.WriteSpeciesDroughtMaps;
             PlugIn.ModelCore.UI.WriteLine("UseDrought on initialization = {0}", UseDrought); //debug
         }
@@ -138,6 +142,7 @@ namespace Landis.Extension.Succession.NECN
             double betaBiomass = BetaBiomass[cohort.Species];
             double betaCWD = BetaCWD[cohort.Species];
             double betaNormCWD = BetaNormCWD[cohort.Species];
+            double betaNormTemp = BetaNormTemp[cohort.Species];
             double intxnCWD_Biomass = IntxnCWD_Biomass[cohort.Species];
             //PlugIn.ModelCore.UI.WriteLine("Regression parameters are: intercept {0}, age {1}, temp {2}, SWAAnom {3}, biomass {4}", 
             //    intercept, betaAge, betaTemp, betaSWAAnom, betaBiomass);
@@ -171,7 +176,7 @@ namespace Landis.Extension.Succession.NECN
                 //calculate decadal log odds of survival
                 //TODO we need to get the climate vars from a SiteVar, calculated in ComputeDroughtSiteVars
                 double logOdds = intercept + betaAge * cohortAge + betaTemp * tempLagged + betaSWAAnom * swaAnom + betaBiomass * siteBiomass +
-                    betaCWD * cwdLagged + betaNormCWD * normalCWD + intxnCWD_Biomass * cwdLagged * siteBiomass;
+                    betaCWD * cwdLagged + betaNormCWD * normalCWD + betaNormTemp * normalTemp + intxnCWD_Biomass * cwdLagged * siteBiomass;
                 p_surv = Math.Exp(logOdds) / (Math.Exp(logOdds) + 1);
                 p_mort = (1 - Math.Pow(p_surv, 0.1));
                 if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("p_mort from regression is {0}", p_mort);

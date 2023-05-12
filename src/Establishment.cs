@@ -152,7 +152,6 @@ namespace Landis.Extension.Succession.NECN
         avgEndGDD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         avgCWD = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
 
-
         }
 
 

@@ -211,7 +211,7 @@ namespace Landis.Extension.Succession.NECN
                     Name = "Summer Soil Water Availability",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
-                    Map_Unit = FieldUnits.cm,
+                    Map_Unit = FieldUnits.cm, //SF check on units
                     Visualize = true,
                 };
                 Extension.OutputMetadatas.Add(mapOut_SWA);
@@ -227,10 +227,26 @@ namespace Landis.Extension.Succession.NECN
                     //FilePath = @"NECN\TotalC-{timestep}.img",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
-                    Map_Unit = FieldUnits.cm,
+                    Map_Unit = FieldUnits.cm, //SF check on units
                     Visualize = true,
                 };
                 Extension.OutputMetadatas.Add(mapOut_CWD);
+            }
+
+            if (DroughtMortality.WriteTemp)
+            {
+                string[] paths = { @"NECN", "Temperature-{timestep}.img" };
+                OutputMetadata mapOut_Temp = new OutputMetadata()
+                {
+                    Type = OutputType.Map,
+                    Name = "Temperature",
+                    //FilePath = @"NECN\TotalC-{timestep}.img",
+                    FilePath = Path.Combine(paths),
+                    Map_DataType = MapDataType.Continuous,
+                    Map_Unit = FieldUnits.cm, //SF check on units
+                    Visualize = true,
+                };
+                Extension.OutputMetadatas.Add(mapOut_Temp);
             }
 
 

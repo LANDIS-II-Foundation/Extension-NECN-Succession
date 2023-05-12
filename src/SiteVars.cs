@@ -130,6 +130,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> cwdLagged;
         public static ISiteVar<double> normalSWA;
         public static ISiteVar<double> normalCWD;
+        public static ISiteVar<double> normalTemp;
         public static ISiteVar<double> slope;
         public static ISiteVar<double> aspect;
 
@@ -253,6 +254,7 @@ namespace Landis.Extension.Succession.NECN
 
                 normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                normalTemp = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
                 speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>(); 
 
@@ -438,7 +440,7 @@ namespace Landis.Extension.Succession.NECN
 
             //SiteVars.FireEfflux[site] = 0.0;
             //drought_todo
-            if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD)
+            if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD | DroughtMortality.WriteTemp)
             {
                 if (PlugIn.ModelCore.CurrentTime >= 11)
                 {
@@ -1293,6 +1295,24 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 normalCWD = value;
+            }
+
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Input value of Normal CWD
+        /// //TODO sam //drought_todo
+        /// </summary>
+        public static ISiteVar<double> NormalTemp
+        {
+            get
+            {
+                return normalTemp;
+            }
+            set
+            {
+                normalTemp = value;
             }
 
         }

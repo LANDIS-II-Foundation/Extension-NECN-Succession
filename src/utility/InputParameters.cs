@@ -43,6 +43,9 @@ namespace Landis.Extension.Succession.NECN
         //Drought normals -- optional variables for drought mortality
         private string normalSWAMapName;
         private string normalCWDMapName;
+        private string normalTempMapName;
+
+        //Maps to adjust PET based on topography
         private string slopeMapName;
         private string aspectMapName;
 
@@ -51,6 +54,7 @@ namespace Landis.Extension.Succession.NECN
         private bool henne_watermode;
         private bool writeSWA; //write soil water maps, for calculating normal SWA
         private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
+        private bool writeTemp; //write temperature maps, for calculating normal CWD
         private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
         private WaterType wtype;       
         private string communityInputMapNames;
@@ -105,6 +109,7 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> betaSWAAnom; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaCWD; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaNormCWD; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaNormTemp; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> intxnCWD_Biomass; // optional
 
         private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold; // optional
@@ -286,6 +291,23 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
+        /// Should annual rasters of Temperature be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool WriteTemp
+        {
+            get
+            {
+                return writeTemp;
+            }
+            set
+            {
+                writeTemp = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
         /// Should annual rasters of CWD be written? Used to generate input
         /// variables for drought mortality
         /// </summary>
@@ -442,6 +464,7 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get { return betaBiomass; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get { return betaCWD; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get { return betaNormTemp; } }
         public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
 
         //CWD Establishment
@@ -954,6 +977,23 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------
+
+
+        public string NormalTempMapName
+        {
+            get
+            {
+                return normalTempMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                normalTempMapName = value;
+            }
+        }
+        //---------------------------------------------------------------------
         public string SlopeMapName
         {
             get
@@ -1382,6 +1422,11 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             betaNormCWD[species] = VerifyRange(newValue, -10, 10);
         }
+        public void SetBetaNormTemp(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaNormTemp[species] = VerifyRange(newValue, -10, 10);
+        }
 
         public void SetIntxnCWD_Biomass(ISpecies species, double newValue)
         {
@@ -1434,6 +1479,7 @@ namespace Landis.Extension.Succession.NECN
             betaBiomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaNormCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaNormTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             
             maximumShadeLAI = new double[6];
