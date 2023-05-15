@@ -505,39 +505,11 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
                 parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
                 parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
-                parameters.Grass[species] = ReadGrass(row);
-                parameters.SetLightLAImean(species, System.Convert.ToInt32(row["LightLAImean"]));
-                parameters.SetLightLAIdispersion(species, System.Convert.ToInt32(row["LightLAIdispersion"]));
-                parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
-
-            }
-                CSVParser speciesParser = new CSVParser();
-                DataTable speciesTable = speciesParser.ParseToDataTable(csv.Value);
-            foreach (DataRow row in speciesTable.Rows)
-            {
-                ISpecies species = ReadSpecies(System.Convert.ToString(row["SpeciesCode"]));
-                parameters.SetFunctionalType(species, System.Convert.ToInt32(row["FunctionalGroupIndex"]));
-                parameters.NFixer[species] = System.Convert.ToBoolean(row["NitrogenFixer"]);
-                parameters.SetGDDmin(species, System.Convert.ToInt32(row["GDDMinimum"]));
-                parameters.SetGDDmax(species, System.Convert.ToInt32(row["GDDMaximum"]));
-                parameters.SetMinJanTemp(species, System.Convert.ToInt32(row["MinJanuaryT"]));
-                parameters.SetMaxDrought(species, System.Convert.ToDouble(row["MaxDrought"]));
-                parameters.SetLeafLongevity(species, System.Convert.ToDouble(row["LeafLongevity"]));
-                parameters.Epicormic[species] = System.Convert.ToBoolean(row["Epicormic"]);
-                parameters.SetLeafLignin(species, System.Convert.ToDouble(row["LeafLignin"]));
-                parameters.SetFineRootLignin(species, System.Convert.ToDouble(row["FineRootLignin"]));
-                parameters.SetWoodLignin(species, System.Convert.ToDouble(row["WoodLignin"]));
-                parameters.SetCoarseRootLignin(species, System.Convert.ToDouble(row["CoarseRootLignin"]));
-                parameters.SetLeafCN(species, System.Convert.ToDouble(row["LeafCN"]));
-                parameters.SetFineRootCN(species, System.Convert.ToDouble(row["FineRootCN"]));
-                parameters.SetWoodCN(species, System.Convert.ToDouble(row["WoodCN"]));
-                parameters.SetCoarseRootCN(species, System.Convert.ToDouble(row["CoarseRootCN"]));
-                parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
-                parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
-                parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
                 parameters.SetCWDBegin(species, System.Convert.ToInt32(row["CWDBegin"]));//TODO make optional
                 parameters.SetCWDMax(species, System.Convert.ToInt32(row["CWDMax"]));
                 parameters.Grass[species] = ReadGrass(row);
+                parameters.SetLightLAImean(species, System.Convert.ToInt32(row["LightLAImean"]));
+                parameters.SetLightLAIdispersion(species, System.Convert.ToInt32(row["LightLAIdispersion"]));
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
             }
 

@@ -1120,28 +1120,17 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         //CWD Establishment
-        public void SetCWDBegin(ISpecies           species,
-                                     InputValue<int> newValue)
+        public void SetCWDBegin(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            cwdBegin[species] = VerifyRange(newValue, 0, 5000);
+            cwdBegin[species] = VerifyRange(newValue, 0, 5000, "CWDBegin");
         }
-        public void SetCWDBegin(ISpecies species,int newValue)
+         public void SetCWDMax(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            cwdBegin[species] = VerifyRange(newValue, 0, 5000);
+            cwdMax[species] = VerifyRange(newValue, 0, 5000, "CWDMax");
         }
-        public void SetCWDMax(ISpecies species,
-                             InputValue<int> newValue)
-        {
-            Debug.Assert(species != null);
-            cwdMax[species] = VerifyRange(newValue, 0, 5000);
-        }
-        public void SetCWDMax(ISpecies species, int newValue)
-        {
-            Debug.Assert(species != null);
-            cwdMax[species] = VerifyRange(newValue, 0, 5000);
-        }
+
         //---------------------------------------------------------------------
 
         //public void SetLeafLongevity(ISpecies           species,
@@ -1288,11 +1277,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetMaxBiomass(ISpecies species, InputValue<int> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    maxBiomass[species] = VerifyRange(newValue, 2, 300000);
-        //}
         public void SetMaxBiomass(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
@@ -1306,12 +1290,11 @@ namespace Landis.Extension.Succession.NECN
         }
 
         public void SetLightLAImean(ISpecies species, double newValue)
-
-        public void SetMaxBiomass(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
             lightLAImean[species] = VerifyRange(newValue, 0.0, 10.0, "LightLAImean");
         }
+
         public void SetLightLAIdispersion(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
@@ -1384,75 +1367,75 @@ namespace Landis.Extension.Succession.NECN
         public void SetCWDThreshold(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            cwdThreshold[species] = VerifyRange(newValue, 0, 100000);
+            cwdThreshold[species] = VerifyRange(newValue, 0, 100000, "CWDThreshold");
         }
 
         public void SetMortalityAboveThreshold(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            mortalityAboveThreshold[species] = VerifyRange(newValue, 0, 1);
+            mortalityAboveThreshold[species] = VerifyRange(newValue, 0, 1, "MortalityAboveGThreshold");
         }
 
         public void SetCWDThreshold2(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            cwdThreshold2[species] = VerifyRange(newValue, 0, 100000);
+            cwdThreshold2[species] = VerifyRange(newValue, 0, 100000, "CWDThreshold2");
         }
 
         public void SetMortalityAboveThreshold2(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            mortalityAboveThreshold2[species] = VerifyRange(newValue, 0, 1);
+            mortalityAboveThreshold2[species] = VerifyRange(newValue, 0, 1, "MortalityAboveThreshold2");
         }
 
         public void SetIntercept(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            intercept[species] = VerifyRange(newValue, -10, 10);
+            intercept[species] = VerifyRange(newValue, -10, 10, "DroughtIntercept");
 
         }
         public void SetBetaAge(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaAge[species] = VerifyRange(newValue, -10, 10);
+            betaAge[species] = VerifyRange(newValue, -10, 10, "DroughtBetaAge");
         }
         public void SetBetaTemp(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaTemp[species] = VerifyRange(newValue, -10, 10);
+            betaTemp[species] = VerifyRange(newValue, -10, 10, "DroughtBetaTemp");
         }
         public void SetBetaSWAAnom(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaSWAAnom[species] = VerifyRange(newValue, -10, 10);
+            betaSWAAnom[species] = VerifyRange(newValue, -10, 10, "DroughtBetaSWAAnom");
         }
         public void SetBetaBiomass(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaBiomass[species] = VerifyRange(newValue, -10, 10);
+            betaBiomass[species] = VerifyRange(newValue, -10, 10, "DroughtBetaBiomass");
         }
 
         public void SetBetaCWD(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaCWD[species] = VerifyRange(newValue, -10, 10);
+            betaCWD[species] = VerifyRange(newValue, -10, 10, "DroghtBetaCWD");
         }
 
         public void SetBetaNormCWD(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaNormCWD[species] = VerifyRange(newValue, -10, 10);
+            betaNormCWD[species] = VerifyRange(newValue, -10, 10, "DroughtBetaNormCWD");
         }
         public void SetBetaNormTemp(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaNormTemp[species] = VerifyRange(newValue, -10, 10);
+            betaNormTemp[species] = VerifyRange(newValue, -10, 10, "DroughtBetaNormTemp");
         }
 
         public void SetIntxnCWD_Biomass(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            intxnCWD_Biomass[species] = VerifyRange(newValue, -10, 10);
+            intxnCWD_Biomass[species] = VerifyRange(newValue, -10, 10, "DroughtBetaIntxn");
         }
 
         public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
@@ -1502,15 +1485,9 @@ namespace Landis.Extension.Succession.NECN
             betaNormCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaNormTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            
-            maximumShadeLAI = new double[6];
-            sufficientLight         = new List<ISufficientLight>();
             lightLAImean = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAIdispersion = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-
-            //maximumShadeLAI = new double[6];
-            //sufficientLight         = new List<ISufficientLight>();
-
+            
         }
 
         //---------------------------------------------------------------------
