@@ -13,8 +13,7 @@ namespace Landis.Extension.Succession.NECN
     /// <summary>
     /// The parameters for biomass succession.
     /// </summary>
-    public class InputParameters
-        : IInputParameters
+    public class InputParameters : IInputParameters
     {
         private int timestep;
         private SeedingAlgorithms seedAlg;
@@ -41,10 +40,24 @@ namespace Landis.Extension.Succession.NECN
         private string initialDeadSurfaceMapName;
         private string initialDeadSoilMapName;
 
+        //Drought normals -- optional variables for drought mortality
+        private string normalSWAMapName;
+        private string normalCWDMapName;
+        private string normalTempMapName;
+
+        //Maps to adjust PET based on topography
+        private string slopeMapName;
+        private string aspectMapName;
+
         private bool calibrateMode;
         private bool smokeModelOutputs;
         private bool henne_watermode;
-        private WaterType wtype;
+        private bool writeSWA; //write soil water maps, for calculating normal SWA
+        private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
+        private bool writeTemp; //write temperature maps, for calculating normal CWD
+        private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
+        private WaterType wtype;       
+        private string communityInputMapNames;
         private double probEstablishAdjust;
         private double atmosNslope;
         private double atmosNintercept;
@@ -91,6 +104,26 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAIdispersion; 
 
         //private List<ISufficientLight> sufficientLight;
+      
+        //Drought variables
+        private Landis.Library.Parameters.Species.AuxParm<double> intercept; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaAge; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaBiomass; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaTemp; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaSWAAnom; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaCWD; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaNormCWD; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaNormTemp; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> intxnCWD_Biomass; // optional
+
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> mortalityAboveThreshold; // optional
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold2; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> mortalityAboveThreshold2; // optional
+
+        //CWD Establishment
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdBegin;
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdMax;
 
 
         //---------------------------------------------------------------------
@@ -210,6 +243,88 @@ namespace Landis.Extension.Succession.NECN
                 henne_watermode = value;
             }
         }
+
+        public string CommunityInputMapNames
+        {
+            get
+            {
+                return communityInputMapNames;
+            }
+            set
+            {
+                communityInputMapNames = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should yearly rasters of mean summer SWA be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool WriteSWA
+        {
+            get
+            {
+                return writeSWA;
+            }
+            set
+            {
+                writeSWA = value;
+            }
+        }
+
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of CWD be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool WriteCWD
+        {
+            get
+            {
+                return writeCWD;
+            }
+            set
+            {
+                writeCWD = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of Temperature be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool WriteTemp
+        {
+            get
+            {
+                return writeTemp;
+            }
+            set
+            {
+                writeTemp = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of CWD be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool WriteSpeciesDroughtMaps
+        {
+            get
+            {
+                return writeSpeciesDroughtMaps;
+            }
+            set
+            {
+                writeSpeciesDroughtMaps = value;
+            }
+        }
+
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -340,8 +455,25 @@ namespace Landis.Extension.Succession.NECN
 
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAIMean { get { return lightLAImean; } }
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAIDispersion { get { return lightLAIdispersion; } }
+        //Drought variables
 
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2 { get { return cwdThreshold2; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2 { get { return mortalityAboveThreshold2; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get { return betaSWAAnom; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get { return betaBiomass; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get { return betaCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get { return betaNormTemp; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
 
+        //CWD Establishment
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDBegin { get { return cwdBegin; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDMax { get { return cwdMax; } }
         //---------------------------------------------------------------------
         /// <summary>
         /// Can the species resprout epicormically following a fire?
@@ -815,6 +947,90 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
+
+        public string NormalSWAMapName
+        {
+            get
+            {
+                return normalSWAMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                normalSWAMapName = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
+
+        public string NormalCWDMapName
+        {
+            get
+            {
+                return normalCWDMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                normalCWDMapName = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+
+
+        public string NormalTempMapName
+        {
+            get
+            {
+                return normalTempMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                normalTempMapName = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        public string SlopeMapName
+        {
+            get
+            {
+                return slopeMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                slopeMapName = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public string AspectMapName
+        {
+            get
+            {
+                return aspectMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                aspectMapName = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+
         //public void SetMaximumShadeLAI(byte                   shadeClass,
         //                                  //IEcoregion             ecoregion,
         //                                  InputValue<double> newValue)
@@ -901,6 +1117,30 @@ namespace Landis.Extension.Succession.NECN
         {
             Debug.Assert(species != null);
             maxDrought[species] = VerifyRange(newValue, 0.0, 1.0, "MaxDrought");
+        }
+        //---------------------------------------------------------------------
+        //CWD Establishment
+        public void SetCWDBegin(ISpecies           species,
+                                     InputValue<int> newValue)
+        {
+            Debug.Assert(species != null);
+            cwdBegin[species] = VerifyRange(newValue, 0, 5000);
+        }
+        public void SetCWDBegin(ISpecies species,int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdBegin[species] = VerifyRange(newValue, 0, 5000);
+        }
+        public void SetCWDMax(ISpecies species,
+                             InputValue<int> newValue)
+        {
+            Debug.Assert(species != null);
+            cwdMax[species] = VerifyRange(newValue, 0, 5000);
+        }
+        public void SetCWDMax(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdMax[species] = VerifyRange(newValue, 0, 5000);
         }
         //---------------------------------------------------------------------
 
@@ -1066,6 +1306,8 @@ namespace Landis.Extension.Succession.NECN
         }
 
         public void SetLightLAImean(ISpecies species, double newValue)
+
+        public void SetMaxBiomass(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
             lightLAImean[species] = VerifyRange(newValue, 0.0, 10.0, "LightLAImean");
@@ -1139,6 +1381,80 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
+        public void SetCWDThreshold(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdThreshold[species] = VerifyRange(newValue, 0, 100000);
+        }
+
+        public void SetMortalityAboveThreshold(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            mortalityAboveThreshold[species] = VerifyRange(newValue, 0, 1);
+        }
+
+        public void SetCWDThreshold2(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdThreshold2[species] = VerifyRange(newValue, 0, 100000);
+        }
+
+        public void SetMortalityAboveThreshold2(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            mortalityAboveThreshold2[species] = VerifyRange(newValue, 0, 1);
+        }
+
+        public void SetIntercept(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            intercept[species] = VerifyRange(newValue, -10, 10);
+
+        }
+        public void SetBetaAge(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaAge[species] = VerifyRange(newValue, -10, 10);
+        }
+        public void SetBetaTemp(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaTemp[species] = VerifyRange(newValue, -10, 10);
+        }
+        public void SetBetaSWAAnom(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaSWAAnom[species] = VerifyRange(newValue, -10, 10);
+        }
+        public void SetBetaBiomass(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaBiomass[species] = VerifyRange(newValue, -10, 10);
+        }
+
+        public void SetBetaCWD(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaCWD[species] = VerifyRange(newValue, -10, 10);
+        }
+
+        public void SetBetaNormCWD(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaNormCWD[species] = VerifyRange(newValue, -10, 10);
+        }
+        public void SetBetaNormTemp(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaNormTemp[species] = VerifyRange(newValue, -10, 10);
+        }
+
+        public void SetIntxnCWD_Biomass(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            intxnCWD_Biomass[species] = VerifyRange(newValue, -10, 10);
+        }
+
         public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
         {
             this.speciesDataset = speciesDataset;
@@ -1169,6 +1485,26 @@ namespace Landis.Extension.Succession.NECN
             maxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             growthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            //CWD Establishment
+            cwdBegin = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            cwdMax = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            //Drought variables
+            cwdThreshold = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            mortalityAboveThreshold = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            cwdThreshold2 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            mortalityAboveThreshold2 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            intercept = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaAge = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaSWAAnom = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaBiomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaNormCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaNormTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            
+            maximumShadeLAI = new double[6];
+            sufficientLight         = new List<ISufficientLight>();
             lightLAImean = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAIdispersion = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
 

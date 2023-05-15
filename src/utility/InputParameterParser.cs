@@ -166,6 +166,37 @@ namespace Landis.Extension.Succession.NECN
             ReadVar(deadSoilMapName);
             parameters.InitialDeadSoilMapName = deadSoilMapName.Value;
 
+            InputVar<string> normalSWAMapName = new InputVar<string>("NormalSWAMapName");
+            if (ReadOptionalVar(normalSWAMapName))
+            {
+                parameters.NormalSWAMapName = normalSWAMapName.Value;
+            }
+
+            InputVar<string> normalCWDMapName = new InputVar<string>("NormalCWDMapName");
+            if (ReadOptionalVar(normalCWDMapName))
+            {
+                parameters.NormalCWDMapName = normalCWDMapName.Value;
+            }
+
+            InputVar<string> normalTempMapName = new InputVar<string>("NormalCWDMapName");
+            if (ReadOptionalVar(normalTempMapName))
+            {
+                parameters.NormalCWDMapName = normalTempMapName.Value;
+            }
+
+
+            InputVar<string> slopeMapName = new InputVar<string>("SlopeMapName");
+            if (ReadOptionalVar(slopeMapName))
+            {
+                parameters.SlopeMapName = slopeMapName.Value;
+            }
+
+            InputVar<string> aspectMapName = new InputVar<string>("AspectMapName");
+            if (ReadOptionalVar(aspectMapName))
+            {
+                parameters.AspectMapName = aspectMapName.Value;
+            }
+
             InputVar<bool> calimode = new InputVar<bool>("CalibrateMode");
             if (ReadOptionalVar(calimode))
                 parameters.CalibrateMode = calimode.Value;
@@ -185,6 +216,38 @@ namespace Landis.Extension.Succession.NECN
             }
             else
                 parameters.SoilWater_Henne = false;
+
+            InputVar<bool> write_SWA = new InputVar<bool>("Write_SWA_Maps");
+            if (ReadOptionalVar(write_SWA))
+            {
+                parameters.WriteSWA= write_SWA.Value;
+            }
+            else
+                parameters.WriteSWA = false;
+
+            InputVar<bool> write_CWD = new InputVar<bool>("Write_CWD_Maps");
+            if (ReadOptionalVar(write_CWD))
+            {
+                parameters.WriteCWD = write_CWD.Value;
+            }
+            else
+                parameters.WriteCWD = false;
+
+            InputVar<bool> write_Temp = new InputVar<bool>("Write_Temperature_Maps");
+            if (ReadOptionalVar(write_Temp))
+            {
+                parameters.WriteTemp = write_Temp.Value;
+            }
+            else
+                parameters.WriteTemp = false;
+
+            InputVar<bool> write_SpeciesDroughtMaps = new InputVar<bool>("Write_Species_Drought_Maps");
+            if (ReadOptionalVar(write_SpeciesDroughtMaps))
+            {
+                parameters.WriteSpeciesDroughtMaps = write_SpeciesDroughtMaps.Value;
+            }
+            else
+                parameters.WriteSpeciesDroughtMaps = false;
 
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
@@ -242,6 +305,17 @@ namespace Landis.Extension.Succession.NECN
             {
                 parameters.SetGrassThresholdMultiplier(grassTMult.Value);
                 //PlugIn.Grasses = true;
+            }
+
+            InputVar<string> inputCommunityMaps = new InputVar<string>("CreateInputCommunityMaps");
+            if (ReadOptionalVar(inputCommunityMaps))
+            {
+                PlugIn.InputCommunityMapNames = inputCommunityMaps.Value;
+
+                InputVar<int> inputMapFreq = new InputVar<int>("InputCommunityMapFrequency");
+                ReadVar(inputMapFreq);
+                PlugIn.InputCommunityMapFrequency = inputMapFreq.Value;
+
             }
 
             InputVar<double> stormFlowOverride = new InputVar<double>("StormFlowOverride");
@@ -316,18 +390,6 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.TotalCMapFrequency = totalCMapFreq.Value;
 
             }
-
-            InputVar<string> inputCommunityMaps = new InputVar<string>("CreateInputCommunityMaps");
-            if (ReadOptionalVar(inputCommunityMaps))
-            {
-                PlugIn.InputCommunityMapNames = inputCommunityMaps.Value;
-
-                InputVar<int> inputMapFreq = new InputVar<int>("InputCommunityMapFrequency");
-                ReadVar(inputMapFreq);
-                PlugIn.InputCommunityMapFrequency = inputMapFreq.Value;
-
-            }
-
             //--------------------------
             //  LAI and light table
 
@@ -449,6 +511,35 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 
             }
+                CSVParser speciesParser = new CSVParser();
+                DataTable speciesTable = speciesParser.ParseToDataTable(csv.Value);
+            foreach (DataRow row in speciesTable.Rows)
+            {
+                ISpecies species = ReadSpecies(System.Convert.ToString(row["SpeciesCode"]));
+                parameters.SetFunctionalType(species, System.Convert.ToInt32(row["FunctionalGroupIndex"]));
+                parameters.NFixer[species] = System.Convert.ToBoolean(row["NitrogenFixer"]);
+                parameters.SetGDDmin(species, System.Convert.ToInt32(row["GDDMinimum"]));
+                parameters.SetGDDmax(species, System.Convert.ToInt32(row["GDDMaximum"]));
+                parameters.SetMinJanTemp(species, System.Convert.ToInt32(row["MinJanuaryT"]));
+                parameters.SetMaxDrought(species, System.Convert.ToDouble(row["MaxDrought"]));
+                parameters.SetLeafLongevity(species, System.Convert.ToDouble(row["LeafLongevity"]));
+                parameters.Epicormic[species] = System.Convert.ToBoolean(row["Epicormic"]);
+                parameters.SetLeafLignin(species, System.Convert.ToDouble(row["LeafLignin"]));
+                parameters.SetFineRootLignin(species, System.Convert.ToDouble(row["FineRootLignin"]));
+                parameters.SetWoodLignin(species, System.Convert.ToDouble(row["WoodLignin"]));
+                parameters.SetCoarseRootLignin(species, System.Convert.ToDouble(row["CoarseRootLignin"]));
+                parameters.SetLeafCN(species, System.Convert.ToDouble(row["LeafCN"]));
+                parameters.SetFineRootCN(species, System.Convert.ToDouble(row["FineRootCN"]));
+                parameters.SetWoodCN(species, System.Convert.ToDouble(row["WoodCN"]));
+                parameters.SetCoarseRootCN(species, System.Convert.ToDouble(row["CoarseRootCN"]));
+                parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
+                parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
+                parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
+                parameters.SetCWDBegin(species, System.Convert.ToInt32(row["CWDBegin"]));//TODO make optional
+                parameters.SetCWDMax(species, System.Convert.ToInt32(row["CWDMax"]));
+                parameters.Grass[species] = ReadGrass(row);
+                parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
+            }
 
             //--------- Read In Functional Group Table -------------------------------
             PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
@@ -487,10 +578,56 @@ namespace Landis.Extension.Succession.NECN
                     funcTParms.CoarseRootFraction = System.Convert.ToDouble(row["CoarseRootFraction"]);
                     funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
                     funcTParms.MinLAI = ReadMinLAI(row);
+                    funcTParms.MoistureCurve1 = ReadMC1(row);
+                    funcTParms.MoistureCurve4 = ReadMC4(row);
+                    funcTParms.MinSoilDrain = ReadMinSoilDrain(row);
 
             }
 
-                //--------- Read In Fire Reductions Table ---------------------------
+
+            //-------------------------
+            //  Read Drought Mortality Parameters table
+            PlugIn.ModelCore.UI.WriteLine("   Begin parsing Drought table.");
+                        
+            InputVar<string> drought_csv = new InputVar<string>("DroughtMortalityParameters");
+
+            if (ReadOptionalVar(drought_csv))
+            {
+                DroughtMortality.UseDrought = true; //set flag to use drought mortality algorithms
+                PlugIn.ModelCore.UI.WriteLine("    Setting UseDrought flag to true."); //debug
+
+                InputVar<int> inputMapFreq = new InputVar<int>("InputCommunityMapFrequency");
+               
+                CSVParser droughtParser = new CSVParser();
+                DataTable droughtTable = speciesParser.ParseToDataTable(drought_csv.Value);
+                foreach (DataRow row in droughtTable.Rows)
+                {
+                    //TODO Currently, does not check for duplicate or missing species. It should be okay to have missing
+                    // species, but we ought to check for duplicates. It does correctly reject species that aren't present
+                    // in the species table already.
+                    ISpecies species = ReadDroughtSpecies(System.Convert.ToString(row["SpeciesCode"]));
+                    PlugIn.ModelCore.UI.WriteLine("Reading drought parameters for species {0}", species.Name);
+
+                    parameters.SetCWDThreshold(species, System.Convert.ToInt32(row["CWDThreshold"]));
+                    parameters.SetMortalityAboveThreshold(species, System.Convert.ToDouble(row["MortalityAboveThreshold"]));
+                    parameters.SetCWDThreshold2(species, System.Convert.ToInt32(row["CWDThreshold2"]));
+                    parameters.SetMortalityAboveThreshold2(species, System.Convert.ToDouble(row["MortalityAboveThreshold2"]));
+
+                    parameters.SetIntercept(species, System.Convert.ToDouble(row["Intercept"]));
+                    parameters.SetBetaAge(species, System.Convert.ToDouble(row["BetaAge"]));
+                    parameters.SetBetaTemp(species, System.Convert.ToDouble(row["BetaTemp"]));
+                    parameters.SetBetaSWAAnom(species, System.Convert.ToDouble(row["BetaSWAAnom"]));
+                    parameters.SetBetaBiomass(species, System.Convert.ToDouble(row["BetaBiomass"]));
+                    parameters.SetBetaCWD(species, System.Convert.ToDouble(row["BetaCWD"]));
+                    parameters.SetBetaNormCWD(species, System.Convert.ToDouble(row["BetaNormCWD"]));
+                    parameters.SetBetaNormTemp(species, System.Convert.ToDouble(row["BetaNormTemp"]));
+                    parameters.SetIntxnCWD_Biomass(species, System.Convert.ToDouble(row["IntxnCWD_Biomass"]));
+                }
+               
+            }
+
+            //--------- Read In Fire Reductions Table ---------------------------
+
             PlugIn.ModelCore.UI.WriteLine("   Begin reading FIRE REDUCTION parameters.");
             ReadName(Names.FireReductionParameters);
 
@@ -640,6 +777,23 @@ namespace Landis.Extension.Succession.NECN
                 speciesLineNums[species.Name] = LineNumber;
             return species;
         }
+        private ISpecies ReadDroughtSpecies(string speciesName)
+        {
+            ISpecies species = speciesDataset[speciesName];
+            if (species == null)
+                throw new InputValueException(speciesName,
+                                              "{0} is not a species name.",
+                                              speciesName);
+            int lineNumber;
+            if (speciesLineNums.TryGetValue(species.Name, out lineNumber))
+            {
+                return species;
+            }            
+            else throw new InputValueException(speciesName,
+                                              "The species {0}, found on the drought table, does not exist in the species table",
+                                              speciesName);
+            
+        }
         private bool ReadGrass(DataRow row)
         {
             try
@@ -662,6 +816,49 @@ namespace Landis.Extension.Succession.NECN
             catch
             {
                 return 0.1;
+            }
+        }
+        //Optional MoistureCurve1
+        private double ReadMC1(DataRow row)
+        {
+            try
+            {
+                double mc1 = System.Convert.ToDouble(row["MoistureCurve1"]);
+                return mc1;
+            }
+            catch
+            {
+                NewParseException("Error in moisture curve 1");
+                return 0.0;
+            }
+        }
+        //Optional MoistureCurve4 -- NECN uses 4-parameter water limit if MoistureCurve4 is present
+        private double ReadMC4(DataRow row)
+        {
+            try
+            {
+                double mc4 = System.Convert.ToDouble(row["MoistureCurve4"]);
+                OtherData.DGS_waterlimit = true;
+                return mc4;
+            }
+            catch
+            {
+                NewParseException("Error in moisture curve 4");
+                return 0.0;
+            }
+        }
+        //Optional minimum soil drainage -- prevents functional types from establishing on poorly drained soils
+        private double ReadMinSoilDrain(DataRow row)
+        {
+            try
+            {
+                double minSoilDrain = System.Convert.ToDouble(row["MinSoilDrain"]);
+                return minSoilDrain;
+            }
+            catch
+            {
+                NewParseException("Error in minimum soil drainage");
+                return 0.0;
             }
         }
         private double ReadGrowthLAI(DataRow row)

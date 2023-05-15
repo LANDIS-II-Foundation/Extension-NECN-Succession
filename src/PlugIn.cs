@@ -115,6 +115,18 @@ namespace Landis.Extension.Succession.NECN
                 Parameters.InitialSOM3NMapName);
             ReadMaps.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
 
+            //TODO only read if path isn't null
+            ReadMaps.ReadNormalSWAMap(Parameters.NormalSWAMapName);
+            ReadMaps.ReadNormalCWDMap(Parameters.NormalCWDMapName);
+            if (Parameters.SlopeMapName != null)
+            {
+                ReadMaps.ReadSlopeMap(Parameters.SlopeMapName);
+            }
+            if (Parameters.AspectMapName != null)
+            {
+                ReadMaps.ReadAspectMap(Parameters.AspectMapName);
+            }
+
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
             FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
@@ -141,6 +153,18 @@ namespace Landis.Extension.Succession.NECN
             Landis.Library.LeafBiomassCohorts.Cohort.DeathEvent += CohortTotalMortality;
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
+
+            if (DroughtMortality.UseDrought)
+            {
+                DroughtMortality.Initialize(Parameters);
+            }
+
+            //B_MAX = 0;
+            //foreach (ISpecies species in ModelCore.Species)
+            //{
+            //    if (SpeciesData.Max_Biomass[species] > B_MAX)
+            //        B_MAX = SpeciesData.Max_Biomass[species];
+            //}
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
@@ -315,7 +339,7 @@ namespace Landis.Extension.Succession.NECN
                     //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
                     //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
 
-                    //Disturbed[site] = true; //SF should browse count as a "disturbance" for this purpose?
+                    Disturbed[site] = true; //SF should browse count as a "disturbance" for this purpose?
 
                     return;
                 }
@@ -686,7 +710,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
         //---------------------------------------------------------------------
-
         /// <summary>
         /// Determines if a species can establish on a site.
         /// This is a Delegate method to base succession.

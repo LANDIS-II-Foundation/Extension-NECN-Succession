@@ -21,6 +21,7 @@ $dlls = "Landis.Library.AgeOnlyCohorts-v3.dll",
 
 # LANDIS-II support libraries download
 $current = Get-Location
+write $current
 $outpath = $current.toString() + "/"
 
 try {

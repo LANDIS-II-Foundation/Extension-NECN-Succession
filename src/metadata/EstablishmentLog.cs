@@ -27,8 +27,14 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Desc = "Average January T Multiplier", Format = "0.00")]
         public double AvgMinJanTempMult { set; get; }
 
+        [DataFieldAttribute(Desc = "Average CWD Multiplier", Format = "0.00")]
+        public double AvgCWDLimit { set; get; }
+
         [DataFieldAttribute(Desc = "Average Soil Moisture Multiplier", Format = "0.00")]
         public double AvgSoilMoistureMult { set; get; }
+
+        [DataFieldAttribute(Desc = "Average Dry Days Multiplier", Format = "0.00")]
+        public double AvgDryDaysMult { set; get; }
 
         [DataFieldAttribute(Desc = "Average Probability of Establishment", Format = "0.00")]
         public double AvgProbEst { set; get; }
@@ -41,5 +47,9 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Desc = "End of Growing Season", Format = "0.00")]
         public double EndGDD { set; get; }
+        [DataFieldAttribute(Desc = "Average CWD value", Format = "0.00")]
+        public double AvgCWD { set; get; }
+
+        
     }
 }

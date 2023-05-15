@@ -6,6 +6,7 @@ using Landis.Library.LeafBiomassCohorts;
 using System.Collections.Generic;
 using Landis.Library.Climate;
 
+
 namespace Landis.Extension.Succession.NECN
 {
     /// <summary>
@@ -31,8 +32,8 @@ namespace Landis.Extension.Succession.NECN
 
             for (int y = 0; y < years; ++y) {
 
-                Year = y + 1;
-                
+                //PlugIn.ModelCore.UI.WriteLine("Timestep is = {0}.", PlugIn.ModelCore.CurrentTime);
+
                 if (Climate.Future_MonthlyData.ContainsKey(PlugIn.FutureClimateBaseYear + y + PlugIn.ModelCore.CurrentTime - years))
                     ClimateRegionData.AnnualWeather[ecoregion] = Climate.Future_MonthlyData[PlugIn.FutureClimateBaseYear + y - years + PlugIn.ModelCore.CurrentTime][ecoregion.Index];
 
@@ -43,11 +44,19 @@ namespace Landis.Extension.Succession.NECN
                 // Next, Grow and Decompose each month
                 int[] months = new int[12]{6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
 
-                if(OtherData.CalibrateMode)
+                int[] summer = new int[6] {6, 7, 8, 9, 4, 5};
+
+                if (OtherData.CalibrateMode)
                     //months = new int[12]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; This output will not match normal mode due to differences in initialization
                     months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
                 PlugIn.AnnualWaterBalance = 0;
+
+                if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteTemp)
+                {
+                    double[] summer_water = new double[6];
+                    double[] summer_temp = new double[6];
+                }
 
                 for (MonthCnt = 0; MonthCnt < 12; MonthCnt++)
                 {
@@ -70,9 +79,12 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyLAI_Trees[site][Month] = 0.0;
                     SiteVars.MonthlyLAI_Grasses[site][Month] = 0.0; // Chihiro, 2020.03.30: tentative
                     SiteVars.MonthlySoilWaterContent[site][Month] = 0.0;
+                    SiteVars.MonthlyMeanSoilWaterContent[site][Month] = 0.0;
+                    SiteVars.MonthlyAnaerobicEffect[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);
-                                   
+
+                                                   
                     double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month];
 
                     double monthlyNdeposition;
@@ -116,8 +128,56 @@ namespace Landis.Extension.Succession.NECN
                     // Chihiro 2021.03.30: tentative
                     SiteVars.MonthlyLAI_GrassesLastMonth[site] = SiteVars.MonthlyLAI_Grasses[site][Month];
 
+                    //Drought vars
+                    //Update monthly temperature and soil water
+                    if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteTemp)
+                    {
+                        int year_index = PlugIn.ModelCore.CurrentTime - 1;
+
+                        if(year_index >= 10)
+                        {
+                            year_index = 9;
+                        }
+
+                        //PlugIn.ModelCore.UI.WriteLine("Year index = {0}", year_index);
+                        
+                        //check if the current month is in "summer" 
+                        foreach (var i in summer)
+                        {
+                            if (i == Month)
+                            {
+                                //Initialize each year by adding a new list element
+                                if (Month == summer[0])
+                                {
+                                    //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} before adding new year", SiteVars.SoilWater10[site].Count);
+                                    //Add a new entry to the list; in years before year 10, we're just adding to the list. For later
+                                    // years, we've already popped the first element when resetting the site vars, so the list stays
+                                    // ten elements long
+                                    SiteVars.SoilWater10[site].Add(0);
+                                    
+                                    //SiteVars.SoilWater10[site].ForEach(p => PlugIn.ModelCore.UI.WriteLine("SoilWater10 value is {0}", p));
+                                    SiteVars.Temp10[site].Add(0);
+
+                                    //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} after adding new year", SiteVars.SoilWater10[site].Count);
+                                }
+                                                             
+                                //PlugIn.ModelCore.UI.WriteLine("Month = {0}", Month);
+                                //PlugIn.ModelCore.UI.WriteLine("Monthly soil water content = {0}", SiteVars.MonthlySoilWaterContent[site][Month]);
+
+                                SiteVars.SoilWater10[site][year_index] += SiteVars.MonthlySoilWaterContent[site][Month];
+
+                                //PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year_index]);
+
+                                SiteVars.Temp10[site][year_index] += ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[Month];
+                                
+                            }
+                        }
+                    }
+
+                    
 
                     WoodLayer.Decompose(site);
+
                     if (OtherData.CalibrateMode)
                     {
                         PlugIn.ModelCore.UI.WriteLine("currentDeadWoodC:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, string.Join(", ", SiteVars.CurrentDeadWoodC[site]));
@@ -129,6 +189,7 @@ namespace Landis.Extension.Succession.NECN
                     // Volatilization loss as a function of the mineral N which remains after uptake by plants.  
                     // ML added a correction factor for wetlands since their denitrification rate is double that of wetlands
                     // based on a review paper by Seitziner 2006.
+                    //TODO update this for wetlands?
 
                     double volatilize = (SiteVars.MineralN[site] * PlugIn.Parameters.DenitrificationRate); 
 
@@ -146,8 +207,31 @@ namespace Landis.Extension.Succession.NECN
                     //SiteVars.FineFuels[site] = (System.Math.Min(1.0, (double) (PlugIn.ModelCore.CurrentTime - SiteVars.HarvestTime[site]) * 0.1));
                 }
 
+                //Do this just once a year, after CWD is calculated above
+                if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD | DroughtMortality.WriteTemp) //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                {
+                    int year_index = PlugIn.ModelCore.CurrentTime - 1;
+
+                    SiteVars.CWD10[site].Add(0);
+
+                    if (year_index >= 10)
+                    {
+                        year_index = 9;
+                    }
+
+                    SiteVars.CWD10[site][year_index] = SiteVars.AnnualClimaticWaterDeficit[site];
+
+                    //PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
+                }
+
+                if (DroughtMortality.UseDrought)
+                {
+                    DroughtMortality.ComputeDroughtLaggedVars(site);
+                }
+
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
             }
+
 
             ComputeTotalCohortCN(site, siteCohorts);
 

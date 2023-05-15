@@ -49,5 +49,8 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Soil Water Content", Format = "0.00")]
         public double SoilWaterContent { get; set; }
+
+        [DataFieldAttribute(Unit = "unitless", Desc = "Anaerobic Effect", Format = "0.00")]
+        public double AnaerobicEffect { get; set; }
     }
 }

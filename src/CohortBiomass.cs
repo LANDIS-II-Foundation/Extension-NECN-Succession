@@ -6,6 +6,7 @@ using Landis.SpatialModeling;
 using System.Collections.Generic;
 using Landis.Library.LeafBiomassCohorts;
 using System;
+using System.Linq;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -55,12 +56,12 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.cohortAge = cohort.Age;
                 CalibrateLog.cohortWoodB = cohort.WoodBiomass;
                 CalibrateLog.cohortLeafB = cohort.LeafBiomass;
-            } 
-           
+            }
+
 
             double siteBiomass = Main.ComputeLivingBiomass(SiteVars.Cohorts[site]);
 
-            if(siteBiomass < 0)
+            if (siteBiomass < 0)
                 throw new ApplicationException("Error: Site biomass < 0");
 
             // ****** Mortality *******
@@ -69,14 +70,27 @@ namespace Landis.Extension.Succession.NECN
 
             // ****** Growth *******
             double[] actualANPP = ComputeActualANPP(cohort, site, siteBiomass, mortalityAge);
-            
+
             //  Growth-related mortality
             double[] mortalityGrowth = ComputeGrowthMortality(cohort, site, siteBiomass, actualANPP);
 
-            double[] totalMortality = new double[2]{Math.Min(cohort.WoodBiomass, mortalityAge[0] + mortalityGrowth[0]), Math.Min(cohort.LeafBiomass, mortalityAge[1] + mortalityGrowth[1])};
+            // Drought mortality
+            //Calculate drought mortality just in May, after annual CWD has been calculated
+            double[] mortalityDrought = new double[2] { 0, 0 };
+
+            //PlugIn.ModelCore.UI.WriteLine("Use_Drought = {0}", DroughtMortality.UseDrought);
+
+            if (Main.Month == 5)
+            {
+                if (DroughtMortality.UseDrought)
+                {
+                   mortalityDrought = DroughtMortality.ComputeDroughtMortality(cohort, site);
+                }
+            }
+                                             
+            double[] totalMortality = new double[2] { Math.Min(cohort.WoodBiomass, mortalityAge[0] + mortalityGrowth[0] + mortalityDrought[0]), Math.Min(cohort.LeafBiomass, mortalityAge[1] + mortalityGrowth[1] + mortalityDrought[1]) };
             double nonDisturbanceLeafFall = totalMortality[1];
 
-            
             double scorch = 0.0;
             defoliatedLeafBiomass = 0.0;
 
@@ -94,6 +108,7 @@ namespace Landis.Extension.Succession.NECN
                     //defoliation = Landis.Library.BiomassCohorts.CohortDefoliation.Compute(cohort, site, (int)siteBiomass); //this line lets defoliation work with Biomass Browse
                     int cohortBiomass = (int)(cohort.LeafBiomass + cohort.WoodBiomass);
                     defoliation = Landis.Library.Biomass.CohortDefoliation.Compute(site, cohort.Species, cohortBiomass, (int)siteBiomass);
+
                 }
 
                 if (defoliation > 1.0)
@@ -102,20 +117,20 @@ namespace Landis.Extension.Succession.NECN
                 if (defoliation > 0.0)
                 {
                     defoliatedLeafBiomass = (cohort.LeafBiomass) * defoliation;
-                   if (totalMortality[1] + defoliatedLeafBiomass - cohort.LeafBiomass > 0.001)
+                    if (totalMortality[1] + defoliatedLeafBiomass - cohort.LeafBiomass > 0.001)
                         defoliatedLeafBiomass = cohort.LeafBiomass - totalMortality[1];
                     //PlugIn.ModelCore.UI.WriteLine("Defoliation.Month={0:0.0}, LeafBiomass={1:0.00}, DefoliatedLeafBiomass={2:0.00}, TotalLeafMort={2:0.00}", Main.Month, cohort.LeafBiomass, defoliatedLeafBiomass , mortalityAge[1]);
 
                     ForestFloor.AddFrassLitter(defoliatedLeafBiomass, cohort.Species, site);
 
                 }
+             
             }
             else
             {
                 defoliation = 0.0;
                 defoliatedLeafBiomass = 0.0;
             }
-
 
             if (totalMortality[0] <= 0.0 || cohort.WoodBiomass <= 0.0)
                 totalMortality[0] = 0.0;
@@ -145,7 +160,7 @@ namespace Landis.Extension.Succession.NECN
 
             //if((totalMortality[1] + defoliatedLeafBiomass) > cohort.LeafBiomass)
             //   PlugIn.ModelCore.UI.WriteLine("Warning: Leaf Mortality exceeds cohort leaf biomass. M={0:0.0}, B={1:0.0}, DefoLeafBiomass={2:0.0}, defoliationIndex={3:0.0}", totalMortality[1], cohort.LeafBiomass, defoliatedLeafBiomass, defoliation);
-            
+
             UpdateDeadBiomass(cohort, site, totalMortality);
 
             CalculateNPPcarbon(site, cohort, actualANPP);
@@ -165,25 +180,43 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        private double[] ComputeActualANPP(ICohort    cohort,
+        private double[] ComputeActualANPP(ICohort cohort,
                                          ActiveSite site,
-                                         double    siteBiomass,
-                                         double[]   mortalityAge)
+                                         double siteBiomass,
+                                         double[] mortalityAge)
         {
 
-            double leafFractionNPP  = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FractionANPPtoLeaf;
+            double leafFractionNPP = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FractionANPPtoLeaf;
             //double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
             double sitelai          = SiteVars.LAI[site];
             double maxNPP           = SpeciesData.Max_ANPP[cohort.Species];
+            double limitH20 = 1.0;
 
-            double limitT   = calculateTemp_Limit(site, cohort.Species);
+            double limitT = calculateTemp_Limit(site, cohort.Species);
 
-            double limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            if (OtherData.DGS_waterlimit) 
+            {
+                double wilt_point = SiteVars.SoilWiltingPoint[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                
+                if (volumetric_water < 0.001) volumetric_water = 0.001;
+
+                limitH20 = calculateWater_Limit_versionDGS(volumetric_water, cohort.Species);
+                if (OtherData.CalibrateMode)
+                {
+                    PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
+                    volumetric_water, limitH20);
+                }
+
+                if (volumetric_water < wilt_point) limitH20 = 0.001;
+
+            }
+            else
+            {
+                limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            }
 
             double limitLAI = calculateLAI_Limit(cohort, site);
-
-            // RMS 03/2016: Testing alternative more similar to how Biomass Succession operates: REMOVE FOR NEXT RELEASE
-            //double limitCapacity = 1.0 - Math.Min(1.0, Math.Exp(siteBiomass / maxBiomass * 5.0) / Math.Exp(5.0));
 
             double competition_limit = calculate_LAI_Competition(cohort, site);
 
@@ -193,12 +226,18 @@ namespace Landis.Extension.Succession.NECN
 
             potentialNPP *= limitN;
 
-            //if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(limitCapacity) || Double.IsNaN(limitN))
-            //{
-            //    PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
-            //    PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Capacity={6:0.0}", PlugIn.ModelCore.CurrentTime, month + 1, limitLAI, limitH20, limitN, limitT, limitCapacity);
-            //    PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, month + 1, maxBiomass, (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
-            //}
+            if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(competition_limit) || Double.IsNaN(limitN))
+            {
+                PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
+
+                double wilt_point = SiteVars.SoilWiltingPoint[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+
+                PlugIn.ModelCore.UI.WriteLine("wilt_point = {0}, volumetric_water = {1}", wilt_point, volumetric_water);
+
+            }
 
 
             //  Age mortality is discounted from ANPP to prevent the over-
@@ -214,14 +253,17 @@ namespace Landis.Extension.Succession.NECN
                 actualANPP *= (1.0 - growthReduction);
             }
 
-            double leafNPP  = actualANPP * leafFractionNPP;
-            double woodNPP  = actualANPP * (1.0 - leafFractionNPP);
-                        
+            double leafNPP = actualANPP * leafFractionNPP;
+            double woodNPP = actualANPP * (1.0 - leafFractionNPP);
+
             if (Double.IsNaN(leafNPP) || Double.IsNaN(woodNPP))
             {
                 PlugIn.ModelCore.UI.WriteLine("  EITHER WOOD or LEAF NPP = NaN!  Will set to zero.");
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (cohort.WoodBiomass + cohort.LeafBiomass), SiteVars.SoilTemperature[site]);
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     species={2}, age={3}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, cohort.Species.Name, cohort.Age);
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     WoodNPP={2:0.00}, LeafNPP={3:0.00}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, woodNPP, leafNPP);
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     actualANPP={2:0.00}, leafFractionNPP={3:0.00}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, actualANPP, leafFractionNPP);
+
                 if (Double.IsNaN(leafNPP))
                     leafNPP = 0.0;
                 if (Double.IsNaN(woodNPP))
@@ -243,10 +285,10 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.soilTemp = SiteVars.SoilTemperature[site];
                 CalibrateLog.actualWoodNPP = woodNPP;
                 CalibrateLog.actualLeafNPP = leafNPP;
-               
+
             }
-                        
-            return new double[2]{woodNPP, leafNPP};
+
+            return new double[2] { woodNPP, leafNPP };
 
         }
 
@@ -260,25 +302,25 @@ namespace Landis.Extension.Succession.NECN
         {
 
             double monthAdjust = 1.0 / 12.0;
-            double totalBiomass = (double) (cohort.WoodBiomass + cohort.LeafBiomass);
-            double max_age      = (double) cohort.Species.Longevity;
-            double d            = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].LongevityMortalityShape;
+            double totalBiomass = (double)(cohort.WoodBiomass + cohort.LeafBiomass);
+            double max_age = (double)cohort.Species.Longevity;
+            double d = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].LongevityMortalityShape;
 
-            double M_AGE_wood =    cohort.WoodBiomass *  monthAdjust *
-                                    Math.Exp((double) cohort.Age / max_age * d) / Math.Exp(d);
+            double M_AGE_wood = cohort.WoodBiomass * monthAdjust *
+                                    Math.Exp((double)cohort.Age / max_age * d) / Math.Exp(d);
 
-            double M_AGE_leaf =    cohort.LeafBiomass *  monthAdjust *
-                                    Math.Exp((double) cohort.Age / max_age * d) / Math.Exp(d);
+            double M_AGE_leaf = cohort.LeafBiomass * monthAdjust *
+                                    Math.Exp((double)cohort.Age / max_age * d) / Math.Exp(d);
 
 
             M_AGE_wood = Math.Min(M_AGE_wood, cohort.WoodBiomass);
             M_AGE_leaf = Math.Min(M_AGE_leaf, cohort.LeafBiomass);
 
-            double[] M_AGE = new double[2]{M_AGE_wood, M_AGE_leaf};
+            double[] M_AGE = new double[2] { M_AGE_wood, M_AGE_leaf };
 
             SiteVars.WoodMortality[site] += (M_AGE_wood);
 
-            if(M_AGE_wood < 0.0 || M_AGE_leaf < 0.0)
+            if (M_AGE_wood < 0.0 || M_AGE_leaf < 0.0)
             {
                 PlugIn.ModelCore.UI.WriteLine("Mwood={0}, Mleaf={1}.", M_AGE_wood, M_AGE_leaf);
                 throw new ApplicationException("Error: Woody or Leaf Age Mortality is < 0");
@@ -302,7 +344,7 @@ namespace Landis.Extension.Succession.NECN
 
             double maxBiomass = SpeciesData.Max_Biomass[cohort.Species];
             double NPPwood = (double)AGNPP[0];
-            
+
             double M_wood_fixed = cohort.WoodBiomass * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MonthlyWoodMortality;
             double M_leaf = 0.0;
 
@@ -321,27 +363,27 @@ namespace Landis.Extension.Succession.NECN
 
 
             // Leaves and Needles dropped.
-            if (SpeciesData.LeafLongevity[cohort.Species] > 1.0) 
+            if (SpeciesData.LeafLongevity[cohort.Species] > 1.0)
             {
-                M_leaf = cohort.LeafBiomass / (double) SpeciesData.LeafLongevity[cohort.Species] / 12.0;  //Needle deposit spread across the year.
-               
+                M_leaf = cohort.LeafBiomass / (double)SpeciesData.LeafLongevity[cohort.Species] / 12.0;  //Needle deposit spread across the year.
+
             }
             else
             {
-                if(Main.Month +1 == FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth)
+                if (Main.Month + 1 == FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth)
                 {
                     M_leaf = cohort.LeafBiomass / 2.0;  //spread across 2 months
-                    
+
                 }
-                if (Main.Month +2 > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth)
+                if (Main.Month + 2 > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth)
                 {
                     M_leaf = cohort.LeafBiomass;  //drop the remainder
                 }
             }
 
-            double[] M_BIO = new double[2]{M_wood, M_leaf};
+            double[] M_BIO = new double[2] { M_wood, M_leaf };
 
-            if(M_wood < 0.0 || M_leaf < 0.0)
+            if (M_wood < 0.0 || M_leaf < 0.0)
             {
                 PlugIn.ModelCore.UI.WriteLine("Mwood={0}, Mleaf={1}.", M_wood, M_leaf);
                 throw new ApplicationException("Error: Wood or Leaf Growth Mortality is < 0");
@@ -359,8 +401,26 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
+               
+        public static double CrownScorching(ICohort cohort, byte siteSeverity)
+        {
 
-        //---------------------------------------------------------------------
+            int difference = (int)siteSeverity - cohort.Species.FireTolerance;
+            double ageFraction = 1.0 - ((double)cohort.Age / (double)cohort.Species.Longevity);
+
+            if (SpeciesData.Epicormic[cohort.Species])
+            {
+                if (difference < 0)
+                    return 0.5 * ageFraction;
+                if (difference == 0)
+                    return 0.75 * ageFraction;
+                if (difference > 0)
+                    return 1.0 * ageFraction;
+            }
+
+            return 0.0;
+        }
+
 
         private void UpdateDeadBiomass(ICohort cohort, ActiveSite site, double[] totalMortality)
         {
@@ -658,6 +718,32 @@ namespace Landis.Extension.Succession.NECN
             double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
 
             return competition_limit;
+
+        }
+
+        public static double calculateWater_Limit_versionDGS(double volumetricWater, ISpecies species)
+     //This implements a 4-parameter water limit calculation, similar to soil T, which allows a unimodal response to 
+     //soil moisture and allows us to prevent rapid growth in wetlands by species that are intolerant of waterlogged soils
+     //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
+        {
+            var A1 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve1;
+            var A2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
+            var A3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
+            var A4 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve4;
+            
+            var frac = (A2 - volumetricWater) / (A2 - A1);
+            var waterLimit = 0.0;
+            if (frac > 0.0)
+                waterLimit = Math.Exp(A3 / A4 * (1.0 - Math.Pow(frac, A4))) * Math.Pow(frac, A3);
+
+            if (Double.IsNaN(waterLimit))
+            {
+                PlugIn.ModelCore.UI.WriteLine("soilWater = {0}, soil water limit = {1}, frac = {2}", volumetricWater, waterLimit, frac); //debug
+                PlugIn.ModelCore.UI.WriteLine("A1 = {0}, A2 = {1}, A3 = {2}, A4 = {3}", A1, A2, A3, A4);
+
+
+            }
+                return waterLimit;
 
         }
 

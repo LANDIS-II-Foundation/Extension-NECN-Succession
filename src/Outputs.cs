@@ -5,6 +5,7 @@ using Landis.SpatialModeling;
 using Landis.Utilities;
 using System.IO;
 using System;
+using System.Linq;
 
 using Landis.Library.Metadata;
 using System.Data;
@@ -17,7 +18,7 @@ namespace Landis.Extension.Succession.NECN
 {
     public class Outputs
     {
-        public static MetadataTable<MonthlyLog> monthlyLog; 
+        public static MetadataTable<MonthlyLog> monthlyLog;
         public static MetadataTable<PrimaryLog> primaryLog;
         public static MetadataTable<PrimaryLogShort> primaryLogShort;
         public static MetadataTable<ReproductionLog> reproductionLog;
@@ -60,8 +61,8 @@ namespace Landis.Extension.Succession.NECN
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
                 avgNEEc += SiteVars.AnnualNEE[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;
-                avgSOMtc += GetOrganicCarbon(site) / PlugIn.ModelCore.Landscape.ActiveSiteCount; 
-                avgAGB += (double) Main.ComputeLivingBiomass(SiteVars.Cohorts[site]) / PlugIn.ModelCore.Landscape.ActiveSiteCount; 
+                avgSOMtc += GetOrganicCarbon(site) / PlugIn.ModelCore.Landscape.ActiveSiteCount;
+                avgAGB += (double)Main.ComputeLivingBiomass(SiteVars.Cohorts[site]) / PlugIn.ModelCore.Landscape.ActiveSiteCount;
                 avgAGNPPtc += SiteVars.AGNPPcarbon[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;
                 avgMineralN += SiteVars.MineralN[site] / PlugIn.ModelCore.Landscape.ActiveSiteCount;
                 avgDeadWoodC += SiteVars.SurfaceDeadWood[site].Carbon / PlugIn.ModelCore.Landscape.ActiveSiteCount;
@@ -160,78 +161,82 @@ namespace Landis.Extension.Succession.NECN
             double[] avgfrassC = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avglai = new double[PlugIn.ModelCore.Ecoregions.Count];
 
+            double[] droughtMort = new double[PlugIn.ModelCore.Ecoregions.Count];
+
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
-                    avgAnnualPPT[ecoregion.Index] = 0.0;
-                    avgJJAtemp[ecoregion.Index] = 0.0;
+                avgAnnualPPT[ecoregion.Index] = 0.0;
+                avgJJAtemp[ecoregion.Index] = 0.0;
 
-                    avgNEEc[ecoregion.Index] = 0.0;
-                    avgSOMtc[ecoregion.Index] = 0.0;
-                    avgAGB[ecoregion.Index] = 0.0;
+                avgNEEc[ecoregion.Index] = 0.0;
+                avgSOMtc[ecoregion.Index] = 0.0;
+                avgAGB[ecoregion.Index] = 0.0;
 
-                    avgAGNPPtc[ecoregion.Index] = 0.0;
-                    avgBGNPPtc[ecoregion.Index] = 0.0;
-                    avgLittertc[ecoregion.Index] = 0.0;
-                    avgWoodMortality[ecoregion.Index] = 0.0;
+                avgAGNPPtc[ecoregion.Index] = 0.0;
+                avgBGNPPtc[ecoregion.Index] = 0.0;
+                avgLittertc[ecoregion.Index] = 0.0;
+                avgWoodMortality[ecoregion.Index] = 0.0;
 
-                    avgMineralN[ecoregion.Index] = 0.0;
-                    avgGrossMin[ecoregion.Index] = 0.0;
-                    avgTotalN[ecoregion.Index] = 0.0;
+                avgMineralN[ecoregion.Index] = 0.0;
+                avgGrossMin[ecoregion.Index] = 0.0;
+                avgTotalN[ecoregion.Index] = 0.0;
 
-                    avgCohortLeafC[ecoregion.Index] = 0.0;
-                    avgCohortFRootC[ecoregion.Index] = 0.0;
-                    avgCohortWoodC[ecoregion.Index] = 0.0;
-                    avgCohortCRootC[ecoregion.Index] = 0.0;
-                    avgWoodC[ecoregion.Index] = 0.0;
-                    avgCRootC[ecoregion.Index] = 0.0;
+                avgCohortLeafC[ecoregion.Index] = 0.0;
+                avgCohortFRootC[ecoregion.Index] = 0.0;
+                avgCohortWoodC[ecoregion.Index] = 0.0;
+                avgCohortCRootC[ecoregion.Index] = 0.0;
+                avgWoodC[ecoregion.Index] = 0.0;
+                avgCRootC[ecoregion.Index] = 0.0;
 
-                    avgSurfStrucC[ecoregion.Index] = 0.0;
-                    avgSurfMetaC[ecoregion.Index] = 0.0;
-                    avgSoilStrucC[ecoregion.Index] = 0.0;
-                    avgSoilMetaC[ecoregion.Index] = 0.0;
+                avgSurfStrucC[ecoregion.Index] = 0.0;
+                avgSurfMetaC[ecoregion.Index] = 0.0;
+                avgSoilStrucC[ecoregion.Index] = 0.0;
+                avgSoilMetaC[ecoregion.Index] = 0.0;
 
-                    avgCohortLeafN[ecoregion.Index] = 0.0;
-                    avgCohortFRootN[ecoregion.Index] = 0.0;
-                    avgCohortWoodN[ecoregion.Index] = 0.0;
-                    avgCohortCRootN[ecoregion.Index] = 0.0;
-                    avgWoodN[ecoregion.Index] = 0.0;
-                    avgCRootN[ecoregion.Index] = 0.0;
+                avgCohortLeafN[ecoregion.Index] = 0.0;
+                avgCohortFRootN[ecoregion.Index] = 0.0;
+                avgCohortWoodN[ecoregion.Index] = 0.0;
+                avgCohortCRootN[ecoregion.Index] = 0.0;
+                avgWoodN[ecoregion.Index] = 0.0;
+                avgCRootN[ecoregion.Index] = 0.0;
 
-                    avgSurfStrucN[ecoregion.Index] = 0.0;
-                    avgSurfMetaN[ecoregion.Index] = 0.0;
-                    avgSoilStrucN[ecoregion.Index] = 0.0;
-                    avgSoilMetaN[ecoregion.Index] = 0.0;
+                avgSurfStrucN[ecoregion.Index] = 0.0;
+                avgSurfMetaN[ecoregion.Index] = 0.0;
+                avgSoilStrucN[ecoregion.Index] = 0.0;
+                avgSoilMetaN[ecoregion.Index] = 0.0;
 
-                    avgSurfStrucNetMin[ecoregion.Index] = 0.0;
-                    avgSurfMetaNetMin[ecoregion.Index] = 0.0;
-                    avgSoilStrucNetMin[ecoregion.Index] = 0.0;
-                    avgSoilMetaNetMin[ecoregion.Index] = 0.0;
+                avgSurfStrucNetMin[ecoregion.Index] = 0.0;
+                avgSurfMetaNetMin[ecoregion.Index] = 0.0;
+                avgSoilStrucNetMin[ecoregion.Index] = 0.0;
+                avgSoilMetaNetMin[ecoregion.Index] = 0.0;
 
-                    avgSOM1surfC[ecoregion.Index] = 0.0;
-                    avgSOM1soilC[ecoregion.Index] = 0.0;
-                    avgSOM2C[ecoregion.Index] = 0.0;
-                    avgSOM3C[ecoregion.Index] = 0.0;
+                avgSOM1surfC[ecoregion.Index] = 0.0;
+                avgSOM1soilC[ecoregion.Index] = 0.0;
+                avgSOM2C[ecoregion.Index] = 0.0;
+                avgSOM3C[ecoregion.Index] = 0.0;
 
-                    avgSOM1surfN[ecoregion.Index] = 0.0;
-                    avgSOM1soilN[ecoregion.Index] = 0.0;
-                    avgSOM2N[ecoregion.Index] = 0.0;
-                    avgSOM3N[ecoregion.Index] = 0.0;
+                avgSOM1surfN[ecoregion.Index] = 0.0;
+                avgSOM1soilN[ecoregion.Index] = 0.0;
+                avgSOM2N[ecoregion.Index] = 0.0;
+                avgSOM3N[ecoregion.Index] = 0.0;
 
-                    avgSOM1surfNetMin[ecoregion.Index] = 0.0;
-                    avgSOM1soilNetMin[ecoregion.Index] = 0.0;
-                    avgSOM2NetMin[ecoregion.Index] = 0.0;
-                    avgSOM3NetMin[ecoregion.Index] = 0.0;
+                avgSOM1surfNetMin[ecoregion.Index] = 0.0;
+                avgSOM1soilNetMin[ecoregion.Index] = 0.0;
+                avgSOM2NetMin[ecoregion.Index] = 0.0;
+                avgSOM3NetMin[ecoregion.Index] = 0.0;
 
-                    //avgNDeposition[ecoregion.Index] = 0.0;
-                    avgStreamC[ecoregion.Index] = 0.0;
-                    avgStreamN[ecoregion.Index] = 0.0;
-                    avgFireCEfflux[ecoregion.Index] = 0.0;
-                    avgFireNEfflux[ecoregion.Index] = 0.0;
-                    avgNuptake[ecoregion.Index] = 0.0;
-                    avgNresorbed[ecoregion.Index] = 0.0;
-                    avgTotalSoilN[ecoregion.Index] = 0.0;
-                    avgNvol[ecoregion.Index] = 0.0;
-                    avgfrassC[ecoregion.Index] = 0.0;
+                //avgNDeposition[ecoregion.Index] = 0.0;
+                avgStreamC[ecoregion.Index] = 0.0;
+                avgStreamN[ecoregion.Index] = 0.0;
+                avgFireCEfflux[ecoregion.Index] = 0.0;
+                avgFireNEfflux[ecoregion.Index] = 0.0;
+                avgNuptake[ecoregion.Index] = 0.0;
+                avgNresorbed[ecoregion.Index] = 0.0;
+                avgTotalSoilN[ecoregion.Index] = 0.0;
+                avgNvol[ecoregion.Index] = 0.0;
+                avgfrassC[ecoregion.Index] = 0.0;
+
+                droughtMort[ecoregion.Index] = 0.0;
             }
 
 
@@ -307,6 +312,8 @@ namespace Landis.Extension.Succession.NECN
                 avgNvol[ecoregion.Index] += SiteVars.Nvol[site];
                 avgfrassC[ecoregion.Index] += SiteVars.FrassC[site];
 
+                droughtMort[ecoregion.Index] += SiteVars.DroughtMort[site];
+
             }
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
@@ -316,10 +323,10 @@ namespace Landis.Extension.Succession.NECN
                 primaryLog.Clear();
                 PrimaryLog pl = new PrimaryLog();
 
-                pl.Time =    CurrentTime;
-                pl.ClimateRegionName =    ecoregion.Name;
+                pl.Time = CurrentTime;
+                pl.ClimateRegionName = ecoregion.Name;
                 pl.ClimateRegionIndex = ecoregion.Index;
-                pl.NumSites = ClimateRegionData.ActiveSiteCount[ecoregion]; 
+                pl.NumSites = ClimateRegionData.ActiveSiteCount[ecoregion];
 
                 pl.NEEC = (avgNEEc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.SOMTC = (avgSOMtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
@@ -378,6 +385,8 @@ namespace Landis.Extension.Succession.NECN
                 pl.Nvol = (avgNvol[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.FrassC = (avgfrassC[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
 
+                pl.DroughtMort = (droughtMort[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+
                 primaryLog.AddObject(pl);
                 primaryLog.WriteToFile();
             }
@@ -402,6 +411,7 @@ namespace Landis.Extension.Succession.NECN
             double[] nitrogenDeposition = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] streamN = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] soilWaterContent = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] anaerobicEffect = new double[PlugIn.ModelCore.Ecoregions.Count];
 
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
@@ -415,6 +425,7 @@ namespace Landis.Extension.Succession.NECN
                 nitrogenDeposition[ecoregion.Index] = 0.0;
                 streamN[ecoregion.Index] = 0.0;
                 soilWaterContent[ecoregion.Index] = 0.0;
+                anaerobicEffect[ecoregion.Index] = 0.0;
             }
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -433,14 +444,14 @@ namespace Landis.Extension.Succession.NECN
 
                 nitrogenDeposition[ecoregion.Index] = ClimateRegionData.MonthlyNDeposition[ecoregion][month];
                 streamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
-                soilWaterContent[ecoregion.Index] += SiteVars.MonthlySoilWaterContent[site][month];
-
+                soilWaterContent[ecoregion.Index] += SiteVars.MonthlyMeanSoilWaterContent[site][month]; //SF changed to mean
+                anaerobicEffect[ecoregion.Index] += SiteVars.MonthlyAnaerobicEffect[site][month]; //SF added 2023-4-11
             }
-            
+
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
-                if (ClimateRegionData.ActiveSiteCount[ecoregion] > 0) 
+                if (ClimateRegionData.ActiveSiteCount[ecoregion] > 0)
                 {
                     monthlyLog.Clear();
                     MonthlyLog ml = new MonthlyLog();
@@ -461,6 +472,7 @@ namespace Landis.Extension.Succession.NECN
                     ml.Ndep = nitrogenDeposition[ecoregion.Index];
                     ml.StreamN = (streamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.SoilWaterContent = (soilWaterContent[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.AnaerobicEffect = (anaerobicEffect[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
 
                     monthlyLog.AddObject(ml);
                     monthlyLog.WriteToFile();
@@ -468,28 +480,28 @@ namespace Landis.Extension.Succession.NECN
             }
 
         }
-        
-        
+
+
         public static void WriteMaps()
         {
 
-                string pathH2O = MapNames.ReplaceTemplateVars(@"NECN\Annual-water-budget-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathH2O, PlugIn.ModelCore.Landscape.Dimensions))
+            string pathH2O = MapNames.ReplaceTemplateVars(@"NECN\Annual-water-budget-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathH2O, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
-                    IntPixel pixel = outputRaster.BufferPixel;
-                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    if (site.IsActive)
                     {
-                        if (site.IsActive)
-                        {
-                            pixel.MapCode.Value = (int)((SiteVars.AnnualWaterBalance[site]));
-                        }
-                        else
-                        {
-                            //  Inactive site
-                            pixel.MapCode.Value = 0;
-                        }
-                        outputRaster.WriteBufferPixel();
+                        pixel.MapCode.Value = (int)((SiteVars.AnnualWaterBalance[site]));
                     }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
             }
             string pathANPP = MapNames.ReplaceTemplateVars(@"NECN\AG_NPP-{timestep}.img", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathANPP, PlugIn.ModelCore.Landscape.Dimensions))
@@ -509,6 +521,25 @@ namespace Landis.Extension.Succession.NECN
                     outputRaster.WriteBufferPixel();
                 }
 
+            }
+
+            string pathPET = MapNames.ReplaceTemplateVars(@"NECN\PET-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathPET, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = (int)((SiteVars.AnnualPotentialEvapotranspiration[site]));
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
             }
 
             string path = MapNames.ReplaceTemplateVars(@"NECN\SOMTC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
@@ -538,7 +569,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (short)(SiteVars.MineralN[site]);
+                        pixel.MapCode.Value = (short)(SiteVars.MineralN[site] * 1000); //SF changed 2023-4-11
                     }
                     else
                     {
@@ -550,89 +581,89 @@ namespace Landis.Extension.Succession.NECN
             }
 
             string path4 = MapNames.ReplaceTemplateVars(@"NECN\ANEE-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                    using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path4, PlugIn.ModelCore.Landscape.Dimensions))
-                    {
-                        ShortPixel pixel = outputRaster.BufferPixel;
-                        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
-                        {
-                            if (site.IsActive)
-                            {
-                                pixel.MapCode.Value = (short)(SiteVars.AnnualNEE[site] + 1000);
-                            }
-                            else
-                            {
-                                //  Inactive site
-                                pixel.MapCode.Value = 0;
-                            }
-                            outputRaster.WriteBufferPixel();
-                        }
-                    }
-
-                    string path5 = MapNames.ReplaceTemplateVars(@"NECN\TotalC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path5, PlugIn.ModelCore.Landscape.Dimensions))
-                    {
-                        IntPixel pixel = outputRaster.BufferPixel;
-                        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
-                        {
-                            if (site.IsActive)
-                            {
-                                pixel.MapCode.Value = (int)(Outputs.GetOrganicCarbon(site) +
-                                    SiteVars.CohortLeafC[site] +
-                                    SiteVars.CohortFRootC[site] +
-                                    SiteVars.CohortWoodC[site] +
-                                    SiteVars.CohortCRootC[site] +
-                                    SiteVars.SurfaceDeadWood[site].Carbon +
-                                    SiteVars.SoilDeadWood[site].Carbon);
-                            }
-                            else
-                            {
-                                //  Inactive site
-                                pixel.MapCode.Value = 0;
-                            }
-                            outputRaster.WriteBufferPixel();
-                        }
-                    }
-                //}
-
-                    string pathLAI = MapNames.ReplaceTemplateVars(@"NECN\LAI-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathLAI, PlugIn.ModelCore.Landscape.Dimensions))
+            using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path4, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                ShortPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
-                    IntPixel pixel = outputRaster.BufferPixel;
-                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    if (site.IsActive)
                     {
-                        if (site.IsActive)
-                        {
-                            pixel.MapCode.Value = (short)(SiteVars.LAI[site]);
-                        }
-                        else
-                        {
-                            //  Inactive site
-                            pixel.MapCode.Value = 0;
-                        }
-                        outputRaster.WriteBufferPixel();
+                        pixel.MapCode.Value = (short)(SiteVars.AnnualNEE[site] + 1000);
                     }
-                    
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+            }
+
+            string path5 = MapNames.ReplaceTemplateVars(@"NECN\TotalC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(path5, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = (int)(Outputs.GetOrganicCarbon(site) +
+                            SiteVars.CohortLeafC[site] +
+                            SiteVars.CohortFRootC[site] +
+                            SiteVars.CohortWoodC[site] +
+                            SiteVars.CohortCRootC[site] +
+                            SiteVars.SurfaceDeadWood[site].Carbon +
+                            SiteVars.SoilDeadWood[site].Carbon);
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+            }
+            //}
+
+            string pathLAI = MapNames.ReplaceTemplateVars(@"NECN\LAI-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathLAI, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = (short)(SiteVars.LAI[site]);
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
                 }
 
-                string pathavailablewater = MapNames.ReplaceTemplateVars(@"NECN\AvailableWater-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathavailablewater, PlugIn.ModelCore.Landscape.Dimensions))
-                {
-                    IntPixel pixel = outputRaster.BufferPixel;
-                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
-                    {
-                        if (site.IsActive)
-                        {
-                            pixel.MapCode.Value = (int)((SiteVars.AvailableWater[site]));
-                        }
-                        else
-                        {
-                            //  Inactive site
-                            pixel.MapCode.Value = 0;
-                        }
-                        outputRaster.WriteBufferPixel();
-                    }
+            }
 
+            string pathavailablewater = MapNames.ReplaceTemplateVars(@"NECN\AvailableWater-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathavailablewater, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = (int)((SiteVars.AvailableWater[site]));
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
                 }
+
+            }
 
             if (PlugIn.Parameters.SmokeModelOutputs)
             {
@@ -663,7 +694,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (site.IsActive)
                         {
-                            pixel.MapCode.Value = (int) (SiteVars.SurfaceDeadWood[site].Carbon * 2.0);
+                            pixel.MapCode.Value = (int)(SiteVars.SurfaceDeadWood[site].Carbon * 2.0);
                         }
                         else
                         {
@@ -683,7 +714,7 @@ namespace Landis.Extension.Succession.NECN
                         if (site.IsActive)
                         {
                             pixel.MapCode.Value = (int)((SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0);
-;
+                            ;
                         }
                         else
                         {
@@ -693,6 +724,47 @@ namespace Landis.Extension.Succession.NECN
                         outputRaster.WriteBufferPixel();
                     }
                 }
+            string pathsoilwater = MapNames.ReplaceTemplateVars(@"NECN\SoilWater-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathsoilwater, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = (int)((SiteVars.MeanSoilWaterContent[site])); //changed to mean
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+
+            }
+
+                //SF added anaerobic effect map for troubleshooting
+            string pathanerb = MapNames.ReplaceTemplateVars(@"NECN\AnaerobicEffect-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(pathanerb, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                ShortPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        //July anaerobic effect -- SF TODO make more flexible input, or mean for year
+                        pixel.MapCode.Value = (short)(SiteVars.MonthlyAnaerobicEffect[site][7] * 1000); 
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+
+            }
 
                 string pathDuff = MapNames.ReplaceTemplateVars(@"NECN\SurfaceDuffBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                 using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDuff, PlugIn.ModelCore.Landscape.Dimensions))
@@ -713,7 +785,106 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
             }
+
+            if (DroughtMortality.UseDrought)
+            {
+                string pathDrought = MapNames.ReplaceTemplateVars(@"NECN\DroughtMortality-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDrought, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = (int)(SiteVars.DroughtMort[site]);
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
+            }
+            if (DroughtMortality.WriteSWA)
+            {
+                string pathSWA = MapNames.ReplaceTemplateVars(@"NECN\SWA-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathSWA, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            if (SiteVars.SoilWater10[site].Count > 0)
+                            {
+                                pixel.MapCode.Value = (int)SiteVars.SoilWater10[site].Last();
+                            }
+                            else
+                            {
+                                pixel.MapCode.Value = 0;
+                            }
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
+            }
+            if (DroughtMortality.WriteCWD)
+            {
+                string pathCWD = MapNames.ReplaceTemplateVars(@"NECN\CWD-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathCWD, PlugIn.ModelCore.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                    {
+                        if (site.IsActive)
+                        {
+                            pixel.MapCode.Value = (int)SiteVars.AnnualClimaticWaterDeficit[site];
+                        }
+                        else
+                        {
+                            //  Inactive site
+                            pixel.MapCode.Value = 0;
+                        }
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
+            }
+            if (DroughtMortality.WriteSpeciesDroughtMaps)
+            {
+                foreach (ISpecies species in PlugIn.ModelCore.Species)
+                {
+                    string pathDroughtSpecies = DroughtMortality.SpeciesMapNames.ReplaceTemplateVars(@"NECN\DroughtMortality-{species}-{timestep}.img", species.Name, PlugIn.ModelCore.CurrentTime);
+                    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDroughtSpecies, PlugIn.ModelCore.Landscape.Dimensions))
+                    {
+                        IntPixel pixel = outputRaster.BufferPixel;
+                        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                        {
+                            if (site.IsActive)
+                            {
+                                pixel.MapCode.Value = (int)SiteVars.SpeciesDroughtMortality[site][species.Index];
+                            }
+                            else
+                            {
+                                //  Inactive site
+                                pixel.MapCode.Value = 0;
+                            }
+                            outputRaster.WriteBufferPixel();
+                        }
+                    }
+
+                }
+
+            }
         }
+    
+
 
         // ---------------------------------------------------
         // This method created to create maps that could be used during a subsequent new model run.
@@ -840,7 +1011,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (double)((SiteVars.SOM3[site].Carbon));
+                        pixel.MapCode.Value = (double)((SiteVars.SOM3[site].Carbon)); 
                     }
                     else
                     {
@@ -850,7 +1021,7 @@ namespace Landis.Extension.Succession.NECN
                     outputRaster.WriteBufferPixel();
                 }
             }
-            string input_map_8 = MapNames.ReplaceTemplateVars(@"NECN-Initial-Conditions\DeadRootC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            string input_map_8 = MapNames.ReplaceTemplateVars(@"NECN-Initial-Conditions\DeadWoodBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<DoublePixel> outputRaster = PlugIn.ModelCore.CreateRaster<DoublePixel>(input_map_8, PlugIn.ModelCore.Landscape.Dimensions))
             {
                 DoublePixel pixel = outputRaster.BufferPixel;
@@ -858,7 +1029,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (double)((SiteVars.SoilDeadWood[site].Carbon));
+                        pixel.MapCode.Value = (double)(SiteVars.SurfaceDeadWood[site].Carbon / 0.47); //SF changed 2023-4-12
                     }
                     else
                     {
@@ -868,7 +1039,7 @@ namespace Landis.Extension.Succession.NECN
                     outputRaster.WriteBufferPixel();
                 }
             }
-            string input_map_9 = MapNames.ReplaceTemplateVars(@"NECN-Initial-Conditions\DeadRootN-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            string input_map_9 = MapNames.ReplaceTemplateVars(@"NECN-Initial-Conditions\DeadRootBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<DoublePixel> outputRaster = PlugIn.ModelCore.CreateRaster<DoublePixel>(input_map_9, PlugIn.ModelCore.Landscape.Dimensions))
             {
                 DoublePixel pixel = outputRaster.BufferPixel;
@@ -876,7 +1047,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (double)((SiteVars.SoilDeadWood[site].Nitrogen));
+                        pixel.MapCode.Value = (double)(SiteVars.SoilDeadWood[site].Carbon / 0.47); //SF changed 2023-4-12
                     }
                     else
                     {

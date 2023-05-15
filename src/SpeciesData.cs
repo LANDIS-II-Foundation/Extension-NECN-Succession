@@ -44,6 +44,24 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend; // W.Hotta (2021.08.01)
         public static Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI;
 
+        //Drought mortality variables
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2;
+        public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;
+
+        //CWD Establishment
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDBegin;
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDMax;
+
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
@@ -70,6 +88,10 @@ namespace Landis.Extension.Succession.NECN
             Grass               = parameters.Grass;
             Nlog_depend         = parameters.Nlog_depend; // W.Hotta (2021.08.01)
             GrowthLAI           = parameters.GrowthLAI;
+            //CWD Establishment
+            CWDBegin            = parameters.CWDBegin;
+            CWDMax              = parameters.CWDMax;
+
             LightLAIMean        = parameters.LightLAIMean;
             LightLAIDispersion  = parameters.LightLAIDispersion;
 
