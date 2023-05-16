@@ -37,9 +37,10 @@ namespace Landis.Extension.Succession.NECN
             //     Rewritten by Bill Pulliam - 9/94
             //     Rewritten by Melissa Lucash- 11/2014
 
+            //SF revised to avoid negative soil moisture
             //SF: expected behavior: soil moisture typically between field capacity and zero; only transiently above field capacity
             //available soil water must be between zero (SM = PWP) and available water capacity (FC - PWP)
-            //all water should be balanced
+            //water budget should be balanced
             //AET should always reduce soil moisture
             //stormflow should come out of excess water; baseflow should come out of soil water
             //Also: this might explain why calculations of CWD and soil water for the drought model didn't work correctly
@@ -306,8 +307,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11
-            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
-            //SF changed to use min and max per month. Max was too high, so capped at field capacity. Same as elements that are averaged to get mean soil water content
+            //SiteVars.DryDays[site] += CalculateDryDaysNew(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
+            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, Math.Min(availableWaterMax, waterFull), soilWaterContent);//SF changed to use min and max per month. Max was too high, so capped at field capacity. TODO?
             //TODO
             return;
         }
@@ -613,7 +614,7 @@ namespace Landis.Extension.Succession.NECN
             //if (month == 0) //I think this is dealt with already when annual accumulators are reset
             //    SiteVars.DryDays[site] = 0;
             //else
-                SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
+            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);
 
             return;
         }
@@ -664,7 +665,6 @@ namespace Landis.Extension.Succession.NECN
 
             return x;
         }
-
         private static int CalculateDryDays(int month, int beginGrowing, int endGrowing, double wiltingPoint, double waterAvail, double priorWaterAvail)
         {
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}.", month, beginGrowing, endGrowing);
@@ -680,61 +680,59 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}, wiltPt={3:0.0}, waterAvail={4:0.0}, priorWater={5:0.0}.", 
             //   month, beginGrowing, endGrowing, wiltingPoint, soilMoisture, priorSoilMoisture); //debug
             //Increment number of dry days, truncate at end of growing season
-            if ((julianDay > beginGrowing) && (oldJulianDay < endGrowing)) 
+            if ((julianDay > beginGrowing) && (oldJulianDay < endGrowing))
+            {
+                if ((priorWaterAvail >= wiltingPoint) && (waterAvail >= wiltingPoint))
                 {
-                    if ((priorSoilMoisture >= wiltingPoint)  && (soilMoisture >= wiltingPoint))
-                        {
-                        dryDayInterp += 0.0;  // NONE below wilting point
-                    }
-                    else if ((priorSoilMoisture > wiltingPoint) && (soilMoisture < wiltingPoint)) 
-                    {
-                        dryDayInterp = daysInMonth * (wiltingPoint - soilMoisture) / 
-                                        (priorSoilMoisture - soilMoisture);
-                        if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
-                            if ((julianDay - beginGrowing) < dryDayInterp)
-                                dryDayInterp = julianDay - beginGrowing;
-    
-                        if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
-                            dryDayInterp = endGrowing - julianDay + dryDayInterp;
-    
-                        if (dryDayInterp < 0.0)
-                            dryDayInterp = 0.0;
-    
-                    } 
-                    else if ((priorSoilMoisture < wiltingPoint) && (soilMoisture > wiltingPoint)) 
-                    {
-                        dryDayInterp = daysInMonth * (wiltingPoint - priorSoilMoisture) / 
-                                        (soilMoisture - priorSoilMoisture);
-          
-                        if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
-                            dryDayInterp = oldJulianDay + dryDayInterp - beginGrowing;
-    
-                        if (dryDayInterp < 0.0)
-                            dryDayInterp = 0.0;
-    
-                        if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
-                            if ((endGrowing - oldJulianDay) < dryDayInterp)
-                                dryDayInterp = endGrowing - oldJulianDay;
-                    } 
-                    else // ALL below wilting point
-                    {
-                        dryDayInterp = daysInMonth;
-          
-                        if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
-                            dryDayInterp = julianDay - beginGrowing;
-    
-                        if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
-                            dryDayInterp = endGrowing - oldJulianDay;
-                    }
-      
-                    dryDays += (int) dryDayInterp;
+                    dryDayInterp += 0.0;  // NONE below wilting point
                 }
+                else if ((priorWaterAvail > wiltingPoint) && (waterAvail < wiltingPoint))
+                {
+                    dryDayInterp = daysInMonth * (wiltingPoint - waterAvail) /
+                                    (priorWaterAvail - waterAvail);
+                    if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
+                        if ((julianDay - beginGrowing) < dryDayInterp)
+                            dryDayInterp = julianDay - beginGrowing;
+
+                    if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
+                        dryDayInterp = endGrowing - julianDay + dryDayInterp;
+
+                    if (dryDayInterp < 0.0)
+                        dryDayInterp = 0.0;
+
+                }
+                else if ((priorWaterAvail < wiltingPoint) && (waterAvail > wiltingPoint))
+                {
+                    dryDayInterp = daysInMonth * (wiltingPoint - priorWaterAvail) /
+                                    (waterAvail - priorWaterAvail);
+
+                    if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
+                        dryDayInterp = oldJulianDay + dryDayInterp - beginGrowing;
+
+                    if (dryDayInterp < 0.0)
+                        dryDayInterp = 0.0;
+
+                    if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
+                        if ((endGrowing - oldJulianDay) < dryDayInterp)
+                            dryDayInterp = endGrowing - oldJulianDay;
+                }
+                else // ALL below wilting point
+                {
+                    dryDayInterp = daysInMonth;
+
+                    if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
+                        dryDayInterp = julianDay - beginGrowing;
+
+                    if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
+                        dryDayInterp = endGrowing - oldJulianDay;
+                }
+
+                dryDays += (int)dryDayInterp;
+            }
             //PlugIn.ModelCore.UI.WriteLine("dryDays = {0}", dryDays); //debug
             return dryDays;
         }
-
-        //---------------------------------------------------------------------------
-
+        
         private static double CalculateDecayFactor(int waterDecayFunction, double soilTemp, double availableWaterContent, double ratioPrecipPET, int month)
         {
             // Decomposition factor relfecting the effects of soil temperature and moisture on decomposition

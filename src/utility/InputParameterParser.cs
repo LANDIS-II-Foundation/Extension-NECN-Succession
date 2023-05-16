@@ -178,10 +178,10 @@ namespace Landis.Extension.Succession.NECN
                 parameters.NormalCWDMapName = normalCWDMapName.Value;
             }
 
-            InputVar<string> normalTempMapName = new InputVar<string>("NormalCWDMapName");
+            InputVar<string> normalTempMapName = new InputVar<string>("NormalTempMapName");
             if (ReadOptionalVar(normalTempMapName))
             {
-                parameters.NormalCWDMapName = normalTempMapName.Value;
+                parameters.NormalTempMapName = normalTempMapName.Value;
             }
 
 
@@ -505,12 +505,17 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetFoliageLitterCN(species, System.Convert.ToDouble(row["FoliageLitterCN"]));
                 parameters.SetMaxANPP(species, System.Convert.ToInt32(row["MaximumANPP"]));
                 parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
-                parameters.SetCWDBegin(species, System.Convert.ToInt32(row["CWDBegin"]));//TODO make optional
-                parameters.SetCWDMax(species, System.Convert.ToInt32(row["CWDMax"]));
+                
                 parameters.Grass[species] = ReadGrass(row);
                 parameters.SetLightLAImean(species, System.Convert.ToInt32(row["LightLAImean"]));
                 parameters.SetLightLAIdispersion(species, System.Convert.ToInt32(row["LightLAIdispersion"]));
+
+
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
+
+                //Optional parameters for CWD-limited establishment
+                parameters.SetCWDBeginLimit(species, ReadCWDBeginLimit(row));
+                parameters.SetCWDMax(species, ReadCWDMax(row));
             }
 
             //--------- Read In Functional Group Table -------------------------------
@@ -810,7 +815,7 @@ namespace Landis.Extension.Succession.NECN
             try
             {
                 double mc4 = System.Convert.ToDouble(row["MoistureCurve4"]);
-                OtherData.DGS_waterlimit = true;
+                OtherData.DGS_waterlimit = true; //SF set flag to turn on 4-parameter water limit mode
                 return mc4;
             }
             catch
@@ -829,8 +834,36 @@ namespace Landis.Extension.Succession.NECN
             }
             catch
             {
-                NewParseException("Error in minimum soil drainage");
-                return 0.0;
+                return 0.0; //SF by default, all species can establish in all soil drainage classes
+            }
+        }
+
+        //Optional CWD-based limit to establishment. If present for one species, this should be provided for all species.
+        //This parameter sets the CWD at which establishment begins to become limited
+        private int ReadCWDBeginLimit(DataRow row)
+        {
+            try
+            {
+                int cwdBeginLimit = System.Convert.ToInt32(row["CWDBeginLimit"]);
+                return cwdBeginLimit;
+            }
+            catch
+            {
+                return 0; //SF set to 0 -- later handled to avoid CWD-based establishment if CWDBeginLimit == 0
+            }
+        }
+        //Optional CWD-based limit to establishment. If present for one species, this should be provided for all species
+        //This parameter sets the maximum CWD under which a species can establish; past this threshold, pest = 0.
+        private int ReadCWDMax(DataRow row)
+        {
+            try
+            {
+                int cwdMax = System.Convert.ToInt32(row["CWDMax"]);
+                return cwdMax;
+            }
+            catch
+            {
+                return 0; //SF set to 0 -- later handled to avoid CWD-based establishment if CWDBeginLimit == 0
             }
         }
         private double ReadGrowthLAI(DataRow row)

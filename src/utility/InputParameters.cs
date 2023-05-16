@@ -1120,7 +1120,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         //CWD Establishment
-        public void SetCWDBegin(ISpecies species, int newValue)
+        public void SetCWDBeginLimit(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
             cwdBegin[species] = VerifyRange(newValue, 0, 5000, "CWDBegin");

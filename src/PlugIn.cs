@@ -115,9 +115,21 @@ namespace Landis.Extension.Succession.NECN
                 Parameters.InitialSOM3NMapName);
             ReadMaps.ReadDeadWoodMaps(Parameters.InitialDeadSurfaceMapName, Parameters.InitialDeadSoilMapName);
 
-            //TODO only read if path isn't null
-            ReadMaps.ReadNormalSWAMap(Parameters.NormalSWAMapName);
-            ReadMaps.ReadNormalCWDMap(Parameters.NormalCWDMapName);
+            //Optional drought mortality maps
+            if (Parameters.NormalSWAMapName != null)
+            {
+                ReadMaps.ReadNormalSWAMap(Parameters.NormalSWAMapName);
+            }
+            if (Parameters.NormalCWDMapName != null)
+            {
+                ReadMaps.ReadNormalCWDMap(Parameters.NormalCWDMapName);
+            }
+            if (Parameters.NormalTempMapName != null)
+            {
+                ReadMaps.ReadNormalTempMap(Parameters.NormalTempMapName);
+            }
+
+            //Optional topographic maps for adjusting PET
             if (Parameters.SlopeMapName != null)
             {
                 ReadMaps.ReadSlopeMap(Parameters.SlopeMapName);
@@ -494,6 +506,7 @@ namespace Landis.Extension.Succession.NECN
             double lightProbability = 0.0;
 
             string regenType = "failed"; // Identify where the cohort established; Chihiro
+            //SF regenType is only used in CalibrateMode
 
             var random = new Troschuetz.Random.TRandom();
 
@@ -552,12 +565,12 @@ namespace Landis.Extension.Succession.NECN
                         if (isSufficientlight) regenType = "nlog";
                     //}
                 }
-                //if (OtherData.CalibrateMode)
-                //{
-                //    PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
-                //    PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
-                //    PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
-                //}
+                if (OtherData.CalibrateMode)
+                {
+                    PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
+                    PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
+                    PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
+                }
             }
 
             return isSufficientlight;

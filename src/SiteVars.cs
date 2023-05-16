@@ -241,8 +241,8 @@ namespace Landis.Extension.Succession.NECN
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
             //if drought, then create these site vars
-            if (DroughtMortality.UseDrought)
-            {
+            //if (DroughtMortality.UseDrought)
+           // {
                 droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
                 temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
@@ -259,7 +259,7 @@ namespace Landis.Extension.Succession.NECN
                 speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>(); 
 
 
-            }
+            //}
 
             slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();

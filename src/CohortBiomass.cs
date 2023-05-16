@@ -195,6 +195,7 @@ namespace Landis.Extension.Succession.NECN
             double limitT = calculateTemp_Limit(site, cohort.Species);
 
             if (OtherData.DGS_waterlimit) 
+                //SF added 4-parameter water limit calculation
             {
                 double wilt_point = SiteVars.SoilWiltingPoint[site];
                 double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];

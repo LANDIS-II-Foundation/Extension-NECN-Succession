@@ -37,6 +37,7 @@ namespace Landis.Extension.Succession.NECN
         string InitialDeadSoilMapName { get; set; }
         string NormalSWAMapName { get; set; }
         string NormalCWDMapName { get; set; }
+        string NormalTempMapName { get; set; }
         string SlopeMapName { get; set; }
         string AspectMapName { get; set; }
         bool CalibrateMode { get; set; }

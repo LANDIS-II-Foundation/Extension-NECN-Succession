@@ -111,6 +111,9 @@ namespace Landis.Extension.Succession.NECN
             double normalCWD = SiteVars.NormalCWD[site];
             //PlugIn.ModelCore.UI.WriteLine("normalCWD is {0}", normalCWD);
 
+            double normalTemp= SiteVars.NormalTemp[site];
+            //PlugIn.ModelCore.UI.WriteLine("normalCWD is {0}", normalCWD);
+
             //TODO ned to divide SoilWater10 by swayear
             double swaAnom = SiteVars.SWALagged[site] - normalSWA;
             //PlugIn.ModelCore.UI.WriteLine("swaAnom is {0}", swaAnom);
@@ -119,7 +122,7 @@ namespace Landis.Extension.Succession.NECN
 
             double cwdLagged = SiteVars.CWDLagged[site];
 
-            double waterDeficit = SiteVars.AnnualClimaticWaterDeficit[site];
+            //double waterDeficit = SiteVars.AnnualClimaticWaterDeficit[site];
 
             double cohortAge = cohort.Age;
             double siteBiomass = SiteVars.ActualSiteBiomass(site);
@@ -150,7 +153,7 @@ namespace Landis.Extension.Succession.NECN
             // double mortalitySlope = 0.005; //TODO make this a species-level param
 
             double p_mort = 0;
-            double p_surv = 0;
+            //double p_surv = 0;
             double M_leaf = 0;
             double M_wood = 0;
 
@@ -177,12 +180,11 @@ namespace Landis.Extension.Succession.NECN
                 //TODO we need to get the climate vars from a SiteVar, calculated in ComputeDroughtSiteVars
                 double logOdds = intercept + betaAge * cohortAge + betaTemp * tempLagged + betaSWAAnom * swaAnom + betaBiomass * siteBiomass +
                     betaCWD * cwdLagged + betaNormCWD * normalCWD + betaNormTemp * normalTemp + intxnCWD_Biomass * cwdLagged * siteBiomass;
-                p_surv = Math.Exp(logOdds) / (Math.Exp(logOdds) + 1);
+                double p_surv = Math.Exp(logOdds) / (Math.Exp(logOdds) + 1);
                 p_mort = (1 - Math.Pow(p_surv, 0.1));
                 if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("p_mort from regression is {0}", p_mort);
 
             }
-
 
             double random = PlugIn.ModelCore.GenerateUniform();
 

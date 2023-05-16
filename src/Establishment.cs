@@ -38,7 +38,7 @@ namespace Landis.Extension.Succession.NECN
             double establishProbability = 0.0;
             double soilwaterMultiplier = 1.0;
             double soilDrainMultiplier = 1.0;
-            double cwdMultiplier = 0.0;
+            double cwdMultiplier = 0.0; //SF added; TODO make this optional
 
             AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[climateRegion];
 
@@ -46,12 +46,24 @@ namespace Landis.Extension.Succession.NECN
                 throw new System.ApplicationException("Error in Establishment: CLIMATE NULL.");
 
             double ecoDryDays = SiteVars.DryDays[site]; 
-            soilMultiplier = SoilMoistureMultiplier(ecoClimate, species, ecoDryDays);
+            soilMultiplier = SoilMoistureMultiplier(ecoClimate, species, ecoDryDays); //Dry days
             
             tempMultiplier = BotkinDegreeDayMultiplier(ecoClimate, species);
             minJanTempMultiplier = MinJanuaryTempModifier(ecoClimate, species);
-            cwdMultiplier = CWDMultiplier(site, species);
 
+            //SF TODO calculate CWD-based establishment limitation if CWD parameters are greater than 0 
+            // to avoid calculation when CWD parameters are not provided (0 is default value)
+            if (SpeciesData.CWDBegin[species] > 0 & SpeciesData.CWDMax[species] > 0)
+            {
+                cwdMultiplier = CWDMultiplier(site, species);
+            }
+            else
+            {
+                cwdMultiplier = 1;
+            }
+
+            //SF method to limit establishment on wet sites
+            // Needs to be updated to apply to a yearly measure of soil moisture
             /*if (OtherData.DGS_waterlimit)
             {
                 double volumetric_water = SiteVars.SoilWaterContent[site] / SiteVars.SoilDepth[site];
@@ -67,6 +79,7 @@ namespace Landis.Extension.Succession.NECN
                 }
             }*/
 
+            //SF limit establishment on poorly-drailed soils
             if (SiteVars.SoilDrain[site] < FunctionalType.Table[SpeciesData.FuncType[species]].MinSoilDrain)
             {
                 //this stops trees from establishing in wetlands
@@ -188,6 +201,9 @@ namespace Landis.Extension.Succession.NECN
         }
 
         private static double CWDMultiplier(ActiveSite site, ISpecies species)
+            //Limits establishment based on two CWD thresholds. CWDBegin is the CWD value at which pest starts to decline,
+            // and CWDMax is the CWD value at which pest is zero. For values between CWDBegin and CWDMax, pest scales linearly from
+            // 1 to 0.
         {
             double cwd_Begin = SpeciesData.CWDBegin[species];
             double cwd_Max = SpeciesData.CWDMax[species];
