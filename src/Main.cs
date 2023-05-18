@@ -247,7 +247,6 @@ namespace Landis.Extension.Succession.NECN
                 foreach (ISpeciesCohorts speciesCohorts in cohorts)
                     foreach (ICohort cohort in speciesCohorts)
                         total += (int) (cohort.WoodBiomass + cohort.LeafBiomass);
-                    //total += ComputeBiomass(speciesCohorts);
             return total;
         }
 
@@ -260,7 +259,6 @@ namespace Landis.Extension.Succession.NECN
                 foreach (ISpeciesCohorts speciesCohorts in cohorts)
                     foreach (ICohort cohort in speciesCohorts)
                         total += (int)(cohort.LeafBiomass);
-            //total += ComputeBiomass(speciesCohorts);
             return total;
         }
         //---------------------------------------------------------------------
@@ -313,10 +311,6 @@ namespace Landis.Extension.Succession.NECN
             double woodN = woodC / (double) SpeciesData.WoodCN[species];
             double cRootN = cRootC / (double) SpeciesData.CoarseRootCN[species];
             double fRootN = fRootC / (double) SpeciesData.FineRootCN[species];
-
-            //double totalN = woodN + cRootN + leafN + fRootN;
-
-            //PlugIn.ModelCore.UI.WriteLine("month={0}, species={1}, leafB={2:0.0}, leafC={3:0.00}, leafN={4:0.0}, woodB={5:0.0}, woodC={6:0.000}, woodN={7:0.0}", Month, cohort.Species.Name, cohort.LeafBiomass, leafC, leafN, cohort.WoodBiomass, woodC, woodN);
 
             SiteVars.CohortLeafC[site] += leafC;
             SiteVars.CohortFRootC[site] += fRootC;
