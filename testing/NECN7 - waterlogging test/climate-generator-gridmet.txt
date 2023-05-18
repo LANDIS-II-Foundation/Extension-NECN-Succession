@@ -1,11 +1,11 @@
 LandisData "Climate Config"				
 		
 ClimateTimeSeries			Daily_RandomYears
-ClimateFile				LTB_daily_historic_fixed_singlecell_3.csv
+ClimateFile				"historical_gridmet.csv"
 ClimateFileFormat			Daily_Temp-C_Precip-mmDay
 
-SpinUpClimateTimeSeries			Daily_AverageAllYears
-SpinUpClimateFile			LTB_daily_historic_fixed_singlecell_3.csv
+SpinUpClimateTimeSeries			Daily_RandomYears
+SpinUpClimateFile			"historical_gridmet.csv"
 SpinUpClimateFileFormat			Daily_Temp-C_Precip-mmDay
 
 UsingFireClimate			yes
@@ -14,4 +14,3 @@ DuffMoistureCode			100
 DroughtCode				100
 FirstDayFire				30
 LastDayFire				320
-
