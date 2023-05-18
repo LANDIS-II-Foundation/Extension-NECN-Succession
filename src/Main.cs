@@ -1,4 +1,4 @@
-//  Authors: Robert Scheller, Melissa Lucash
+//  Authors: See User Guide
 
 using Landis.Core;
 using Landis.SpatialModeling;
@@ -52,7 +52,7 @@ namespace Landis.Extension.Succession.NECN
 
                 PlugIn.AnnualWaterBalance = 0;
 
-                if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteTemp)
+                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature)
                 {
                     double[] summer_water = new double[6];
                     double[] summer_temp = new double[6];
@@ -130,7 +130,7 @@ namespace Landis.Extension.Succession.NECN
 
                     //Drought vars
                     //Update monthly temperature and soil water
-                    if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteTemp)
+                    if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature)
                     {
                         int year_index = PlugIn.ModelCore.CurrentTime - 1;
 
@@ -208,7 +208,7 @@ namespace Landis.Extension.Succession.NECN
                 }
 
                 //Do this just once a year, after CWD is calculated above
-                if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD | DroughtMortality.WriteTemp) //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature) //TODO fix this so we don't have to always calculate all of these vars when writing maps
                 {
                     int year_index = PlugIn.ModelCore.CurrentTime - 1;
 
@@ -247,7 +247,6 @@ namespace Landis.Extension.Succession.NECN
                 foreach (ISpeciesCohorts speciesCohorts in cohorts)
                     foreach (ICohort cohort in speciesCohorts)
                         total += (int) (cohort.WoodBiomass + cohort.LeafBiomass);
-                    //total += ComputeBiomass(speciesCohorts);
             return total;
         }
 
@@ -260,7 +259,6 @@ namespace Landis.Extension.Succession.NECN
                 foreach (ISpeciesCohorts speciesCohorts in cohorts)
                     foreach (ICohort cohort in speciesCohorts)
                         total += (int)(cohort.LeafBiomass);
-            //total += ComputeBiomass(speciesCohorts);
             return total;
         }
         //---------------------------------------------------------------------
@@ -314,9 +312,6 @@ namespace Landis.Extension.Succession.NECN
             double cRootN = cRootC / (double) SpeciesData.CoarseRootCN[species];
             double fRootN = fRootC / (double) SpeciesData.FineRootCN[species];
 
-            //double totalN = woodN + cRootN + leafN + fRootN;
-
-            //PlugIn.ModelCore.UI.WriteLine("month={0}, species={1}, leafB={2:0.0}, leafC={3:0.00}, leafN={4:0.0}, woodB={5:0.0}, woodC={6:0.000}, woodN={7:0.0}", Month, cohort.Species.Name, cohort.LeafBiomass, leafC, leafN, cohort.WoodBiomass, woodC, woodN);
 
             SiteVars.CohortLeafC[site] += leafC;
             SiteVars.CohortFRootC[site] += fRootC;

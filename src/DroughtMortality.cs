@@ -32,9 +32,9 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;  // needs better variable name
 
         public static bool UseDrought = false;
-        public static bool WriteSWA;
-        public static bool WriteCWD;
-        public static bool WriteTemp;
+        public static bool OutputSoilWaterAvailable;
+        public static bool OutputClimateWaterDeficit;
+        public static bool OutputTemperature;
         public static bool WriteSpeciesDroughtMaps;
 
 
@@ -56,9 +56,9 @@ namespace Landis.Extension.Succession.NECN
             BetaNormTemp           = parameters.BetaNormTemp;
             IntxnCWD_Biomass    = parameters.IntxnCWD_Biomass ;
 
-            WriteSWA = parameters.WriteSWA;
-            WriteCWD = parameters.WriteCWD;
-            WriteTemp = parameters.WriteTemp;
+            OutputSoilWaterAvailable = parameters.OutputSoilWaterAvailable;
+            OutputClimateWaterDeficit = parameters.OutputClimateWaterDeficit;
+            OutputTemperature = parameters.OutputTemp;
             WriteSpeciesDroughtMaps = parameters.WriteSpeciesDroughtMaps;
             PlugIn.ModelCore.UI.WriteLine("UseDrought on initialization = {0}", UseDrought); //debug
         }
@@ -187,10 +187,6 @@ namespace Landis.Extension.Succession.NECN
             }
 
             double random = PlugIn.ModelCore.GenerateUniform();
-
-            //PlugIn.ModelCore.UI.WriteLine("p_mort is {0}", p_mort);
-            //PlugIn.ModelCore.UI.WriteLine("random is {0}", random);
-
 
             if (p_mort > random)
             {

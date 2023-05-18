@@ -171,13 +171,6 @@ namespace Landis.Extension.Succession.NECN
                 DroughtMortality.Initialize(Parameters);
             }
 
-            //B_MAX = 0;
-            //foreach (ISpecies species in ModelCore.Species)
-            //{
-            //    if (SpeciesData.Max_Biomass[species] > B_MAX)
-            //        B_MAX = SpeciesData.Max_Biomass[species];
-            //}
-
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
                 Main.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
@@ -238,14 +231,16 @@ namespace Landis.Extension.Succession.NECN
 
 
         //---------------------------------------------------------------------
+        // Although this function is no longer referenced, it is required through inheritance from the succession library
 
         public override byte ComputeShade(ActiveSite site)
         {
 
             return (byte) SiteVars.LAI[site]; // finalShade;
         }
-        
 
+
+        //---------------------------------------------------------------------
 
         protected override void InitializeSite(ActiveSite site)
         {
@@ -526,7 +521,7 @@ namespace Landis.Extension.Succession.NECN
             //   Option1: function type is linear
             //   Option2: function type is power
 
-            if (!SpeciesData.Nlog_depend[species])
+            if (!SpeciesData.NurseLog_depend[species])
                 return isSufficientlight;
 
             double nurseryLogAvailabilityModifier = 2.0; // tuning parameter (only even)
@@ -539,11 +534,11 @@ namespace Landis.Extension.Succession.NECN
             }
 
             // Case 1. CWD-dependent species (species which can only be established on nursery log)
-            if (SpeciesData.Nlog_depend[species]) // W.Hotta (2021.08.01)
+            if (SpeciesData.NurseLog_depend[species]) // W.Hotta (2021.08.01)
             {
                 lightProbability *= nurseryLogAvailability;
                 isSufficientlight = modelCore.GenerateUniform() < lightProbability;
-                if (isSufficientlight) regenType = "nlog";
+                if (isSufficientlight) regenType = "nurse_log";
             }
             // Case 2. CWD-independent species (species which can be established on both forest floor & nursery log)
             else
@@ -554,17 +549,17 @@ namespace Landis.Extension.Succession.NECN
                     isSufficientlight = true;
                     regenType = "surface";
                 }
-                else
-                {
-                    // 2. If (1) the site shade is darker than the best shade class for the species and 
-                    //       (2) the light availability meets the species requirement,
-                    //if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
-                    //{
-                        // 3. check if threre are sufficient amounts of downed logs?
-                        isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
-                        if (isSufficientlight) regenType = "nlog";
-                    //}
-                }
+                //else
+                //{
+                //    // 2. If (1) the site shade is darker than the best shade class for the species and 
+                //    //       (2) the light availability meets the species requirement,
+                //    //if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
+                //    //{
+                //        // 3. check if threre are sufficient amounts of downed logs?
+                //        isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
+                //        if (isSufficientlight) regenType = "nlog";
+                //    //}
+                //}
                 if (OtherData.CalibrateMode)
                 {
                     PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);

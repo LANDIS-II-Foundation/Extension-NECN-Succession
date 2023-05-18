@@ -653,7 +653,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (int)((SiteVars.AvailableWater[site]));
+                        pixel.MapCode.Value = (int)((SiteVars.PlantAvailableWater[site]));
                     }
                     else
                     {
@@ -807,7 +807,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
             }
-            if (DroughtMortality.WriteSWA)
+            if (DroughtMortality.OutputSoilWaterAvailable)
             {
                 string pathSWA = MapNames.ReplaceTemplateVars(@"NECN\SWA-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                 using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathSWA, PlugIn.ModelCore.Landscape.Dimensions))
@@ -835,7 +835,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
             }
-            if (DroughtMortality.WriteCWD)
+            if (DroughtMortality.OutputClimateWaterDeficit)
             {
                 string pathCWD = MapNames.ReplaceTemplateVars(@"NECN\CWD-{timestep}.img", PlugIn.ModelCore.CurrentTime);
                 using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathCWD, PlugIn.ModelCore.Landscape.Dimensions))

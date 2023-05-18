@@ -220,26 +220,26 @@ namespace Landis.Extension.Succession.NECN
             InputVar<bool> write_SWA = new InputVar<bool>("Write_SWA_Maps");
             if (ReadOptionalVar(write_SWA))
             {
-                parameters.WriteSWA= write_SWA.Value;
+                parameters.OutputSoilWaterAvailable= write_SWA.Value;
             }
             else
-                parameters.WriteSWA = false;
+                parameters.OutputSoilWaterAvailable = false;
 
             InputVar<bool> write_CWD = new InputVar<bool>("Write_CWD_Maps");
             if (ReadOptionalVar(write_CWD))
             {
-                parameters.WriteCWD = write_CWD.Value;
+                parameters.OutputClimateWaterDeficit = write_CWD.Value;
             }
             else
-                parameters.WriteCWD = false;
+                parameters.OutputClimateWaterDeficit = false;
 
             InputVar<bool> write_Temp = new InputVar<bool>("Write_Temperature_Maps");
             if (ReadOptionalVar(write_Temp))
             {
-                parameters.WriteTemp = write_Temp.Value;
+                parameters.OutputTemp = write_Temp.Value;
             }
             else
-                parameters.WriteTemp = false;
+                parameters.OutputTemp = false;
 
             InputVar<bool> write_SpeciesDroughtMaps = new InputVar<bool>("Write_Species_Drought_Maps");
             if (ReadOptionalVar(write_SpeciesDroughtMaps))
@@ -390,90 +390,6 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.TotalCMapFrequency = totalCMapFreq.Value;
 
             }
-            //--------------------------
-            //  LAI and light table
-
-            //ReadName("MaximumLAI"); 
-            //InputVar<byte> shadeClassVar = new InputVar<byte>("Shade Class");
-            //InputVar<double> maxLAI = new InputVar<double>("Maximum LAI");
-
-            //for (byte shadeClass = 1; shadeClass <= 5; shadeClass++) {
-            //    if (AtEndOfInput)
-            //        throw NewParseException("Expected a line with available light class {0}", shadeClass);
-
-            //    StringReader currentLine = new StringReader(CurrentLine);
-            //    ReadValue(shadeClassVar, currentLine);
-            //    if (shadeClassVar.Value.Actual != shadeClass)
-            //        throw new InputValueException(shadeClassVar.Value.String,
-            //                                      "Expected the available light class {0}", shadeClass);
-                
-            //    ReadValue(maxLAI, currentLine);
-            //    parameters.SetMaximumShadeLAI(shadeClass, maxLAI.Value);
-
-            //    CheckNoDataAfter("the " + maxLAI + " column", currentLine);
-            //    GetNextLine();
-            //}
-
-            //----------------------------------------------------------
-            //  Read table of sufficient light probabilities.
-            //  Available light classes are in increasing order.
-            //ReadName("LightEstablishmentTable");
-
-            //InputVar<byte> sc = new InputVar<byte>("Available Light Class");
-            //InputVar<double> pl0 = new InputVar<double>("Probability of Germination - Light Level 0");
-            //InputVar<double> pl1 = new InputVar<double>("Probability of Germination - Light Level 1");
-            //InputVar<double> pl2 = new InputVar<double>("Probability of Germination - Light Level 2");
-            //InputVar<double> pl3 = new InputVar<double>("Probability of Germination - Light Level 3");
-            //InputVar<double> pl4 = new InputVar<double>("Probability of Germination - Light Level 4");
-            //InputVar<double> pl5 = new InputVar<double>("Probability of Germination - Light Level 5");
-
-            //int previousNumber = 0;
-
-            //while (! AtEndOfInput && CurrentName != Names.SpeciesParameters
-            //                      && previousNumber != 6) {
-            //    StringReader currentLine = new StringReader(CurrentLine);
-
-            //    ISufficientLight suffLight = new SufficientLight();
-
-            //    ReadValue(sc, currentLine);
-            //    suffLight.ShadeClass = sc.Value;
-
-            //    //  Check that the current shade class is 1 more than
-            //    //  the previous number (numbers are must be in increasing order).
-            //    if (sc.Value.Actual != (byte) previousNumber + 1)
-            //        throw new InputValueException(sc.Value.String,
-            //                                      "Expected the severity number {0}",
-            //                                      previousNumber + 1);
-            //    previousNumber = (int) sc.Value.Actual;
-
-            //    ReadValue(pl0, currentLine);
-            //    suffLight.ProbabilityLight0 = pl0.Value;
-
-            //    ReadValue(pl1, currentLine);
-            //    suffLight.ProbabilityLight1 = pl1.Value;
-
-            //    ReadValue(pl2, currentLine);
-            //    suffLight.ProbabilityLight2 = pl2.Value;
-
-            //    ReadValue(pl3, currentLine);
-            //    suffLight.ProbabilityLight3 = pl3.Value;
-
-            //    ReadValue(pl4, currentLine);
-            //    suffLight.ProbabilityLight4 = pl4.Value;
-
-            //    ReadValue(pl5, currentLine);
-            //    suffLight.ProbabilityLight5 = pl5.Value;
-
-            //    //parameters.LightClassProbabilities.Add(suffLight);
-
-            //    CheckNoDataAfter("the " + pl5.Name + " column",
-            //                     currentLine);
-            //    GetNextLine();
-            //}
-            //if (parameters.LightClassProbabilities.Count == 0)
-            //    throw NewParseException("No sufficient light probabilities defined.");
-            //if (previousNumber != 5)
-            //    throw NewParseException("Expected shade class {0}", previousNumber + 1);
 
             //-------------------------
             //  Read Species Parameters table
@@ -507,6 +423,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
                 
                 parameters.Grass[species] = ReadGrass(row);
+                parameters.Nlog_depend[species] = System.Convert.ToBoolean(row["Nlog_depend"]); // W.Hotta (2023.05.06)
                 parameters.SetLightLAImean(species, System.Convert.ToInt32(row["LightLAImean"]));
                 parameters.SetLightLAIdispersion(species, System.Convert.ToInt32(row["LightLAIdispersion"]));
 
