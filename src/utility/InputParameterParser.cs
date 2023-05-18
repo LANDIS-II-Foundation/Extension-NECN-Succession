@@ -507,6 +507,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
                 
                 parameters.Grass[species] = ReadGrass(row);
+                parameters.Nlog_depend[species] = System.Convert.ToBoolean(row["Nlog_depend"]); // W.Hotta (2023.05.06)
                 parameters.SetLightLAImean(species, System.Convert.ToInt32(row["LightLAImean"]));
                 parameters.SetLightLAIdispersion(species, System.Convert.ToInt32(row["LightLAIdispersion"]));
 

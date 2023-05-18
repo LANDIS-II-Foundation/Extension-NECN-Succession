@@ -543,7 +543,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 lightProbability *= nurseryLogAvailability;
                 isSufficientlight = modelCore.GenerateUniform() < lightProbability;
-                if (isSufficientlight) regenType = "nlog";
+                if (isSufficientlight) regenType = "nurse_log";
             }
             // Case 2. CWD-independent species (species which can be established on both forest floor & nursery log)
             else
@@ -554,17 +554,17 @@ namespace Landis.Extension.Succession.NECN
                     isSufficientlight = true;
                     regenType = "surface";
                 }
-                else
-                {
-                    // 2. If (1) the site shade is darker than the best shade class for the species and 
-                    //       (2) the light availability meets the species requirement,
-                    //if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
-                    //{
-                        // 3. check if threre are sufficient amounts of downed logs?
-                        isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
-                        if (isSufficientlight) regenType = "nlog";
-                    //}
-                }
+                //else
+                //{
+                //    // 2. If (1) the site shade is darker than the best shade class for the species and 
+                //    //       (2) the light availability meets the species requirement,
+                //    //if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
+                //    //{
+                //        // 3. check if threre are sufficient amounts of downed logs?
+                //        isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
+                //        if (isSufficientlight) regenType = "nlog";
+                //    //}
+                //}
                 if (OtherData.CalibrateMode)
                 {
                     PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
