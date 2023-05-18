@@ -1,4 +1,4 @@
-//  Authors: Robert Scheller, Melissa Lucash
+//  Authors: See User Guide
 
 using Landis.Core;
 using Landis.SpatialModeling;
@@ -311,6 +311,7 @@ namespace Landis.Extension.Succession.NECN
             double woodN = woodC / (double) SpeciesData.WoodCN[species];
             double cRootN = cRootC / (double) SpeciesData.CoarseRootCN[species];
             double fRootN = fRootC / (double) SpeciesData.FineRootCN[species];
+
 
             SiteVars.CohortLeafC[site] += leafC;
             SiteVars.CohortFRootC[site] += fRootC;
