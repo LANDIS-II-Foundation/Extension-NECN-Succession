@@ -15,7 +15,8 @@ $dlls = "Landis.Library.AgeOnlyCohorts-v3.dll",
 "Landis.Library.Biomass-v2.dll",
 "Landis.Library.Climate-v4.3.dll",
 "Landis.Library.Succession-v8.dll",
-"Landis.Library.InitialCommunity.LeafBiomass.dll"
+"Landis.Library.InitialCommunity.LeafBiomass.dll",
+"MathNet.Numerics.dll"
 #************************************************
 
 
