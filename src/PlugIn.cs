@@ -171,13 +171,6 @@ namespace Landis.Extension.Succession.NECN
                 DroughtMortality.Initialize(Parameters);
             }
 
-            //B_MAX = 0;
-            //foreach (ISpecies species in ModelCore.Species)
-            //{
-            //    if (SpeciesData.Max_Biomass[species] > B_MAX)
-            //        B_MAX = SpeciesData.Max_Biomass[species];
-            //}
-
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
                 Main.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
@@ -238,14 +231,16 @@ namespace Landis.Extension.Succession.NECN
 
 
         //---------------------------------------------------------------------
+        // Although this function is no longer referenced, it is required through inheritance from the succession library
 
         public override byte ComputeShade(ActiveSite site)
         {
 
             return (byte) SiteVars.LAI[site]; // finalShade;
         }
-        
 
+
+        //---------------------------------------------------------------------
 
         protected override void InitializeSite(ActiveSite site)
         {
