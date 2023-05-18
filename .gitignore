@@ -785,3 +785,14 @@ testing/Core7-NECN6.11-SingleCell/NECN/TotalC-47.img
 testing/Core7-NECN6.11-SingleCell/NECN/TotalC-48.img
 testing/Core7-NECN6.11-SingleCell/NECN/TotalC-49.img
 testing/Core7-NECN6.11-SingleCell/NECN/TotalC-50.img
+src/lib/Landis.Library.AgeOnlyCohorts-v3.dll
+src/lib/Landis.Library.Biomass-v2.dll
+src/lib/Landis.Library.BiomassCohorts-v3.dll
+src/lib/Landis.Library.Climate-v4.3.dll
+src/lib/Landis.Library.Cohorts-v2.dll
+src/lib/Landis.Library.InitialCommunity.Biomass.dll
+src/lib/Landis.Library.LeafBiomassCohorts-v2.dll
+src/lib/Landis.Library.Metadata-v2.dll
+src/lib/Landis.Library.Parameters-v2.dll
+src/lib/Landis.Library.Succession-v8.dll
+src/lib/MathNet.Numerics.dll
