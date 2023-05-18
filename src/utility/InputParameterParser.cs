@@ -336,6 +336,24 @@ namespace Landis.Extension.Succession.NECN
                 OtherData.WaterLossFactor2 = wf2Override.Value;
             }
 
+            InputVar<double> anerb1Override = new InputVar<double>("AnaerobicFactor1Override");
+            if (ReadOptionalVar(anerb1Override))
+            {
+                OtherData.RatioPrecipPETMaximum = anerb1Override.Value;
+            }
+
+            InputVar<double> anerb2Override = new InputVar<double>("AnaerobicFactor2Override");
+            if (ReadOptionalVar(anerb2Override))
+            {
+                OtherData.RatioPrecipPETMinimum = anerb2Override.Value;
+            }
+
+            InputVar<double> anerb3Override = new InputVar<double>("AnaerobicFactor3Override");
+            if (ReadOptionalVar(anerb3Override))
+            {
+                OtherData.AnerobicEffectMinimum = anerb3Override.Value;
+            }
+
             InputVar<string> anppMaps = new InputVar<string>("ANPPMapNames");
             if (ReadOptionalVar(anppMaps))
             {
@@ -423,7 +441,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetMaxBiomass(species, System.Convert.ToInt32(row["MaximumBiomass"]));
                 
                 parameters.Grass[species] = ReadGrass(row);
-                parameters.Nlog_depend[species] = System.Convert.ToBoolean(row["Nlog_depend"]); // W.Hotta (2023.05.06)
+                parameters.SetNlog_depend(species, ReadNlog(row)); // W.Hotta (2023.05.06)
                 parameters.SetLightLAImean(species, System.Convert.ToInt32(row["LightLAImean"]));
                 parameters.SetLightLAIdispersion(species, System.Convert.ToInt32(row["LightLAIdispersion"]));
 
@@ -694,6 +712,18 @@ namespace Landis.Extension.Succession.NECN
             {
                 bool grass = System.Convert.ToBoolean(row["Grass"]);
                 return grass;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private bool ReadNlog(DataRow row)
+        {
+            try
+            {
+                bool Nlog_depend = System.Convert.ToBoolean(row["Nlog_depend"]);
+                return Nlog_depend;
             }
             catch
             {

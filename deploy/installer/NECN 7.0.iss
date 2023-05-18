@@ -1,7 +1,7 @@
 ; LANDIS-II Extension infomation
 #define CoreRelease "LANDIS-II-V7"
 #define ExtensionName "NECN Succession"
-#define AppVersion "6.11"
+#define AppVersion "7.0"
 #define AppPublisher "LANDIS-II Foundation"
 #define AppURL "http://www.landis-ii.org/"
 
@@ -65,7 +65,7 @@ Source: {#BuildDir}\Mathnet.Numerics.dll; DestDir: {#ExtDir}; Flags: uninsneveru
 
 ; LANDIS-II identifies the extension with the info in this .txt file
 ; NB. New releases must modify the name of this file and the info in it
-#define InfoTxt "NECN_Succession 6.txt"
+#define InfoTxt "NECN_Succession 7.txt"
 Source: {#InfoTxt}; DestDir: {#LandisPlugInDir}
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

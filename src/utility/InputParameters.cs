@@ -1364,6 +1364,13 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
+        public void SetNlog_depend(ISpecies species, bool newValue)
+        {
+            Debug.Assert(species != null);
+            nlog_depend[species] = newValue;
+        }
+
+
         public void SetCWDThreshold(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);

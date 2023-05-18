@@ -822,9 +822,9 @@ namespace Landis.Extension.Succession.NECN
             //     rprpet    - actual (RAIN+IRRACT+AVH2O[3])/PET ratio
 
             //SF changed to match paper from Rocky Mountain fen sites: 
-            double aneref1 = 0.35;// OtherData.RatioPrecipPETMaximum;  //This value is 1.5   //0.35
-            double aneref2 = 1.1; // OtherData.RatioPrecipPETMinimum;   //This value is 3.0 //1.1
-            double aneref3 = 0.008; // OtherData.AnerobicEffectMinimum;   //This value is 0.3
+            double aneref1 = OtherData.RatioPrecipPETMaximum;  //This value is 1.5   //0.35
+            double aneref2 = OtherData.RatioPrecipPETMinimum;   //This value is 3.0 //1.1
+            double aneref3 = OtherData.AnerobicEffectMinimum;   //This value is 0.3 //0.008
 
             double anerob = 1.0;
 

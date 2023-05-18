@@ -186,9 +186,9 @@ namespace Landis.Extension.Succession.NECN
         // ANEREF(1) - Ratio of rain/potential evapotranspiration below which there is no negative impact of soil anaerobic conditions on decomposition.
         // ANEREF(2) - Ratio of rain/potential evapotranspiration above which there is maximum negative impact of soil anaerobic conditions on decomposition.
         // ANEREF(3) - Minimum value of the impact of soil anaerobic conditions on decomposition; functions as a multiplier for the maximum decomposition rate.
-        public const double RatioPrecipPETMaximum = 1.5;
-        public const double RatioPrecipPETMinimum = 3.0;
-        public const double AnerobicEffectMinimum = 0.3;
+        public static double RatioPrecipPETMaximum = 1.5;
+        public static double RatioPrecipPETMinimum = 3.0;
+        public static double AnerobicEffectMinimum = 0.3;
 
         public const double MonthAdjust = 1.0;
 

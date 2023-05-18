@@ -45,6 +45,7 @@ namespace Landis.Extension.Succession.NECN
         public static double ProbEstablishAdjust;
         public static double StormFlowOverride = 0.0;
 
+
         public static int FutureClimateBaseYear;
         //public static int B_MAX;
         private ICommunity initialCommunity;
