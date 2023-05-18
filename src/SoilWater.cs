@@ -178,6 +178,7 @@ namespace Landis.Extension.Succession.NECN
 
                 //...Decrement remaining pet by energy used to evaporate snow:
                 remainingPET -= evaporatedSnow;
+                //TODO does this need to be added to AET?
 
                 if (remainingPET < 0.0)
                     remainingPET = 0.0;
@@ -237,8 +238,9 @@ namespace Landis.Extension.Succession.NECN
             //  Bergström, 1992
 
             //SF changed: if there is enough water left to satisfy remainingPET, then all of it will be evaporated/transpired
-            //if (soilWaterContent > waterFull) 
-            if ((soilWaterContent - waterEmpty) >= remainingPET)
+            //if (soilWaterContent > waterFull) //SF this condition didn't make sense to me, and in the original version this condition would never have been met
+            if (soilWaterContent >= remainingPET) //TODO what should the condition be? How low should AET draw down soil water? 
+                                                  //Paul has: ((soilWaterContent - waterEmpty) >= remainingPET)
             {
                 AET = remainingPET;
             }
