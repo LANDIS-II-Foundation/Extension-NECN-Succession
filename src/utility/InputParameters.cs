@@ -261,7 +261,7 @@ namespace Landis.Extension.Succession.NECN
         /// Should yearly rasters of mean summer SWA be written? Used to generate input
         /// variables for drought mortality
         /// </summary>
-        public bool WriteSWA
+        public bool OutputSoilWaterAvailable
         {
             get
             {
@@ -279,7 +279,7 @@ namespace Landis.Extension.Succession.NECN
         /// Should annual rasters of CWD be written? Used to generate input
         /// variables for drought mortality
         /// </summary>
-        public bool WriteCWD
+        public bool OutputClimateWaterDeficit
         {
             get
             {
@@ -296,7 +296,7 @@ namespace Landis.Extension.Succession.NECN
         /// Should annual rasters of Temperature be written? Used to generate input
         /// variables for drought mortality
         /// </summary>
-        public bool WriteTemp
+        public bool OutputTemp
         {
             get
             {

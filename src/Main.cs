@@ -52,7 +52,7 @@ namespace Landis.Extension.Succession.NECN
 
                 PlugIn.AnnualWaterBalance = 0;
 
-                if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteTemp)
+                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature)
                 {
                     double[] summer_water = new double[6];
                     double[] summer_temp = new double[6];
@@ -130,7 +130,7 @@ namespace Landis.Extension.Succession.NECN
 
                     //Drought vars
                     //Update monthly temperature and soil water
-                    if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteTemp)
+                    if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature)
                     {
                         int year_index = PlugIn.ModelCore.CurrentTime - 1;
 
@@ -208,7 +208,7 @@ namespace Landis.Extension.Succession.NECN
                 }
 
                 //Do this just once a year, after CWD is calculated above
-                if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD | DroughtMortality.WriteTemp) //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature) //TODO fix this so we don't have to always calculate all of these vars when writing maps
                 {
                     int year_index = PlugIn.ModelCore.CurrentTime - 1;
 

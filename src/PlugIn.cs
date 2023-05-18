@@ -526,7 +526,7 @@ namespace Landis.Extension.Succession.NECN
             //   Option1: function type is linear
             //   Option2: function type is power
 
-            if (!SpeciesData.Nlog_depend[species])
+            if (!SpeciesData.NurseLog_depend[species])
                 return isSufficientlight;
 
             double nurseryLogAvailabilityModifier = 2.0; // tuning parameter (only even)
@@ -539,7 +539,7 @@ namespace Landis.Extension.Succession.NECN
             }
 
             // Case 1. CWD-dependent species (species which can only be established on nursery log)
-            if (SpeciesData.Nlog_depend[species]) // W.Hotta (2021.08.01)
+            if (SpeciesData.NurseLog_depend[species]) // W.Hotta (2021.08.01)
             {
                 lightProbability *= nurseryLogAvailability;
                 isSufficientlight = modelCore.GenerateUniform() < lightProbability;

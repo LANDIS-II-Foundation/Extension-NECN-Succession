@@ -774,7 +774,7 @@ namespace Landis.Extension.Succession.NECN
             
             if (pet >= 0.01)
             {   
-                Ratio_AvailWaterToPET = (SiteVars.AvailableWater[site] / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
+                Ratio_AvailWaterToPET = (SiteVars.PlantAvailableWater[site] / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
             }
             else Ratio_AvailWaterToPET = 0.01;
 
@@ -801,7 +801,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
-                CalibrateLog.availableWater = SiteVars.AvailableWater[site];
+                CalibrateLog.availableWater = SiteVars.PlantAvailableWater[site];
                 //Outputs.CalibrateLog.Write("{0:0.00},", SiteVars.AvailableWater[site]);
             }
 

@@ -17,7 +17,6 @@ namespace Landis.Extension.Succession.NECN
     public class SoilWater
     {
         private static double Precipitation;
-        //private static double Precipitation;
         private static double tave;
         private static double tmax;
         private static double tmin;
@@ -36,6 +35,7 @@ namespace Landis.Extension.Succession.NECN
             //     Updated from Fortran 4 - rm 2/92
             //     Rewritten by Bill Pulliam - 9/94
             //     Rewritten by Melissa Lucash- 11/2014
+            //     Rewritten by Sam Flake - 5/2023
 
             //SF revised to avoid negative soil moisture
             //SF: expected behavior: soil moisture typically between field capacity and zero; only transiently above field capacity
@@ -58,8 +58,8 @@ namespace Landis.Extension.Succession.NECN
             double remainingPET = 0.0;
             double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
             double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
-            double availableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
-            double priorWaterAvail = SiteVars.AvailableWater[site];
+            double plantAvailableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
+            double priorWaterAvail = SiteVars.PlantAvailableWater[site];
 
             //...Calculate external inputs
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
@@ -193,8 +193,7 @@ namespace Landis.Extension.Succession.NECN
                 //...Compute storm flow.
                 stormFlow = waterMovement * stormFlowFraction; //SF some of the waterMovement just disappears here -- the waterMovement that isn't part of stormFlow gets removed in line 158,
                 //but not accounted for as runoff
-
-                
+                                
                 //Subtract stormflow from soil water
                 soilWaterContent -= stormFlow; //SF remove some excess water as stormflow; the rest remains available until end of month
 
@@ -249,7 +248,7 @@ namespace Landis.Extension.Succession.NECN
 
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWaterContent = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWaterContent, waterFull, waterEmpty);
             //Subtract transpiration from soil water content
-            soilWaterContent -= AET;
+            soilWaterContent -= Math.Max(AET, 0.0);  // Cannot become negative
 
             //PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWaterContent = {1}", AET, soilWaterContent); //debug
 
@@ -261,7 +260,7 @@ namespace Landis.Extension.Succession.NECN
             baseFlow = Math.Max(baseFlow, 0.0); //SF: make sure baseflow > 0
 
             //Subtract baseflow from soil water
-            soilWaterContent -= baseFlow;
+            soilWaterContent -= Math.Max(baseFlow, 0.0);  // Cannot become negative
 
             //PlugIn.ModelCore.UI.WriteLine("Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
 
@@ -269,19 +268,19 @@ namespace Landis.Extension.Succession.NECN
             //soil moisture carried forward cannot exceed field capacity; everything else runs off
             double surplus = Math.Max(soilWaterContent - waterFull, 0.0); //SF calculate water in excess of field capacity
             baseFlow += surplus; //SF add runoff to baseFlow to calculate leaching
-            soilWaterContent -= surplus;
+            soilWaterContent -= Math.Max(surplus, 0.0);  // Cannot become negative
             
             //Calculate the amount of available water after all the evapotranspiration and leaching has taken place (minimum available water)           
             availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0);
 
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
-            availableWater = (availableWaterMax + availableWaterMin)/ 2.0;
+            plantAvailableWater = (availableWaterMax + availableWaterMin)/ 2.0;
             double meanSoilWater = (availableWaterMax + soilWaterContent) / 2.0; //SF added this as relevant variable for physiology. Actual end-of-month soil moisture is tracked in SoilWaterContent
             
 
            // Compute the ratio of precipitation to PET
            double ratioPrecipPET = 0.0;
-            if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET. 
+            if (PET > 0.0) ratioPrecipPET = plantAvailableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET. 
             //PlugIn.ModelCore.UI.WriteLine("Precip={0}, PET={1}, Ratio={2}.", Precipitation, PET, ratioPrecipPET); //debug
             //SF availableWater is not precip
             //SF consider chaging to use precip; this would tend to reduce the
@@ -294,7 +293,7 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
-            SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
+            SiteVars.PlantAvailableWater[site] = plantAvailableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent; //lowest soil water, after subtracting everything
             SiteVars.MeanSoilWaterContent[site] = meanSoilWater; //mean of lowest soil water and highest soil water (or waterFull)
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
@@ -309,7 +308,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11
             //SiteVars.DryDays[site] += CalculateDryDaysNew(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, Math.Min(availableWaterMax, waterFull), soilWaterContent);//SF changed to use min and max per month. Max was too high, so capped at field capacity. TODO?
-            //TODO
             return;
         }
 
@@ -329,7 +327,7 @@ namespace Landis.Extension.Succession.NECN
             stormFlow = 0.0;
             double actualET = 0.0;
             double remainingPET = 0.0;
-            double priorWaterAvail = SiteVars.AvailableWater[site];
+            double priorWaterAvail = SiteVars.PlantAvailableWater[site];
             //double waterFull = 0.0;
 
             //...Calculate external inputs
@@ -604,7 +602,7 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
-            SiteVars.AvailableWater[site] = availableWater;  //available to plants for growth     
+            SiteVars.PlantAvailableWater[site] = availableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent;
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
 

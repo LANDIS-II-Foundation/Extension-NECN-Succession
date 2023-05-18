@@ -440,7 +440,7 @@ namespace Landis.Extension.Succession.NECN
 
             //SiteVars.FireEfflux[site] = 0.0;
             //drought_todo
-            if (DroughtMortality.UseDrought | DroughtMortality.WriteSWA | DroughtMortality.WriteCWD | DroughtMortality.WriteTemp)
+            if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
             {
                 if (PlugIn.ModelCore.CurrentTime >= 11)
                 {
@@ -635,7 +635,7 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Water loss
         /// </summary>
-        public static ISiteVar<double> AvailableWater
+        public static ISiteVar<double> PlantAvailableWater
         {
             get {
                 return availableWater;

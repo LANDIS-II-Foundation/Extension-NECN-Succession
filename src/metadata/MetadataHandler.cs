@@ -202,7 +202,7 @@ namespace Landis.Extension.Succession.NECN
                 Extension.OutputMetadatas.Add(mapOut_DroughtMort);
             }
 
-            if (DroughtMortality.WriteSWA)
+            if (DroughtMortality.OutputSoilWaterAvailable)
             {
                 string[] paths = { @"NECN", "SWA-{timestep}.img" };
                 OutputMetadata mapOut_SWA = new OutputMetadata()
@@ -217,7 +217,7 @@ namespace Landis.Extension.Succession.NECN
                 Extension.OutputMetadatas.Add(mapOut_SWA);
             }
 
-            if (DroughtMortality.WriteCWD)
+            if (DroughtMortality.OutputClimateWaterDeficit)
             {
                 string[] paths = { @"NECN", "CWD-{timestep}.img" };
                 OutputMetadata mapOut_CWD = new OutputMetadata()
@@ -233,7 +233,7 @@ namespace Landis.Extension.Succession.NECN
                 Extension.OutputMetadatas.Add(mapOut_CWD);
             }
 
-            if (DroughtMortality.WriteTemp)
+            if (DroughtMortality.OutputTemperature)
             {
                 string[] paths = { @"NECN", "Temperature-{timestep}.img" };
                 OutputMetadata mapOut_Temp = new OutputMetadata()
