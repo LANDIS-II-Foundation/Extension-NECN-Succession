@@ -184,7 +184,7 @@ namespace Landis.Extension.Succession.NECN
                     remainingPET = 0.0;
 
                 //Subtract evaporated snowfrom the soil water content
-                soilWaterContent -= evaporatedSnow;
+                soilWaterContent = Math.Max(soilWaterContent - evaporatedSnow, 0.0);  // Do not allow to go negative
             }
 
             //...Calculate bare soil water loss and interception  when air temperature is above freezing and no snow cover.
@@ -209,8 +209,8 @@ namespace Landis.Extension.Succession.NECN
                 soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent); //SF added: stops soilWaterContent from becoming negative
 
                 //Subtract soil evaporation from soil water content
-               soilWaterContent -= soilEvaporation; //SF this can reduce SWC to less than zero
-                                                    //SF also, soilEvaporation should be added to AET?
+               soilWaterContent = Math.Max(soilWaterContent - soilEvaporation, 0.0); // Do not allow to go negeative
+                                                    //SF, soilEvaporation should be added to AET?  RMS: Yes
 
                 //PlugIn.ModelCore.UI.WriteLine("evaporation = {0}, soilWaterContent = {1}.", soilEvaporation, soilWaterContent); //debug
             }
@@ -229,13 +229,13 @@ namespace Landis.Extension.Succession.NECN
                                                                //but not accounted for as runoff
 
                 //Subtract stormflow from soil water
-                soilWaterContent -= stormFlow; //SF remove some excess water as stormflow; the rest remains available until end of month. SWC can still be greater than FC at this point
+                soilWaterContent = Math.Max(soilWaterContent - stormFlow, 0.0); //SF remove some excess water as stormflow; the rest remains available until end of month. SWC can still be greater than FC at this point
 
                 //PlugIn.ModelCore.UI.WriteLine("Water Runs Off. stormflow={0}. soilWaterContent = {1}", stormFlow, soilWaterContent); //debug
             }
 
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
-            //  Bergström, 1992
+            //  BergstrÃ¶m, 1992
 
             //SF changed: if there is enough water left to satisfy remainingPET, then all of it will be evaporated/transpired
             //if (soilWaterContent > waterFull) //SF this condition didn't make sense to me, and in the original version this condition would never have been met
@@ -255,17 +255,17 @@ namespace Landis.Extension.Succession.NECN
 
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWaterContent = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWaterContent, waterFull, waterEmpty);
             //Subtract transpiration from soil water content
-            soilWaterContent -= Math.Max(AET, 0.0);  // AET cannot become negative
+            soilWaterContent = Math.Max(soilWaterContent - AET, 0.0);  // AET cannot become negative
 
             //PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWaterContent = {1}", AET, soilWaterContent); //debug
 
             //Water above permanent wilting point can be drained by baseflow; otherwise, baseflow does not occur
-            double remainingWater = soilWaterContent - waterEmpty;
+            double remainingWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
 
             //Leaching occurs. Drain baseflow fraction from soil water
             baseFlow = remainingWater * baseFlowFraction; //Calculate baseflow as proportion of water above permanent wilt point
             baseFlow = Math.Max(baseFlow, 0.0); // make sure baseflow > 0 
-            soilWaterContent -= baseFlow;  //remove baseFlow from soil water
+            soilWaterContent = Math.Max(soilWaterContent - baseFlow, 0.0);  //remove baseFlow from soil water
 
             //PlugIn.ModelCore.UI.WriteLine("Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
 
@@ -273,7 +273,7 @@ namespace Landis.Extension.Succession.NECN
             //SF soil moisture carried forward cannot exceed field capacity; everything else runs off and is added to baseflow
             double surplus = Math.Max(soilWaterContent - waterFull, 0.0); //SF calculate water in excess of field capacity
             baseFlow += surplus; //SF add runoff to baseFlow to calculate leaching
-            soilWaterContent -= surplus;
+            soilWaterContent = Math.Max(soilWaterContent - surplus, 0.0);
             
             //Calculate the amount of available water after all the evapotranspiration and runoff has taken place (minimum available water)           
             availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0);
@@ -506,7 +506,7 @@ namespace Landis.Extension.Succession.NECN
 
             // ********************************************************
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
-            // Bergström, 1992
+            // BergstrÃ¶m, 1992
             // PH: Moved up to take evapotranspiration out before excess drains away. This is different from the CENTURY approach, 
             // where evaporation is taken out of the add first, but is 
             // less complex because it does not require partitioning the evaporation if evapotranspiration exceeds addToSoil.
