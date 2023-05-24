@@ -36,7 +36,7 @@ namespace Landis.Extension.Succession.NECN
                         cohortAddYear--;
 
                     double SWfraction = GetSWFraction(cohort);
-                    double SWallocation = Math.Max(0.000001, SWfraction * availableSW); // Stop the soil water allocation from being 0. Even the smallest cohort gets some water. 
+                    double SWallocation = Math.Max(0.000001, SWfraction * availableSW); // Stop the soil water allocation from being 0
 
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
                     newEntry.Add(cohortAddYear, SWallocation);
@@ -155,10 +155,12 @@ namespace Landis.Extension.Succession.NECN
         }
 
 
-
-
-
-        // Stop transpiration from exceeding water in the cell  
+        // Allocates the max water available to plants (soilwatercontent - water empty) between cohorts 
+        // This is different from the above allocation.
+        // The above is based on the 'available water' calculation which is an average of the min and max wateravailable in the cell each month. This is the m
+        // This is the total available water to plants in the cell when transpiration is being calculated. 
+        // Here, we divide that water between cohorts using the same fractions as above, and then use it as a cap on transpiration for each cohort
+        // This stops total transpiration from exceeding water in the cell 
         public static Dictionary<int, Dictionary<int, double>> CohortCapWater; 
 
         // Function allocates the swc-water empty as a cap on transpiration between cohorts each month
