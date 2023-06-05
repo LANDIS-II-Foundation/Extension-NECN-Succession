@@ -150,18 +150,15 @@ namespace Landis.Extension.Succession.NECN
 
                 //PlugIn.ModelCore.UI.WriteLine("Snow melts, addToSoil = {0}", addToSoil);
 
-                //Subtracted melted snow from snowpack and add it to the soil
-                liquidSnowpack = liquidSnowpack - addToSoil;
+                // Subtracted melted snow from snowpack and add it to the soil
+                // We are not accounting for evaporation from snow ablation
+                liquidSnowpack = Math.Max(liquidSnowpack - addToSoil, 0.0);
                 soilWaterContent += addToSoil;
-
-                //SF TODO: does the energy used to melt snow need to be taken out of remainingPET?
             }
-
             
             //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             availableWaterMax = soilWaterContent;
-            //PlugIn.ModelCore.UI.WriteLine("Starting soilWaterContent = {0}. Max soil water (after adding ppt and snowmelt) = {1}",
-            //    SiteVars.SoilWaterContent[site], soilWaterContent); //debug
+            //PlugIn.ModelCore.UI.WriteLine("Starting soilWaterContent = {0}. Max soil water (after adding ppt and snowmelt) = {1}", SiteVars.SoilWaterContent[site], soilWaterContent); //debug
 
             //...Evaporate water from the snow pack (rewritten by Pulliam 9/94)
             //...Coefficient 0.87 relates to heat of fusion for ice vs. liquid water
@@ -177,8 +174,8 @@ namespace Landis.Extension.Succession.NECN
                 liquidSnowpack = liquidSnowpack - evaporatedSnow;
 
                 //...Decrement remaining pet by energy used to evaporate snow:
-                remainingPET -= evaporatedSnow;
-                //TODO does this need to be added to AET?
+                remainingPET = Math.Max(remainingPET - evaporatedSnow, 0.0);
+                AET += evaporatedSnow;
 
                 if (remainingPET < 0.0)
                     remainingPET = 0.0;
@@ -209,8 +206,9 @@ namespace Landis.Extension.Succession.NECN
                 soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent); //SF added: stops soilWaterContent from becoming negative
 
                 //Subtract soil evaporation from soil water content
-               soilWaterContent = Math.Max(soilWaterContent - soilEvaporation, 0.0); // Do not allow to go negeative
-                                                    //SF, soilEvaporation should be added to AET?  RMS: Yes
+               soilWaterContent = Math.Max(soilWaterContent - soilEvaporation, 0.0); // Do not allow to go negative
+               AET += soilEvaporation;  
+               remainingPET = Math.Max(remainingPET - soilEvaporation, 0.0); 
 
                 //PlugIn.ModelCore.UI.WriteLine("evaporation = {0}, soilWaterContent = {1}.", soilEvaporation, soilWaterContent); //debug
             }
@@ -221,15 +219,14 @@ namespace Landis.Extension.Succession.NECN
             if (soilWaterContent > waterFull)
             {
                 // How much water should move during a storm event, which is based on how much water the soil can hold.
-                //soilWaterContent = waterFull; //SF deleted: original code removes stormflow twice. Soil water is capped to FC (waterFull) later in the code, when being fed forward to next month
                 waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); 
 
                 //...Compute storm flow.
-                stormFlow = waterMovement * stormFlowFraction; //SF some of the waterMovement just disappears here -- the waterMovement that isn't part of stormFlow gets removed in line 158,
-                                                               //but not accounted for as runoff
+                stormFlow = waterMovement * stormFlowFraction; 
 
                 //Subtract stormflow from soil water
-                soilWaterContent = Math.Max(soilWaterContent - stormFlow, 0.0); //SF remove some excess water as stormflow; the rest remains available until end of month. SWC can still be greater than FC at this point
+                // Remove excess water (above field capacity) as stormflow; the rest remains available until end of month. SWC can still be greater than FC at this point
+                soilWaterContent = Math.Max(soilWaterContent - stormFlow, 0.0); 
 
                 //PlugIn.ModelCore.UI.WriteLine("Water Runs Off. stormflow={0}. soilWaterContent = {1}", stormFlow, soilWaterContent); //debug
             }
@@ -237,21 +234,21 @@ namespace Landis.Extension.Succession.NECN
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
             //  Bergström, 1992
 
-            //SF changed: if there is enough water left to satisfy remainingPET, then all of it will be evaporated/transpired
-            //if (soilWaterContent > waterFull) //SF this condition didn't make sense to me, and in the original version this condition would never have been met
-            if (soilWaterContent >= remainingPET) //TODO what should the condition be? How low should AET draw down soil water? 
-                                                  //Paul has: ((soilWaterContent - waterEmpty) >= remainingPET)
+            //SF changed: if there is enough water left to satisfy remainingPET, then all of it will be evaporated/transpired, bringing soilWaterContent to zero (but not less)
+            //Paul Henne code: ((soilWaterContent - waterEmpty) >= remainingPET)
+            if (soilWaterContent >= remainingPET) 
+                                                  
             {
                 AET = remainingPET;
             }
             else
             {
                 //SF otherwise AET is limited by soil water
-                AET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0); //this will only be set to 0 if soilWaterContent < waterEmpty
-                                                                                                                  // PlugIn.ModelCore.UI.WriteLine("AET = {0}, remainingPET = {1}, soilWaterContent = {2}", AET, remainingPET, soilWaterContent); //debug
+                AET = Math.Max(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), 0.0); //TODO
+                // PlugIn.ModelCore.UI.WriteLine("AET = {0}, remainingPET = {1}, soilWaterContent = {2}", AET, remainingPET, soilWaterContent); //debug
             }
 
-            AET = Math.Min(AET, soilWaterContent); //SF: stops AET from reducing soil moisture to below zero
+            AET = Math.Min(AET, soilWaterContent); //SF: prevent AET from reducing soil moisture to below zero
 
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWaterContent = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWaterContent, waterFull, waterEmpty);
             //Subtract transpiration from soil water content
@@ -269,7 +266,7 @@ namespace Landis.Extension.Succession.NECN
 
             //PlugIn.ModelCore.UI.WriteLine("Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
 
-            //SF limit soil moisture to feed to next month
+            //SF limit soil moisture that carries over to the next month
             //SF soil moisture carried forward cannot exceed field capacity; everything else runs off and is added to baseflow
             double surplus = Math.Max(soilWaterContent - waterFull, 0.0); //SF calculate water in excess of field capacity
             baseFlow += surplus; //SF add runoff to baseFlow to calculate leaching
@@ -279,17 +276,15 @@ namespace Landis.Extension.Succession.NECN
             availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0);
 
             //Calculate the final amount of available water to the trees, which is the average of the max and min          
-            plantAvailableWater = (availableWaterMax + availableWaterMin)/ 2.0;
             //SF added meanSoilWater as variable to compare to empirical data and to calculate water
-            // limitation using some data sources. Actual end-of-month soil moisture is tracked in SoilWaterContent.
-            // This should always be less than plantAvailableWater
-            double meanSoilWater = (availableWaterMax + soilWaterContent) / 2.0;             
+            // limitation using emprirical data sources. Actual end-of-month soil moisture is tracked in SoilWaterContent.
+            plantAvailableWater = (availableWaterMax + availableWaterMin)/ 2.0;
+            double meanSoilWater = (availableWaterMax + soilWaterContent) / 2.0;  //availableWaterMax is the initial soilWaterContent after precip           
 
            // Compute the ratio of precipitation to PET
-           double ratioPrecipPET = 0.0;
+           double ratioPrecipPET = 0.0;  //TODO rename to ratioPlantAvailablePET
             if (PET > 0.0) ratioPrecipPET = plantAvailableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET. 
             //PlugIn.ModelCore.UI.WriteLine("Precip={0}, PET={1}, Ratio={2}.", Precipitation, PET, ratioPrecipPET); //debug
-            //SF TODO change name from ratioPrecipPET to ratioAvailableWaterPET or something similar?
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
@@ -311,8 +306,9 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPrecipPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
             SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11, to add as monthly output variable
+                        
+            //SF changed to use min and max per month. Max was too high, so capped at field capacity. This results in a greater number of dry days, on average. 
             //SiteVars.DryDays[site] += CalculateDryDaysNew(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
-            //SF changed to use min and max per month. Max was too high, so capped at field capacity. This results in a greater number of dry days, on average. TODO decide which to use
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, Math.Min(availableWaterMax, waterFull), soilWaterContent);
             return;
         }
