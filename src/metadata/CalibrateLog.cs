@@ -30,6 +30,19 @@ namespace Landis.Extension.Succession.NECN
         public static double availableWaterTranspiration;  //  (availableWaterMax + priorAvailableWaterMin) / 2.0;
         public static double transpiration;
 
+        //KM checking on the calculate_soilwater growth limit function --- fuck 
+        public static double cwl_ratio_availwatertopet;
+        public static double cwl_watercontent;
+        public static double cwl_tmin;
+        public static double cwl_h2oinputs;
+        public static double cwl_pet;
+        public static double cwl_availablesw;
+        public static double cwl_moisturecurve2;
+        public static double cwl_moisturecurve3;
+        public static double cwl_intcpt;
+        public static double cwl_slope;
+
+
         public static void WriteLogFile()
         {
             Outputs.calibrateLog.Clear();
@@ -78,6 +91,18 @@ namespace Landis.Extension.Succession.NECN
             clog.AvailableSWFraction = availableSWFraction; // Fraction of available water allocated to the cohort
             clog.AvailableWaterTranspiration = availableWaterTranspiration; // Total water available for transpiration in the cell 
             clog.Transpiration = transpiration;
+
+            // KM tracking soil water growth limitation function 
+            clog.Cwl_ratio_availwatertopet = cwl_ratio_availwatertopet;
+            clog.Cwl_watercontent = cwl_watercontent;
+            clog.Cwl_tmin = cwl_tmin;
+            clog.Cwl_h2oinputs = cwl_h2oinputs;
+            clog.Cwl_pet = cwl_pet;
+            clog.Cwl_availablesw = cwl_availablesw;
+            clog.Cwl_moisturecurve2 = cwl_moisturecurve2;
+            clog.Cwl_moisturecurve3 = cwl_moisturecurve3;
+            clog.Cwl_intcpt = cwl_intcpt;
+            clog.Cwl_slope = cwl_slope;
             
             Outputs.calibrateLog.AddObject(clog);
             Outputs.calibrateLog.WriteToFile();
@@ -87,7 +112,6 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Simulation Year")]
         public int Year {set; get;}
-
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.Month, Desc = "Simulation Month")]
         public int Month { set; get; }
@@ -215,5 +239,38 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.00")]
         public double Transpiration { set; get; }
+
+        //KM added variables to track soil water growth function 
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_ratio_availwatertopet", Format = "0.00")]
+        public double Cwl_ratio_availwatertopet { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_watercontent", Format = "0.00")]
+        public double Cwl_watercontent { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_tmin", Format = "0.00")]
+        public double Cwl_tmin { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_h2oinputs", Format = "0.00")]
+        public double Cwl_h2oinputs { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_pet", Format = "0.00")]
+        public double Cwl_pet { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_availablesw", Format = "0.00")]
+        public double Cwl_availablesw { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_moist2", Format = "0.00")]
+        public double Cwl_moisturecurve2 { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_moist3", Format = "0.00")]
+        public double Cwl_moisturecurve3 { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_intcpt", Format = "0.00")]
+        public double Cwl_intcpt { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "cwl_slope", Format = "0.00")]
+        public double Cwl_slope { set; get; }
+
     }
 }

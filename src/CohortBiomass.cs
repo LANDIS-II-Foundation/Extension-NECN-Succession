@@ -457,7 +457,8 @@ namespace Landis.Extension.Succession.NECN
              IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
             
             // KM: Calculate transpiration within the NPP function to make sure carbon and water fluxes are being calculated together and because npp is necessary for transpiration calculations 
-            double NPP = AGNPP[0] + AGNPP[1];
+            double NPP = AGNPP[0] + AGNPP[1] + (NPPcoarseRoot/0.47) + (NPPfineRoot/0.47);
+            //double NPP = NPPwood + NPPleaf + NPPcoarseRoot + NPPfineRoot;
             Calculate_Transpiration(cohort, site, ecoregion, NPP);
 
             SiteVars.AGNPPcarbon[site] += NPPwood + NPPleaf;
@@ -688,16 +689,14 @@ namespace Landis.Extension.Succession.NECN
             double tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[Main.Month];
             double H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
             double pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[Main.Month];
-            
-            // KM: update the plant available water and the pet to be cohort specific
-            // KM: The PET had to be scaled by the fraction allocated to each cohort because otherwise the soil water to pet ratio was too low
-            double availableSW = AvailableSoilWater.GetSWAllocation(cohort);
-            double fractionSW = AvailableSoilWater.GetSWFraction(cohort);
-            double cohort_pet = pet*fractionSW;
+
+            // KM: Use available water based on max + min (prior month)
+            double availableSW = SiteVars.AvailableWaterTranspiration[site];
 
             if (pet >= 0.01)
             {   
-                Ratio_AvailWaterToPET = (availableSW / cohort_pet);  //Modified by ML so that we weren't double-counting precip as in above equation
+               //Ratio_AvailWaterToPET = (availableSW / cohort_pet);  
+                Ratio_AvailWaterToPET = (availableSW / pet);
             }
             else Ratio_AvailWaterToPET = 0.01;
 
@@ -719,6 +718,23 @@ namespace Landis.Extension.Succession.NECN
               
             if (WaterLimit > 1.0)  WaterLimit = 1.0;
             if (WaterLimit < 0.01) WaterLimit = 0.01;
+
+
+            // write to the calibration log for testing purposes 
+            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+                {
+                    CalibrateLog.cwl_ratio_availwatertopet = Ratio_AvailWaterToPET;
+                    CalibrateLog.cwl_watercontent = waterContent;
+                    CalibrateLog.cwl_tmin = tmin;
+                    CalibrateLog.cwl_h2oinputs = H2Oinputs;
+                    CalibrateLog.cwl_pet = pet;
+                    CalibrateLog.cwl_availablesw = availableSW;
+                    CalibrateLog.cwl_moisturecurve2 = moisturecurve2;
+                    CalibrateLog.cwl_moisturecurve3= moisturecurve3;
+                    CalibrateLog.cwl_intcpt = intcpt;
+                    CalibrateLog.cwl_slope = slope;
+
+                }
 
             //PlugIn.ModelCore.UI.WriteLine("Intercept={0}, Slope={1}, WaterLimit={2}.", intcpt, slope, WaterLimit);     
             return WaterLimit;
@@ -834,13 +850,6 @@ namespace Landis.Extension.Succession.NECN
             double AvailableSW = AvailableSoilWater.GetCapWater(cohort);
             double AvailableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
             double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
-
-            // If it is a non-growing season month, then calculate transpiration using the original method and scale it by fraction of water allocated to each species so it totals to the right amount 
-            if(Main.Month == 9 || Main.Month == 10 || Main.Month == 11 || Main.Month == 0 || Main.Month == 1 ||Main.Month == 2){
-                Transpiration = SiteVars.OG_ET[site] * AvailableSWfraction;
-                ActualTranspiration = Transpiration;
-                ActualTranspiration = Math.Min(AvailableSW, Transpiration);
-            }
 
             // Add to overall site monthly and annual transpiration 
             SiteVars.Transpiration[site] += ActualTranspiration;
