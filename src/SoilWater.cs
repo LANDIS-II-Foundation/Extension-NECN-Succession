@@ -169,18 +169,6 @@ namespace Landis.Extension.Succession.NECN
             // KM: Delted the additional '+ addToSoil' because it's already taken out of soilwatercontent in line above 
             //availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
             availableWaterMax = soilWaterContent - waterEmpty;
-
-            // Calculate transpiration using the original method during winter months when updated transpiration calculation does not perform well since its based on npp
-            double og_et = 0.0;
-            if((soilWaterContent - waterEmpty) >= remainingPET)
-            {
-                og_et = remainingPET;
-            }else
-            {
-                og_et = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
-            }
-            og_et = Math.Min(soilWaterContent - waterEmpty, og_et);
-            SiteVars.OG_ET[site] = og_et;
             
             // KM: Transpiration calculations moved to a new script (cohortBiomass.cs) to be done at the species cohort level 
             // KM: Output the plant available water for species cohort transpiration calculations 
