@@ -1,0 +1,88 @@
+﻿LandisData  "NECN Succession"
+
+>>
+>> Date:    20/01/01
+>> Version: v1.0 (Alpha)
+>> Note:    Resilience only case for ESJ67
+>>
+
+
+Timestep  1
+SeedingAlgorithm  			UniversalDispersal
+InitialCommunities		./InitialCommunities_onecell.txt
+InitialCommunitiesMap   	../../input/onecell_ID3.img
+ClimateConfigFile			"../../ini/clim-gen_noCC.txt"
+
+SoilDepthMapName			../../input/single33.tif
+SoilDrainMapName			../../input/single0.75.tif
+SoilBaseFlowMapName			../../input/single0.3.tif
+SoilStormFlowMapName		../../input/single0.6.tif
+SoilFieldCapacityMapName	../../input/single0.26.tif
+SoilWiltingPointMapName		../../input/single0.09.tif
+SoilPercentSandMapName		../../input/single0.41.tif
+SoilPercentClayMapName		../../input/single0.13.tif
+InitialSOM1CsurfMapName ../../input/single225.tif
+InitialSOM1NsurfMapName ../../input/single8.tif
+InitialSOM1CsoilMapName ../../input/single782.15.tif
+InitialSOM1NsoilMapName ../../input/single40.7.tif
+InitialSOM2CMapName ../../input/single16704.95.tif
+InitialSOM2NMapName ../../input/single869.15.tif
+InitialSOM3CMapName ../../input/single8053.3.tif
+InitialSOM3NMapName ../../input/single419.1.tif
+InitialDeadWoodSurfaceMapName	../../input/single110.tif	<< NEW, Default
+InitialDeadCoarseRootsMapName	../../input/single50.tif	<< NEW, Default
+
+CalibrateMode 			yes
+SmokeModelOutputs		no
+WaterDecayFunction		Ratio
+
+ProbabilityEstablishAdjust 	1.0
+InitialMineralN			65.8
+InitialFineFuels		0.1		<< Default
+AtmosphericNSlope		0.0058
+AtmosphericNIntercept	0.024
+Latitude				43.13
+DenitrificationRate		0.001
+DecayRateSurf			0.76
+DecayRateSOM1			1.03
+DecayRateSOM2			0.05
+DecayRateSOM3			0.0005
+GrassThresholdMultiplier 1
+
+MaximumLAI
+
+>> Shade	Max LAI
+>> Class	
+>> ----------	--------------------	
+	1	1 
+	2	2.5 
+	3	3.5 
+	4	6
+	5	8
+		
+LightEstablishmentTable	
+					
+>>	Spp Shade	Probability					
+>>	Class		by Actual Shade					
+>>	 ----------	--------------------					
+>>		0	1	2	3	4	5
+>> Case 3. fix lowest values
+	1	1.0	0.5	0.02	0.01	0.01	0.01
+	2	0.6	1.0	0.5	0.02	0.01	0.01
+	3	0.01	0.6	1.0	0.5	0.02	0.01
+	4	0.01	0.01	0.6	1.0	0.5	0.02
+	5	0.01	0.01	0.01	0.5	1.0	0.5
+		
+			
+SpeciesParameters			../../input/necn-spp-table.csv
+FunctionalGroupParameters	../../input/necn-functional-table.csv
+
+
+FireReductionParameters
+>>	Severity	CoarseDebri	FineLitter	CohortWood	CohortLeaf	OrganicHorizon
+>>	Fire		Reduct		Reduct		Reduct		Reduct		Reduct
+	1			0.0			0.5			0.5			0			0
+	2			0.0			0.75		0.5			0			0
+	3			0.0			1.0			0.5			0			0
+
+HarvestReductionParameters

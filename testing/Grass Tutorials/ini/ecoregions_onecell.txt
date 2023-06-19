@@ -1,0 +1,11 @@
+LandisData	"Ecoregions"
+
+>>
+>> 1 cell simulation in teshio
+>>
+
+
+>>	Active	Map		Name	Description
+>>			Code
+>>--------------------------------------------------------			
+	yes		3		eco3	"test landscape" << same as eco01 of landscape simulation

@@ -1,0 +1,21 @@
+LandisData  Scenario
+
+>>
+>> Date:    2023/06/06
+>> Version: onecell v0.1
+
+Duration		87
+Species   		../../input/species_donan.txt
+Ecoregions      ../../ini/ecoregions_onecell.txt
+EcoregionsMap   ../../input/onecell_ID3.img
+CellLength  	100 	<< meters, 100 x 100 m = 1 ha
+
+
+>> Extension          Initialization File
+"NECN Succession"     ./NECN-succession_onecell_v7_3_shadelowmod.txt
+"Output Biomass"      ../../ini/output_biomass.txt
+
+DisturbancesRandomOrder  	yes  	<< optional parameter; default = no
+
+>>RandomNumberSeed  			4,357	<< optional parameter; default = the seed is
+									<< randomly generated using the current time
