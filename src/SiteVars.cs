@@ -117,6 +117,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlySoilWaterContent;
         public static ISiteVar<double[]> MonthlyMeanSoilWaterContent;//SF added
         public static ISiteVar<double[]> MonthlyAnaerobicEffect;//SF added 2023-4-11
+        public static ISiteVar<double[]> MonthlyClimaticWaterDeficit;//SF added 2023-6-27
+        public static ISiteVar<double[]> MonthlyActualEvapotranspiration;//SF added 2023-6-27
 
         //Drought params
         //drought_todo
@@ -210,6 +212,8 @@ namespace Landis.Extension.Succession.NECN
             MonthlySoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyAnaerobicEffect = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyClimaticWaterDeficit = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyActualEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             AnnualNEE           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireCEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireNEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -310,6 +314,8 @@ namespace Landis.Extension.Succession.NECN
                 MonthlySoilWaterContent[site]       = new double[12];
                 MonthlyMeanSoilWaterContent[site] = new double[12];
                 MonthlyAnaerobicEffect[site] = new double[12];
+                MonthlyClimaticWaterDeficit[site] = new double[12];
+                MonthlyActualEvapotranspiration[site] = new double[12];
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
@@ -1016,40 +1022,7 @@ namespace Landis.Extension.Succession.NECN
                 monthlyStreamN = value;
             }
         }
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// A summary of Monthly LAI
-        /// </summary>
-        //public static ISiteVar<double[]> MonthlyLAI
-        //{
-        //    get
-        //    {
-        //        return MonthlyLAI;
-        //    }
-        //    set
-        //    {
-        //        MonthlyLAI = value;
-        //    }
-        //}
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// A summary of Monthly SoilWaterContent
-        /// </summary>
-        //public static ISiteVar<double[]> MonthlySoilWaterContent
-        //{
-        //    get
-        //    {
-        //        return monthlySoilWaterContent;
-        //    }
-        //    set
-        //    {
-        //        monthlySoilWaterContent = value;
-        //    }
-        //}
-        //---------------------------------------------------------------------
-
+        
         /// <summary>
         /// Water loss
         /// </summary>
@@ -1353,39 +1326,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// A summary of Annual Water Budget (PPT - AET)
-        /// </summary>
-        //public static ISiteVar<double> AnnualWaterBalance
-        //{
-        //    get
-        //    {
-        //        return annualPPT_AET;
-        //    }
-        //    set
-        //    {
-        //        annualPPT_AET = value;
-        //    }
-
-
-        //}
-        /// <summary>
-        /// A summary of Soil Moisture (PET - AET)
-        /// </summary>
-        //public static ISiteVar<double> AnnualClimaticWaterDeficit
-        //{
-        //    get
-        //    {
-        //        return annualClimaticWaterDeficit;
-        //    }
-        //    set
-        //    {
-        //        annualClimaticWaterDeficit = value;
-        //    }
-
-
-        //}
     }
 
 }

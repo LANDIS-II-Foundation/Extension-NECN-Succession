@@ -212,7 +212,7 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            
+
             //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             availableWaterMax = Math.Max(soilWaterContent - waterEmpty, 0.0);
             waterContentMax = soilWaterContent;
@@ -308,6 +308,8 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("Precip={0}, PET={1}, Ratio={2}.", Precipitation, PET, ratioPrecipPET); //debug
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
+            SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET) * 10.0;
+            SiteVars.MonthlyActualEvapotranspiration[site][Main.Month] = AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
@@ -612,6 +614,8 @@ namespace Landis.Extension.Succession.NECN
             if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
+            SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET) * 10.0;
+            SiteVars.MonthlyActualEvapotranspiration[site][Main.Month] = AET * 10.0;
             SiteVars.AnnualClimaticWaterDeficit[site] += (remainingPET - actualET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, remainingPET = {2}, AET={3}, monthly CWD = {4}," +
