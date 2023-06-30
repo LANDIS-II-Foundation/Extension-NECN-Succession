@@ -209,13 +209,14 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.SmokeModelOutputs = false;
 
-            InputVar<bool> version_Henne = new InputVar<bool>("Version_Henne_SoilWater");
+           /* InputVar<bool> version_Henne = new InputVar<bool>("Version_Henne_SoilWater");
             if (ReadOptionalVar(version_Henne))
             {
                 parameters.SoilWater_Henne = version_Henne.Value;
             }
             else
                 parameters.SoilWater_Henne = false;
+           */
 
             InputVar<bool> write_SWA = new InputVar<bool>("Write_SWA_Maps");
             if (ReadOptionalVar(write_SWA))
@@ -339,13 +340,13 @@ namespace Landis.Extension.Succession.NECN
             InputVar<double> anerb1Override = new InputVar<double>("AnaerobicFactor1Override");
             if (ReadOptionalVar(anerb1Override))
             {
-                OtherData.RatioPrecipPETMaximum = anerb1Override.Value;
+                OtherData.ratioPlantAvailableWaterPETMaximum = anerb1Override.Value;
             }
 
             InputVar<double> anerb2Override = new InputVar<double>("AnaerobicFactor2Override");
             if (ReadOptionalVar(anerb2Override))
             {
-                OtherData.RatioPrecipPETMinimum = anerb2Override.Value;
+                OtherData.ratioPlantAvailableWaterPETMinimum = anerb2Override.Value;
             }
 
             InputVar<double> anerb3Override = new InputVar<double>("AnaerobicFactor3Override");

@@ -295,17 +295,17 @@ namespace Landis.Extension.Succession.NECN
             availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0); //minimum amount of water for the month
 
             // Calculate the final amount of available water to the trees, which is the average of the max and min 
-            plantAvailableWater = (availableWaterMax + availableWaterMin)/ 2.0;//availableWaterMax is the initial soilWaterContent after precip  
+            plantAvailableWater = (availableWaterMax + availableWaterMin)/ 2.0;//availableWaterMax is the initial soilWaterContent after precip, interception, and bare-soil evaporation  
 
             // SF added meanSoilWater as variable to calculate volumetric water to compare to empirical sources
             // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture is tracked in SoilWaterContent.
-            double meanSoilWater = (waterContentMax + soilWaterContent) / 2.0;  //availableWaterMax is the initial soilWaterContent after precip           
+            double meanSoilWater = (waterContentMax + soilWaterContent) / 2.0;          
             PlugIn.ModelCore.UI.WriteLine("availableWaterMax = {0}, soilWaterContent = {1}", availableWaterMax, soilWaterContent);
 
             // Compute the ratio of precipitation to PET
             double ratioPlantAvailableWaterPET = 0.0;  
             if (PET > 0.0) ratioPlantAvailableWaterPET = plantAvailableWater / PET; 
-            //PlugIn.ModelCore.UI.WriteLine("Precip={0}, PET={1}, Ratio={2}.", Precipitation, PET, ratioPrecipPET); //debug
+            //PlugIn.ModelCore.UI.WriteLine("Precip={0}, PET={1}, Ratio={2}.", Precipitation, PET, ratioPlantAvailableWaterPET); //debug
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET) * 10.0;
@@ -320,7 +320,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SoilWaterContent[site] = soilWaterContent; //lowest (end-of-month) soil water, after subtracting everything
             SiteVars.MeanSoilWaterContent[site] = meanSoilWater; //mean of lowest soil water and highest soil water
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
-            SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater/soilDepth;
+            SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater/soilDepth; //Convert to volumetric water content
 
             if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, remainingPET = {2}, AET={3}, monthly CWD = {4}," +
                  "cumulative CWD = {5}.",
@@ -337,7 +337,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, Math.Min(availableWaterMax, waterFull), soilWaterContent);
             return;
         }
-
+/*
         public static void Run_Henne(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
         {
             //     Original Water Submodel for Century - written by Bill Parton
@@ -610,8 +610,8 @@ namespace Landis.Extension.Succession.NECN
             PlugIn.ModelCore.UI.WriteLine("availableWaterMax = {0}, soilWaterContent = {1}", availableWaterMax, soilWaterContent);
 
             // Compute the ratio of precipitation to PET
-            double ratioPrecipPET = 0.0;
-            if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
+            double ratioPlantAvailableWaterPET = 0.0;
+            if (PET > 0.0) ratioPlantAvailableWaterPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET) * 10.0;
@@ -631,8 +631,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater;
 
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
-            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
-            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
+            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPlantAvailableWaterPET, month);
+            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPlantAvailableWaterPET, PET, tave);
             //if (month == 0) //I think this is dealt with already when annual accumulators are reset
             //    SiteVars.DryDays[site] = 0;
             //else
@@ -640,7 +640,7 @@ namespace Landis.Extension.Succession.NECN
 
             return;
         }
-
+*/
 
         private static double CalculateSlopeAspectEffect(double slope, double aspect)
         {
@@ -800,7 +800,7 @@ namespace Landis.Extension.Succession.NECN
             //if (soilTemp < 0 && decayFactor > 0.01)
             //{
             //    PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, PET={2:0.00}, MinT={3:0.0}, MaxT={4:0.0}, AveT={5:0.0}, H20={6:0.0}.", Main.Year, month, pet, tmin, tmax, tave, H2Oinputs);
-            //    PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, DecayFactor={2:0.00}, tempFactor={3:0.00}, waterFactor={4:0.00}, ratioPrecipPET={5:0.000}, soilT={6:0.0}.", Main.Year, month, decayFactor, tempModifier, W_Decomp, ratioPrecipPET, soilTemp);
+            //    PlugIn.ModelCore.UI.WriteLine("Yr={0},Mo={1}, DecayFactor={2:0.00}, tempFactor={3:0.00}, waterFactor={4:0.00}, ratioPlantAvailableWaterPET={5:0.000}, soilT={6:0.0}.", Main.Year, month, decayFactor, tempModifier, W_Decomp, ratioPlantAvailableWaterPET, soilTemp);
             //}
 
             return decayFactor;   //Combination of water and temperature effects on decomposition
@@ -825,7 +825,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------------
 
-        private static double CalculateAnaerobicEffect(double drain, double ratioPrecipPET, double pet, double tave)
+        private static double CalculateAnaerobicEffect(double drain, double ratioPlantAvailableWaterPET, double pet, double tave)
         {
 
             //Originally from anerob.f of Century
@@ -844,18 +844,18 @@ namespace Landis.Extension.Succession.NECN
             //     rprpet    - actual (RAIN+IRRACT+AVH2O[3])/PET ratio
 
             //SF changed to match paper from Rocky Mountain fen sites: 
-            double aneref1 = OtherData.RatioPrecipPETMaximum;  //This value is 1.5   //0.35
-            double aneref2 = OtherData.RatioPrecipPETMinimum;   //This value is 3.0 //1.1
-            double aneref3 = OtherData.AnerobicEffectMinimum;   //This value is 0.3 //0.008
+            double aneref1 = OtherData.ratioPlantAvailableWaterPETMaximum;  //This value is 1.5   //0.35 for wetlands
+            double aneref2 = OtherData.ratioPlantAvailableWaterPETMinimum;   //This value is 3.0 //1.1 for wetlands
+            double aneref3 = OtherData.AnerobicEffectMinimum;   //This value is 0.3 //0.008 for wetlands
 
             double anerob = 1.0;
 
             //...Determine if RAIN/PET ratio is GREATER than the ratio with
             //     maximum impact.
 
-            if ((ratioPrecipPET > aneref1) && (tave > 2.0))
+            if ((ratioPlantAvailableWaterPET > aneref1) && (tave > 2.0))
             {
-                double xh2o = (ratioPrecipPET - aneref1) * pet * (1.0 - drain);
+                double xh2o = (ratioPlantAvailableWaterPET - aneref1) * pet * (1.0 - drain);
 
                 if (xh2o > 0) //SF this must be true if we're in this loop
                 {
@@ -870,7 +870,7 @@ namespace Landis.Extension.Succession.NECN
                     anerob = aneref3;
                //PlugIn.ModelCore.UI.WriteLine("Lower than threshold. Anaerobic={0}", anerob);      
             }
-            //PlugIn.ModelCore.UI.WriteLine("ratioPrecipPET={0:0.0}, tave={1:0.00}, pet={2:0.00}, AnaerobicFactor={3:0.00}, Drainage={4:0.00}", ratioPrecipPET, tave, pet, anerob, drain);         
+            //PlugIn.ModelCore.UI.WriteLine("ratioPlantAvailableWaterPET={0:0.0}, tave={1:0.00}, pet={2:0.00}, AnaerobicFactor={3:0.00}, Drainage={4:0.00}", ratioPlantAvailableWaterPET, tave, pet, anerob, drain);         
             //PlugIn.ModelCore.UI.WriteLine("Anaerobic Effect = {0:0.00}.", anerob);
             return anerob;
         }

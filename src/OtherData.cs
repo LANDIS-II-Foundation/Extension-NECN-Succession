@@ -14,7 +14,7 @@ namespace Landis.Extension.Succession.NECN
         public static bool CalibrateMode;
         public static double ProbEstablishAdjust;
         public static WaterType WaterDecayFunction;
-        public static bool SoilWaterVersion_Henne = false;
+        //public static bool SoilWaterVersion_Henne = false;
         public static bool DGS_waterlimit = false;
 
         // NOTE: *****************************************************************
@@ -186,8 +186,8 @@ namespace Landis.Extension.Succession.NECN
         // ANEREF(1) - Ratio of rain/potential evapotranspiration below which there is no negative impact of soil anaerobic conditions on decomposition.
         // ANEREF(2) - Ratio of rain/potential evapotranspiration above which there is maximum negative impact of soil anaerobic conditions on decomposition.
         // ANEREF(3) - Minimum value of the impact of soil anaerobic conditions on decomposition; functions as a multiplier for the maximum decomposition rate.
-        public static double RatioPrecipPETMaximum = 1.5;
-        public static double RatioPrecipPETMinimum = 3.0;
+        public static double ratioPlantAvailableWaterPETMaximum = 1.5;
+        public static double ratioPlantAvailableWaterPETMinimum = 3.0;
         public static double AnerobicEffectMinimum = 0.3;
 
         public const double MonthAdjust = 1.0;
@@ -201,7 +201,7 @@ namespace Landis.Extension.Succession.NECN
             LitterType litterParmsSoil = new LitterType();
 
             CalibrateMode = parameters.CalibrateMode;
-            SoilWaterVersion_Henne = parameters.SoilWater_Henne;
+            //SoilWaterVersion_Henne = parameters.SoilWater_Henne;
             WaterDecayFunction = parameters.WType;
 
 
