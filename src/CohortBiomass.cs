@@ -719,23 +719,6 @@ namespace Landis.Extension.Succession.NECN
             if (WaterLimit > 1.0)  WaterLimit = 1.0;
             if (WaterLimit < 0.01) WaterLimit = 0.01;
 
-
-            // write to the calibration log for testing purposes 
-            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
-                {
-                    CalibrateLog.cwl_ratio_availwatertopet = Ratio_AvailWaterToPET;
-                    CalibrateLog.cwl_watercontent = waterContent;
-                    CalibrateLog.cwl_tmin = tmin;
-                    CalibrateLog.cwl_h2oinputs = H2Oinputs;
-                    CalibrateLog.cwl_pet = pet;
-                    CalibrateLog.cwl_availablesw = availableSW;
-                    CalibrateLog.cwl_moisturecurve2 = moisturecurve2;
-                    CalibrateLog.cwl_moisturecurve3= moisturecurve3;
-                    CalibrateLog.cwl_intcpt = intcpt;
-                    CalibrateLog.cwl_slope = slope;
-
-                }
-
             //PlugIn.ModelCore.UI.WriteLine("Intercept={0}, Slope={1}, WaterLimit={2}.", intcpt, slope, WaterLimit);     
             return WaterLimit;
         }
