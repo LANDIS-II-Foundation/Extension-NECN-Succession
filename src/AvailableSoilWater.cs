@@ -17,44 +17,6 @@ namespace Landis.Extension.Succession.NECN
         public static Dictionary<int, Dictionary<int, double>> CohortSWallocation;  // Dictionary of soil water allocation (cm) on a monthly basis 
         public static Dictionary<int, Dictionary<int, double>> CohortSWFraction;    // Dictionary of the fraction of total available water each cohort can access on a monthly basis 
 
-        // Function allocates plant available water to each cohort on a site for a given month  
-        public static void SetSWAllocation(Site site)
-        {
-            // Create a new dictionary for the sw allocation
-            AvailableSoilWater.CohortSWallocation = new Dictionary<int, Dictionary<int, double>>();
-            
-            // This is the total water available to plants for growth/transpiration
-            double availableSW = SiteVars.AvailableWaterTranspiration[site];
-
-            //Loop through cohorts and set the allocation in the dictionary 
-            foreach(ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
-            {
-                foreach(ICohort cohort in speciesCohorts)
-                {
-                    int cohortAddYear = GetAddYear(cohort);
-                    if (Main.MonthCnt == 11)
-                        cohortAddYear--;
-
-                    double SWfraction = GetSWFraction(cohort);
-                    double SWallocation = Math.Max(0.000001, SWfraction * availableSW); // Stop the soil water allocation from being 0
-
-                    Dictionary<int, double> newEntry = new Dictionary<int, double>();
-                    newEntry.Add(cohortAddYear, SWallocation);
-
-                    if (CohortSWallocation.ContainsKey(cohort.Species.Index))
-                    {
-                        if (!CohortSWallocation[cohort.Species.Index].ContainsKey(cohortAddYear))
-                            CohortSWallocation[cohort.Species.Index][cohortAddYear] = SWallocation;
-                    }
-                    else
-                    {
-                        CohortSWallocation.Add(cohort.Species.Index, newEntry);
-                    }
-                }
-            }
-
-        }
-
         // Function calculates the fraction of plant available water that each cohort receives on a site for a given month 
         public static void CalculateSWFraction(Site site)
         {   
@@ -117,19 +79,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-
-        // Function to retrieve the allocated soil water of a given cohort 
-        public static double GetSWAllocation(ICohort cohort)
-        {
-            int cohortAddYear = GetAddYear(cohort);
-            double SWAllocation = 0.0;
-            Dictionary<int, double> cohortDict;
-
-            if (AvailableSoilWater.CohortSWallocation.TryGetValue(cohort.Species.Index, out cohortDict))
-                cohortDict.TryGetValue(cohortAddYear, out SWAllocation);
-            return SWAllocation;
-        }
-
         // Function to retrieve the fraction of soil water a given cohort can access 
         public static double GetSWFraction(ICohort cohort)
         {
@@ -156,8 +105,6 @@ namespace Landis.Extension.Succession.NECN
 
 
         // Allocates the max water available to plants (soilwatercontent - water empty) between cohorts 
-        // This is different from the above allocation.
-        // The above is based on the 'available water' calculation which is an average of the min and max wateravailable in the cell each month. This is the m
         // This is the total available water to plants in the cell when transpiration is being calculated. 
         // Here, we divide that water between cohorts using the same fractions as above, and then use it as a cap on transpiration for each cohort
         // This stops total transpiration from exceeding water in the cell 
