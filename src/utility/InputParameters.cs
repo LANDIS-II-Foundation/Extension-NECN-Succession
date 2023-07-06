@@ -51,7 +51,7 @@ namespace Landis.Extension.Succession.NECN
 
         private bool calibrateMode;
         private bool smokeModelOutputs;
-        private bool henne_watermode;
+        //private bool henne_watermode;
         private bool writeSWA; //write soil water maps, for calculating normal SWA
         private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
         private bool writeTemp; //write temperature maps, for calculating normal CWD
@@ -232,7 +232,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         /// <summary>
         /// </summary>
-        public bool SoilWater_Henne
+        /*public bool SoilWater_Henne
         {
             get
             {
@@ -243,7 +243,7 @@ namespace Landis.Extension.Succession.NECN
                 henne_watermode = value;
             }
         }
-
+*/
         public string CommunityInputMapNames
         {
             get

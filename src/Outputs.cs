@@ -402,6 +402,9 @@ namespace Landis.Extension.Succession.NECN
         {
             double[] ppt = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] airtemp = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] pet = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] avgAET = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] avgCWD = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             double[] avgNPPtc = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avgTotalResp = new double[PlugIn.ModelCore.Ecoregions.Count];
@@ -418,6 +421,9 @@ namespace Landis.Extension.Succession.NECN
             {
                 ppt[ecoregion.Index] = 0.0;
                 airtemp[ecoregion.Index] = 0.0;
+                pet[ecoregion.Index] = 0.0;
+                avgAET[ecoregion.Index] = 0.0;
+                avgCWD[ecoregion.Index] = 0.0;
                 avgNPPtc[ecoregion.Index] = 0.0;
                 avgTotalResp[ecoregion.Index] = 0.0;
                 avgSoilResp[ecoregion.Index] = 0.0;
@@ -434,6 +440,9 @@ namespace Landis.Extension.Succession.NECN
 
                 ppt[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
                 airtemp[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
+                pet[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month]; //SF added 2023-6-27
+                avgCWD[ecoregion.Index] += SiteVars.MonthlyClimaticWaterDeficit[site][month]; //SF added 2023-6-27
+                avgAET[ecoregion.Index] += SiteVars.MonthlyActualEvapotranspiration[site][month]; //SF added 2023-6-27
 
                 avgNPPtc[ecoregion.Index] += SiteVars.MonthlyAGNPPcarbon[site][month] + SiteVars.MonthlyBGNPPcarbon[site][month];
                 avgTotalResp[ecoregion.Index] += SiteVars.MonthlyHeteroResp[site][month];
@@ -465,6 +474,9 @@ namespace Landis.Extension.Succession.NECN
 
                     ml.Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
                     ml.AirTemp = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
+                    ml.PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
+                    ml.avgAET = (avgAET[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.avgCWD = (avgCWD[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgTotalNPP_C = (avgNPPtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgHeteroRespiration = (avgTotalResp[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgSoilRespiration = (avgSoilResp[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
