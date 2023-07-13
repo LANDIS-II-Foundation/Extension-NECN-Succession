@@ -347,7 +347,7 @@ namespace Landis.Extension.Succession.NECN
                     //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
                     //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
 
-                    Disturbed[site] = true; //SF should browse count as a "disturbance" for this purpose?
+                    Disturbed[site] = false; //SF should browse count as a "disturbance" for this purpose?
 
                     return;
                 }
@@ -506,7 +506,7 @@ namespace Landis.Extension.Succession.NECN
 
             var random = new Troschuetz.Random.TRandom();
 
-            lightProbability = Weibull.PDF(SpeciesData.LightLAIMean[species], SpeciesData.LightLAIMean[species], SiteVars.LAI[site]);
+            lightProbability = Weibull.PDF(SpeciesData.LightLAIShape[species], SpeciesData.LightLAIScale[species], SiteVars.LAI[site]);
 
             PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:0.000}, at LAI = {2:0.00}", species.Name, lightProbability, SiteVars.LAI[site]);
             

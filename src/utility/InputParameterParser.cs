@@ -443,8 +443,8 @@ namespace Landis.Extension.Succession.NECN
                 
                 parameters.Grass[species] = ReadGrass(row);
                 parameters.SetNlog_depend(species, ReadNlog(row)); // W.Hotta (2023.05.06)
-                parameters.SetLightLAImean(species, System.Convert.ToDouble(row["LightLAImean"]));
-                parameters.SetLightLAIdispersion(species, System.Convert.ToDouble(row["LightLAIdispersion"]));
+                parameters.SetLightLAIShape(species, System.Convert.ToDouble(row["LightLAIShape"]));
+                parameters.SetLightLAIScale(species, System.Convert.ToDouble(row["LightLAIScale"]));
 
 
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));

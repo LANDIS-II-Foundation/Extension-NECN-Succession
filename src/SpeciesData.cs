@@ -36,8 +36,8 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> FineRootCN;
         public static Landis.Library.Parameters.Species.AuxParm<int> Max_ANPP;
         public static Landis.Library.Parameters.Species.AuxParm<int> Max_Biomass;
-        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIMean;
-        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIDispersion;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale;
 
         // Optional parameters:
         public static Landis.Library.Parameters.Species.AuxParm<bool> Grass;
@@ -92,8 +92,8 @@ namespace Landis.Extension.Succession.NECN
             CWDBegin            = parameters.CWDBegin;
             CWDMax              = parameters.CWDMax;
 
-            LightLAIMean        = parameters.LightLAIMean;
-            LightLAIDispersion  = parameters.LightLAIDispersion;
+            LightLAIShape        = parameters.LightLAIShape;
+            LightLAIScale       = parameters.LightLAIScale;
 
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)

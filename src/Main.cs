@@ -47,7 +47,6 @@ namespace Landis.Extension.Succession.NECN
                 int[] summer = new int[6] {6, 7, 8, 9, 4, 5};
 
                 if (OtherData.CalibrateMode)
-                    //months = new int[12]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; This output will not match normal mode due to differences in initialization
                     months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
                 PlugIn.AnnualWaterBalance = 0;
@@ -112,7 +111,7 @@ namespace Landis.Extension.Succession.NECN
                     //if(OtherData.SoilWaterVersion_Henne)
                     //    SoilWater.Run_Henne(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
                     //else
-                        SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
+                    SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
                     PlugIn.AnnualWaterBalance += ppt - AET;
 
@@ -138,9 +137,7 @@ namespace Landis.Extension.Succession.NECN
                         {
                             year_index = 9;
                         }
-
-                        //PlugIn.ModelCore.UI.WriteLine("Year index = {0}", year_index);
-                        
+                                            
                         //check if the current month is in "summer" 
                         foreach (var i in summer)
                         {
@@ -189,7 +186,6 @@ namespace Landis.Extension.Succession.NECN
                     // Volatilization loss as a function of the mineral N which remains after uptake by plants.  
                     // ML added a correction factor for wetlands since their denitrification rate is double that of wetlands
                     // based on a review paper by Seitziner 2006.
-                    //TODO update this for wetlands?
 
                     double volatilize = (SiteVars.MineralN[site] * PlugIn.Parameters.DenitrificationRate); 
 
@@ -224,10 +220,10 @@ namespace Landis.Extension.Succession.NECN
                     //PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
                 }
 
-                if (DroughtMortality.UseDrought)
-                {
-                    DroughtMortality.ComputeDroughtLaggedVars(site);
-                }
+                //if (DroughtMortality.UseDrought)
+                //{
+                //    DroughtMortality.ComputeDroughtLaggedVars(site);
+                //}
 
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
             }

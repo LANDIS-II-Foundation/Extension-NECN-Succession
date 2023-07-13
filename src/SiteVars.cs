@@ -442,21 +442,17 @@ namespace Landis.Extension.Succession.NECN
             }
             
 
-            //SiteVars.DryDays[site] = 0;
-
-            //SiteVars.FireEfflux[site] = 0.0;
-            //drought_todo
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
             {
                 if (PlugIn.ModelCore.CurrentTime >= 11)
                 {
-                    //PlugIn.ModelCore.UI.WriteLine("number of elements in SWA10 = {0}", SiteVars.SoilWater10[site].Count);
+                    //PlugIn.ModelCore.UI.WriteLine("number of elements in
+                    //10 = {0}", SiteVars.SoilWater10[site].Count);
                     SiteVars.SoilWater10[site].RemoveAt(0);
                     SiteVars.Temp10[site].RemoveAt(0);
                     SiteVars.CWD10[site].RemoveAt(0);
                 }
             }
-
         }
 
         //---------------------------------------------------------------------

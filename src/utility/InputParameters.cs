@@ -100,8 +100,8 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
         private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
-        private Landis.Library.Parameters.Species.AuxParm<double> lightLAImean; 
-        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIdispersion; 
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIShape; 
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIScale; 
 
         //private List<ISufficientLight> sufficientLight;
       
@@ -453,8 +453,8 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
-        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIMean { get { return lightLAImean; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIDispersion { get { return lightLAIdispersion; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get { return lightLAIShape; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get { return lightLAIScale; } }
         //Drought variables
 
         public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
@@ -1289,16 +1289,16 @@ namespace Landis.Extension.Succession.NECN
             growthLAI[species] = VerifyRange(newValue, 0.0, 1.0, "GrowthLAI");
         }
 
-        public void SetLightLAImean(ISpecies species, double newValue)
+        public void SetLightLAIShape(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            lightLAImean[species] = VerifyRange(newValue, 0.0, 10.0, "LightLAImean");
+            lightLAIShape[species] = VerifyRange(newValue, 0.0, 10.0, "LightLAIShape");
         }
 
-        public void SetLightLAIdispersion(ISpecies species, double newValue)
+        public void SetLightLAIScale(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            lightLAIdispersion[species] = VerifyRange(newValue, 0.0, 10.0, "LightLAIdispersion");
+            lightLAIScale[species] = VerifyRange(newValue, 0.0, 1000.0, "LightLAIScale"); //Scale parameter can be high for some shade-tolerant spp
         }
 
 
@@ -1492,8 +1492,8 @@ namespace Landis.Extension.Succession.NECN
             betaNormCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaNormTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            lightLAImean = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            lightLAIdispersion = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            lightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            lightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             
         }
 
