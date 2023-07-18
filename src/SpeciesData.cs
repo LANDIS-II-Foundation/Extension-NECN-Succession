@@ -38,6 +38,7 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<int> Max_Biomass;
         public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape;
         public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation;
 
         // Optional parameters:
         public static Landis.Library.Parameters.Species.AuxParm<bool> Grass;
@@ -94,6 +95,7 @@ namespace Landis.Extension.Succession.NECN
 
             LightLAIShape        = parameters.LightLAIShape;
             LightLAIScale       = parameters.LightLAIScale;
+            LightLAILocation = parameters.LightLAILocation;
 
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)

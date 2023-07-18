@@ -505,10 +505,15 @@ namespace Landis.Extension.Succession.NECN
             //SF regenType is only used in CalibrateMode
 
             var random = new Troschuetz.Random.TRandom();
+            double a = SpeciesData.LightLAIShape[species];
+            double b = SpeciesData.LightLAIScale[species];
+            double c = SpeciesData.LightLAILocation[species];
+            double lai = SiteVars.LAI[site];
+            lightProbability = ((a / b) * Math.Pow((lai / b), (a - 1)) * Math.Exp(Math.Pow(-(lai / b), a))) + c; //3-parameter Weibull PDF equation
 
-            lightProbability = Weibull.PDF(SpeciesData.LightLAIShape[species], SpeciesData.LightLAIScale[species], SiteVars.LAI[site]);
+            //lightProbability = Weibull.PDF(SpeciesData.LightLAIShape[species], SpeciesData.LightLAIScale[species], SiteVars.LAI[site]);
 
-            PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:0.000}, at LAI = {2:0.00}", species.Name, lightProbability, SiteVars.LAI[site]);
+            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:0.000}, at LAI = {2:0.00}", species.Name, lightProbability, SiteVars.LAI[site]);
             
             double randomLAI = PlugIn.ModelCore.NormalDistribution.NextDouble();
             if (modelCore.GenerateUniform() < lightProbability)

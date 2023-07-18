@@ -121,6 +121,7 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get; }
         Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get; }
         Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation { get; }
 
         //Drought threshold parameters
         Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get; }

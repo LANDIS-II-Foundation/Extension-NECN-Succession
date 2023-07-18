@@ -445,7 +445,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetNlog_depend(species, ReadNlog(row)); // W.Hotta (2023.05.06)
                 parameters.SetLightLAIShape(species, System.Convert.ToDouble(row["LightLAIShape"]));
                 parameters.SetLightLAIScale(species, System.Convert.ToDouble(row["LightLAIScale"]));
-
+                parameters.SetLightLAILocation(species, System.Convert.ToDouble(row["LightLAILocation"]));
 
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 

@@ -101,10 +101,11 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAIShape; 
-        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIScale; 
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIScale;
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAILocation;
 
         //private List<ISufficientLight> sufficientLight;
-      
+
         //Drought variables
         private Landis.Library.Parameters.Species.AuxParm<double> intercept; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaAge; // optional
@@ -455,6 +456,7 @@ namespace Landis.Extension.Succession.NECN
 
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get { return lightLAIShape; } }
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get { return lightLAIScale; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation { get { return lightLAILocation; } }
         //Drought variables
 
         public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
@@ -1301,6 +1303,12 @@ namespace Landis.Extension.Succession.NECN
             lightLAIScale[species] = VerifyRange(newValue, 0.0, 1000.0, "LightLAIScale"); //Scale parameter can be high for some shade-tolerant spp
         }
 
+        public void SetLightLAILocation(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            lightLAILocation[species] = VerifyRange(newValue, 0.0, 1, "LightLAILocation");
+        }
+
 
         //---------------------------------------------------------------------
 
@@ -1494,7 +1502,8 @@ namespace Landis.Extension.Succession.NECN
             intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            
+            lightLAILocation = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+
         }
 
         //---------------------------------------------------------------------
