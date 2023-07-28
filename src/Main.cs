@@ -44,18 +44,13 @@ namespace Landis.Extension.Succession.NECN
                 // Next, Grow and Decompose each month
                 int[] months = new int[12]{6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
 
-                int[] summer = new int[6] {6, 7, 8, 9, 4, 5};
+                int[] summer = new int[6] {6, 7, 8, 9, 4, 5}; //summer months for calculating summer T for drought mortality 
+                //TODO have these be user defined so drought can be used in southern hemisphere
 
-                if (OtherData.CalibrateMode)
-                    months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+                //if (OtherData.CalibrateMode)//SF remove?
+                //    months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
                 PlugIn.AnnualWaterBalance = 0;
-
-                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature)
-                {
-                    double[] summer_water = new double[6];
-                    double[] summer_temp = new double[6];
-                }
 
                 for (MonthCnt = 0; MonthCnt < 12; MonthCnt++)
                 {
@@ -220,10 +215,10 @@ namespace Landis.Extension.Succession.NECN
                     //PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
                 }
 
-                //if (DroughtMortality.UseDrought)
-                //{
-                //    DroughtMortality.ComputeDroughtLaggedVars(site);
-                //}
+                if (DroughtMortality.UseDrought)
+                {
+                    DroughtMortality.ComputeDroughtLaggedVars(site);
+                }
 
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
             }

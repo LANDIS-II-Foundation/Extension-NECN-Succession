@@ -64,9 +64,13 @@ namespace Landis.Extension.Succession.NECN
             WriteSpeciesDroughtMaps = parameters.WriteSpeciesDroughtMaps;
             PlugIn.ModelCore.UI.WriteLine("UseDrought on initialization = {0}", UseDrought); //debug
 
+            //TODO let the climate normals be calculated during spinup (30 year spinup)
+
             SpinUpWeather = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly>(PlugIn.ModelCore.Ecoregions);
+            
             int[] spinupYears = new int[10] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
             int[] months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+            int[] summer = new int[6] { 6, 7, 8, 9, 4, 5 };
 
             //Borrowed from ClimateRegionData.cs
             //Initialize spinup climate data
@@ -86,12 +90,56 @@ namespace Landis.Extension.Succession.NECN
 
             foreach(int year in spinupYears)
             {
+
                 foreach(int month in months)
                 {
                     foreach (ActiveSite site in PlugIn.ModelCore.Landscape.ActiveSites)
                     {
                         SpinUpWater(year, month, site);
+
+
+                        //check if the current month is in "summer" 
+                        
+                        if (summer.Contains(month))
+                        {
+                            //Initialize each year by adding a new list element
+
+                            //TODO we need to make sure to pop elements if these get longer than 10 elements
+                            if (month == summer[0])
+                            {
+                                //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} before adding new year", SiteVars.SoilWater10[site].Count);
+                                //Add a new entry to the list; in years before year 10, we're just adding to the list. For later
+                                // years, we've already popped the first element when resetting the site vars, so the list stays
+                                // ten elements long
+                                SiteVars.SoilWater10[site].Add(0);
+
+                                SiteVars.SoilWater10[site].ForEach(p => PlugIn.ModelCore.UI.WriteLine("SoilWater10 value is {0}", p));
+                                SiteVars.Temp10[site].Add(0);
+
+                                PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} after adding new year", SiteVars.SoilWater10[site].Count);
+                            }
+
+                            PlugIn.ModelCore.UI.WriteLine("Monthly soil water content = {0}", SiteVars.MonthlySoilWaterContent[site][month]);
+
+                            SiteVars.SoilWater10[site][year] += SiteVars.MonthlySoilWaterContent[site][month];
+
+                            PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year]);
+
+                            SiteVars.Temp10[site][year] += ClimateRegionData.AnnualWeather[PlugIn.ModelCore.Ecoregion[site]].MonthlyTemp[month];
+
+                        }
+                        
+                        if(month == 5) //end of year -- add annual CWD to tracker
+                        {
+                               SiteVars.CWD10[site].Add(0);
+
+                               SiteVars.CWD10[site][year] = SiteVars.AnnualClimaticWaterDeficit[site];
+
+                                //PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
+                        
+                        }
                     }
+                    
                 }
 
             }
@@ -102,6 +150,7 @@ namespace Landis.Extension.Succession.NECN
         {
             int actualYear = Climate.Spinup_MonthlyData.Keys.Min() + year;
             SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
+            //TODO add check if spinup climate data exists, throw error if missing
         }
 
         private static void SetAllEcoregions_SpinupAnnualClimate(int year)
@@ -138,15 +187,11 @@ namespace Landis.Extension.Succession.NECN
             double availableWaterMax = 0.0;  //amount of water available after precipitation and snowmelt (over-estimate of available water)
             double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water). SF changed to after baseflow
             double plantAvailableWater = 0.0;     //amount of water deemed available to the trees, which will be the average between the max and min
-            double priorWaterAvail = SiteVars.PlantAvailableWater[site];
             double waterContentMax = 0.0; //maximum amount of water (before evaporation and ET)
 
             //...Calculate external inputs
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-
-            //double litterBiomass = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
-            //double deadBiomass = SiteVars.SurfaceDeadWood[site].Carbon / 0.47;
-            
+                       
             double soilWaterContent = SiteVars.SoilWaterContent[site];
             if (OtherData.CalibrateMode)
                 PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
@@ -237,7 +282,8 @@ namespace Landis.Extension.Succession.NECN
                 addToSoil = liquidSnowpack * snowMeltFraction;  //Amount of liquidsnowpack that melts = liquidsnowpack multiplied by the fraction that melts.
                 if (addToSoil > liquidSnowpack) addToSoil = liquidSnowpack;
 
-                PlugIn.ModelCore.UI.WriteLine("   Snow melts, addToSoil = {0}", addToSoil);
+                if(OtherData.CalibrateMode) 
+                    PlugIn.ModelCore.UI.WriteLine("   Snow melts, addToSoil = {0}", addToSoil);
 
                 // Subtracted melted snow from snowpack and add it to the soil
                 // We are not accounting for evaporation from snow ablation
@@ -274,12 +320,9 @@ namespace Landis.Extension.Succession.NECN
             //...Mofified 9/94 to allow interception when t < 0 but no snow cover, Pulliam
             if (liquidSnowpack <= 0.0)
             {
-                //...Calculate total canopy cover and litter, put cap on effects:
+                //Set biomass (not being tracked for spinup)
                 double standingBiomass = 800;
                 double litterBiomass = 400.0;
-
-                //if (standingBiomass > 800.0) standingBiomass = 800.0;
-                //if (litterBiomass > 400.0) litterBiomass = 400.0;
 
                 //...canopy interception, fraction of  precip (canopyIntercept):
                 double canopyIntercept = ((0.0003 * litterBiomass) + (0.0006 * standingBiomass)) * OtherData.WaterLossFactor1;
@@ -346,18 +389,6 @@ namespace Landis.Extension.Succession.NECN
                 tempAET = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
             }
 
-            /*Here's the original equation from Bergstom (1992) HBV model: https://github.com/mxgiuliani00/hbv/blob/master/hbv_model.cpp
-            It allows soil moisture to be drawn down to zero, with it becoming more difficult when soil moisture is below waterEmpty
-                {
-                    evap = remainingPET * Math.Min((soilWaterContent / waterEmpty), 1.0);
-                    evap = Math.Min(evap, 0.0);
-                    if (soilWaterContent < evap) {
-                        evap = soilWaterContent;
-                    }
-                }
-            */
-
-
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWaterContent = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWaterContent, waterFull, waterEmpty);
             //Subtract ET from soil water content
             soilWaterContent = Math.Max(soilWaterContent - tempAET, 0.0);
@@ -404,7 +435,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyActualEvapotranspiration[site][Main.Month] = AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
-                                                                                //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
+            
+            PlugIn.ModelCore.UI.WriteLine("Spinup climate: Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
             
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
@@ -529,7 +561,6 @@ namespace Landis.Extension.Succession.NECN
             if (cwdThreshold == 0 & cwdThreshold2 == 0)
             {
                 //calculate decadal log odds of survival
-                //TODO we need to get the climate vars from a SiteVar, calculated in ComputeDroughtSiteVars
                 double logOdds = intercept + betaAge * cohortAge + betaTemp * tempLagged + betaSWAAnom * swaAnom + betaBiomass * siteBiomass +
                     betaCWD * cwdLagged + betaNormCWD * normalCWD + betaNormTemp * normalTemp + intxnCWD_Biomass * cwdLagged * siteBiomass;
                 double p_surv = Math.Exp(logOdds) / (Math.Exp(logOdds) + 1);
@@ -552,9 +583,8 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            //SiteVars.Cohorts[site].ReduceOrKillBiomassCohorts(this);
-            //PlugIn.ModelCore.UI.WriteLine("CWD is {0}", waterDeficit);
-            //PlugIn.ModelCore.UI.WriteLine("Drought wood mortality = {0}. Leaf mortality = {0}.", M_leaf, M_wood);
+            PlugIn.ModelCore.UI.WriteLine("CWD is {0}", cwdLagged);
+            PlugIn.ModelCore.UI.WriteLine("Drought wood mortality = {0}. Leaf mortality = {0}.", M_leaf, M_wood);
 
             double[] M_DROUGHT = new double[2] { M_wood, M_leaf };
 
@@ -564,8 +594,7 @@ namespace Landis.Extension.Succession.NECN
 
         public static void ComputeDroughtLaggedVars(ActiveSite site)
         {
-            //TODO this only needs to be computed once per site per year (in month 5)
-
+            
             int timestep = PlugIn.ModelCore.CurrentTime;
 
             double waterDeficit = SiteVars.AnnualClimaticWaterDeficit[site];
@@ -576,38 +605,17 @@ namespace Landis.Extension.Succession.NECN
             double[] tempValue = new double[0];
             double[] cwdValue = new double[0];
 
-            //For the first few years, use all of the temp and soilwater data, until lags can start to be used
-            //TODO use spinup climate?
-
-            //TODO have adjustable timelags as input variable?
-
-            int currentyear = timestep + 1;
-            //PlugIn.ModelCore.UI.WriteLine("current year is ", currentyear);
-            int swayear = currentyear;
-            int tempyear = currentyear;
-            int cwdyear = currentyear;
-            if (currentyear >= 10)
-            {
-                currentyear = 10;
-                swayear = 8;
-                tempyear = 7;
-                cwdyear = 10;
-            }
-            else if (currentyear == 9 | currentyear == 8)
-            {
-                swayear = 8;
-                tempyear = 7;
-                cwdyear = currentyear;
-            }
-
-            //PlugIn.ModelCore.UI.WriteLine("SoilWater10 is {0}", SiteVars.SoilWater10[site]);
+            //TODO Make swayear, tempyear, cwdyear species-level variables that are read in from drought params csv
+            int swayear = 8;
+            int tempyear = 7;
+            int cwdyear = 10;
 
             //soilWater should already have just 10 elements
             soilWater = SiteVars.SoilWater10[site].OrderByDescending(s => s).Reverse().Take(swayear).ToArray();
             tempValue = SiteVars.Temp10[site].OrderByDescending(s => s).Take(tempyear).ToArray();
             cwdValue = SiteVars.cwd10[site].OrderByDescending(s => s).Take(cwdyear).ToArray();
 
-            //PlugIn.ModelCore.UI.WriteLine("Time-lagged CWD is {0}", cwdValue);
+            PlugIn.ModelCore.UI.WriteLine("Year = {0}. Time-lagged CWD is {1}", timestep, cwdValue);
 
             //get SWA8yrs and Temp7yrs           
 
@@ -626,7 +634,7 @@ namespace Landis.Extension.Succession.NECN
             Temp7years /= tempyear;
             CWD10years /= cwdyear;
 
-            SiteVars.SWALagged[site] = SWA8years; //TODO can we store these in DroughtMortality instead of SiteVars?
+            SiteVars.SWALagged[site] = SWA8years;
             SiteVars.TempLagged[site] = Temp7years;
             SiteVars.CWDLagged[site] = CWD10years;
             //PlugIn.ModelCore.UI.WriteLine("temp is {0}", Temp7years);
