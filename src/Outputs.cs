@@ -635,7 +635,7 @@ namespace Landis.Extension.Succession.NECN
                 }
 
             string pathDeadWood = MapNames.ReplaceTemplateVars(@"NECN\SurfaceDeadWoodC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathavailablewater, PlugIn.ModelCore.Landscape.Dimensions))
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDeadWood, PlugIn.ModelCore.Landscape.Dimensions))
             {
                 IntPixel pixel = outputRaster.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
