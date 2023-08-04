@@ -355,7 +355,7 @@ namespace Landis.Extension.Succession.NECN
                 OtherData.AnerobicEffectMinimum = anerb3Override.Value;
             }
 
-            InputVar<string> anppMaps = new InputVar<string>("ANPPMapNames");
+            InputVar<string> anppMaps = new InputVar<string>("ANPPMapName");
             if (ReadOptionalVar(anppMaps))
             {
                 PlugIn.ANPPMapNames = anppMaps.Value;
@@ -366,7 +366,7 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            InputVar<string> aneeMaps = new InputVar<string>("ANEEMapNames");
+            InputVar<string> aneeMaps = new InputVar<string>("ANEEMapName");
             if (ReadOptionalVar(aneeMaps))
             {
                 PlugIn.ANEEMapNames = aneeMaps.Value;
@@ -377,7 +377,7 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            InputVar<string> soilCarbonMaps = new InputVar<string>("SoilCarbonMapNames");
+            InputVar<string> soilCarbonMaps = new InputVar<string>("SoilCarbonMapName");
             if (ReadOptionalVar(soilCarbonMaps))
             {
                 PlugIn.SoilCarbonMapNames = soilCarbonMaps.Value;
@@ -388,7 +388,7 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            InputVar<string> soilNitrogenMaps = new InputVar<string>("SoilNitrogenMapNames");
+            InputVar<string> soilNitrogenMaps = new InputVar<string>("SoilNitrogenMapName");
             if (ReadOptionalVar(soilNitrogenMaps))
             {
                 PlugIn.SoilNitrogenMapNames = soilNitrogenMaps.Value;
@@ -399,7 +399,7 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            InputVar<string> totalCMaps = new InputVar<string>("TotalCMapNames");
+            InputVar<string> totalCMaps = new InputVar<string>("TotalCMapName");
             if (ReadOptionalVar(totalCMaps))
             {
                 PlugIn.TotalCMapNames = totalCMaps.Value;
