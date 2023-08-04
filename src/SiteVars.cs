@@ -127,9 +127,9 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<List<double>> swa10;
         public static ISiteVar<List<double>> temp10;
         public static ISiteVar<List<double>> cwd10;
-        public static ISiteVar<Dictionary<ISpecies, double>> swaLagged;
-        public static ISiteVar<Dictionary<ISpecies, double>> tempLagged;
-        public static ISiteVar<Dictionary<ISpecies, double>> cwdLagged;
+        public static ISiteVar<Dictionary<int, double>> swaLagged;
+        public static ISiteVar<Dictionary<int, double>> tempLagged;
+        public static ISiteVar<Dictionary<int, double>> cwdLagged;
         public static ISiteVar<double> normalSWA;
         public static ISiteVar<double> normalCWD;
         public static ISiteVar<double> normalTemp;
@@ -251,14 +251,14 @@ namespace Landis.Extension.Succession.NECN
                 swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
                 temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
                 cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
-
-                swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, double>>();
-                tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, double>>();
-                cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, double>>();
-
+            
                 normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 normalTemp = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
+                swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+                tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+                cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
 
                 speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>(); 
 
@@ -319,12 +319,14 @@ namespace Landis.Extension.Succession.NECN
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
-                //drought_todo
+                //Drought parameters
                 swa10[site] = new List<double>(10);
                 temp10[site] = new List<double>(10);
                 cwd10[site] = new List<double>(10);
-
                 speciesDroughtMortality[site] =new Dictionary<int, double>();
+                swaLagged[site] = new Dictionary<int, double>();
+                tempLagged[site] = new Dictionary<int, double>();
+                cwdLagged[site] = new Dictionary<int, double>();
 
 
             }
@@ -439,6 +441,9 @@ namespace Landis.Extension.Succession.NECN
             foreach(ISpecies species in PlugIn.ModelCore.Species)
             {
                 SiteVars.SpeciesDroughtMortality[site][species.Index] = 0.0;
+                SiteVars.TempLagged[site][species.Index] = 0.0;
+                SiteVars.CWDLagged[site][species.Index] = 0.0;
+                SiteVars.SWALagged[site][species.Index] = 0.0;
             }
             
 
@@ -1180,7 +1185,7 @@ namespace Landis.Extension.Succession.NECN
         /// SWA calculated for each site with appropriate time-lag
         /// //TODO sam
         /// </summary>
-        public static ISiteVar<Dictionary<ISpecies, double>> SWALagged //one value per species per site
+        public static ISiteVar<Dictionary<int, double>> SWALagged //one value per species per site
         {
             get
             {
@@ -1199,7 +1204,7 @@ namespace Landis.Extension.Succession.NECN
         /// Temperature calculated for each site with appropriate time-lag
         /// //TODO sam
         /// </summary>
-        public static ISiteVar<Dictionary<ISpecies, double>> TempLagged //list of doubles
+        public static ISiteVar<Dictionary<int, double>> TempLagged //list of doubles
         {
             get
             {
@@ -1217,7 +1222,7 @@ namespace Landis.Extension.Succession.NECN
         /// CWD calculated for each site with appropriate time-lag
         /// //TODO sam
         /// </summary>
-        public static ISiteVar<Dictionary<ISpecies, double>> CWDLagged //list of doubles
+        public static ISiteVar<Dictionary<int, double>> CWDLagged //list of doubles
         {
             get
             {

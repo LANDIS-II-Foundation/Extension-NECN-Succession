@@ -507,7 +507,7 @@ namespace Landis.Extension.Succession.NECN
             if (ReadOptionalVar(drought_csv))
             {
                 DroughtMortality.UseDrought = true; //set flag to use drought mortality algorithms
-                PlugIn.ModelCore.UI.WriteLine("    Setting UseDrought flag to true."); //debug
+                //PlugIn.ModelCore.UI.WriteLine("    Setting UseDrought flag to true."); //debug
 
                 InputVar<int> inputMapFreq = new InputVar<int>("InputCommunityMapFrequency");
                

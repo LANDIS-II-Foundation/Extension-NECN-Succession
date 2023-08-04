@@ -143,7 +143,7 @@ namespace Landis.Extension.Succession.NECN
 
                                SiteVars.CWD10[site][year] = SiteVars.AnnualClimaticWaterDeficit[site];
 
-                                //PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
+                                PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
                         
                         }
                     }
@@ -174,7 +174,7 @@ namespace Landis.Extension.Succession.NECN
                         SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
                     }
 
-                    //PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
+                    if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
                 }
 
             }
@@ -498,6 +498,7 @@ namespace Landis.Extension.Succession.NECN
 
         public static double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
+            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Calculating drought mortality for species {0}", cohort.Species.Name);
 
             //Predictor variables
             double normalSWA = SiteVars.NormalSWA[site];
@@ -508,14 +509,13 @@ namespace Landis.Extension.Succession.NECN
 
             double normalTemp= SiteVars.NormalTemp[site];
             //PlugIn.ModelCore.UI.WriteLine("normalTemp is {0}", normalTemp);
-
-            //TODO ned to divide SoilWater10 by swayear
-            double swaAnom = SiteVars.SWALagged[site][cohort.Species] - normalSWA;
+                        
+            double swaAnom = SiteVars.SWALagged[site][cohort.Species.Index] - normalSWA;
             //PlugIn.ModelCore.UI.WriteLine("swaAnom is {0}", swaAnom);
 
-            double tempLagged = SiteVars.TempLagged[site][cohort.Species];
+            double tempLagged = SiteVars.TempLagged[site][cohort.Species.Index];
 
-            double cwdLagged = SiteVars.CWDLagged[site][cohort.Species];
+            double cwdLagged = SiteVars.CWDLagged[site][cohort.Species.Index];
 
             double cohortAge = cohort.Age;
             double siteBiomass = SiteVars.ActualSiteBiomass(site);
@@ -540,8 +540,12 @@ namespace Landis.Extension.Succession.NECN
             double betaNormCWD = BetaNormCWD[cohort.Species];
             double betaNormTemp = BetaNormTemp[cohort.Species];
             double intxnCWD_Biomass = IntxnCWD_Biomass[cohort.Species];
-            //PlugIn.ModelCore.UI.WriteLine("Regression parameters are: intercept {0}, age {1}, temp {2}, SWAAnom {3}, biomass {4}", 
-            //    intercept, betaAge, betaTemp, betaSWAAnom, betaBiomass);
+            if (OtherData.CalibrateMode)
+            {
+                PlugIn.ModelCore.UI.WriteLine("Regression parameters are: intercept {0}, age {1}, temp {2}, SWAAnom {3}, biomass {4}",
+                                               intercept, betaAge, betaTemp, betaSWAAnom, betaBiomass);
+            }
+
 
             int lagTemp = LagTemp[cohort.Species];
             int lagCWD = LagCWD[cohort.Species];
@@ -595,8 +599,7 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            PlugIn.ModelCore.UI.WriteLine("CWD is {0}", cwdLagged);
-            PlugIn.ModelCore.UI.WriteLine("Drought wood mortality = {0}. Leaf mortality = {0}.", M_leaf, M_wood);
+            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Drought wood mortality = {0}. Leaf mortality = {0}.", M_leaf, M_wood);
 
             double[] M_DROUGHT = new double[2] { M_wood, M_leaf };
 
@@ -628,7 +631,7 @@ namespace Landis.Extension.Succession.NECN
 
             //PlugIn.ModelCore.UI.WriteLine("Year = {0}. Time-lagged CWD is {1}", timestep, cwdValue);
             
-            //initialize variables for lowest SWA of highest 8 years of 10 and highest temperature for 7 years out of 10
+            //initialize variables for lowest/highest N years
             double SWA_lagged = 0;
             double Temp_lagged = 0;
             double CWD_lagged = 0;
@@ -638,14 +641,14 @@ namespace Landis.Extension.Succession.NECN
             Array.ForEach(tempValue, i => Temp_lagged += i);
             Array.ForEach(cwdValue, i => CWD_lagged += i);
 
-
+            //get average annual value
             SWA_lagged /= swayear;
             Temp_lagged /= tempyear;
             CWD_lagged /= cwdyear;
 
-            SiteVars.SWALagged[site][species] = SWA_lagged;
-            SiteVars.TempLagged[site][species] = Temp_lagged;
-            SiteVars.CWDLagged[site][species] = CWD_lagged;
+            SiteVars.SWALagged[site][species.Index] = SWA_lagged;
+            SiteVars.TempLagged[site][species.Index] = Temp_lagged;
+            SiteVars.CWDLagged[site][species.Index] = CWD_lagged;
             //PlugIn.ModelCore.UI.WriteLine("temp is {0}", Temp7years);
         }
 
