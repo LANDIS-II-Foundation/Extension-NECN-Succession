@@ -117,6 +117,10 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> betaNormTemp; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> intxnCWD_Biomass; // optional
 
+        private Landis.Library.Parameters.Species.AuxParm<int> lagTemp; // optional
+        private Landis.Library.Parameters.Species.AuxParm<int> lagCWD; // optional
+        private Landis.Library.Parameters.Species.AuxParm<int> lagSWA; // optional
+
         private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> mortalityAboveThreshold; // optional
         private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold2; // optional
@@ -472,6 +476,10 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get { return betaNormTemp; } }
         public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
+
+        public Landis.Library.Parameters.Species.AuxParm<int> LagTemp { get { return lagTemp; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> LagCWD { get { return lagCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> LagSWA { get { return lagSWA; } }
 
         //CWD Establishment
         public Landis.Library.Parameters.Species.AuxParm<int> CWDBegin { get { return cwdBegin; } }
@@ -1453,6 +1461,23 @@ namespace Landis.Extension.Succession.NECN
             intxnCWD_Biomass[species] = VerifyRange(newValue, -10, 10, "DroughtBetaIntxn");
         }
 
+        public void SetLagTemp(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            lagTemp[species] = VerifyRange(newValue,  0, 10, "DroughtLagTemp");
+        }
+        public void SetLagCWD(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            lagCWD[species] = VerifyRange(newValue, 0, 10, "DroughtLagCWD");
+        }
+        public void SetLagSWA(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            lagSWA[species] = VerifyRange(newValue, 0, 10, "DroughtLagSWA");
+        }
+
+
         public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
         {
             this.speciesDataset = speciesDataset;
@@ -1500,6 +1525,10 @@ namespace Landis.Extension.Succession.NECN
             betaNormCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaNormTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            lagTemp = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            lagCWD = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            lagSWA = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+
             lightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAILocation = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);

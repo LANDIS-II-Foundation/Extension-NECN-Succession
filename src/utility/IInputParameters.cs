@@ -139,6 +139,10 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get; }
         Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get; }
 
+        Landis.Library.Parameters.Species.AuxParm<int> LagTemp { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> LagCWD { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> LagSWA { get; }
+
 
 
         double AtmosNslope {get;}

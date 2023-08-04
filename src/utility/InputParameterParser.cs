@@ -535,6 +535,10 @@ namespace Landis.Extension.Succession.NECN
                     parameters.SetBetaNormCWD(species, System.Convert.ToDouble(row["BetaNormCWD"]));
                     parameters.SetBetaNormTemp(species, System.Convert.ToDouble(row["BetaNormTemp"]));
                     parameters.SetIntxnCWD_Biomass(species, System.Convert.ToDouble(row["IntxnCWD_Biomass"]));
+
+                    parameters.SetLagTemp(species, System.Convert.ToInt32(row["LagTemp"]));
+                    parameters.SetLagCWD(species, System.Convert.ToInt32(row["LagCWD"]));
+                    parameters.SetLagSWA(species, System.Convert.ToInt32(row["LagSWA"]));
                 }
                
             }

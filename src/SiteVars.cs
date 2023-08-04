@@ -127,9 +127,9 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<List<double>> swa10;
         public static ISiteVar<List<double>> temp10;
         public static ISiteVar<List<double>> cwd10;
-        public static ISiteVar<double> swaLagged;
-        public static ISiteVar<double> tempLagged;
-        public static ISiteVar<double> cwdLagged;
+        public static ISiteVar<Dictionary<ISpecies, double>> swaLagged;
+        public static ISiteVar<Dictionary<ISpecies, double>> tempLagged;
+        public static ISiteVar<Dictionary<ISpecies, double>> cwdLagged;
         public static ISiteVar<double> normalSWA;
         public static ISiteVar<double> normalCWD;
         public static ISiteVar<double> normalTemp;
@@ -252,9 +252,9 @@ namespace Landis.Extension.Succession.NECN
                 temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
                 cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
 
-                swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-                tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-                cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, double>>();
+                tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, double>>();
+                cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, double>>();
 
                 normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                 normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -1180,7 +1180,7 @@ namespace Landis.Extension.Succession.NECN
         /// SWA calculated for each site with appropriate time-lag
         /// //TODO sam
         /// </summary>
-        public static ISiteVar<double> SWALagged //list of doubles
+        public static ISiteVar<Dictionary<ISpecies, double>> SWALagged //one value per species per site
         {
             get
             {
@@ -1199,7 +1199,7 @@ namespace Landis.Extension.Succession.NECN
         /// Temperature calculated for each site with appropriate time-lag
         /// //TODO sam
         /// </summary>
-        public static ISiteVar<double> TempLagged //list of doubles
+        public static ISiteVar<Dictionary<ISpecies, double>> TempLagged //list of doubles
         {
             get
             {
@@ -1217,7 +1217,7 @@ namespace Landis.Extension.Succession.NECN
         /// CWD calculated for each site with appropriate time-lag
         /// //TODO sam
         /// </summary>
-        public static ISiteVar<double> CWDLagged //list of doubles
+        public static ISiteVar<Dictionary<ISpecies, double>> CWDLagged //list of doubles
         {
             get
             {

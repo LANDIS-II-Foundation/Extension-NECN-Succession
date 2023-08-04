@@ -59,6 +59,10 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;
 
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagSWA;
+
         //CWD Establishment
         public static Landis.Library.Parameters.Species.AuxParm<int> CWDBegin;
         public static Landis.Library.Parameters.Species.AuxParm<int> CWDMax;

@@ -32,6 +32,10 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;  // needs better variable name
 
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagSWA;
+
         public static bool UseDrought = false;
         public static bool OutputSoilWaterAvailable;
         public static bool OutputClimateWaterDeficit;
@@ -57,6 +61,10 @@ namespace Landis.Extension.Succession.NECN
             BetaNormCWD = parameters.BetaNormCWD;
             BetaNormTemp = parameters.BetaNormTemp;
             IntxnCWD_Biomass = parameters.IntxnCWD_Biomass;
+
+            LagTemp = parameters.LagTemp;
+            LagCWD = parameters.LagCWD;
+            LagSWA = parameters.LagSWA;
 
             OutputSoilWaterAvailable = parameters.OutputSoilWaterAvailable;
             OutputClimateWaterDeficit = parameters.OutputClimateWaterDeficit;
@@ -502,12 +510,12 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("normalTemp is {0}", normalTemp);
 
             //TODO ned to divide SoilWater10 by swayear
-            double swaAnom = SiteVars.SWALagged[site] - normalSWA;
+            double swaAnom = SiteVars.SWALagged[site][cohort.Species] - normalSWA;
             //PlugIn.ModelCore.UI.WriteLine("swaAnom is {0}", swaAnom);
 
-            double tempLagged = SiteVars.TempLagged[site];
+            double tempLagged = SiteVars.TempLagged[site][cohort.Species];
 
-            double cwdLagged = SiteVars.CWDLagged[site];
+            double cwdLagged = SiteVars.CWDLagged[site][cohort.Species];
 
             double cohortAge = cohort.Age;
             double siteBiomass = SiteVars.ActualSiteBiomass(site);
@@ -534,6 +542,10 @@ namespace Landis.Extension.Succession.NECN
             double intxnCWD_Biomass = IntxnCWD_Biomass[cohort.Species];
             //PlugIn.ModelCore.UI.WriteLine("Regression parameters are: intercept {0}, age {1}, temp {2}, SWAAnom {3}, biomass {4}", 
             //    intercept, betaAge, betaTemp, betaSWAAnom, betaBiomass);
+
+            int lagTemp = LagTemp[cohort.Species];
+            int lagCWD = LagCWD[cohort.Species];
+            int lagSWA = LagSWA[cohort.Species];
 
             // double mortalitySlope = 0.005; //TODO make this a species-level param
 
@@ -592,7 +604,7 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        public static void ComputeDroughtLaggedVars(ActiveSite site)
+        public static void ComputeDroughtLaggedVars(ActiveSite site, ISpecies species)
         {
             
             int timestep = PlugIn.ModelCore.CurrentTime;
@@ -600,43 +612,40 @@ namespace Landis.Extension.Succession.NECN
             double waterDeficit = SiteVars.AnnualClimaticWaterDeficit[site];
             //PlugIn.ModelCore.UI.WriteLine("curernt year CWD is {0}", waterDeficit);
 
-
             double[] soilWater = new double[0];
             double[] tempValue = new double[0];
             double[] cwdValue = new double[0];
 
             //TODO Make swayear, tempyear, cwdyear species-level variables that are read in from drought params csv
-            int swayear = 8;
-            int tempyear = 7;
-            int cwdyear = 10;
+            int swayear = DroughtMortality.LagSWA[species];
+            int tempyear = DroughtMortality.LagTemp[species];
+            int cwdyear = DroughtMortality.LagCWD[species];
 
-            //soilWater should already have just 10 elements
+            //take highest or lowest values of SWA, Temp, CWD
             soilWater = SiteVars.SoilWater10[site].OrderByDescending(s => s).Reverse().Take(swayear).ToArray();
             tempValue = SiteVars.Temp10[site].OrderByDescending(s => s).Take(tempyear).ToArray();
             cwdValue = SiteVars.cwd10[site].OrderByDescending(s => s).Take(cwdyear).ToArray();
 
-            PlugIn.ModelCore.UI.WriteLine("Year = {0}. Time-lagged CWD is {1}", timestep, cwdValue);
-
-            //get SWA8yrs and Temp7yrs           
-
+            //PlugIn.ModelCore.UI.WriteLine("Year = {0}. Time-lagged CWD is {1}", timestep, cwdValue);
+            
             //initialize variables for lowest SWA of highest 8 years of 10 and highest temperature for 7 years out of 10
-            double SWA8years = 0;
-            double Temp7years = 0;
-            double CWD10years = 0;
+            double SWA_lagged = 0;
+            double Temp_lagged = 0;
+            double CWD_lagged = 0;
 
             //Sum values selected above 
-            Array.ForEach(soilWater, i => SWA8years += i);
-            Array.ForEach(tempValue, i => Temp7years += i);
-            Array.ForEach(cwdValue, i => CWD10years += i);
+            Array.ForEach(soilWater, i => SWA_lagged += i);
+            Array.ForEach(tempValue, i => Temp_lagged += i);
+            Array.ForEach(cwdValue, i => CWD_lagged += i);
 
 
-            SWA8years /= swayear;
-            Temp7years /= tempyear;
-            CWD10years /= cwdyear;
+            SWA_lagged /= swayear;
+            Temp_lagged /= tempyear;
+            CWD_lagged /= cwdyear;
 
-            SiteVars.SWALagged[site] = SWA8years;
-            SiteVars.TempLagged[site] = Temp7years;
-            SiteVars.CWDLagged[site] = CWD10years;
+            SiteVars.SWALagged[site][species] = SWA_lagged;
+            SiteVars.TempLagged[site][species] = Temp_lagged;
+            SiteVars.CWDLagged[site][species] = CWD_lagged;
             //PlugIn.ModelCore.UI.WriteLine("temp is {0}", Temp7years);
         }
 

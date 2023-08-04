@@ -217,7 +217,10 @@ namespace Landis.Extension.Succession.NECN
 
                 if (DroughtMortality.UseDrought)
                 {
-                    DroughtMortality.ComputeDroughtLaggedVars(site);
+                    foreach (ISpecies species in PlugIn.ModelCore.Species)
+                    {//TODO could speed up by only looping thorugh species with drought parameters (skip ones with zeroes)
+                        DroughtMortality.ComputeDroughtLaggedVars(site, species);
+                    }
                 }
 
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
