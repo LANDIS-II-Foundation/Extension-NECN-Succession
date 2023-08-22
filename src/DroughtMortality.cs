@@ -98,13 +98,11 @@ namespace Landis.Extension.Succession.NECN
 
             foreach(int year in spinupYears)
             {
-
                 foreach(int month in months)
                 {
                     foreach (ActiveSite site in PlugIn.ModelCore.Landscape.ActiveSites)
                     {
                         SpinUpWater(year, month, site);
-
 
                         //check if the current month is in "summer" 
                         
@@ -127,17 +125,17 @@ namespace Landis.Extension.Succession.NECN
                                 PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} after adding new year", SiteVars.SoilWater10[site].Count);
                             }
 
-                            PlugIn.ModelCore.UI.WriteLine("Monthly soil water content = {0}", SiteVars.MonthlySoilWaterContent[site][month]);
-
-                            SiteVars.SoilWater10[site][year] += SiteVars.MonthlySoilWaterContent[site][month];
-
-                            PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year]);
-
                             SiteVars.Temp10[site][year] += ClimateRegionData.AnnualWeather[PlugIn.ModelCore.Ecoregion[site]].MonthlyTemp[month];
 
                         }
-                        
-                        if(month == 5) //end of year -- add annual CWD to tracker
+
+                        PlugIn.ModelCore.UI.WriteLine("Monthly soil water content = {0}", SiteVars.MonthlySoilWaterContent[site][month]);
+
+                        SiteVars.SoilWater10[site][year] += SiteVars.MonthlySoilWaterContent[site][month];
+
+                        PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year]);
+
+                        if (month == 5) //end of year -- add annual CWD to tracker
                         {
                                SiteVars.CWD10[site].Add(0);
 
@@ -174,7 +172,8 @@ namespace Landis.Extension.Succession.NECN
                         SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
                     }
 
-                    if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
+                    //if (OtherData.CalibrateMode)PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
+                    
                 }
 
             }
@@ -408,11 +407,11 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWaterContent = {1}", AET, soilWaterContent); //debug
 
             //Water above permanent wilting point can be drained by baseflow; otherwise, baseflow does not occur
-            double remainingWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
+            //double remainingWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
 
             //Leaching occurs. Drain baseflow fraction from soil water
-            baseFlow = remainingWater * baseFlowFraction; //Calculate baseflow as proportion of water above permanent wilt point
-            baseFlow = Math.Max(baseFlow, 0.0); // make sure baseflow > 0 
+            baseFlow = soilWaterContent * baseFlowFraction; //Calculate baseflow as proportion of remaining soil water; this can draw down soil water below PWP
+            baseFlow = Math.Max(baseFlow, 0.0); // make sure baseflow >= 0 
             soilWaterContent = Math.Max(soilWaterContent - baseFlow, 0.0);  //remove baseFlow from soil water
 
             if (OtherData.CalibrateMode)
@@ -444,8 +443,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
             
-            PlugIn.ModelCore.UI.WriteLine("Spinup climate: Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
-            
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
             SiteVars.PlantAvailableWater[site] = plantAvailableWater;  //available to plants for growth     
@@ -454,6 +451,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
             SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater / soilDepth; //Convert to volumetric water content
 
+            PlugIn.ModelCore.UI.WriteLine("Spinup climate: Month={0}, PET={1}, AET={2}, max soil water = {3}," +
+                "end soil water = {4}.", month, PET, AET, waterContentMax, soilWaterContent); //debug
             return;
         
         }

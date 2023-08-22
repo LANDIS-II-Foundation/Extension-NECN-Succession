@@ -287,12 +287,9 @@ namespace Landis.Extension.Succession.NECN
 
             //PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWaterContent = {1}", AET, soilWaterContent); //debug
 
-            //Water above permanent wilting point can be drained by baseflow; otherwise, baseflow does not occur
-            double remainingWater = Math.Max(soilWaterContent - waterEmpty, 0.0);
-
             //Leaching occurs. Drain baseflow fraction from soil water
-            baseFlow = remainingWater * baseFlowFraction; //Calculate baseflow as proportion of water above permanent wilt point
-            baseFlow = Math.Max(baseFlow, 0.0); // make sure baseflow > 0 
+            baseFlow = soilWaterContent * baseFlowFraction; //Calculate baseflow as proportion of remaining soil water; this can draw down soil water below PWP
+            baseFlow = Math.Max(baseFlow, 0.0); // make sure baseflow >= 0 
             soilWaterContent = Math.Max(soilWaterContent - baseFlow, 0.0);  //remove baseFlow from soil water
 
             if (OtherData.CalibrateMode)
@@ -302,9 +299,8 @@ namespace Landis.Extension.Succession.NECN
             // Soil moisture carried forward cannot exceed field capacity; everything else runs off and is added to baseflow
             double surplus = Math.Max(soilWaterContent - waterFull, 0.0); //calculate water in excess of field capacity
             baseFlow += surplus; //add runoff to baseFlow to calculate leaching
-            soilWaterContent = Math.Max(soilWaterContent - surplus, 0.0);                     
+            soilWaterContent = Math.Max(soilWaterContent - surplus, 0.0);
             availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0); //minimum amount of water for the month
-
             // Calculate the final amount of available water to the trees, which is the average of the max and min 
             plantAvailableWater = (availableWaterMax + availableWaterMin)/ 2.0;//availableWaterMax is the initial soilWaterContent after precip, interception, and bare-soil evaporation  
 
