@@ -440,8 +440,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET) * 10.0;
             SiteVars.MonthlyActualEvapotranspiration[site][Main.Month] = AET;
-            SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
-            SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
+            SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET);  
+            SiteVars.AnnualPotentialEvapotranspiration[site] += PET;  
             
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
