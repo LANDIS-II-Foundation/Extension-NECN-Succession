@@ -122,18 +122,18 @@ namespace Landis.Extension.Succession.NECN
                                 SiteVars.SoilWater10[site].ForEach(p => PlugIn.ModelCore.UI.WriteLine("SoilWater10 value is {0}", p));
                                 SiteVars.Temp10[site].Add(0);
 
-                                PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} after adding new year", SiteVars.SoilWater10[site].Count);
+                                //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} after adding new year", SiteVars.SoilWater10[site].Count);
                             }
 
                             SiteVars.Temp10[site][year] += ClimateRegionData.AnnualWeather[PlugIn.ModelCore.Ecoregion[site]].MonthlyTemp[month];
 
                         }
 
-                        PlugIn.ModelCore.UI.WriteLine("Monthly soil water content = {0}", SiteVars.MonthlySoilWaterContent[site][month]);
+                        //PlugIn.ModelCore.UI.WriteLine("Monthly soil water content = {0}", SiteVars.MonthlySoilWaterContent[site][month]);
 
                         SiteVars.SoilWater10[site][year] += SiteVars.MonthlySoilWaterContent[site][month];
 
-                        PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year]);
+                        //PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year]);
 
                         if (month == 5) //end of year -- add annual CWD to tracker
                         {
@@ -141,7 +141,7 @@ namespace Landis.Extension.Succession.NECN
 
                                SiteVars.CWD10[site][year] = SiteVars.AnnualClimaticWaterDeficit[site];
 
-                                PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
+                                //PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
                         
                         }
                     }
@@ -451,8 +451,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
             SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater / soilDepth; //Convert to volumetric water content
 
-            PlugIn.ModelCore.UI.WriteLine("Spinup climate: Month={0}, PET={1}, AET={2}, max soil water = {3}," +
-                "end soil water = {4}.", month, PET, AET, waterContentMax, soilWaterContent); //debug
+            //PlugIn.ModelCore.UI.WriteLine("Spinup climate: Month={0}, PET={1}, AET={2}, max soil water = {3}," +
+            //   "end soil water = {4}.", month, PET, AET, waterContentMax, soilWaterContent); //debug
             return;
         
         }
@@ -618,27 +618,23 @@ namespace Landis.Extension.Succession.NECN
             double[] tempValue = new double[0];
             double[] cwdValue = new double[0];
 
-            //TODO Make swayear, tempyear, cwdyear species-level variables that are read in from drought params csv
             int swayear = DroughtMortality.LagSWA[species];
             int tempyear = DroughtMortality.LagTemp[species];
             int cwdyear = DroughtMortality.LagCWD[species];
 
-            //take highest or lowest values of SWA, Temp, CWD
-            soilWater = SiteVars.SoilWater10[site].OrderByDescending(s => s).Reverse().Take(swayear).ToArray();
-            tempValue = SiteVars.Temp10[site].OrderByDescending(s => s).Take(tempyear).ToArray();
-            cwdValue = SiteVars.cwd10[site].OrderByDescending(s => s).Take(cwdyear).ToArray();
+            soilWater = SiteVars.SoilWater10[site].ToArray();
+            tempValue = SiteVars.Temp10[site].ToArray();
+            cwdValue = SiteVars.cwd10[site].ToArray();
 
-            //PlugIn.ModelCore.UI.WriteLine("Year = {0}. Time-lagged CWD is {1}", timestep, cwdValue);
-            
             //initialize variables for lowest/highest N years
             double SWA_lagged = 0;
             double Temp_lagged = 0;
             double CWD_lagged = 0;
 
-            //Sum values selected above 
-            Array.ForEach(soilWater, i => SWA_lagged += i);
-            Array.ForEach(tempValue, i => Temp_lagged += i);
-            Array.ForEach(cwdValue, i => CWD_lagged += i);
+            //Get values for the sum of the largest/smallest consecutive N values of each array
+            SWA_lagged = GetSmallestSum(soilWater, swayear);
+            Temp_lagged = GetLargestSum(tempValue, tempyear);
+            CWD_lagged = GetLargestSum(cwdValue, cwdyear);
 
             //get average annual value
             SWA_lagged /= swayear;
@@ -648,8 +644,70 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SWALagged[site][species.Index] = SWA_lagged;
             SiteVars.TempLagged[site][species.Index] = Temp_lagged;
             SiteVars.CWDLagged[site][species.Index] = CWD_lagged;
-            //PlugIn.ModelCore.UI.WriteLine("temp is {0}", Temp7years);
+        }
+
+        static double GetLargestSum(double[] array, int n)
+        {
+            double largestSum = 0;
+            double previousSum = 0;
+
+            for (int i = 0; i <= array.Length - n; i++)
+            {
+                if (i == 0)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        largestSum += array[j];
+                    }
+
+                    previousSum = largestSum;
+                }
+                else
+                {
+                    double currentSum = previousSum - array[i - 1] + array[i + n - 1];
+                    if (currentSum > largestSum)
+                    {
+                        largestSum = currentSum;
+                    }
+                    previousSum = currentSum;
+                }
+            }
+
+            return largestSum;
+        }
+
+        static double GetSmallestSum(double[] array, int n)
+        {
+            double smallestSum = 0;
+            double previousSum = 0;
+
+            for (int i = 0; i <= array.Length - n; i++)
+            {
+                if (i == 0)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        smallestSum += array[j];
+                    }
+
+                    previousSum = smallestSum;
+                }
+                else
+                {
+                    double currentSum = previousSum - array[i - 1] + array[i + n - 1];
+                    if (currentSum < smallestSum)
+                    {
+                        smallestSum = currentSum;
+                    }
+                    previousSum = currentSum;
+                }
+            }
+
+            return smallestSum;
         }
 
     }
+
 }
+
+

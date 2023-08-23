@@ -317,8 +317,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET) * 10.0;
             SiteVars.MonthlyActualEvapotranspiration[site][Main.Month] = AET;
-            SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET) * 10.0;  // Convert to mm, the standard definition
-            SiteVars.AnnualPotentialEvapotranspiration[site] += PET * 10.0;  // Convert to mm, the standard definition
+            SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET);  
+            SiteVars.AnnualPotentialEvapotranspiration[site] += PET;  
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
@@ -331,7 +331,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (OtherData.CalibrateMode) 
                 PlugIn.ModelCore.UI.WriteLine("   Month={0}, PET={1}, remainingPET = {2}, AET={3}, monthly CWD = {4}, cumulative CWD = {5}.",
-                 month, PET, remainingPET, AET, (remainingPET - AET) * 10.0, SiteVars.AnnualClimaticWaterDeficit[site]);
+                 month, PET, remainingPET, AET, (remainingPET - AET), SiteVars.AnnualClimaticWaterDeficit[site]);
             if (OtherData.CalibrateMode)
                 PlugIn.ModelCore.UI.WriteLine("   Max soil water = {0}, End-of-month soil water = {1}, Mean soil water = {2}", 
                     waterContentMax, soilWaterContent, meanSoilWater); //debug
