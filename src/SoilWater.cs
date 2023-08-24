@@ -63,8 +63,8 @@ namespace Landis.Extension.Succession.NECN
             double litterBiomass = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
             double deadBiomass = SiteVars.SurfaceDeadWood[site].Carbon / 0.47;
             double soilWaterContent = SiteVars.SoilWaterContent[site];
-            if(OtherData.CalibrateMode) 
-                PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
+            //if(OtherData.CalibrateMode) 
+            //    PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
             Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
@@ -119,8 +119,8 @@ namespace Landis.Extension.Succession.NECN
                 PET = PET * (1 + SlAsp * 0.063);
             }
 
-            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Slope = {0}, Aspect = {1}, SlAsp = {2}, Adjusted PET = {3}", 
-                slope, aspect, SlAsp, PET);
+            //if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Slope = {0}, Aspect = {1}, SlAsp = {2}, Adjusted PET = {3}", 
+            //    slope, aspect, SlAsp, PET);
 
             //...Calculating snow pack first. Occurs when mean monthly air temperature is equal to or below freezing,
             //     precipitation is in the form of snow.
@@ -141,8 +141,8 @@ namespace Landis.Extension.Succession.NECN
 
             //Set original remainingPET outside of the if(snow) sections, in case all the snow is melted
             remainingPET = PET;
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   SoilWater: snowpack before melting = {0}", liquidSnowpack);
+            //if (OtherData.CalibrateMode)
+            //   PlugIn.ModelCore.UI.WriteLine("   SoilWater: snowpack before melting = {0}", liquidSnowpack);
             //...Then melt snow if there is snow on the ground and air temperature (tmax) is above minimum.            
             if (liquidSnowpack > 0.0 && tmax > 0.0)
             {
@@ -164,8 +164,8 @@ namespace Landis.Extension.Succession.NECN
                 liquidSnowpack = Math.Max(liquidSnowpack - addToSoil, 0.0);
                 soilWaterContent += addToSoil;
             }
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   Snow before evaporation = {0}", liquidSnowpack);
+            //if (OtherData.CalibrateMode)
+            //    PlugIn.ModelCore.UI.WriteLine("   Snow before evaporation = {0}", liquidSnowpack);
             //...Evaporate water from the snow pack (rewritten by Pulliam 9/94)
             //...Coefficient 0.87 relates to heat of fusion for ice vs. liquid water
             if (liquidSnowpack > 0.0)
@@ -183,13 +183,13 @@ namespace Landis.Extension.Succession.NECN
                 remainingPET = Math.Max(remainingPET - evaporatedSnow/0.87, 0.0);
                 AET += evaporatedSnow/0.87;
 
-                if (OtherData.CalibrateMode)
-                    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET after evaporation ={1}.", month, remainingPET);
+                //if (OtherData.CalibrateMode)
+                //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET after evaporation ={1}.", month, remainingPET);
 
             }
 
-            if (OtherData.CalibrateMode) 
-                PlugIn.ModelCore.UI.WriteLine("   snow after evaporation = {0}", liquidSnowpack);
+            //if (OtherData.CalibrateMode) 
+            //    PlugIn.ModelCore.UI.WriteLine("   snow after evaporation = {0}", liquidSnowpack);
             //...Calculate bare soil water loss and interception  when air temperature is above freezing and no snow cover.
             //...Mofified 9/94 to allow interception when t < 0 but no snow cover, Pulliam
             if (liquidSnowpack <= 0.0)
@@ -210,9 +210,9 @@ namespace Landis.Extension.Succession.NECN
                 double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
                 soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent);
-                if (OtherData.CalibrateMode)
-                    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
-                        soilEvaporation, bareSoilEvap, canopyIntercept);
+                //if (OtherData.CalibrateMode)
+                //    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
+                //        soilEvaporation, bareSoilEvap, canopyIntercept);
 
                 //Subtract soil evaporation from soil water content
                 soilWaterContent = Math.Max(soilWaterContent - soilEvaporation, 0.0); // Do not allow to go negative
@@ -225,9 +225,9 @@ namespace Landis.Extension.Succession.NECN
             //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             availableWaterMax = Math.Max(soilWaterContent - waterEmpty, 0.0);
             waterContentMax = soilWaterContent;
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   Max soil water (after adding ppt and snowmelt, " +
-                "and substracting soil evaporation) = {0}", waterContentMax); //debug
+            //if (OtherData.CalibrateMode)
+            //    PlugIn.ModelCore.UI.WriteLine("   Max soil water (after adding ppt and snowmelt, " +
+            //    "and substracting soil evaporation) = {0}", waterContentMax); //debug
 
             //Allow excess water to run off when soil is greater than field capacity
             double waterMovement = 0.0;
@@ -251,8 +251,8 @@ namespace Landis.Extension.Succession.NECN
             //  Bergström, 1992
             double tempAET = 0.0;
 
-            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Before calculating AET: Month={0}, soilWaterContent = {1}, remainingPET = {2}, waterFull = {3}, waterEmpty = {4}.", 
-                month, soilWaterContent, remainingPET, waterFull, waterEmpty);
+            //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Before calculating AET: Month={0}, soilWaterContent = {1}, remainingPET = {2}, waterFull = {3}, waterEmpty = {4}.", 
+            //    month, soilWaterContent, remainingPET, waterFull, waterEmpty);
             
             if (soilWaterContent - waterEmpty >= remainingPET)
 
@@ -292,8 +292,8 @@ namespace Landis.Extension.Succession.NECN
             baseFlow = Math.Max(baseFlow, 0.0); // make sure baseflow >= 0 
             soilWaterContent = Math.Max(soilWaterContent - baseFlow, 0.0);  //remove baseFlow from soil water
 
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
+            //if (OtherData.CalibrateMode)
+            //    PlugIn.ModelCore.UI.WriteLine("   Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
 
             // Limit soil moisture that carries over to the next month.
             // Soil moisture carried forward cannot exceed field capacity; everything else runs off and is added to baseflow
@@ -332,9 +332,9 @@ namespace Landis.Extension.Succession.NECN
             if (OtherData.CalibrateMode) 
                 PlugIn.ModelCore.UI.WriteLine("   Month={0}, PET={1}, remainingPET = {2}, AET={3}, monthly CWD = {4}, cumulative CWD = {5}.",
                  month, PET, remainingPET, AET, (remainingPET - AET), SiteVars.AnnualClimaticWaterDeficit[site]);
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   Max soil water = {0}, End-of-month soil water = {1}, Mean soil water = {2}", 
-                    waterContentMax, soilWaterContent, meanSoilWater); //debug
+            //if (OtherData.CalibrateMode)
+            //    PlugIn.ModelCore.UI.WriteLine("   Max soil water = {0}, End-of-month soil water = {1}, Mean soil water = {2}", 
+            //        waterContentMax, soilWaterContent, meanSoilWater); //debug
 
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPlantAvailableWaterPET, month);
