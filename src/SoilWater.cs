@@ -343,7 +343,7 @@ namespace Landis.Extension.Succession.NECN
                         
             //SF changed DryDays call to use min and max per month (max capped at Field Capacity). This results in a greater number of dry days, on average. 
             //SiteVars.DryDays[site] += CalculateDryDaysNew(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
-            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, Math.Min(availableWaterMax, waterFull), soilWaterContent);
+            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
             return;
         }
 /*
