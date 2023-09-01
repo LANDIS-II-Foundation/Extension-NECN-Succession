@@ -757,8 +757,28 @@ namespace Landis.Extension.Succession.NECN
             }
 
                 //SF added anaerobic effect map for troubleshooting
-            string pathanerb = MapNames.ReplaceTemplateVars(@"NECN\AnaerobicEffect-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-            using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(pathanerb, PlugIn.ModelCore.Landscape.Dimensions))
+            //string pathanerb = MapNames.ReplaceTemplateVars(@"NECN\AnaerobicEffect-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            //using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(pathanerb, PlugIn.ModelCore.Landscape.Dimensions))
+            string pathDeadWood = MapNames.ReplaceTemplateVars(@"NECN\SurfaceDeadWoodC-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDeadWood, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = (int)(SiteVars.SurfaceDeadWood[site].Carbon);
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+
+            }
+            if (PlugIn.Parameters.SmokeModelOutputs)
             {
                 ShortPixel pixel = outputRaster.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)

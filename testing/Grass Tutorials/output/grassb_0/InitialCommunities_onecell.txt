@@ -1,0 +1,7 @@
+LandisData	"Initial Communities"	
+
+>>
+>> 1 cell simulation for calibration
+>>
+
+MapCode	3
