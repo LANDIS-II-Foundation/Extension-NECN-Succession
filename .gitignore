@@ -997,3 +997,6 @@ testing/Core7-NECN7-SingleCell/NECN-reproduction-log.csv
 testing/Core7-NECN7-SingleCell/NECN-succession-log-short.csv
 testing/Core7-NECN7-SingleCell/NECN-succession-log.csv
 testing/Core7-NECN7-SingleCell/NECN-succession-monthly-log.csv
+testing/Core7-NECN7-Landscape/Climate-annual-log.csv
+testing/Core7-NECN7-Landscape/Climate-future-input-log.csv
+testing/Core7-NECN7-Landscape/Climate-spinup-input-log.csv

@@ -28,7 +28,7 @@ InitialDeadWoodSurfaceMapName	random110.img
 InitialDeadCoarseRootsMapName	random50.img
 
 CalibrateMode 	no
-SmokeModelOutputs yes
+SmokeModelOutputs no  << produces additional maps that are valuable for modeling smoke
 WaterDecayFunction Ratio <<Linear or Ratio
 
 
