@@ -77,9 +77,9 @@ namespace Landis.Extension.Succession.NECN
                 throw new ApplicationException(string.Format("PET is missing or negative. PET = {0}", PET));
             }
 
-            if (OtherData.CalibrateMode) 
-                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
-                month, tave, tmax, tmin, PET);
+            //if (OtherData.CalibrateMode) 
+            //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
+            //    month, tave, tmax, tmin, PET);
 
             daysInMonth = AnnualClimate.DaysInMonth(month, year);
             beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
@@ -157,7 +157,7 @@ namespace Landis.Extension.Succession.NECN
                 addToSoil = liquidSnowpack * snowMeltFraction;  //Amount of liquidsnowpack that melts = liquidsnowpack multiplied by the fraction that melts.
                 if (addToSoil > liquidSnowpack) addToSoil = liquidSnowpack;
 
-                if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Snow melts, addToSoil = {0}", addToSoil);
+                //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Snow melts, addToSoil = {0}", addToSoil);
 
                 // Subtracted melted snow from snowpack and add it to the soil
                 // We are not accounting for evaporation from snow ablation
@@ -329,9 +329,9 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent; //lowest soil water value
             SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater/soilDepth; //Convert to volumetric water content
 
-            if (OtherData.CalibrateMode) 
-                PlugIn.ModelCore.UI.WriteLine("   Month={0}, PET={1}, remainingPET = {2}, AET={3}, monthly CWD = {4}, cumulative CWD = {5}.",
-                 month, PET, remainingPET, AET, (remainingPET - AET), SiteVars.AnnualClimaticWaterDeficit[site]);
+            //if (OtherData.CalibrateMode) 
+            //    PlugIn.ModelCore.UI.WriteLine("   Month={0}, PET={1}, remainingPET = {2}, AET={3}, monthly CWD = {4}, cumulative CWD = {5}.",
+            //     month, PET, remainingPET, AET, (remainingPET - AET), SiteVars.AnnualClimaticWaterDeficit[site]);
             //if (OtherData.CalibrateMode)
             //    PlugIn.ModelCore.UI.WriteLine("   Max soil water = {0}, End-of-month soil water = {1}, Mean soil water = {2}", 
             //        waterContentMax, soilWaterContent, meanSoilWater); //debug
@@ -376,13 +376,9 @@ namespace Landis.Extension.Succession.NECN
 
             Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
             tave = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
-            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, T={1}.", month, tave);
             tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
-            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Tmax={1}.", month, tmax);
             tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
-            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Tmin={1}.", month, tmin);
             PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
-            if (OtherData.CalibrateMode)     PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, PET={1}.", month, PET);
             daysInMonth = AnnualClimate.DaysInMonth(month, year);
             beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
             endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
@@ -560,7 +556,6 @@ namespace Landis.Extension.Succession.NECN
             actualET = Math.Max(actualET, 0.0);
 
             AET = actualET;
-            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, AET={1}.", month, AET);
             // ********************************************************
 
             //Subtract transpiration from soil water content

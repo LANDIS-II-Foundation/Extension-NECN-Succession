@@ -19,7 +19,7 @@ Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effe
 # Release Notes
 
 - Latest official release: Version 7 — September 2023
-- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v7%20User%20Guide.pdf).
+- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v7.0%20User%20Guide.pdf).
 - [User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/master/docs/LANDIS-II%20Climate%20Library%20v4.2%20User%20Guide.pdf)
 - Full release details found in the NECN User Guide and on GitHub.
 - This extension was formerly named Century Succession.

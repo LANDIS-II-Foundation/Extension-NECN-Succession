@@ -61,11 +61,8 @@
     <Reference Include="Landis.Library.InitialCommunity.LeafBiomass">
       <HintPath>lib\Landis.Library.InitialCommunity.LeafBiomass.dll</HintPath>
 		</Reference>
-
 		<Reference Include="MathNet.Numerics">
-				<HintPath>lib\MathNet.Numerics.dll</HintPath>
-
-			</Reference>  
+		</Reference>  
 </ItemGroup>
 </Project>
 

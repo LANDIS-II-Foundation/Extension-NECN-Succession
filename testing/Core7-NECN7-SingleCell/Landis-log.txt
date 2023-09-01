@@ -1,0 +1,567 @@
+2023-09-01 12:24:21,752 - LANDIS-II 7.0 (7)
+2023-09-01 12:24:21,759 - 
+2023-09-01 12:24:21,799 - Loading scenario from file "scenario-single-cell.txt" ...
+2023-09-01 12:24:21,837 - Initialized random number generator with seed = 1,924,455,105
+2023-09-01 12:24:21,837 - Loading species data from file "species_LTB.txt" ...
+2023-09-01 12:24:21,849 - Loading ecoregions from file "./ecoregions.txt" ...
+2023-09-01 12:24:21,858 - Initializing landscape from ecoregions map "./single3.tif" ...
+2023-09-01 12:24:21,866 - Cell length = 100 m, cell area = 1 ha
+2023-09-01 12:24:21,867 - Map dimensions: 1 row by 1 column = 1 cell
+2023-09-01 12:24:21,872 - Sites: 1 active (100.0%), 0 inactive (0.0%)
+2023-09-01 12:24:21,876 - Loading NECN Succession extension ...
+2023-09-01 12:24:22,009 -    Begin parsing NECN SPECIES table.
+2023-09-01 12:24:22,023 -    Begin parsing FUNCTIONAL GROUP table.
+2023-09-01 12:24:22,028 -    Begin parsing Drought table.
+2023-09-01 12:24:22,028 -    Begin reading FIRE REDUCTION parameters.
+2023-09-01 12:24:22,029 -    Begin reading HARVEST REDUCTION parameters.
+2023-09-01 12:24:22,033 - Initializing NECN Succession ...
+2023-09-01 12:24:22,065 -    Registering Data:  Succession.LeafBiomassCohorts.
+2023-09-01 12:24:22,065 -    Registering Data:  Succession.AgeCohorts.
+2023-09-01 12:24:22,065 -    Registering Data:  Succession.BiomassCohorts.
+2023-09-01 12:24:22,066 -    Registering Data:  Succession.FineFuels.
+2023-09-01 12:24:22,068 -    Registering Data:  Succession.SmolderConsumption.
+2023-09-01 12:24:22,069 -    Registering Data:  Succession.FlamingConsumption.
+2023-09-01 12:24:22,069 -    Registering Data:  Succession.CWD.
+2023-09-01 12:24:22,069 -    Registering Data:  Succession.PET.
+2023-09-01 12:24:22,071 -   Read in data from single75.tif
+2023-09-01 12:24:22,073 -   Read in data from single0.691.tif
+2023-09-01 12:24:22,077 -   Read in data from single0.4.tif
+2023-09-01 12:24:22,078 -   Read in data from single0.4.tif
+2023-09-01 12:24:22,079 -   Read in data from single0.109.tif
+2023-09-01 12:24:22,080 -   Read in data from single0.055.tif
+2023-09-01 12:24:22,081 -   Read in data from single0.714.tif
+2023-09-01 12:24:22,082 -   Read in data from single0.07.tif
+2023-09-01 12:24:22,086 -   Read in data from single75.tif
+2023-09-01 12:24:22,086 -   Read in data from single3.tif
+2023-09-01 12:24:22,087 -   Read in data from single100.tif
+2023-09-01 12:24:22,087 -   Read in data from single10.tif
+2023-09-01 12:24:22,087 -   Read in data from single3000.tif
+2023-09-01 12:24:22,088 -   Read in data from single50.tif
+2023-09-01 12:24:22,088 -   Read in data from single300.tif
+2023-09-01 12:24:22,089 -   Read in data from single15.tif
+2023-09-01 12:24:22,090 -   Read in data from single110.tif
+2023-09-01 12:24:22,091 -   Read in data from single50.tif
+2023-09-01 12:24:22,102 -    Loading weather data ...
+2023-09-01 12:24:24,543 -    Registering Data:  TimeOfLastSuccession.
+2023-09-01 12:24:24,546 -    Registering Data:  Shade.
+2023-09-01 12:24:24,548 -    Creating Dispersal Neighborhood List.
+2023-09-01 12:24:24,548 -    Dispersal:  NeighborRadius=5050, CellLength=100, numCellRadius=50
+2023-09-01 12:24:24,556 -    Loading initial communities from file "initial-communities_LTBselect.txt" ...
+2023-09-01 12:24:24,575 -    Reading initial communities map "single3.tif" ...
+2023-09-01 12:24:24,604 - Using the following extensions ...
+   Extension Name            Extension Filename       
+   --------------            ------------------       
+   NECN Succession           NECN-succession-singlecell.txt
+
+2023-09-01 12:24:24,606 - Current time: 1
+2023-09-01 12:24:24,606 - Running NECN Succession ...
+2023-09-01 12:24:24,682 - Estimated Weibull light probability for species PinuJeff = 0.166, at LAI = 2.20
+2023-09-01 12:24:24,683 - Estimated Weibull light probability for species PinuLamb = 0.166, at LAI = 2.20
+2023-09-01 12:24:24,686 - Estimated Weibull light probability for species CaloDecu = 0.182, at LAI = 2.20
+2023-09-01 12:24:24,688 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.20
+2023-09-01 12:24:24,689 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.20
+2023-09-01 12:24:24,689 - Estimated Weibull light probability for species PinuCont = 0.166, at LAI = 2.20
+2023-09-01 12:24:24,690 - Estimated Weibull light probability for species PinuMont = 0.166, at LAI = 2.20
+2023-09-01 12:24:24,691 - Estimated Weibull light probability for species TsugMert = 0.088, at LAI = 2.20
+2023-09-01 12:24:24,691 - Estimated Weibull light probability for species PinuAlbi = 0.166, at LAI = 2.20
+2023-09-01 12:24:24,693 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.20
+2023-09-01 12:24:24,694 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.20
+2023-09-01 12:24:24,694 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.20
+2023-09-01 12:24:24,697 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.20
+2023-09-01 12:24:24,698 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.20
+2023-09-01 12:24:24,957 - Current time: 2
+2023-09-01 12:24:24,958 - Running NECN Succession ...
+2023-09-01 12:24:24,976 - Estimated Weibull light probability for species PinuJeff = 0.162, at LAI = 2.25
+2023-09-01 12:24:24,977 - Estimated Weibull light probability for species PinuLamb = 0.162, at LAI = 2.25
+2023-09-01 12:24:24,977 - Estimated Weibull light probability for species CaloDecu = 0.197, at LAI = 2.25
+2023-09-01 12:24:24,977 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.25
+2023-09-01 12:24:24,977 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.25
+2023-09-01 12:24:24,978 - Estimated Weibull light probability for species PinuCont = 0.162, at LAI = 2.25
+2023-09-01 12:24:24,979 - Estimated Weibull light probability for species PinuMont = 0.162, at LAI = 2.25
+2023-09-01 12:24:24,980 - Estimated Weibull light probability for species TsugMert = 0.090, at LAI = 2.25
+2023-09-01 12:24:24,980 - Estimated Weibull light probability for species PinuAlbi = 0.162, at LAI = 2.25
+2023-09-01 12:24:24,980 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.25
+2023-09-01 12:24:24,981 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.25
+2023-09-01 12:24:24,981 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.25
+2023-09-01 12:24:24,981 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.25
+2023-09-01 12:24:24,982 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.25
+2023-09-01 12:24:25,201 - Current time: 3
+2023-09-01 12:24:25,202 - Running NECN Succession ...
+2023-09-01 12:24:25,223 - Estimated Weibull light probability for species PinuJeff = 0.160, at LAI = 2.28
+2023-09-01 12:24:25,223 - Estimated Weibull light probability for species PinuLamb = 0.160, at LAI = 2.28
+2023-09-01 12:24:25,224 - Estimated Weibull light probability for species CaloDecu = 0.206, at LAI = 2.28
+2023-09-01 12:24:25,224 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.28
+2023-09-01 12:24:25,224 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.28
+2023-09-01 12:24:25,224 - Estimated Weibull light probability for species PinuCont = 0.160, at LAI = 2.28
+2023-09-01 12:24:25,225 - Estimated Weibull light probability for species PinuMont = 0.160, at LAI = 2.28
+2023-09-01 12:24:25,225 - Estimated Weibull light probability for species TsugMert = 0.092, at LAI = 2.28
+2023-09-01 12:24:25,225 - Estimated Weibull light probability for species PinuAlbi = 0.160, at LAI = 2.28
+2023-09-01 12:24:25,226 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.28
+2023-09-01 12:24:25,226 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.28
+2023-09-01 12:24:25,226 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.28
+2023-09-01 12:24:25,226 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.28
+2023-09-01 12:24:25,227 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.28
+2023-09-01 12:24:25,459 - Current time: 4
+2023-09-01 12:24:25,459 - Running NECN Succession ...
+2023-09-01 12:24:25,478 - Estimated Weibull light probability for species PinuJeff = 0.157, at LAI = 2.32
+2023-09-01 12:24:25,478 - Estimated Weibull light probability for species PinuLamb = 0.157, at LAI = 2.32
+2023-09-01 12:24:25,479 - Estimated Weibull light probability for species CaloDecu = 0.218, at LAI = 2.32
+2023-09-01 12:24:25,479 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.32
+2023-09-01 12:24:25,479 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.32
+2023-09-01 12:24:25,480 - Estimated Weibull light probability for species PinuCont = 0.157, at LAI = 2.32
+2023-09-01 12:24:25,480 - Estimated Weibull light probability for species PinuMont = 0.157, at LAI = 2.32
+2023-09-01 12:24:25,480 - Estimated Weibull light probability for species TsugMert = 0.093, at LAI = 2.32
+2023-09-01 12:24:25,481 - Estimated Weibull light probability for species PinuAlbi = 0.157, at LAI = 2.32
+2023-09-01 12:24:25,481 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.32
+2023-09-01 12:24:25,481 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.32
+2023-09-01 12:24:25,481 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.32
+2023-09-01 12:24:25,482 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.32
+2023-09-01 12:24:25,484 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.32
+2023-09-01 12:24:25,715 - Current time: 5
+2023-09-01 12:24:25,715 - Running NECN Succession ...
+2023-09-01 12:24:25,735 - Estimated Weibull light probability for species PinuJeff = 0.155, at LAI = 2.35
+2023-09-01 12:24:25,737 - Estimated Weibull light probability for species PinuLamb = 0.155, at LAI = 2.35
+2023-09-01 12:24:25,738 - Estimated Weibull light probability for species CaloDecu = 0.228, at LAI = 2.35
+2023-09-01 12:24:25,738 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.35
+2023-09-01 12:24:25,739 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.35
+2023-09-01 12:24:25,739 - Estimated Weibull light probability for species PinuCont = 0.155, at LAI = 2.35
+2023-09-01 12:24:25,740 - Estimated Weibull light probability for species PinuMont = 0.155, at LAI = 2.35
+2023-09-01 12:24:25,740 - Estimated Weibull light probability for species TsugMert = 0.095, at LAI = 2.35
+2023-09-01 12:24:25,741 - Estimated Weibull light probability for species PinuAlbi = 0.155, at LAI = 2.35
+2023-09-01 12:24:25,741 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.35
+2023-09-01 12:24:25,741 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.35
+2023-09-01 12:24:25,742 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.35
+2023-09-01 12:24:25,742 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.35
+2023-09-01 12:24:25,743 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.35
+2023-09-01 12:24:26,033 - Current time: 6
+2023-09-01 12:24:26,034 - Running NECN Succession ...
+2023-09-01 12:24:26,057 - Estimated Weibull light probability for species PinuJeff = 0.144, at LAI = 2.48
+2023-09-01 12:24:26,057 - Estimated Weibull light probability for species PinuLamb = 0.144, at LAI = 2.48
+2023-09-01 12:24:26,057 - Estimated Weibull light probability for species CaloDecu = 0.278, at LAI = 2.48
+2023-09-01 12:24:26,058 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.48
+2023-09-01 12:24:26,058 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.48
+2023-09-01 12:24:26,059 - Estimated Weibull light probability for species PinuCont = 0.144, at LAI = 2.48
+2023-09-01 12:24:26,059 - Estimated Weibull light probability for species PinuMont = 0.144, at LAI = 2.48
+2023-09-01 12:24:26,059 - Estimated Weibull light probability for species TsugMert = 0.102, at LAI = 2.48
+2023-09-01 12:24:26,060 - Estimated Weibull light probability for species PinuAlbi = 0.144, at LAI = 2.48
+2023-09-01 12:24:26,060 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.48
+2023-09-01 12:24:26,061 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.48
+2023-09-01 12:24:26,061 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.48
+2023-09-01 12:24:26,062 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.48
+2023-09-01 12:24:26,062 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.48
+2023-09-01 12:24:26,282 - Current time: 7
+2023-09-01 12:24:26,285 - Running NECN Succession ...
+2023-09-01 12:24:26,340 - Estimated Weibull light probability for species PinuJeff = 0.141, at LAI = 2.53
+2023-09-01 12:24:26,342 - Estimated Weibull light probability for species PinuLamb = 0.141, at LAI = 2.53
+2023-09-01 12:24:26,344 - Estimated Weibull light probability for species CaloDecu = 0.296, at LAI = 2.53
+2023-09-01 12:24:26,347 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.53
+2023-09-01 12:24:26,348 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.53
+2023-09-01 12:24:26,350 - Estimated Weibull light probability for species PinuCont = 0.141, at LAI = 2.53
+2023-09-01 12:24:26,352 - Estimated Weibull light probability for species PinuMont = 0.141, at LAI = 2.53
+2023-09-01 12:24:26,354 - Estimated Weibull light probability for species TsugMert = 0.104, at LAI = 2.53
+2023-09-01 12:24:26,357 - Estimated Weibull light probability for species PinuAlbi = 0.141, at LAI = 2.53
+2023-09-01 12:24:26,360 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.53
+2023-09-01 12:24:26,362 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.53
+2023-09-01 12:24:26,364 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.53
+2023-09-01 12:24:26,367 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.53
+2023-09-01 12:24:26,369 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.53
+2023-09-01 12:24:26,628 - Current time: 8
+2023-09-01 12:24:26,629 - Running NECN Succession ...
+2023-09-01 12:24:26,650 - Estimated Weibull light probability for species PinuJeff = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,650 - Estimated Weibull light probability for species PinuLamb = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,651 - Estimated Weibull light probability for species CaloDecu = 0.306, at LAI = 2.55
+2023-09-01 12:24:26,651 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.55
+2023-09-01 12:24:26,651 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.55
+2023-09-01 12:24:26,652 - Estimated Weibull light probability for species PinuCont = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,652 - Estimated Weibull light probability for species PinuMont = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,652 - Estimated Weibull light probability for species TsugMert = 0.105, at LAI = 2.55
+2023-09-01 12:24:26,652 - Estimated Weibull light probability for species PinuAlbi = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,653 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.55
+2023-09-01 12:24:26,653 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.55
+2023-09-01 12:24:26,654 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.55
+2023-09-01 12:24:26,654 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.55
+2023-09-01 12:24:26,655 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.55
+2023-09-01 12:24:26,896 - Current time: 9
+2023-09-01 12:24:26,897 - Running NECN Succession ...
+2023-09-01 12:24:26,922 - Estimated Weibull light probability for species PinuJeff = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,922 - Estimated Weibull light probability for species PinuLamb = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,923 - Estimated Weibull light probability for species CaloDecu = 0.307, at LAI = 2.55
+2023-09-01 12:24:26,923 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.55
+2023-09-01 12:24:26,924 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.55
+2023-09-01 12:24:26,924 - Estimated Weibull light probability for species PinuCont = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,924 - Estimated Weibull light probability for species PinuMont = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,925 - Estimated Weibull light probability for species TsugMert = 0.105, at LAI = 2.55
+2023-09-01 12:24:26,925 - Estimated Weibull light probability for species PinuAlbi = 0.140, at LAI = 2.55
+2023-09-01 12:24:26,925 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.55
+2023-09-01 12:24:26,926 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.55
+2023-09-01 12:24:26,926 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.55
+2023-09-01 12:24:26,927 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.55
+2023-09-01 12:24:26,927 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.55
+2023-09-01 12:24:27,149 - Current time: 10
+2023-09-01 12:24:27,149 - Running NECN Succession ...
+2023-09-01 12:24:27,170 - Estimated Weibull light probability for species PinuJeff = 0.138, at LAI = 2.58
+2023-09-01 12:24:27,171 - Estimated Weibull light probability for species PinuLamb = 0.138, at LAI = 2.58
+2023-09-01 12:24:27,171 - Estimated Weibull light probability for species CaloDecu = 0.318, at LAI = 2.58
+2023-09-01 12:24:27,171 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.58
+2023-09-01 12:24:27,172 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.58
+2023-09-01 12:24:27,172 - Estimated Weibull light probability for species PinuCont = 0.138, at LAI = 2.58
+2023-09-01 12:24:27,173 - Estimated Weibull light probability for species PinuMont = 0.138, at LAI = 2.58
+2023-09-01 12:24:27,173 - Estimated Weibull light probability for species TsugMert = 0.106, at LAI = 2.58
+2023-09-01 12:24:27,173 - Estimated Weibull light probability for species PinuAlbi = 0.138, at LAI = 2.58
+2023-09-01 12:24:27,174 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.58
+2023-09-01 12:24:27,174 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.58
+2023-09-01 12:24:27,174 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.58
+2023-09-01 12:24:27,175 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.58
+2023-09-01 12:24:27,175 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.58
+2023-09-01 12:24:33,740 - Current time: 11
+2023-09-01 12:24:33,740 - Running NECN Succession ...
+2023-09-01 12:24:33,767 - Estimated Weibull light probability for species PinuJeff = 0.138, at LAI = 2.58
+2023-09-01 12:24:33,767 - Estimated Weibull light probability for species PinuLamb = 0.138, at LAI = 2.58
+2023-09-01 12:24:33,767 - Estimated Weibull light probability for species CaloDecu = 0.319, at LAI = 2.58
+2023-09-01 12:24:33,768 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.58
+2023-09-01 12:24:33,769 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.58
+2023-09-01 12:24:33,770 - Estimated Weibull light probability for species PinuCont = 0.138, at LAI = 2.58
+2023-09-01 12:24:33,770 - Estimated Weibull light probability for species PinuMont = 0.138, at LAI = 2.58
+2023-09-01 12:24:33,770 - Estimated Weibull light probability for species TsugMert = 0.106, at LAI = 2.58
+2023-09-01 12:24:33,771 - Estimated Weibull light probability for species PinuAlbi = 0.138, at LAI = 2.58
+2023-09-01 12:24:33,771 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.58
+2023-09-01 12:24:33,771 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.58
+2023-09-01 12:24:33,772 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.58
+2023-09-01 12:24:33,772 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.58
+2023-09-01 12:24:33,772 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.58
+2023-09-01 12:24:33,985 - Current time: 12
+2023-09-01 12:24:33,986 - Running NECN Succession ...
+2023-09-01 12:24:34,007 - Estimated Weibull light probability for species PinuJeff = 0.136, at LAI = 2.61
+2023-09-01 12:24:34,008 - Estimated Weibull light probability for species PinuLamb = 0.136, at LAI = 2.61
+2023-09-01 12:24:34,008 - Estimated Weibull light probability for species CaloDecu = 0.331, at LAI = 2.61
+2023-09-01 12:24:34,008 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.61
+2023-09-01 12:24:34,009 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.61
+2023-09-01 12:24:34,009 - Estimated Weibull light probability for species PinuCont = 0.136, at LAI = 2.61
+2023-09-01 12:24:34,009 - Estimated Weibull light probability for species PinuMont = 0.136, at LAI = 2.61
+2023-09-01 12:24:34,010 - Estimated Weibull light probability for species TsugMert = 0.108, at LAI = 2.61
+2023-09-01 12:24:34,010 - Estimated Weibull light probability for species PinuAlbi = 0.136, at LAI = 2.61
+2023-09-01 12:24:34,011 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.61
+2023-09-01 12:24:34,011 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.61
+2023-09-01 12:24:34,011 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.61
+2023-09-01 12:24:34,012 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.61
+2023-09-01 12:24:34,012 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.61
+2023-09-01 12:24:34,225 - Current time: 13
+2023-09-01 12:24:34,226 - Running NECN Succession ...
+2023-09-01 12:24:34,252 - Estimated Weibull light probability for species PinuJeff = 0.134, at LAI = 2.63
+2023-09-01 12:24:34,252 - Estimated Weibull light probability for species PinuLamb = 0.134, at LAI = 2.63
+2023-09-01 12:24:34,252 - Estimated Weibull light probability for species CaloDecu = 0.341, at LAI = 2.63
+2023-09-01 12:24:34,253 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.63
+2023-09-01 12:24:34,253 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.63
+2023-09-01 12:24:34,253 - Estimated Weibull light probability for species PinuCont = 0.134, at LAI = 2.63
+2023-09-01 12:24:34,254 - Estimated Weibull light probability for species PinuMont = 0.134, at LAI = 2.63
+2023-09-01 12:24:34,254 - Estimated Weibull light probability for species TsugMert = 0.109, at LAI = 2.63
+2023-09-01 12:24:34,254 - Estimated Weibull light probability for species PinuAlbi = 0.134, at LAI = 2.63
+2023-09-01 12:24:34,255 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.63
+2023-09-01 12:24:34,255 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.63
+2023-09-01 12:24:34,255 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.63
+2023-09-01 12:24:34,255 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.63
+2023-09-01 12:24:34,255 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.63
+2023-09-01 12:24:34,479 - Current time: 14
+2023-09-01 12:24:34,480 - Running NECN Succession ...
+2023-09-01 12:24:34,504 - Estimated Weibull light probability for species PinuJeff = 0.134, at LAI = 2.64
+2023-09-01 12:24:34,504 - Estimated Weibull light probability for species PinuLamb = 0.134, at LAI = 2.64
+2023-09-01 12:24:34,504 - Estimated Weibull light probability for species CaloDecu = 0.347, at LAI = 2.64
+2023-09-01 12:24:34,505 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.64
+2023-09-01 12:24:34,505 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.64
+2023-09-01 12:24:34,505 - Estimated Weibull light probability for species PinuCont = 0.134, at LAI = 2.64
+2023-09-01 12:24:34,506 - Estimated Weibull light probability for species PinuMont = 0.134, at LAI = 2.64
+2023-09-01 12:24:34,506 - Estimated Weibull light probability for species TsugMert = 0.109, at LAI = 2.64
+2023-09-01 12:24:34,506 - Estimated Weibull light probability for species PinuAlbi = 0.134, at LAI = 2.64
+2023-09-01 12:24:34,507 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.64
+2023-09-01 12:24:34,507 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.64
+2023-09-01 12:24:34,507 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.64
+2023-09-01 12:24:34,508 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.64
+2023-09-01 12:24:34,508 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.64
+2023-09-01 12:24:34,730 - Current time: 15
+2023-09-01 12:24:34,731 - Running NECN Succession ...
+2023-09-01 12:24:34,761 - Estimated Weibull light probability for species PinuJeff = 0.132, at LAI = 2.67
+2023-09-01 12:24:34,762 - Estimated Weibull light probability for species PinuLamb = 0.132, at LAI = 2.67
+2023-09-01 12:24:34,763 - Estimated Weibull light probability for species CaloDecu = 0.362, at LAI = 2.67
+2023-09-01 12:24:34,764 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.67
+2023-09-01 12:24:34,766 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.67
+2023-09-01 12:24:34,766 - Estimated Weibull light probability for species PinuCont = 0.132, at LAI = 2.67
+2023-09-01 12:24:34,767 - Estimated Weibull light probability for species PinuMont = 0.132, at LAI = 2.67
+2023-09-01 12:24:34,768 - Estimated Weibull light probability for species TsugMert = 0.111, at LAI = 2.67
+2023-09-01 12:24:34,769 - Estimated Weibull light probability for species PinuAlbi = 0.132, at LAI = 2.67
+2023-09-01 12:24:34,770 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.67
+2023-09-01 12:24:34,771 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.67
+2023-09-01 12:24:34,772 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.67
+2023-09-01 12:24:34,772 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.67
+2023-09-01 12:24:34,773 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.67
+2023-09-01 12:24:35,129 - Current time: 16
+2023-09-01 12:24:35,130 - Running NECN Succession ...
+2023-09-01 12:24:35,157 - Estimated Weibull light probability for species PinuJeff = 0.130, at LAI = 2.69
+2023-09-01 12:24:35,158 - Estimated Weibull light probability for species PinuLamb = 0.130, at LAI = 2.69
+2023-09-01 12:24:35,158 - Estimated Weibull light probability for species CaloDecu = 0.372, at LAI = 2.69
+2023-09-01 12:24:35,159 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.69
+2023-09-01 12:24:35,160 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.69
+2023-09-01 12:24:35,161 - Estimated Weibull light probability for species PinuCont = 0.130, at LAI = 2.69
+2023-09-01 12:24:35,162 - Estimated Weibull light probability for species PinuMont = 0.130, at LAI = 2.69
+2023-09-01 12:24:35,163 - Estimated Weibull light probability for species TsugMert = 0.112, at LAI = 2.69
+2023-09-01 12:24:35,164 - Estimated Weibull light probability for species PinuAlbi = 0.130, at LAI = 2.69
+2023-09-01 12:24:35,165 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.69
+2023-09-01 12:24:35,165 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.69
+2023-09-01 12:24:35,166 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.69
+2023-09-01 12:24:35,167 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.69
+2023-09-01 12:24:35,167 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.69
+2023-09-01 12:24:35,408 - Current time: 17
+2023-09-01 12:24:35,409 - Running NECN Succession ...
+2023-09-01 12:24:35,438 - Estimated Weibull light probability for species PinuJeff = 0.122, at LAI = 2.82
+2023-09-01 12:24:35,438 - Estimated Weibull light probability for species PinuLamb = 0.122, at LAI = 2.82
+2023-09-01 12:24:35,439 - Estimated Weibull light probability for species CaloDecu = 0.446, at LAI = 2.82
+2023-09-01 12:24:35,440 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.82
+2023-09-01 12:24:35,440 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.82
+2023-09-01 12:24:35,440 - Estimated Weibull light probability for species PinuCont = 0.122, at LAI = 2.82
+2023-09-01 12:24:35,440 - Estimated Weibull light probability for species PinuMont = 0.122, at LAI = 2.82
+2023-09-01 12:24:35,441 - Estimated Weibull light probability for species TsugMert = 0.119, at LAI = 2.82
+2023-09-01 12:24:35,441 - Estimated Weibull light probability for species PinuAlbi = 0.122, at LAI = 2.82
+2023-09-01 12:24:35,441 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.82
+2023-09-01 12:24:35,442 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.82
+2023-09-01 12:24:35,442 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.82
+2023-09-01 12:24:35,442 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.82
+2023-09-01 12:24:35,443 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.82
+2023-09-01 12:24:35,673 - Current time: 18
+2023-09-01 12:24:35,673 - Running NECN Succession ...
+2023-09-01 12:24:35,702 - Estimated Weibull light probability for species PinuJeff = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,702 - Estimated Weibull light probability for species PinuLamb = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,703 - Estimated Weibull light probability for species CaloDecu = 0.456, at LAI = 2.83
+2023-09-01 12:24:35,703 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.83
+2023-09-01 12:24:35,703 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.83
+2023-09-01 12:24:35,704 - Estimated Weibull light probability for species PinuCont = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,704 - Estimated Weibull light probability for species PinuMont = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,704 - Estimated Weibull light probability for species TsugMert = 0.120, at LAI = 2.83
+2023-09-01 12:24:35,705 - Estimated Weibull light probability for species PinuAlbi = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,705 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.83
+2023-09-01 12:24:35,705 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.83
+2023-09-01 12:24:35,706 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.83
+2023-09-01 12:24:35,706 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.83
+2023-09-01 12:24:35,707 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.83
+2023-09-01 12:24:35,955 - Current time: 19
+2023-09-01 12:24:35,955 - Running NECN Succession ...
+2023-09-01 12:24:35,986 - Estimated Weibull light probability for species PinuJeff = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,986 - Estimated Weibull light probability for species PinuLamb = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,986 - Estimated Weibull light probability for species CaloDecu = 0.457, at LAI = 2.83
+2023-09-01 12:24:35,987 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.83
+2023-09-01 12:24:35,987 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.83
+2023-09-01 12:24:35,987 - Estimated Weibull light probability for species PinuCont = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,987 - Estimated Weibull light probability for species PinuMont = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,988 - Estimated Weibull light probability for species TsugMert = 0.120, at LAI = 2.83
+2023-09-01 12:24:35,988 - Estimated Weibull light probability for species PinuAlbi = 0.121, at LAI = 2.83
+2023-09-01 12:24:35,988 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.83
+2023-09-01 12:24:35,989 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.83
+2023-09-01 12:24:35,989 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.83
+2023-09-01 12:24:35,990 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.83
+2023-09-01 12:24:35,990 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.83
+2023-09-01 12:24:36,242 - Current time: 20
+2023-09-01 12:24:36,243 - Running NECN Succession ...
+2023-09-01 12:24:36,272 - Estimated Weibull light probability for species PinuJeff = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,272 - Estimated Weibull light probability for species PinuLamb = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,273 - Estimated Weibull light probability for species CaloDecu = 0.463, at LAI = 2.84
+2023-09-01 12:24:36,273 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.84
+2023-09-01 12:24:36,274 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.84
+2023-09-01 12:24:36,274 - Estimated Weibull light probability for species PinuCont = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,274 - Estimated Weibull light probability for species PinuMont = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,275 - Estimated Weibull light probability for species TsugMert = 0.120, at LAI = 2.84
+2023-09-01 12:24:36,275 - Estimated Weibull light probability for species PinuAlbi = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,276 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.84
+2023-09-01 12:24:36,277 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.84
+2023-09-01 12:24:36,278 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.84
+2023-09-01 12:24:36,278 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.84
+2023-09-01 12:24:36,279 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.84
+2023-09-01 12:24:36,497 - Current time: 21
+2023-09-01 12:24:36,498 - Running NECN Succession ...
+2023-09-01 12:24:36,527 - Estimated Weibull light probability for species PinuJeff = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,527 - Estimated Weibull light probability for species PinuLamb = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,527 - Estimated Weibull light probability for species CaloDecu = 0.463, at LAI = 2.84
+2023-09-01 12:24:36,528 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.84
+2023-09-01 12:24:36,528 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.84
+2023-09-01 12:24:36,528 - Estimated Weibull light probability for species PinuCont = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,529 - Estimated Weibull light probability for species PinuMont = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,529 - Estimated Weibull light probability for species TsugMert = 0.120, at LAI = 2.84
+2023-09-01 12:24:36,530 - Estimated Weibull light probability for species PinuAlbi = 0.121, at LAI = 2.84
+2023-09-01 12:24:36,530 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.84
+2023-09-01 12:24:36,530 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.84
+2023-09-01 12:24:36,531 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.84
+2023-09-01 12:24:36,531 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.84
+2023-09-01 12:24:36,532 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.84
+2023-09-01 12:24:36,663 - Current time: 22
+2023-09-01 12:24:36,663 - Running NECN Succession ...
+2023-09-01 12:24:36,701 - Estimated Weibull light probability for species PinuJeff = 0.113, at LAI = 2.97
+2023-09-01 12:24:36,701 - Estimated Weibull light probability for species PinuLamb = 0.113, at LAI = 2.97
+2023-09-01 12:24:36,702 - Estimated Weibull light probability for species CaloDecu = 0.553, at LAI = 2.97
+2023-09-01 12:24:36,702 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.97
+2023-09-01 12:24:36,702 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.97
+2023-09-01 12:24:36,703 - Estimated Weibull light probability for species PinuCont = 0.113, at LAI = 2.97
+2023-09-01 12:24:36,703 - Estimated Weibull light probability for species PinuMont = 0.113, at LAI = 2.97
+2023-09-01 12:24:36,703 - Estimated Weibull light probability for species TsugMert = 0.127, at LAI = 2.97
+2023-09-01 12:24:36,703 - Estimated Weibull light probability for species PinuAlbi = 0.113, at LAI = 2.97
+2023-09-01 12:24:36,704 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.97
+2023-09-01 12:24:36,704 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.97
+2023-09-01 12:24:36,704 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.97
+2023-09-01 12:24:36,705 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.97
+2023-09-01 12:24:36,705 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.97
+2023-09-01 12:24:36,837 - Current time: 23
+2023-09-01 12:24:36,838 - Running NECN Succession ...
+2023-09-01 12:24:36,875 - Estimated Weibull light probability for species PinuJeff = 0.113, at LAI = 2.98
+2023-09-01 12:24:36,875 - Estimated Weibull light probability for species PinuLamb = 0.113, at LAI = 2.98
+2023-09-01 12:24:36,876 - Estimated Weibull light probability for species CaloDecu = 0.561, at LAI = 2.98
+2023-09-01 12:24:36,876 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.98
+2023-09-01 12:24:36,877 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.98
+2023-09-01 12:24:36,877 - Estimated Weibull light probability for species PinuCont = 0.113, at LAI = 2.98
+2023-09-01 12:24:36,877 - Estimated Weibull light probability for species PinuMont = 0.113, at LAI = 2.98
+2023-09-01 12:24:36,878 - Estimated Weibull light probability for species TsugMert = 0.128, at LAI = 2.98
+2023-09-01 12:24:36,878 - Estimated Weibull light probability for species PinuAlbi = 0.113, at LAI = 2.98
+2023-09-01 12:24:36,878 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.98
+2023-09-01 12:24:36,879 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.98
+2023-09-01 12:24:36,879 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.98
+2023-09-01 12:24:36,880 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.98
+2023-09-01 12:24:36,880 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.98
+2023-09-01 12:24:37,027 - Current time: 24
+2023-09-01 12:24:37,028 - Running NECN Succession ...
+2023-09-01 12:24:37,063 - Estimated Weibull light probability for species PinuJeff = 0.113, at LAI = 2.98
+2023-09-01 12:24:37,063 - Estimated Weibull light probability for species PinuLamb = 0.113, at LAI = 2.98
+2023-09-01 12:24:37,064 - Estimated Weibull light probability for species CaloDecu = 0.562, at LAI = 2.98
+2023-09-01 12:24:37,064 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.98
+2023-09-01 12:24:37,064 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.98
+2023-09-01 12:24:37,065 - Estimated Weibull light probability for species PinuCont = 0.113, at LAI = 2.98
+2023-09-01 12:24:37,065 - Estimated Weibull light probability for species PinuMont = 0.113, at LAI = 2.98
+2023-09-01 12:24:37,065 - Estimated Weibull light probability for species TsugMert = 0.128, at LAI = 2.98
+2023-09-01 12:24:37,065 - Estimated Weibull light probability for species PinuAlbi = 0.113, at LAI = 2.98
+2023-09-01 12:24:37,066 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.98
+2023-09-01 12:24:37,066 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.98
+2023-09-01 12:24:37,066 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.98
+2023-09-01 12:24:37,067 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.98
+2023-09-01 12:24:37,067 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.98
+2023-09-01 12:24:37,231 - Current time: 25
+2023-09-01 12:24:37,233 - Running NECN Succession ...
+2023-09-01 12:24:37,310 - Estimated Weibull light probability for species PinuJeff = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,310 - Estimated Weibull light probability for species PinuLamb = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,311 - Estimated Weibull light probability for species CaloDecu = 0.570, at LAI = 2.99
+2023-09-01 12:24:37,311 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.99
+2023-09-01 12:24:37,312 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.99
+2023-09-01 12:24:37,312 - Estimated Weibull light probability for species PinuCont = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,313 - Estimated Weibull light probability for species PinuMont = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,313 - Estimated Weibull light probability for species TsugMert = 0.128, at LAI = 2.99
+2023-09-01 12:24:37,314 - Estimated Weibull light probability for species PinuAlbi = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,314 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.99
+2023-09-01 12:24:37,315 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.99
+2023-09-01 12:24:37,315 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.99
+2023-09-01 12:24:37,316 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.99
+2023-09-01 12:24:37,316 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.99
+2023-09-01 12:24:37,493 - Current time: 26
+2023-09-01 12:24:37,493 - Running NECN Succession ...
+2023-09-01 12:24:37,566 - Estimated Weibull light probability for species PinuJeff = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,569 - Estimated Weibull light probability for species PinuLamb = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,570 - Estimated Weibull light probability for species CaloDecu = 0.570, at LAI = 2.99
+2023-09-01 12:24:37,571 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.99
+2023-09-01 12:24:37,573 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.99
+2023-09-01 12:24:37,573 - Estimated Weibull light probability for species PinuCont = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,574 - Estimated Weibull light probability for species PinuMont = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,575 - Estimated Weibull light probability for species TsugMert = 0.129, at LAI = 2.99
+2023-09-01 12:24:37,575 - Estimated Weibull light probability for species PinuAlbi = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,576 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.99
+2023-09-01 12:24:37,577 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.99
+2023-09-01 12:24:37,578 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.99
+2023-09-01 12:24:37,579 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.99
+2023-09-01 12:24:37,581 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.99
+2023-09-01 12:24:37,735 - Current time: 27
+2023-09-01 12:24:37,735 - Running NECN Succession ...
+2023-09-01 12:24:37,778 - Estimated Weibull light probability for species PinuJeff = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,779 - Estimated Weibull light probability for species PinuLamb = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,779 - Estimated Weibull light probability for species CaloDecu = 0.570, at LAI = 2.99
+2023-09-01 12:24:37,780 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 2.99
+2023-09-01 12:24:37,781 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 2.99
+2023-09-01 12:24:37,781 - Estimated Weibull light probability for species PinuCont = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,782 - Estimated Weibull light probability for species PinuMont = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,782 - Estimated Weibull light probability for species TsugMert = 0.129, at LAI = 2.99
+2023-09-01 12:24:37,783 - Estimated Weibull light probability for species PinuAlbi = 0.112, at LAI = 2.99
+2023-09-01 12:24:37,784 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 2.99
+2023-09-01 12:24:37,784 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 2.99
+2023-09-01 12:24:37,785 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 2.99
+2023-09-01 12:24:37,785 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 2.99
+2023-09-01 12:24:37,786 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 2.99
+2023-09-01 12:24:37,933 - Current time: 28
+2023-09-01 12:24:37,934 - Running NECN Succession ...
+2023-09-01 12:24:37,982 - Estimated Weibull light probability for species PinuJeff = 0.111, at LAI = 3.01
+2023-09-01 12:24:37,983 - Estimated Weibull light probability for species PinuLamb = 0.111, at LAI = 3.01
+2023-09-01 12:24:37,984 - Estimated Weibull light probability for species CaloDecu = 0.590, at LAI = 3.01
+2023-09-01 12:24:37,985 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 3.01
+2023-09-01 12:24:37,985 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 3.01
+2023-09-01 12:24:37,986 - Estimated Weibull light probability for species PinuCont = 0.111, at LAI = 3.01
+2023-09-01 12:24:37,986 - Estimated Weibull light probability for species PinuMont = 0.111, at LAI = 3.01
+2023-09-01 12:24:37,987 - Estimated Weibull light probability for species TsugMert = 0.130, at LAI = 3.01
+2023-09-01 12:24:37,988 - Estimated Weibull light probability for species PinuAlbi = 0.111, at LAI = 3.01
+2023-09-01 12:24:37,990 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 3.01
+2023-09-01 12:24:37,991 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 3.01
+2023-09-01 12:24:37,992 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 3.01
+2023-09-01 12:24:37,993 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 3.01
+2023-09-01 12:24:37,994 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 3.01
+2023-09-01 12:24:38,160 - Current time: 29
+2023-09-01 12:24:38,160 - Running NECN Succession ...
+2023-09-01 12:24:38,217 - Estimated Weibull light probability for species PinuJeff = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,218 - Estimated Weibull light probability for species PinuLamb = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,218 - Estimated Weibull light probability for species CaloDecu = 0.590, at LAI = 3.01
+2023-09-01 12:24:38,219 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 3.01
+2023-09-01 12:24:38,220 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 3.01
+2023-09-01 12:24:38,220 - Estimated Weibull light probability for species PinuCont = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,221 - Estimated Weibull light probability for species PinuMont = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,222 - Estimated Weibull light probability for species TsugMert = 0.130, at LAI = 3.01
+2023-09-01 12:24:38,223 - Estimated Weibull light probability for species PinuAlbi = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,223 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 3.01
+2023-09-01 12:24:38,224 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 3.01
+2023-09-01 12:24:38,225 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 3.01
+2023-09-01 12:24:38,228 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 3.01
+2023-09-01 12:24:38,228 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 3.01
+2023-09-01 12:24:38,383 - Current time: 30
+2023-09-01 12:24:38,384 - Running NECN Succession ...
+2023-09-01 12:24:38,427 - Estimated Weibull light probability for species PinuJeff = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,427 - Estimated Weibull light probability for species PinuLamb = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,428 - Estimated Weibull light probability for species CaloDecu = 0.589, at LAI = 3.01
+2023-09-01 12:24:38,428 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 3.01
+2023-09-01 12:24:38,429 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 3.01
+2023-09-01 12:24:38,430 - Estimated Weibull light probability for species PinuCont = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,430 - Estimated Weibull light probability for species PinuMont = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,431 - Estimated Weibull light probability for species TsugMert = 0.130, at LAI = 3.01
+2023-09-01 12:24:38,431 - Estimated Weibull light probability for species PinuAlbi = 0.111, at LAI = 3.01
+2023-09-01 12:24:38,432 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 3.01
+2023-09-01 12:24:38,433 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 3.01
+2023-09-01 12:24:38,433 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 3.01
+2023-09-01 12:24:38,434 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 3.01
+2023-09-01 12:24:38,434 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 3.01
+2023-09-01 12:24:38,582 - Current time: 31
+2023-09-01 12:24:38,582 - Running NECN Succession ...
+2023-09-01 12:24:38,625 - Estimated Weibull light probability for species PinuJeff = 0.109, at LAI = 3.04
+2023-09-01 12:24:38,625 - Estimated Weibull light probability for species PinuLamb = 0.109, at LAI = 3.04
+2023-09-01 12:24:38,627 - Estimated Weibull light probability for species CaloDecu = 0.611, at LAI = 3.04
+2023-09-01 12:24:38,627 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 3.04
+2023-09-01 12:24:38,628 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 3.04
+2023-09-01 12:24:38,629 - Estimated Weibull light probability for species PinuCont = 0.109, at LAI = 3.04
+2023-09-01 12:24:38,629 - Estimated Weibull light probability for species PinuMont = 0.109, at LAI = 3.04
+2023-09-01 12:24:38,630 - Estimated Weibull light probability for species TsugMert = 0.131, at LAI = 3.04
+2023-09-01 12:24:38,631 - Estimated Weibull light probability for species PinuAlbi = 0.109, at LAI = 3.04
+2023-09-01 12:24:38,631 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 3.04
+2023-09-01 12:24:38,632 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 3.04
+2023-09-01 12:24:38,633 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 3.04
+2023-09-01 12:24:38,633 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 3.04
+2023-09-01 12:24:38,634 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 3.04
+2023-09-01 12:24:38,778 - Current time: 32
+2023-09-01 12:24:38,779 - Running NECN Succession ...
+2023-09-01 12:24:38,816 - Estimated Weibull light probability for species PinuJeff = 0.109, at LAI = 3.05
+2023-09-01 12:24:38,817 - Estimated Weibull light probability for species PinuLamb = 0.109, at LAI = 3.05
+2023-09-01 12:24:38,817 - Estimated Weibull light probability for species CaloDecu = 0.618, at LAI = 3.05
+2023-09-01 12:24:38,818 - Estimated Weibull light probability for species AbieConc = NaN, at LAI = 3.05
+2023-09-01 12:24:38,818 - Estimated Weibull light probability for species AbieMagn = NaN, at LAI = 3.05
+2023-09-01 12:24:38,819 - Estimated Weibull light probability for species PinuCont = 0.109, at LAI = 3.05
+2023-09-01 12:24:38,819 - Estimated Weibull light probability for species PinuMont = 0.109, at LAI = 3.05
+2023-09-01 12:24:38,820 - Estimated Weibull light probability for species TsugMert = 0.132, at LAI = 3.05
+2023-09-01 12:24:38,820 - Estimated Weibull light probability for species PinuAlbi = 0.109, at LAI = 3.05
+2023-09-01 12:24:38,820 - Estimated Weibull light probability for species PopuTrem = NaN, at LAI = 3.05
+2023-09-01 12:24:38,821 - Estimated Weibull light probability for species NonnResp = NaN, at LAI = 3.05
+2023-09-01 12:24:38,821 - Estimated Weibull light probability for species NonnSeed = NaN, at LAI = 3.05
+2023-09-01 12:24:38,821 - Estimated Weibull light probability for species FixnResp = NaN, at LAI = 3.05
+2023-09-01 12:24:38,822 - Estimated Weibull light probability for species FixnSeed = NaN, at LAI = 3.05

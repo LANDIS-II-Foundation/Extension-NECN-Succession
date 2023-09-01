@@ -778,42 +778,45 @@ namespace Landis.Extension.Succession.NECN
                 }
 
             }
-            if (PlugIn.Parameters.SmokeModelOutputs)
-            {
-                ShortPixel pixel = outputRaster.BufferPixel;
-                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                if (PlugIn.Parameters.SmokeModelOutputs)
                 {
-                    if (site.IsActive)
+                    using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(pathDeadWood, PlugIn.ModelCore.Landscape.Dimensions))
                     {
-                        //July anaerobic effect -- SF TODO make more flexible input, or mean for year
-                        pixel.MapCode.Value = (short)(SiteVars.MonthlyAnaerobicEffect[site][7] * 1000); 
-                    }
-                    else
-                    {
-                        //  Inactive site
-                        pixel.MapCode.Value = 0;
-                    }
-                    outputRaster.WriteBufferPixel();
-                }
-
-            }
-
-                string pathDuff = MapNames.ReplaceTemplateVars(@"NECN\SurfaceDuffBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDuff, PlugIn.ModelCore.Landscape.Dimensions))
-                {
-                    IntPixel pixel = outputRaster.BufferPixel;
-                    foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
-                    {
-                        if (site.IsActive)
+                        ShortPixel pixel = outputRaster.BufferPixel;
+                        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                         {
-                            pixel.MapCode.Value = (int)(SiteVars.SOM1surface[site].Carbon * 2.0);
+                            if (site.IsActive)
+                            {
+                                //July anaerobic effect -- SF TODO make more flexible input, or mean for year
+                                pixel.MapCode.Value = (short)(SiteVars.MonthlyAnaerobicEffect[site][7] * 1000);
+                            }
+                            else
+                            {
+                                //  Inactive site
+                                pixel.MapCode.Value = 0;
+                            }
+                            outputRaster.WriteBufferPixel();
                         }
-                        else
+
+                    }
+
+                    string pathDuff = MapNames.ReplaceTemplateVars(@"NECN\SurfaceDuffBiomass-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathDuff, PlugIn.ModelCore.Landscape.Dimensions))
+                    {
+                        IntPixel pixel = outputRaster.BufferPixel;
+                        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                         {
-                            //  Inactive site
-                            pixel.MapCode.Value = 0;
+                            if (site.IsActive)
+                            {
+                                pixel.MapCode.Value = (int)(SiteVars.SOM1surface[site].Carbon * 2.0);
+                            }
+                            else
+                            {
+                                //  Inactive site
+                                pixel.MapCode.Value = 0;
+                            }
+                            outputRaster.WriteBufferPixel();
                         }
-                        outputRaster.WriteBufferPixel();
                     }
                 }
             }

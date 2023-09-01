@@ -200,8 +200,8 @@ namespace Landis.Extension.Succession.NECN
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
                        
             double soilWaterContent = SiteVars.SoilWaterContent[site];
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
+            //if (OtherData.CalibrateMode)
+            //    PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
             double Precipitation = DroughtMortality.SpinUpWeather[ecoregion].MonthlyPrecip[month];
@@ -210,9 +210,9 @@ namespace Landis.Extension.Succession.NECN
             double tmin = DroughtMortality.SpinUpWeather[ecoregion].MonthlyMinTemp[month];
             double PET = DroughtMortality.SpinUpWeather[ecoregion].MonthlyPET[month];
             
-            if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
-                month, tave, tmax, tmin, PET);
+            //if (OtherData.CalibrateMode)
+            //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
+            //    month, tave, tmax, tmin, PET);
             int daysInMonth = AnnualClimate.DaysInMonth(month, year);
             int beginGrowing = DroughtMortality.SpinUpWeather[ecoregion].BeginGrowing;
             int endGrowing = DroughtMortality.SpinUpWeather[ecoregion].EndGrowing;

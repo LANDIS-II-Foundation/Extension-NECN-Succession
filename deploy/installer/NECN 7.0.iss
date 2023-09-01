@@ -7,6 +7,7 @@
 
 ; Build directory
 #define BuildDir "..\..\src\bin\Debug\netstandard2.0"
+#define LibraryDir "..\..\src\lib"
 
 ; LANDIS-II installation directories
 #define ExtDir "C:\Program Files\LANDIS-II-v7\extensions"
@@ -50,17 +51,17 @@ Source: {#BuildDir}\Landis.Extension.Succession.NECN-v7.pdb; DestDir: {#ExtDir};
 
 ; Requisite auxiliary libraries
 ; NB. These libraries are used by other extensions and thus are never uninstalled.
-Source: {#BuildDir}\Landis.Library.AgeOnlyCohorts-v3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.Cohorts-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.BiomassCohorts-v3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.LeafBiomassCohorts-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.Metadata-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.Parameters-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.Biomass-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.Climate-v4.3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.Succession-v8.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Landis.Library.InitialCommunity.LeafBiomass.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#BuildDir}\Mathnet.Numerics.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.AgeOnlyCohorts-v3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.Cohorts-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.BiomassCohorts-v3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.LeafBiomassCohorts-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.Metadata-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.Parameters-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.Biomass-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.Climate-v4.3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.Succession-v8.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.InitialCommunity.LeafBiomass.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\MathNet.Numerics.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 ; Source: {#BuildDir}\Landis.Library.InitialCommunity-vInputBiomass.pdb; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 
 ; LANDIS-II identifies the extension with the info in this .txt file
