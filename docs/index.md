@@ -39,7 +39,7 @@ The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundat
 
 LANDIS-II requires a global parameter file for your scenario, and then different parameter files for each extension.
 
-Landscape example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN7).
+Landscape example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN7-Landscape).
 
 Single-cell example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN7-SingleCell).
 
