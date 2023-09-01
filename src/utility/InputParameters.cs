@@ -13,8 +13,7 @@ namespace Landis.Extension.Succession.NECN
     /// <summary>
     /// The parameters for biomass succession.
     /// </summary>
-    public class InputParameters
-        : IInputParameters
+    public class InputParameters : IInputParameters
     {
         private int timestep;
         private SeedingAlgorithms seedAlg;
@@ -41,10 +40,24 @@ namespace Landis.Extension.Succession.NECN
         private string initialDeadSurfaceMapName;
         private string initialDeadSoilMapName;
 
+        //Drought normals -- optional variables for drought mortality
+        private string normalSWAMapName;
+        private string normalCWDMapName;
+        private string normalTempMapName;
+
+        //Maps to adjust PET based on topography
+        private string slopeMapName;
+        private string aspectMapName;
+
         private bool calibrateMode;
         private bool smokeModelOutputs;
-        private bool henne_watermode;
-        private WaterType wtype;
+        //private bool henne_watermode;
+        private bool writeSWA; //write soil water maps, for calculating normal SWA
+        private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
+        private bool writeTemp; //write temperature maps, for calculating normal CWD
+        private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
+        private WaterType wtype;       
+        private string communityInputMapNames;
         private double probEstablishAdjust;
         private double atmosNslope;
         private double atmosNintercept;
@@ -54,7 +67,7 @@ namespace Landis.Extension.Succession.NECN
         private double decayRateSOM1;
         private double decayRateSOM2;
         private double decayRateSOM3;
-        private double[] maximumShadeLAI;
+        //private double[] maximumShadeLAI;
         private double initMineralN;
         private double initFineFuels;
 
@@ -87,8 +100,35 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
         private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
         private double grassThresholdMultiplier; // W.Hotta 2020.07.07
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIShape; 
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIScale;
+        private Landis.Library.Parameters.Species.AuxParm<double> lightLAILocation;
 
-        private List<ISufficientLight> sufficientLight;
+        //private List<ISufficientLight> sufficientLight;
+
+        //Drought variables
+        private Landis.Library.Parameters.Species.AuxParm<double> intercept; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaAge; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaBiomass; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaTemp; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaSWAAnom; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaCWD; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaNormCWD; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaNormTemp; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> intxnCWD_Biomass; // optional
+
+        private Landis.Library.Parameters.Species.AuxParm<int> lagTemp; // optional
+        private Landis.Library.Parameters.Species.AuxParm<int> lagCWD; // optional
+        private Landis.Library.Parameters.Species.AuxParm<int> lagSWA; // optional
+
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> mortalityAboveThreshold; // optional
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdThreshold2; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> mortalityAboveThreshold2; // optional
+
+        //CWD Establishment
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdBegin;
+        private Landis.Library.Parameters.Species.AuxParm<int> cwdMax;
 
 
         //---------------------------------------------------------------------
@@ -197,7 +237,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         /// <summary>
         /// </summary>
-        public bool SoilWater_Henne
+        /*public bool SoilWater_Henne
         {
             get
             {
@@ -208,6 +248,88 @@ namespace Landis.Extension.Succession.NECN
                 henne_watermode = value;
             }
         }
+*/
+        public string CommunityInputMapNames
+        {
+            get
+            {
+                return communityInputMapNames;
+            }
+            set
+            {
+                communityInputMapNames = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should yearly rasters of mean summer SWA be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool OutputSoilWaterAvailable
+        {
+            get
+            {
+                return writeSWA;
+            }
+            set
+            {
+                writeSWA = value;
+            }
+        }
+
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of CWD be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool OutputClimateWaterDeficit
+        {
+            get
+            {
+                return writeCWD;
+            }
+            set
+            {
+                writeCWD = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of Temperature be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool OutputTemp
+        {
+            get
+            {
+                return writeTemp;
+            }
+            set
+            {
+                writeTemp = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of CWD be written? Used to generate input
+        /// variables for drought mortality
+        /// </summary>
+        public bool WriteSpeciesDroughtMaps
+        {
+            get
+            {
+                return writeSpeciesDroughtMaps;
+            }
+            set
+            {
+                writeSpeciesDroughtMaps = value;
+            }
+        }
+
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -313,13 +435,13 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
-        public double[] MaximumShadeLAI
-        {
-            get
-            {
-                return maximumShadeLAI;
-            }
-        }
+        //public double[] MaximumShadeLAI
+        //{
+        //    get
+        //    {
+        //        return maximumShadeLAI;
+        //    }
+        //}
 
  
         //---------------------------------------------------------------------
@@ -336,8 +458,32 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
         public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
 
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get { return lightLAIShape; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get { return lightLAIScale; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation { get { return lightLAILocation; } }
+        //Drought variables
 
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold { get { return mortalityAboveThreshold; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2 { get { return cwdThreshold2; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2 { get { return mortalityAboveThreshold2; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get { return betaSWAAnom; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get { return betaBiomass; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get { return betaCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get { return betaNormTemp; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
 
+        public Landis.Library.Parameters.Species.AuxParm<int> LagTemp { get { return lagTemp; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> LagCWD { get { return lagCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> LagSWA { get { return lagSWA; } }
+
+        //CWD Establishment
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDBegin { get { return cwdBegin; } }
+        public Landis.Library.Parameters.Species.AuxParm<int> CWDMax { get { return cwdMax; } }
         //---------------------------------------------------------------------
         /// <summary>
         /// Can the species resprout epicormically following a fire?
@@ -442,18 +588,18 @@ namespace Landis.Extension.Succession.NECN
 
         /// <summary>
         /// Definitions of sufficient light probabilities.
-        /// </summary>
-        public List<ISufficientLight> LightClassProbabilities
-        {
-            get {
-                return sufficientLight;
-            }
-            set 
-            {
-                Debug.Assert(sufficientLight.Count != 0);
-                sufficientLight = value;
-            }
-        }
+        ///// </summary>
+        //public List<ISufficientLight> LightClassProbabilities
+        //{
+        //    get {
+        //        return sufficientLight;
+        //    }
+        //    set 
+        //    {
+        //        Debug.Assert(sufficientLight.Count != 0);
+        //        sufficientLight = value;
+        //    }
+        //}
         //---------------------------------------------------------------------
         public double Latitude
         {
@@ -811,31 +957,115 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        public void SetMaximumShadeLAI(byte                   shadeClass,
-                                          //IEcoregion             ecoregion,
-                                          InputValue<double> newValue)
+
+        public string NormalSWAMapName
         {
-            Debug.Assert(1 <= shadeClass && shadeClass <= 5);
-            //Debug.Assert(ecoregion != null);
-            if (newValue != null) {
-                if (newValue.Actual < 0.0 || newValue.Actual > 20)
-                    throw new InputValueException(newValue.String,
-                                                  "{0} is not between 0 and 20", newValue.String);
+            get
+            {
+                return normalSWAMapName;
             }
-            maximumShadeLAI[shadeClass] = newValue;
-            //minRelativeBiomass[shadeClass][ecoregion] = newValue;
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                normalSWAMapName = value;
+            }
         }
         //---------------------------------------------------------------------
 
-        public void SetFunctionalType(ISpecies species, InputValue<int> newValue)
+
+        public string NormalCWDMapName
         {
-            Debug.Assert(species != null);
-            sppFunctionalType[species] = VerifyRange(newValue, 0, 100);
+            get
+            {
+                return normalCWDMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                normalCWDMapName = value;
+            }
         }
+
+        //---------------------------------------------------------------------
+
+
+        public string NormalTempMapName
+        {
+            get
+            {
+                return normalTempMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                normalTempMapName = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        public string SlopeMapName
+        {
+            get
+            {
+                return slopeMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                slopeMapName = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public string AspectMapName
+        {
+            get
+            {
+                return aspectMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim(null).Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                aspectMapName = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+
+        //public void SetMaximumShadeLAI(byte                   shadeClass,
+        //                                  //IEcoregion             ecoregion,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(1 <= shadeClass && shadeClass <= 5);
+        //    //Debug.Assert(ecoregion != null);
+        //    if (newValue != null) {
+        //        if (newValue.Actual < 0.0 || newValue.Actual > 20)
+        //            throw new InputValueException(newValue.String,
+        //                                          "{0} is not between 0 and 20", newValue.String);
+        //    }
+        //    maximumShadeLAI[shadeClass] = newValue;
+        //    //minRelativeBiomass[shadeClass][ecoregion] = newValue;
+        //}
+        //---------------------------------------------------------------------
+
+        //public void SetFunctionalType(ISpecies species, InputValue<int> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    sppFunctionalType[species] = VerifyRange(newValue, 0, 100, "FunctionalType");
+        //}
         public void SetFunctionalType(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            sppFunctionalType[species] = VerifyRange(newValue, 0, 100);
+            sppFunctionalType[species] = VerifyRange(newValue, 0, 100, "FunctionalType");
         }
         //---------------------------------------------------------------------
 
@@ -848,217 +1078,243 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        public void SetGDDmin(ISpecies           species,
-                                     InputValue<int> newValue)
-        {
-            Debug.Assert(species != null);
-            gddMin[species] = VerifyRange(newValue, 1, 4000);
-        }
+        //public void SetGDDmin(ISpecies           species,
+        //                             InputValue<int> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    gddMin[species] = VerifyRange(newValue, 1, 4000);
+        //}
         public void SetGDDmin(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
-            gddMin[species] = VerifyRange(newValue, 1, 4000);
+            gddMin[species] = VerifyRange(newValue, 1, 4000, "GDDMin");
         }
         //---------------------------------------------------------------------
 
-        public void SetGDDmax(ISpecies           species,
-                                     InputValue<int> newValue)
-        {
-            Debug.Assert(species != null);
-            gddMax[species] = VerifyRange(newValue, 500, 7000);
-        }
+        //public void SetGDDmax(ISpecies           species,
+        //                             InputValue<int> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    gddMax[species] = VerifyRange(newValue, 500, 7000);
+        //}
         public void SetGDDmax(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
-            gddMax[species] = VerifyRange(newValue, 500, 7000);
+            gddMax[species] = VerifyRange(newValue, 500, 7000, "GDDmax");
         }
         //---------------------------------------------------------------------
 
-        public void SetMinJanTemp(ISpecies           species,
-                                     InputValue<int> newValue)
-        {
-            Debug.Assert(species != null);
-            minJanTemp[species] = VerifyRange(newValue, -60, 20);
-        }
+        //public void SetMinJanTemp(ISpecies           species,
+        //                             InputValue<int> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    minJanTemp[species] = VerifyRange(newValue, -60, 20);
+        //}
         public void SetMinJanTemp(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
-            minJanTemp[species] = VerifyRange(newValue, -60, 20);
+            minJanTemp[species] = VerifyRange(newValue, -60, 20, "MinJanTemp");
         }
         //---------------------------------------------------------------------
 
-        public void SetMaxDrought(ISpecies           species,
-                                     InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            maxDrought[species] = VerifyRange(newValue, 0.0, 1.0);
-        }
+        //public void SetMaxDrought(ISpecies           species,
+        //                             InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    maxDrought[species] = VerifyRange(newValue, 0.0, 1.0);
+        //}
         public void SetMaxDrought(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            maxDrought[species] = VerifyRange(newValue, 0.0, 1.0);
+            maxDrought[species] = VerifyRange(newValue, 0.0, 1.0, "MaxDrought");
         }
         //---------------------------------------------------------------------
-
-        public void SetLeafLongevity(ISpecies           species,
-                                     InputValue<double> newValue)
+        //CWD Establishment
+        public void SetCWDBeginLimit(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            leafLongevity[species] = VerifyRange(newValue, 1.0, 10.0);
+            cwdBegin[species] = VerifyRange(newValue, 0, 5000, "CWDBegin");
         }
+         public void SetCWDMax(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdMax[species] = VerifyRange(newValue, 0, 5000, "CWDMax");
+        }
+
+        //---------------------------------------------------------------------
+
+        //public void SetLeafLongevity(ISpecies           species,
+        //                             InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    leafLongevity[species] = VerifyRange(newValue, 1.0, 10.0, "Leaf Longevity");
+        //}
         public void SetLeafLongevity(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            leafLongevity[species] = VerifyRange(newValue, 1.0, 10.0);
+            leafLongevity[species] = VerifyRange(newValue, 1.0, 10.0, "LeafLongevity");
         }
 
         //---------------------------------------------------------------------
 
-        public void SetLeafLignin(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            leafLignin[species] = VerifyRange(newValue, 0.0, 0.4);
-        }
+        //public void SetLeafLignin(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    leafLignin[species] = VerifyRange(newValue, 0.0, 0.4);
+        //}
         public void SetLeafLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            leafLignin[species] = VerifyRange(newValue, 0.0, 0.4);
+            leafLignin[species] = VerifyRange(newValue, 0.0, 0.4, "LeafLignin");
         }
         //---------------------------------------------------------------------
 
-        public void SetWoodLignin(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            woodLignin[species] = VerifyRange(newValue, 0.0, 0.4);
-        }
+        //public void SetWoodLignin(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    woodLignin[species] = VerifyRange(newValue, 0.0, 0.4);
+        //}
         public void SetWoodLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            woodLignin[species] = VerifyRange(newValue, 0.0, 0.4);
+            woodLignin[species] = VerifyRange(newValue, 0.0, 0.4, "WoodLignin");
         }
         //---------------------------------------------------------------------
 
-        public void SetCoarseRootLignin(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            coarseRootLignin[species] = VerifyRange(newValue, 0.0, 0.4);
-        }
+        //public void SetCoarseRootLignin(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    coarseRootLignin[species] = VerifyRange(newValue, 0.0, 0.4);
+        //}
         public void SetCoarseRootLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            coarseRootLignin[species] = VerifyRange(newValue, 0.0, 0.4);
+            coarseRootLignin[species] = VerifyRange(newValue, 0.0, 0.4, "CourseRootLignin");
         }
         //---------------------------------------------------------------------
 
-        public void SetFineRootLignin(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            fineRootLignin[species] = VerifyRange(newValue, 0.0, 0.4);
-        }
+        //public void SetFineRootLignin(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    fineRootLignin[species] = VerifyRange(newValue, 0.0, 0.4);
+        //}
         public void SetFineRootLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            fineRootLignin[species] = VerifyRange(newValue, 0.0, 0.4);
+            fineRootLignin[species] = VerifyRange(newValue, 0.0, 0.4, "FineRootLignin");
         }
         //---------------------------------------------------------------------
 
-        public void SetLeafCN(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            leafCN[species] = VerifyRange(newValue, 5.0, 100.0);
-        }
+        //public void SetLeafCN(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    leafCN[species] = VerifyRange(newValue, 5.0, 100.0);
+        //}
         public void SetLeafCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            leafCN[species] = VerifyRange(newValue, 5.0, 100.0);
+            leafCN[species] = VerifyRange(newValue, 5.0, 100.0, "LeafCN");
         }
         //---------------------------------------------------------------------
 
-        public void SetWoodCN(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            woodCN[species] = VerifyRange(newValue, 5.0, 900.0);
-        }
+        //public void SetWoodCN(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    woodCN[species] = VerifyRange(newValue, 5.0, 900.0);
+        //}
         public void SetWoodCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            woodCN[species] = VerifyRange(newValue, 5.0, 900.0);
+            woodCN[species] = VerifyRange(newValue, 5.0, 900.0, "WoodCN");
         }
         //---------------------------------------------------------------------
 
-        public void SetCoarseRootCN(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            coarseRootCN[species] = VerifyRange(newValue, 5.0, 500.0);
-        }
+        //public void SetCoarseRootCN(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    coarseRootCN[species] = VerifyRange(newValue, 5.0, 500.0);
+        //}
         public void SetCoarseRootCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            coarseRootCN[species] = VerifyRange(newValue, 5.0, 500.0);
+            coarseRootCN[species] = VerifyRange(newValue, 5.0, 500.0, "CourseRootCN");
         }
         //---------------------------------------------------------------------
 
-        public void SetFoliageLitterCN(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            foliageLitterCN[species] = VerifyRange(newValue, 5.0, 100.0);
-        }
+        //public void SetFoliageLitterCN(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    foliageLitterCN[species] = VerifyRange(newValue, 5.0, 100.0);
+        //}
         public void SetFoliageLitterCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            foliageLitterCN[species] = VerifyRange(newValue, 5.0, 100.0);
+            foliageLitterCN[species] = VerifyRange(newValue, 5.0, 100.0, "FoliarLitterCN");
         }
         //---------------------------------------------------------------------
 
-        public void SetFineRootCN(ISpecies           species,
-                                          InputValue<double> newValue)
-        {
-            Debug.Assert(species != null);
-            fineRootCN[species] = VerifyRange(newValue, 5.0, 100.0);
-        }
+        //public void SetFineRootCN(ISpecies           species,
+        //                                  InputValue<double> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    fineRootCN[species] = VerifyRange(newValue, 5.0, 100.0);
+        //}
         public void SetFineRootCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            fineRootCN[species] = VerifyRange(newValue, 5.0, 100.0);
+            fineRootCN[species] = VerifyRange(newValue, 5.0, 100.0, "FineRootCN");
         }
         //---------------------------------------------------------------------
 
-        public void SetMaxANPP(ISpecies species,
-                                          InputValue<int> newValue)
-        {
-            Debug.Assert(species != null);
-            maxANPP[species] = VerifyRange(newValue, 2, 1000);
-        }
+        //public void SetMaxANPP(ISpecies species,
+        //                                  InputValue<int> newValue)
+        //{
+        //    Debug.Assert(species != null);
+        //    maxANPP[species] = VerifyRange(newValue, 2, 1000);
+        //}
         public void SetMaxANPP(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
-            maxANPP[species] = VerifyRange(newValue, 2, 1000);
+            maxANPP[species] = VerifyRange(newValue, 2, 1000, "MaxANPP");
         }
         //---------------------------------------------------------------------
 
-        public void SetMaxBiomass(ISpecies species, InputValue<int> newValue)
-        {
-            Debug.Assert(species != null);
-            maxBiomass[species] = VerifyRange(newValue, 2, 300000);
-        }
         public void SetMaxBiomass(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            maxBiomass[species] = VerifyRange(newValue, 2, 300000);
+            maxBiomass[species] = VerifyRange(newValue, 2, 300000, "MaxBiomass");
         }
 
         public void SetGrowthLAI(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            growthLAI[species] = VerifyRange(newValue, 0.0, 1.0);
+            growthLAI[species] = VerifyRange(newValue, 0.0, 1.0, "GrowthLAI");
+        }
+
+        public void SetLightLAIShape(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            lightLAIShape[species] = VerifyRange(newValue, 0.0, 10.0, "LightLAIShape");
+        }
+
+        public void SetLightLAIScale(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            lightLAIScale[species] = VerifyRange(newValue, 0.0, 1000.0, "LightLAIScale"); //Scale parameter can be high for some shade-tolerant spp
+        }
+
+        public void SetLightLAILocation(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            lightLAILocation[species] = VerifyRange(newValue, 0.0, 1, "LightLAILocation");
         }
 
 
@@ -1066,63 +1322,161 @@ namespace Landis.Extension.Succession.NECN
 
         public void SetAtmosNslope(InputValue<double> newValue)
         {
-            atmosNslope = VerifyRange(newValue, -1.0, 2.0);
+            atmosNslope = VerifyRange(newValue, -1.0, 2.0, "AtmosNslope");
         }
         //---------------------------------------------------------------------
         public void SetAtmosNintercept(InputValue<double> newValue)
         {
-            atmosNintercept = VerifyRange(newValue, -1.0, 2.0);
+            atmosNintercept = VerifyRange(newValue, -1.0, 2.0, "AtmostNintercept");
         }
         //---------------------------------------------------------------------
         public void SetLatitude(InputValue<double> newValue)
         {
-            latitude = VerifyRange(newValue, 0.0, 70.0);
+            latitude = VerifyRange(newValue, 0.0, 70.0, "Latitude");
         }
         //---------------------------------------------------------------------
        
         public void SetDecayRateSurf(InputValue<double> newValue)
         {
-            decayRateSurf = VerifyRange(newValue, 0.0, 10.0);
+            decayRateSurf = VerifyRange(newValue, 0.0, 10.0, "DecayRateSurf");
         }
         //---------------------------------------------------------------------
         public void SetDecayRateSOM1(InputValue<double> newValue)
         {
-            decayRateSOM1 = VerifyRange(newValue, 0.0, 10.0);
+            decayRateSOM1 = VerifyRange(newValue, 0.0, 10.0, "DecayRateSOM1");
         }
         //---------------------------------------------------------------------
         public void SetDecayRateSOM2(InputValue<double> newValue)
         {
-            decayRateSOM2 = VerifyRange(newValue, 0.0, 1.0);
+            decayRateSOM2 = VerifyRange(newValue, 0.0, 1.0, "DecayRateSOM2");
         }
         //---------------------------------------------------------------------
         public void SetDecayRateSOM3(InputValue<double> newValue)
         {
-            decayRateSOM3 = VerifyRange(newValue, 0.0, 1.0);
+            decayRateSOM3 = VerifyRange(newValue, 0.0, 1.0, "DecayRateSOM3");
         }
         // --------------------------------------------------------------------
         // Multiplier to adjust judgement whether a tree-cohort is larger than grass layer
         // W.Hotta 2020.07.07
         public void SetGrassThresholdMultiplier(InputValue<double> newValue)
         {
-            grassThresholdMultiplier = VerifyRange(newValue, 0.0, 10.0);
+            grassThresholdMultiplier = VerifyRange(newValue, 0.0, 10.0, "GrassThresholdMultiplier");
         }
         //---------------------------------------------------------------------
         public void SetDenitrif(InputValue<double> newValue)
         {
-            denitrif = VerifyRange(newValue, 0.0, 1.0);
+            denitrif = VerifyRange(newValue, 0.0, 1.0, "Denitrification");
         }
 
         //---------------------------------------------------------------------
         public void SetInitMineralN(InputValue<double> newValue)
         {
-            initMineralN = VerifyRange(newValue, 0.0, 5000.0);
+            initMineralN = VerifyRange(newValue, 0.0, 5000.0, "InitialMineralN");
         }
         //---------------------------------------------------------------------
         public void SetInitFineFuels(InputValue<double> newValue)
         {
-            initFineFuels = VerifyRange(newValue, 0.0, 1.0);
+            initFineFuels = VerifyRange(newValue, 0.0, 1.0, "InitialFineFuel");
         }
         //---------------------------------------------------------------------
+
+        public void SetNlog_depend(ISpecies species, bool newValue)
+        {
+            Debug.Assert(species != null);
+            nlog_depend[species] = newValue;
+        }
+
+
+        public void SetCWDThreshold(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdThreshold[species] = VerifyRange(newValue, 0, 100000, "CWDThreshold");
+        }
+
+        public void SetMortalityAboveThreshold(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            mortalityAboveThreshold[species] = VerifyRange(newValue, 0, 1, "MortalityAboveGThreshold");
+        }
+
+        public void SetCWDThreshold2(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            cwdThreshold2[species] = VerifyRange(newValue, 0, 100000, "CWDThreshold2");
+        }
+
+        public void SetMortalityAboveThreshold2(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            mortalityAboveThreshold2[species] = VerifyRange(newValue, 0, 1, "MortalityAboveThreshold2");
+        }
+
+        public void SetIntercept(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            intercept[species] = VerifyRange(newValue, -10, 10, "DroughtIntercept");
+
+        }
+        public void SetBetaAge(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaAge[species] = VerifyRange(newValue, -10, 10, "DroughtBetaAge");
+        }
+        public void SetBetaTemp(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaTemp[species] = VerifyRange(newValue, -10, 10, "DroughtBetaTemp");
+        }
+        public void SetBetaSWAAnom(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaSWAAnom[species] = VerifyRange(newValue, -10, 10, "DroughtBetaSWAAnom");
+        }
+        public void SetBetaBiomass(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaBiomass[species] = VerifyRange(newValue, -10, 10, "DroughtBetaBiomass");
+        }
+
+        public void SetBetaCWD(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaCWD[species] = VerifyRange(newValue, -10, 10, "DroghtBetaCWD");
+        }
+
+        public void SetBetaNormCWD(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaNormCWD[species] = VerifyRange(newValue, -10, 10, "DroughtBetaNormCWD");
+        }
+        public void SetBetaNormTemp(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            betaNormTemp[species] = VerifyRange(newValue, -10, 10, "DroughtBetaNormTemp");
+        }
+
+        public void SetIntxnCWD_Biomass(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            intxnCWD_Biomass[species] = VerifyRange(newValue, -10, 10, "DroughtBetaIntxn");
+        }
+
+        public void SetLagTemp(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            lagTemp[species] = VerifyRange(newValue,  0, 10, "DroughtLagTemp");
+        }
+        public void SetLagCWD(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            lagCWD[species] = VerifyRange(newValue, 0, 10, "DroughtLagCWD");
+        }
+        public void SetLagSWA(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            lagSWA[species] = VerifyRange(newValue, 0, 10, "DroughtLagSWA");
+        }
+
 
         public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
         {
@@ -1154,50 +1508,71 @@ namespace Landis.Extension.Succession.NECN
             maxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             growthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            //CWD Establishment
+            cwdBegin = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            cwdMax = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            //Drought variables
+            cwdThreshold = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            mortalityAboveThreshold = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            cwdThreshold2 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            mortalityAboveThreshold2 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            intercept = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaAge = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaSWAAnom = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaBiomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaNormCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaNormTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            lagTemp = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            lagCWD = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            lagSWA = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
 
-            maximumShadeLAI = new double[6];
-            sufficientLight         = new List<ISufficientLight>();
+            lightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            lightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            lightLAILocation = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
 
         }
 
         //---------------------------------------------------------------------
 
-        public static double VerifyRange(InputValue<double> newValue, double minValue, double maxValue)
+        public static double VerifyRange(InputValue<double> newValue, double minValue, double maxValue, string parameterName)
         {
             if (newValue != null) {
                 if (newValue.Actual < minValue || newValue.Actual > maxValue)
                     throw new InputValueException(newValue.String,
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.String, minValue, maxValue);
+                                                  "{0} {1} is not between {2:0.0} and {3:0.0}",
+                                                  parameterName, newValue.String, minValue, maxValue);
             }
             return newValue.Actual;
         }
-        public static double VerifyRange(double newValue, double minValue, double maxValue)
+        public static double VerifyRange(double newValue, double minValue, double maxValue, string parameterName)
         {
                 if (newValue < minValue || newValue > maxValue)
                     throw new InputValueException(newValue.ToString(),
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.ToString(), minValue, maxValue);
+                                                  "{0} {1} is not between {2:0.0} and {3:0.0}",
+                                                  parameterName, newValue.ToString(), minValue, maxValue);
             return newValue;
         }
         //---------------------------------------------------------------------
 
-        public static int VerifyRange(InputValue<int> newValue, int minValue, int maxValue)
+        public static int VerifyRange(InputValue<int> newValue, int minValue, int maxValue, string parameterName)
         {
             if (newValue != null) {
                 if (newValue.Actual < minValue || newValue.Actual > maxValue)
                     throw new InputValueException(newValue.String,
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.String, minValue, maxValue);
+                                                  "{0} {1} is not between {2:0.0} and {3:0.0}",
+                                                  parameterName, newValue.String, minValue, maxValue);
             }
             return newValue.Actual;
         }
-        public static int VerifyRange(int newValue, int minValue, int maxValue)
+        public static int VerifyRange(int newValue, int minValue, int maxValue, string parameterName)
         {
                 if (newValue < minValue || newValue > maxValue)
                     throw new InputValueException(newValue.ToString(),
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.ToString(), minValue, maxValue);
+                                                  "{0} {1} is not between {2:0.0} and {3:0.0}",
+                                                  parameterName, newValue.ToString(), minValue, maxValue);
             return newValue;
         }
 

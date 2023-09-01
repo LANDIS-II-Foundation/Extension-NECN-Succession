@@ -36,11 +36,36 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> FineRootCN;
         public static Landis.Library.Parameters.Species.AuxParm<int> Max_ANPP;
         public static Landis.Library.Parameters.Species.AuxParm<int> Max_Biomass;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation;
 
         // Optional parameters:
         public static Landis.Library.Parameters.Species.AuxParm<bool> Grass;
-        public static Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend; // W.Hotta (2021.08.01)
+        public static Landis.Library.Parameters.Species.AuxParm<bool> NurseLog_depend; // W.Hotta (2021.08.01)
         public static Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI;
+
+        //Drought mortality variables
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold;
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold2;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2;
+        public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;
+
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<int> LagSWA;
+
+        //CWD Establishment
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDBegin;
+        public static Landis.Library.Parameters.Species.AuxParm<int> CWDMax;
 
 
         //---------------------------------------------------------------------
@@ -66,8 +91,16 @@ namespace Landis.Extension.Succession.NECN
             Max_ANPP            = parameters.MaxANPP;
             Max_Biomass         = parameters.MaxBiomass;
             Grass               = parameters.Grass;
-            Nlog_depend         = parameters.Nlog_depend; // W.Hotta (2021.08.01)
+            NurseLog_depend         = parameters.Nlog_depend; // W.Hotta (2021.08.01)
             GrowthLAI           = parameters.GrowthLAI;
+            //CWD Establishment
+            CWDBegin            = parameters.CWDBegin;
+            CWDMax              = parameters.CWDMax;
+
+            LightLAIShape        = parameters.LightLAIShape;
+            LightLAIScale       = parameters.LightLAIScale;
+            LightLAILocation = parameters.LightLAILocation;
+
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {

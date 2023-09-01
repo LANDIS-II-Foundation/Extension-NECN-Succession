@@ -456,5 +456,125 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
+
+        public static void ReadNormalSWAMap(string path)
+        {
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    double mapValue = pixel.MapCode.Value;
+
+                    if (site.IsActive)
+                    {
+                        if (mapValue < 0.0 || mapValue > 100)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "Normal SWA {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0, 100, site.Location.Row, site.Location.Column);
+                        SiteVars.NormalSWA[site] = mapValue; 
+                    }
+                }
+            }
+        }
+
+
+        public static void ReadNormalCWDMap(string path)
+        {
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    double mapValue = pixel.MapCode.Value;
+
+                    if (site.IsActive)
+                    {
+                        if (mapValue < 0 || mapValue > 5000.0)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "Normal CWD {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0, 5000, site.Location.Row, site.Location.Column);
+                        SiteVars.NormalCWD[site] = mapValue; 
+                    }
+                }
+            }
+        }
+        public static void ReadNormalTempMap(string path)
+        {
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    double mapValue = pixel.MapCode.Value;
+
+                    if (site.IsActive)
+                    {
+                        if (mapValue < 100 || mapValue > 100)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "Normal Temp {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, -100, 100, site.Location.Row, site.Location.Column);
+                        SiteVars.NormalTemp[site] = mapValue;
+                    }
+                }
+            }
+        }
+
+        public static void ReadSlopeMap(string path)
+        {
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    double mapValue = pixel.MapCode.Value;
+
+                    if (site.IsActive)
+                    {
+                        if (mapValue < -90.0 || mapValue > 90.0)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "Slope {0} is not between {1:0.0} and {2:0.0} degrees. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, -90, 90, site.Location.Row, site.Location.Column);
+                        SiteVars.Slope[site] = mapValue; 
+                    }
+                }
+            }
+        }
+
+        public static void ReadAspectMap(string path)
+        {
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    double mapValue = pixel.MapCode.Value;
+
+                    if (site.IsActive)
+                    {
+                        if (mapValue < 0 || mapValue > 360)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "Aspect {0} is not between {1:0.0} and {2:0.0} degrees. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0, 360, site.Location.Row, site.Location.Column);
+                        SiteVars.Aspect[site] = mapValue; 
+                    }
+                }
+            }
+        }
     }
 }
