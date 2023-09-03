@@ -20,8 +20,11 @@ namespace Landis.Extension.Succession.NECN
         double MaxLAI{get;set;}
         double MinLAI { get; set; }
         //double GrowthLAI { get; set; }
+        double MoistureCurve1 { get; set; }
         double MoistureCurve2 {get;set;}
         double MoistureCurve3 { get; set; }
+        double MoistureCurve4 { get; set; }
+        double MinSoilDrain { get; set; }
         double MonthlyWoodMortality{get;set;}
         double WoodDecayRate{get;set;}
         double LongevityMortalityShape{get;set;}
@@ -42,8 +45,11 @@ namespace Landis.Extension.Succession.NECN
         private double btoLAI;
         private double kLAI;
         private double maxLAI;
+        private double moisturecurve1;
         private double moisturecurve2;
         private double moisturecurve3;
+        private double moisturecurve4;
+        private double minSoilDrain;
         private double monthlyWoodMortality;
         private double woodDecayRate;
         private double mortCurveShape;
@@ -103,9 +109,9 @@ namespace Landis.Extension.Succession.NECN
                 return tempcurve3;
             }
             set {
-                    if (value  < 0.0 || value  > 5.0)
-                        throw new InputValueException(value.ToString(),
-                            "Decay rate must be between 0 and 5.0");
+                    //if (value  < 0.0 || value  > 5.0)
+                    //    throw new InputValueException(value.ToString(),
+                    //        "Decay rate must be between 0 and 5.0");
                     tempcurve3 = value;
             }
         }
@@ -121,9 +127,9 @@ namespace Landis.Extension.Succession.NECN
                 return tempcurve4;
             }
             set {
-                    if (value  < 0.0 || value  > 10.0)
-                        throw new InputValueException(value.ToString(),
-                            "Decay rate must be between 0 and 10.0");
+                    //if (value  < 0.0 || value  > 10.0)
+                    //    throw new InputValueException(value.ToString(),
+                    //        "Decay rate must be between 0 and 10.0");
                     tempcurve4 = value;
             }
         }
@@ -215,7 +221,20 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-      
+        //---------------------------------------------------------------------
+        // 'PPRPTS(2)': The effect of water content on the intercept, allows the user to 
+        //              increase the value of the intercept and thereby increase the slope of the line. MoistureCurve has replaced PPRPTS naming convention in NECN
+        public double MoistureCurve1
+        {
+            get
+            {
+                return moisturecurve1;
+            }
+            set
+            {
+                moisturecurve1 = value;
+            }
+        }
 
         //---------------------------------------------------------------------
         // 'PPRPTS(2)': The effect of water content on the intercept, allows the user to 
@@ -230,7 +249,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
-        // 'PPRPTS(3)': The lowest ratio of available water to PET at which there is no restriction on production.
+        // 
         public double MoistureCurve3
         {
             get {
@@ -238,6 +257,32 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 moisturecurve3 = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        // 
+        public double MoistureCurve4
+        {
+            get
+            {
+                return moisturecurve4;
+            }
+            set
+            {
+                moisturecurve4 = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        // 
+        public double MinSoilDrain
+        {
+            get
+            {
+                return minSoilDrain;
+            }
+            set
+            {
+                minSoilDrain = value;
             }
         }
         //---------------------------------------------------------------------

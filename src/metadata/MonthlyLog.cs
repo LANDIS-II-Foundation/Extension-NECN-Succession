@@ -29,6 +29,15 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Air Temperature", Format = "0.0")]
         public double AirTemp { get; set; }
 
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Potential Evapotranspiration", Format = "0.0")]
+        public double PET { get; set; }
+
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Climatic Water Deficit", Format = "0.0")]
+        public double avgCWD { get; set; }
+
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Actual Evapotranspiration", Format = "0.0")]
+        public double avgAET { get; set; }
+
         [DataFieldAttribute(Unit = "g_C_m2_month1", Desc = "Total NPP C", Format = "0.00")]
         public double AvgTotalNPP_C { get; set; }
 
@@ -47,7 +56,10 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "N Leaching", Format = "0.00")]
         public double StreamN { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Soil Water Content", Format = "0.00")]
+        [DataFieldAttribute(Unit = FieldUnits.Percentage, Desc = "Volumetric Soil Water Content", Format = "0.00")]
         public double SoilWaterContent { get; set; }
+
+        [DataFieldAttribute(Unit = "unitless", Desc = "Anaerobic Effect", Format = "0.00")]
+        public double AnaerobicEffect { get; set; }
     }
 }

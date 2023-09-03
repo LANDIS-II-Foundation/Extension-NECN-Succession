@@ -1,0 +1,24 @@
+2023-05-15 13:22:48,779 - LANDIS-II 7.0 (7)
+2023-05-15 13:22:48,794 - 
+2023-05-15 13:22:48,890 - Loading scenario from file "scenario-single-cell.txt" ...
+2023-05-15 13:22:48,976 - Initialized random number generator with seed = 1,800,071,794
+2023-05-15 13:22:48,977 - Loading species data from file "species_LTB.txt" ...
+2023-05-15 13:22:49,008 - Loading ecoregions from file "./ecoregions.txt" ...
+2023-05-15 13:22:49,033 - Initializing landscape from ecoregions map "./single3.tif" ...
+2023-05-15 13:22:49,052 - Cell length = 100 m, cell area = 1 ha
+2023-05-15 13:22:49,054 - Map dimensions: 1 row by 1 column = 1 cell
+2023-05-15 13:22:49,065 - Sites: 1 active (100.0%), 0 inactive (0.0%)
+2023-05-15 13:22:49,077 - Loading NECN Succession extension ...
+2023-05-15 13:22:49,131 -    Begin parsing NECN SPECIES table.
+2023-05-15 13:22:49,173 - Internal error occurred within the program:
+2023-05-15 13:22:49,173 -   Column 'CWDBegin' does not belong to table CSV.
+2023-05-15 13:22:49,173 - 
+2023-05-15 13:22:49,174 - Stack trace:
+2023-05-15 13:22:49,251 -    at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at Landis.Extension.Succession.NECN.InputParametersParser.Parse() in C:\Users\Sam\Documents\Research\Extension-NECN-Succession\src\utility\InputParameterParser.cs:line 495
+   at Landis.Utilities.TextParser`1.Parse(LineReader reader)
+   at Landis.Data.Load[T](String path, ITextParser`1 parser)
+   at Landis.Extension.Succession.NECN.PlugIn.LoadParameters(String dataFile, ICore mCore) in C:\Users\Sam\Documents\Research\Extension-NECN-Succession\src\PlugIn.cs:line 69
+   at Landis.Model.Run(String scenarioPath, IUserInterface ui)
+   at Landis.App.Main(String[] args) in D:\CGAProjects\Rob\LANDIS_FINAL\GitHubRepo\Core-Model-v7\Tool-Console\src\App.cs:line 99
