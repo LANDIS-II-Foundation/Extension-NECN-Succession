@@ -1,7 +1,0 @@
-LandisData	"Ecoregions"		
-
->> 	Map Code		
->>Active	Name	Description
->>--------------------------------------------------------			
-no	0	inactiv		"water, agriculture, urban"
-yes	1	eco1		"active"

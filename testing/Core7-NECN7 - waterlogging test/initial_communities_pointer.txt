@@ -1,2 +1,0 @@
-LandisData	"Initial Communities"
-CSV_File "init_comm.csv"
