@@ -44,7 +44,7 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Coarse litter reduction due to fire must be between 0 and 1.0");
+                    throw new InputValueException(value.ToString(), "Coarse litter reduction due to harvest must be between 0 and 1.0");
                 coarseLitterReduction = value;
             }
 
@@ -58,7 +58,7 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Fine litter reduction due to fire must be between 0 and 1.0");
+                    throw new InputValueException(value.ToString(), "Fine litter reduction due to harvest must be between 0 and 1.0");
                 fineLitterReduction = value;
             }
 
@@ -72,7 +72,7 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
+                    throw new InputValueException(value.ToString(), "Cohort wood reduction due to harvest must be between 0 and 1.0");
                 cohortWoodReduction = value;
             }
 
@@ -86,7 +86,7 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Cohort wood reduction due to fire must be between 0 and 1.0");
+                    throw new InputValueException(value.ToString(), "Cohort wood reduction due to harvest must be between 0 and 1.0");
                 cohortLeafReduction = value;
             }
 
@@ -100,7 +100,7 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Soil Organic Matter (SOM) reduction due to fire must be between 0 and 1.0");
+                    throw new InputValueException(value.ToString(), "Soil Organic Matter (SOM) reduction due to harvest must be between 0 and 1.0");
                 somReduction = value;
             }
 
@@ -125,8 +125,13 @@ namespace Landis.Extension.Succession.NECN
         {
 
             double woodRemoval = 1.0;  // Default is 100% removal
+            bool prescription_found = false;
+
             if (SiteVars.HarvestPrescriptionName == null)
+            {
+                PlugIn.ModelCore.UI.WriteLine("   Harvest Prescriptions not found.  Check to see if Harvest is operationg correctly.");
                 return woodRemoval;
+            }
 
             foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
@@ -135,26 +140,42 @@ namespace Landis.Extension.Succession.NECN
                 if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
                     woodRemoval = prescription.CohortWoodReduction;
+                    prescription_found = true;
                 }
             }
 
-            return woodRemoval;
+            if(!prescription_found)
+                PlugIn.ModelCore.UI.WriteLine("   Harvest Prescription {0] Not Found in NECN Harvest table, Site={1}.", SiteVars.HarvestPrescriptionName[site]);
+
+                return woodRemoval;
 
         }
 
         public static double GetCohortLeafRemoval(ActiveSite site)
         {
             double leafRemoval = 0.0;  // Default is 0% removal
+            bool prescription_found = false;
+
             if (SiteVars.HarvestPrescriptionName == null)
+            {
+                PlugIn.ModelCore.UI.WriteLine("   Harvest Prescriptions not found.  Check to see if Harvest is operationg correctly.");
                 return leafRemoval;
+            }
 
             foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
                 if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
                 {
                     leafRemoval = prescription.CohortLeafReduction;
+                    prescription_found = true;
+                    return leafRemoval;
+
                 }
             }
+
+            if (!prescription_found)
+                PlugIn.ModelCore.UI.WriteLine("   Harvest Prescription {0] Not Found in NECN Harvest table, Site={1}.", SiteVars.HarvestPrescriptionName[site]);
+
 
             return leafRemoval;
 

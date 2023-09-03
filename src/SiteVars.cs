@@ -331,6 +331,8 @@ namespace Landis.Extension.Succession.NECN
         {
 
             // Reset these accumulators to zero:
+            
+
             SiteVars.DryDays[site] = 0;
 
             SiteVars.CohortLeafN[site] = 0.0;

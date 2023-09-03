@@ -166,7 +166,10 @@ namespace Landis.Extension.Succession.NECN
         {
 
             if (PlugIn.ModelCore.CurrentTime > 0)
+            {
+                // Disturbed.SiteValues = false; //Unnecessary; this is in the base succession library.
                 SiteVars.InitializeDisturbances();
+            }
 
             ClimateRegionData.AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
             SpeciesByPlant = new int[ModelCore.Species.Count];
