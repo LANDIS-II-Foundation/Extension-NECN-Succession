@@ -58,6 +58,6 @@ HarvestReductionParameters
 >>	Name		WoodLitter	Litter	SOM		CohortWood	CohortLeaf
 >>			Reduct		Reduct	Reduction	Removal		Removal
 	MaxAgeClearcut	0.5		0.15	0.2		0.8		0.15
-	PatchCutting	1.0		1.0	1.0		1.0		1.0
+	PatchCutting	0.75		1.0	1.0		1.0		1.0
 
 

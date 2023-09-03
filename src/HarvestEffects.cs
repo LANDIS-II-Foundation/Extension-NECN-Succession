@@ -187,7 +187,7 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public static void ReduceLayers(string prescriptionName, Site site)
         {
-            //PlugIn.ModelCore.UI.WriteLine("   Calculating harvest induced layer reductions...");
+            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Calculating harvest induced layer reductions...");
 
             double litterLossMultiplier = 0.0;
             double woodLossMultiplier = 0.0;
@@ -208,9 +208,10 @@ namespace Landis.Extension.Succession.NECN
             if (!found)
             {
                 PlugIn.ModelCore.UI.WriteLine("   Prescription {0} not found in the NECN Harvest Effects Table", prescriptionName);
-                return;
+                throw new System.ApplicationException("Error: Harvest Prescription Names NOT FOUND.");
+                //return;
             }
-            //PlugIn.ModelCore.UI.WriteLine("   LitterLoss={0:0.00}, woodLoss={1:0.00}, SOM_loss={2:0.00}, SITE={3}", litterLossMultiplier, woodLossMultiplier, som_Multiplier, site);
+            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   LitterLoss={0:0.00}, woodLoss={1:0.00}, SOM_loss={2:0.00}, SITE={3}", litterLossMultiplier, woodLossMultiplier, som_Multiplier, site);
 
             // Structural litter
 
@@ -237,9 +238,13 @@ namespace Landis.Extension.Succession.NECN
             // Surface dead wood
             carbonLoss   = Math.Round(SiteVars.SurfaceDeadWood[site].Carbon * woodLossMultiplier, 2);
             nitrogenLoss = Math.Round(SiteVars.SurfaceDeadWood[site].Nitrogen * woodLossMultiplier, 2);
+            
+            double tempSurfaceWood = SiteVars.SurfaceDeadWood[site].Carbon;
 
             SiteVars.SurfaceDeadWood[site].Carbon   -= carbonLoss;
             SiteVars.SourceSink[site].Carbon        += carbonLoss;
+
+            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   SurfaceDeadCarbon BEFORE Harvest={0:0.0}, AFTER Harvest={1:0.0}", tempSurfaceWood, SiteVars.SurfaceDeadWood[site].Carbon);
 
             SiteVars.SurfaceDeadWood[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen        += nitrogenLoss;

@@ -7,6 +7,7 @@ using Landis.Library.Succession;
 using Landis.Library.LeafBiomassCohorts;  
 using System.Collections.Generic;
 using System;
+using System.Data;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -119,6 +120,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyAnaerobicEffect;//SF added 2023-4-11
         public static ISiteVar<double[]> MonthlyClimaticWaterDeficit;//SF added 2023-6-27
         public static ISiteVar<double[]> MonthlyActualEvapotranspiration;//SF added 2023-6-27
+        public static ISiteVar<bool> HarvestDisturbed;
+        public static ISiteVar<bool> FireDisturbed;
 
         //Drought params
         //drought_todo
@@ -149,9 +152,11 @@ namespace Landis.Extension.Succession.NECN
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
-            
+            HarvestDisturbed = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
+            FireDisturbed = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
+
             // Dead biomass:
-            surfaceDeadWood     = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            surfaceDeadWood = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
             soilDeadWood        = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
             
             surfaceStructural   = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
@@ -244,26 +249,20 @@ namespace Landis.Extension.Succession.NECN
             HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
-            //if drought, then create these site vars
-            //if (DroughtMortality.UseDrought)
-           // {
-                droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-                swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
-                temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
-                cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
-            
-                normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-                normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-                normalTemp = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+            temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+            cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
 
-                swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
-                tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
-                cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+            normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            normalTemp = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
-                speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>(); 
+            swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+            tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+            cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
 
-
-            //}
+            speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
 
             slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -337,12 +336,13 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Initializes for disturbances.
         /// </summary>
-        public static void InitializeDisturbances()
+        public static void ResetDisturbances()
         {
             FireSeverity        = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-            //HarvestTime = PlugIn.ModelCore.GetSiteVar<int>("Harvest.TimeOfLastEvent");
-
+            SiteVars.HarvestDisturbed.SiteValues = false;
+            SiteVars.FireDisturbed.SiteValues = false;
+            
             //if(HarvestPrescriptionName == null)
             //    throw new System.ApplicationException("TEST Error: Harvest Prescription Names NOT Initialized.");
         }
@@ -384,9 +384,6 @@ namespace Landis.Extension.Succession.NECN
             int totalBiomass = Library.LeafBiomassCohorts.Cohorts.ComputeBiomass(siteCohorts, out youngBiomass);
             double B_ACT = totalBiomass - youngBiomass;
 
-            //int lastMortality = SiteVars.PrevYearMortality[site];
-            //B_ACT = System.Math.Min(ClimateRegionData.B_MAX[ecoregion] - lastMortality, B_ACT);
-
             return B_ACT;
         }
         
@@ -396,7 +393,7 @@ namespace Landis.Extension.Succession.NECN
 
             // Reset these accumulators to zero:
             
-
+            
             SiteVars.DryDays[site] = 0;
 
             SiteVars.CohortLeafN[site] = 0.0;
@@ -453,8 +450,6 @@ namespace Landis.Extension.Succession.NECN
             {
                 if (PlugIn.ModelCore.CurrentTime >= 11)
                 {
-                    //PlugIn.ModelCore.UI.WriteLine("number of elements in
-                    //10 = {0}", SiteVars.SoilWater10[site].Count);
                     SiteVars.SoilWater10[site].RemoveAt(0);
                     SiteVars.Temp10[site].RemoveAt(0);
                     SiteVars.CWD10[site].RemoveAt(0);

@@ -191,8 +191,8 @@ namespace Landis.Extension.Succession.NECN
 
             if (PlugIn.ModelCore.CurrentTime > 0)
             {
-                // Disturbed.SiteValues = false; //Unnecessary; this is in the base succession library.
-                SiteVars.InitializeDisturbances();
+                Disturbed.ActiveSiteValues = false;
+                SiteVars.ResetDisturbances();
             }
 
             ClimateRegionData.AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
@@ -258,7 +258,7 @@ namespace Landis.Extension.Succession.NECN
         // This method does not trigger reproduction
         public void CohortPartialMortality(object sender, Landis.Library.BiomassCohorts.PartialDeathEventArgs eventArgs)
         {
-            //PlugIn.ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
+            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
 
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
             ActiveSite site = eventArgs.Site;
@@ -272,19 +272,21 @@ namespace Landis.Extension.Succession.NECN
             if (disturbanceType.IsMemberOf("disturbance:harvest"))
             {
                 SiteVars.HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-                if (!Disturbed[site]) // this is the first cohort killed/damaged
+                if (!SiteVars.HarvestDisturbed[site]) // this is the first cohort killed/damaged
                 {
+                    //PlugIn.ModelCore.UI.WriteLine("   Begin harvest layer reductions...");
                     HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
                 }
                 woodInput -= woodInput * (float)HarvestEffects.GetCohortWoodRemoval(site);
                 foliarInput -= foliarInput * (float)HarvestEffects.GetCohortLeafRemoval(site);
+                SiteVars.HarvestDisturbed[site] = true;
             }
             if (disturbanceType.IsMemberOf("disturbance:fire"))
             {
 
                 SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
 
-                if (!Disturbed[site]) // this is the first cohort killed/damaged
+                if (!SiteVars.FireDisturbed[site]) // this is the first cohort killed/damaged
                 {
                     SiteVars.SmolderConsumption[site] = 0.0;
                     SiteVars.FlamingConsumption[site] = 0.0;
@@ -300,6 +302,8 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.FlamingConsumption[site] += live_foliarFireConsumption;
                 woodInput -= (float)live_woodFireConsumption;
                 foliarInput -= (float)live_foliarFireConsumption;
+
+                SiteVars.FireDisturbed[site] = true;
             }
             if (disturbanceType.IsMemberOf("disturbance:browse"))
             {
@@ -316,8 +320,8 @@ namespace Landis.Extension.Succession.NECN
                 if (foliarInput > 0)
                 {
                     SiteVars.LitterfallC[site] += foliarInput * 0.47;
-                    //most carbon is respired
-                    foliarInput = foliarInput * (float)0.1;
+                    foliarInput = foliarInput * (float) 0.1;                     //most carbon is respired
+
 
                     //PlugIn.ModelCore.UI.WriteLine("waste input is {0}, CN ratio of waste is {1}", foliarInput, 50);
 
@@ -350,7 +354,7 @@ namespace Landis.Extension.Succession.NECN
                     //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
                     //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
 
-                    Disturbed[site] = false; //SF should browse count as a "disturbance" for this purpose?
+                    Disturbed[site] = false; 
 
                     return;
                 }
@@ -388,6 +392,7 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("Cohort Total Mortality: {0}", eventArgs.Site);
 
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
+
             ActiveSite site = eventArgs.Site;
 
             ICohort cohort = (Landis.Library.LeafBiomassCohorts.ICohort)eventArgs.Cohort;
@@ -403,7 +408,7 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
                     Landis.Library.Succession.Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
 
-                    if (!Disturbed[site])  // the first cohort killed/damaged
+                    if (!SiteVars.FireDisturbed[site])  // the first cohort killed/damaged
                     {
                         SiteVars.SmolderConsumption[site] = 0.0;
                         SiteVars.FlamingConsumption[site] = 0.0;
@@ -421,13 +426,15 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SourceSink[site].Carbon += foliarFireConsumption * 0.47;
                     woodInput -= woodFireConsumption;
                     foliarInput -= foliarFireConsumption;
+                    SiteVars.FireDisturbed[site] = true;
+
                 }
                 else
                 {
                     if (disturbanceType.IsMemberOf("disturbance:harvest"))
                     {
                         SiteVars.HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-                        if (!Disturbed[site])  // the first cohort killed/damaged
+                        if (!SiteVars.HarvestDisturbed[site])  // the first cohort killed/damaged
                         {
                             HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
                         }
@@ -437,6 +444,7 @@ namespace Landis.Extension.Succession.NECN
                         SiteVars.SourceSink[site].Carbon += foliarLoss * 0.47;
                         woodInput -= woodLoss;
                         foliarInput -= foliarLoss;
+                        SiteVars.HarvestDisturbed[site] = true;
                     }
 
                     // If not fire, check for resprouting:

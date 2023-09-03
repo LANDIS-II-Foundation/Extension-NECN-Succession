@@ -1192,3 +1192,23 @@ testing/Core7-NECN7-SingleCell-BiomassHarvest/Landis-log.txt
 testing/Core7-NECN7-SingleCell-BiomassHarvest/Climate-spinup-input-log.csv
 testing/Core7-NECN7-SingleCell-BiomassHarvest/Climate-annual-log.csv
 testing/Core7-NECN7-SingleCell-BiomassHarvest/Climate-future-input-log.csv
+testing/Core7-NECN7-SingleCell-BiomassHarvest/Metadata/Base Wind/Base Wind.xml
+testing/Core7-NECN7-SingleCell-BiomassHarvest/Metadata/Base Wind/WindLog_Metadata.xml
+testing/Core7-NECN7-SingleCell-BiomassHarvest/Metadata/Base Wind/WindSummaryLog_Metadata.xml
+testing/Core7-NECN7-SingleCell-BiomassHarvest/wind-events-log.csv
+testing/Core7-NECN7-SingleCell-BiomassHarvest/wind-summary-log.csv
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-1.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-10.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-11.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-12.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-13.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-14.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-15.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-2.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-3.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-4.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-5.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-6.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-7.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-8.img
+testing/Core7-NECN7-SingleCell-BiomassHarvest/outputs/wind/severity-9.img

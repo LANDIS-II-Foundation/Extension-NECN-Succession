@@ -3,4 +3,4 @@ LandisData  Ecoregions
 >>         Map
 >> Active  Code  Name   Description
 >> ------  ----  -----  -----------
-       yes    3   eco3   "Testing soils"
+       yes    3   eco3   "Arbitrary Name"
