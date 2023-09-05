@@ -1,7 +1,0 @@
-LandisData	"Initial Communities"
->> SE Landis IC input of single species,single cohort TM
-
-MapCode 10 << set up single cell, single spp run for calibration
-PinuTaed 50 (100)
->>QuerAlba 1 (100)
->>AcerRubr 1 (100)
