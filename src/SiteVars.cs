@@ -120,8 +120,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyAnaerobicEffect;//SF added 2023-4-11
         public static ISiteVar<double[]> MonthlyClimaticWaterDeficit;//SF added 2023-6-27
         public static ISiteVar<double[]> MonthlyActualEvapotranspiration;//SF added 2023-6-27
-        public static ISiteVar<bool> HarvestDisturbed;
-        public static ISiteVar<bool> FireDisturbed;
+        public static ISiteVar<int> HarvestDisturbedYear;
+        public static ISiteVar<int> FireDisturbedYear;
 
         //Drought params
         //drought_todo
@@ -152,8 +152,8 @@ namespace Landis.Extension.Succession.NECN
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
-            HarvestDisturbed = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
-            FireDisturbed = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
+            HarvestDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
+            FireDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
 
             // Dead biomass:
             surfaceDeadWood = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
@@ -340,8 +340,8 @@ namespace Landis.Extension.Succession.NECN
         {
             FireSeverity        = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-            SiteVars.HarvestDisturbed.SiteValues = false;
-            SiteVars.FireDisturbed.SiteValues = false;
+            //SiteVars.HarvestDisturbedYear.SiteValues = false;
+            //SiteVars.FireDisturbedYear.SiteValues = false;
             
             //if(HarvestPrescriptionName == null)
             //    throw new System.ApplicationException("TEST Error: Harvest Prescription Names NOT Initialized.");
