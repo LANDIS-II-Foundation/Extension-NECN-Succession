@@ -4,7 +4,9 @@ The NECN Succession extension was designed to provide total ecosystem accounting
 
 # Features
 
-- [x] New with v7 - integrated drought mortality, improved soil water algorithms, new parameterization for available light and regeneration
+- [x] New with v7
+  - [ ] integrated drought mortality
+  - [ ] improved soil water algorithms, new parameterization for available light and regeneration
 - [x] New with v6.7 - simulates grass species and their interactions with regeneration!
 - [x] Estimate Net Ecosystem Exchange.
 - [x] Estimate Actual and Potential Evapotranspiration, Climatic Water Deficit, and Available Soil Water.
