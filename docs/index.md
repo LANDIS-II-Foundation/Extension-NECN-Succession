@@ -2,12 +2,19 @@
 
 The NECN Succession extension was designed to provide total ecosystem accounting of Carbon and Nitrogen and to allow species to respond dynamically to a changing climate via establishment and growth.  NECN calculates how cohorts grow, reproduce, age, and die.  Dead biomass is tracked over time, divided into four pools:  surface wood, soil wood (dead coarse roots), surface litter (dead leaves), and soil litter (dead fine roots).  In addition, three principle soil pools:  fast (soil organic matter (SOM) 1), slow (SOM2), and passive (SOM3) are simulated, following the Century soil model.
 
-# Features
+# Recent Additions
 
 - [x] New with v7
-  - [ ] integrated drought mortality
-  - [ ] improved soil water algorithms, new parameterization for available light and regeneration
-- [x] New with v6.7 - simulates grass species and their interactions with regeneration!
+  - [ ] Integrated drought mortality via an optional table that defines statistical relationships
+  - [ ] Updated soil water algorithms that improves low moisture estimates
+  - [ ] New continuous function for estimating regeneration, given light, that requires fewer parameters
+  - [ ] Optionally capacity to modify PET according to topography
+  - [ ] Establishment can now optionally be reduced according to climatic water deficit and/or soil drainage
+  - [ ] Growth as a function of soil water now has an optional functional form that is more flexible, better able to account for wet soils
+- [x] New with v6.7 - simulates grass species and their interactions with regeneration.
+
+# Standard Features
+
 - [x] Estimate Net Ecosystem Exchange.
 - [x] Estimate Actual and Potential Evapotranspiration, Climatic Water Deficit, and Available Soil Water.
 - [x] Estimate smoke emissions from wildfires and prescribed fires.
