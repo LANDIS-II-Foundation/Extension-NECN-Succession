@@ -211,8 +211,8 @@ namespace Landis.Extension.Succession.NECN
 
                 soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent);
                 //if (OtherData.CalibrateMode)
-                    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
-                        soilEvaporation, bareSoilEvap, canopyIntercept);
+                //    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
+                //        soilEvaporation, bareSoilEvap, canopyIntercept);
 
                 //Subtract soil evaporation from soil water content
                 soilWaterContent = Math.Max(soilWaterContent - soilEvaporation, 0.0); // Do not allow to go negative
@@ -225,8 +225,8 @@ namespace Landis.Extension.Succession.NECN
             availableWaterMax = Math.Max(soilWaterContent - waterEmpty, 0.0);
             waterContentMax = soilWaterContent;
             //if (OtherData.CalibrateMode)
-                PlugIn.ModelCore.UI.WriteLine("   Max soil water (after adding ppt and snowmelt, " +
-                "and substracting soil evaporation) = {0}", waterContentMax); //debug
+            //    PlugIn.ModelCore.UI.WriteLine("   Max soil water (after adding ppt and snowmelt, " +
+            //    "and substracting soil evaporation) = {0}", waterContentMax); //debug
 
             //Allow excess water to run off when soil is greater than field capacity
             double waterMovement = 0.0;
@@ -250,8 +250,8 @@ namespace Landis.Extension.Succession.NECN
             //  Bergström, 1992
             double tempAET = 0.0;
 
-            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Before calculating AET: Month={0}, soilWaterContent = {1}, remainingPET = {2}, waterFull = {3}, waterEmpty = {4}.", 
-                month, soilWaterContent, remainingPET, waterFull, waterEmpty);
+            //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Before calculating AET: Month={0}, soilWaterContent = {1}, remainingPET = {2}, waterFull = {3}, waterEmpty = {4}.", 
+            //    month, soilWaterContent, remainingPET, waterFull, waterEmpty);
             
             if (soilWaterContent - waterEmpty >= remainingPET)
 
@@ -286,7 +286,7 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("tempAET = {0}, AET = {1}, remainingPET = {2}, soilWaterContent = {3}", 
             //    tempAET, AET, remainingPET, soilWaterContent); //debug
 
-            PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWaterContent = {1}", AET, soilWaterContent); //debug
+            //PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWaterContent = {1}", AET, soilWaterContent); //debug
             availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0); //minimum amount of water for the month, aside from baseflow
 
             //Leaching occurs. Drain baseflow fraction from soil water
@@ -309,13 +309,13 @@ namespace Landis.Extension.Succession.NECN
             // SF added meanSoilWater as variable to calculate volumetric water to compare to empirical sources
             // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture is tracked in SoilWaterContent.
             double meanSoilWater = (waterContentMax + soilWaterContent) / 2.0;          
-            PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWaterContent = {2}", 
-                availableWaterMax, availableWaterMin, soilWaterContent);
+            //PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWaterContent = {2}", 
+            //   availableWaterMax, availableWaterMin, soilWaterContent);
 
             // Compute the ratio of precipitation to PET
             double ratioPlantAvailableWaterPET = 0.0;  
             if (PET > 0.0) ratioPlantAvailableWaterPET = plantAvailableWater / PET; 
-            PlugIn.ModelCore.UI.WriteLine("     PAW={0}, PET={1}, Ratio={2}.", plantAvailableWater, PET, ratioPlantAvailableWaterPET); //debug
+            //PlugIn.ModelCore.UI.WriteLine("     PAW={0}, PET={1}, Ratio={2}.", plantAvailableWater, PET, ratioPlantAvailableWaterPET); //debug
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET);
@@ -354,6 +354,9 @@ namespace Landis.Extension.Succession.NECN
             //     Rewritten by Bill Pulliam - 9/94
             //     Rewritten by Melissa Lucash - 11/2014
             //     Rewritten by Paul Henne, USGS - 6/2020
+
+            //SF removed this mode for NECN v7. It can be replicated by setting baseflow = 0 and stormflow = 0.
+
 
             //...Initialize Local Variables
             double addToSoil = 0.0;
