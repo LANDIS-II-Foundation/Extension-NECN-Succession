@@ -265,6 +265,8 @@ namespace Landis.Extension.Succession.NECN
                 tempAET = Math.Min(remainingPET * ((soilWaterContent - waterEmpty) / (waterFull - waterEmpty)), soilWaterContent - waterEmpty);
             }
 
+            tempAET = Math.Max(tempAET, 0.0);
+
             /*Here's the original equation from Bergstom (1992) HBV model: https://github.com/mxgiuliani00/hbv/blob/master/hbv_model.cpp
             It allows soil moisture to be drawn down to zero, with it becoming more difficult when soil moisture is below waterEmpty
              {
