@@ -651,7 +651,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Water loss
+        /// End-of-month soil water content (cm)
         /// </summary>
         public static ISiteVar<double> SoilWaterContent
         {
@@ -665,7 +665,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Water loss
+        /// Mean volumetric water content (proportion)
         /// </summary>
         public static ISiteVar<double> MeanSoilWaterContent
         {
