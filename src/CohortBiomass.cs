@@ -198,7 +198,7 @@ namespace Landis.Extension.Succession.NECN
                 //SF added 4-parameter water limit calculation
             {
                 double wilt_point = SiteVars.SoilWiltingPoint[site];
-                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month];
                 
                 if (volumetric_water < 0.001) volumetric_water = 0.001;
 
