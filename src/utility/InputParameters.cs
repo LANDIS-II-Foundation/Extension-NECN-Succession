@@ -103,7 +103,6 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAIShape; 
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAIScale;
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAILocation;
-        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIAdjust; //optional
 
         //private List<ISufficientLight> sufficientLight;
 
@@ -462,8 +461,6 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get { return lightLAIShape; } }
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get { return lightLAIScale; } }
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation { get { return lightLAILocation; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIAdjust { get { return lightLAIAdjust; } }
-
         //Drought variables
 
         public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
@@ -1320,13 +1317,6 @@ namespace Landis.Extension.Succession.NECN
             lightLAILocation[species] = VerifyRange(newValue, 0.0, 1, "LightLAILocation");
         }
 
-        public void SetLightLAIAdjust(ISpecies species, double newValue)
-        {
-            Debug.Assert(species != null);
-            lightLAIAdjust[species] = VerifyRange(newValue, 0.0, 100.0, "LightLAIAdjust");
-        }
-
-
 
         //---------------------------------------------------------------------
 
@@ -1542,7 +1532,6 @@ namespace Landis.Extension.Succession.NECN
             lightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAILocation = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            lightLAIAdjust = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
 
         }
 

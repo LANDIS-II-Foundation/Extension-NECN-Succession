@@ -446,7 +446,6 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetLightLAIShape(species, System.Convert.ToDouble(row["LightLAIShape"]));
                 parameters.SetLightLAIScale(species, System.Convert.ToDouble(row["LightLAIScale"]));
                 parameters.SetLightLAILocation(species, System.Convert.ToDouble(row["LightLAILocation"]));
-                parameters.SetLightLAIAdjust(species, ReadLightLAIAdjust(row));
 
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 
@@ -830,19 +829,6 @@ namespace Landis.Extension.Succession.NECN
             {
                 return 0.47;  // This is the value given for all biomes in the tree.100 file.
                 // This was the default value for all previous versions of NECN.
-            }
-        }
-
-        private double ReadLightLAIAdjust(DataRow row)
-        {
-            try
-            {
-                double adjustLAI = System.Convert.ToDouble(row["LightLAIAdjust"]);
-                return adjustLAI;
-            }
-            catch
-            {
-                return 1.0;  // value of 1.0 uses unadjusted Weibull distribution (area under the curve = 1)
             }
         }
     }
