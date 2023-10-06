@@ -22,6 +22,10 @@
     <PackageTags>NECN;LANDIS-II;Landis;Extension;Succession;Carbon;Nitrogen</PackageTags>
     <PackageLicenseUrl>https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>http://www.landis-ii.org</PackageProjectUrl>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\build\extensions</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,33 +37,34 @@
   
   <ItemGroup>
     <Reference Include="Landis.Library.AgeOnlyCohorts-v3">
-      <HintPath>lib\Landis.Library.AgeOnlyCohorts-v3.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.AgeOnlyCohorts-v3.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Biomass-v2">
-      <HintPath>lib\Landis.Library.Biomass-v2.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.Biomass-v2.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.BiomassCohorts-v3">
-      <HintPath>lib\Landis.Library.BiomassCohorts-v3.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.BiomassCohorts-v3.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Climate-v4">
-      <HintPath>lib\Landis.Library.Climate-v4.3.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.Climate-v4.3.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Cohorts-v2">
-      <HintPath>lib\Landis.Library.Cohorts-v2.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.Cohorts-v2.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.LeafBiomassCohorts-v2">
-      <HintPath>lib\Landis.Library.LeafBiomassCohorts-v2.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.LeafBiomassCohorts-v2.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Metadata-v2">
-      <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.Metadata-v2.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Parameters-v2">
-      <HintPath>lib\Landis.Library.Parameters-v2.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.Parameters-v2.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Succession-v8">
+	<HintPath>..\..\build\extensions\Landis.Library.Succession-v8.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.InitialCommunity.LeafBiomass">
-      <HintPath>lib\Landis.Library.InitialCommunity.LeafBiomass.dll</HintPath>
+      <HintPath>..\..\build\extensions\Landis.Library.InitialCommunity.LeafBiomass.dll</HintPath>
 		</Reference>
 		<Reference Include="MathNet.Numerics">
 		</Reference>  
