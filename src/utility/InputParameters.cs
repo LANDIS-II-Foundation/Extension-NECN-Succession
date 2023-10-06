@@ -56,6 +56,8 @@ namespace Landis.Extension.Succession.NECN
         private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
         private bool writeTemp; //write temperature maps, for calculating normal CWD
         private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
+        private bool writeMeanSoilWaterMap; //write a map of MeanSoilWater each year
+        private bool writePETMap; //write a map of PET each year
         private WaterType wtype;       
         private string communityInputMapNames;
         private double probEstablishAdjust;
@@ -316,8 +318,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         /// <summary>
-        /// Should annual rasters of CWD be written? Used to generate input
-        /// variables for drought mortality
+        /// Should annual rasters of drought-associated mortality be written for each species?
         /// </summary>
         public bool WriteSpeciesDroughtMaps
         {
@@ -328,6 +329,39 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 writeSpeciesDroughtMaps = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of mean soil water be written? Primarily intended for 
+        /// calibrating the water balance model and diagnosing problems
+        /// </summary>
+        public bool WriteMeanSoilWaterMap
+        {
+            get
+            {
+                return writeMeanSoilWaterMap;
+            }
+            set
+            {
+                writeMeanSoilWaterMap = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Should annual rasters of PET be written? 
+        /// This is useful for looking at topographic and climate region differences
+        /// in PET, or for calculating rasters of AET from PET and CWD
+        /// </summary>
+        public bool WritePETMap
+        {
+            get
+            {
+                return writePETMap;
+            }
+            set
+            {
+                writePETMap = value;
             }
         }
 

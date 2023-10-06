@@ -45,6 +45,8 @@ namespace Landis.Extension.Succession.NECN
         double ProbEstablishAdjustment { get; set; }
         //double[] MaximumShadeLAI { get; }
         bool SmokeModelOutputs { get; set; }
+      
+
         //bool SoilWater_Henne { get; set; }
         double GrassThresholdMultiplier { get; }
         string CommunityInputMapNames { get; set; }
@@ -52,7 +54,11 @@ namespace Landis.Extension.Succession.NECN
         bool OutputSoilWaterAvailable { get; set; }
         bool OutputClimateWaterDeficit { get; set; }
         bool OutputTemp { get; set; }
+        bool WriteMeanSoilWaterMap { get; set; }  
+        bool WritePETMap { get; set; }
+
         bool WriteSpeciesDroughtMaps { get; set; }
+
 
         //---------------------------------------------------------------------
         /// <summary>

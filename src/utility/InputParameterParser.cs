@@ -250,6 +250,22 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.WriteSpeciesDroughtMaps = false;
 
+            InputVar<bool> write_MeanSoilWater_Map = new InputVar<bool>("Write_MeanSoilWater_Map");
+            if (ReadOptionalVar(write_MeanSoilWater_Map))
+            {
+                parameters.WriteMeanSoilWaterMap = write_MeanSoilWater_Map.Value;
+            }
+            else
+                parameters.WriteMeanSoilWaterMap = false;
+
+            InputVar<bool> write_PET_Map = new InputVar<bool>("Write_PET_Map");
+            if (ReadOptionalVar(write_PET_Map))
+            {
+                parameters.WritePETMap = write_PET_Map.Value;
+            }
+            else
+                parameters.WritePETMap = false;
+
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
             parameters.WType = WParse(wt.Value);
