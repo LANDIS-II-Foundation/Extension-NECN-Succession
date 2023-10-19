@@ -53,10 +53,10 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2;
         public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
-        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTempAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass;
-        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWDAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;
 

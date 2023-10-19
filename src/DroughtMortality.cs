@@ -24,10 +24,10 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2;
         public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
-        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTempAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass;
-        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWDAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;  // needs better variable name
@@ -54,10 +54,10 @@ namespace Landis.Extension.Succession.NECN
             MortalityAboveThreshold2 = parameters.MortalityAboveThreshold2;
             Intercept = parameters.Intercept;
             BetaAge = parameters.BetaAge;
-            BetaTemp = parameters.BetaTemp;
+            BetaTempAnom = parameters.BetaTempAnom;
             BetaSWAAnom = parameters.BetaSWAAnom;
             BetaBiomass = parameters.BetaBiomass;
-            BetaCWD = parameters.BetaCWD;
+            BetaCWDAnom = parameters.BetaCWDAnom;
             BetaNormCWD = parameters.BetaNormCWD;
             BetaNormTemp = parameters.BetaNormTemp;
             IntxnCWD_Biomass = parameters.IntxnCWD_Biomass;
@@ -510,9 +510,9 @@ namespace Landis.Extension.Succession.NECN
             double swaAnom = SiteVars.SWALagged[site][cohort.Species.Index] - normalSWA;
             //PlugIn.ModelCore.UI.WriteLine("swaAnom is {0}", swaAnom);
 
-            double tempLagged = SiteVars.TempLagged[site][cohort.Species.Index];
+            double tempLagged = SiteVars.TempLagged[site][cohort.Species.Index] - normalTemp;
 
-            double cwdLagged = SiteVars.CWDLagged[site][cohort.Species.Index];
+            double cwdLagged = SiteVars.CWDLagged[site][cohort.Species.Index] - normalCWD;
 
             double cohortAge = cohort.Age;
             double siteBiomass = SiteVars.ActualSiteBiomass(site);
@@ -530,17 +530,17 @@ namespace Landis.Extension.Succession.NECN
 
             double intercept = Intercept[cohort.Species];
             double betaAge = BetaAge[cohort.Species];
-            double betaTemp = BetaTemp[cohort.Species];
+            double betaTempAnom = BetaTempAnom[cohort.Species];
             double betaSWAAnom = BetaSWAAnom[cohort.Species];
             double betaBiomass = BetaBiomass[cohort.Species];
-            double betaCWD = BetaCWD[cohort.Species];
+            double betaCWDAnom = BetaCWDAnom[cohort.Species];
             double betaNormCWD = BetaNormCWD[cohort.Species];
             double betaNormTemp = BetaNormTemp[cohort.Species];
             double intxnCWD_Biomass = IntxnCWD_Biomass[cohort.Species];
             if (OtherData.CalibrateMode)
             {
                 PlugIn.ModelCore.UI.WriteLine("Regression parameters are: intercept {0}, age {1}, temp {2}, SWAAnom {3}, biomass {4}",
-                                               intercept, betaAge, betaTemp, betaSWAAnom, betaBiomass);
+                                               intercept, betaAge, betaTempAnom, betaSWAAnom, betaBiomass);
             }
 
 
@@ -574,8 +574,8 @@ namespace Landis.Extension.Succession.NECN
             if (cwdThreshold == 0 & cwdThreshold2 == 0)
             {
                 //calculate decadal log odds of survival
-                double logOdds = intercept + betaAge * cohortAge + betaTemp * tempLagged + betaSWAAnom * swaAnom + betaBiomass * siteBiomass +
-                    betaCWD * cwdLagged + betaNormCWD * normalCWD + betaNormTemp * normalTemp + intxnCWD_Biomass * cwdLagged * siteBiomass;
+                double logOdds = intercept + betaAge * cohortAge + betaTempAnom * tempLagged + betaSWAAnom * swaAnom + betaBiomass * siteBiomass +
+                    betaCWDAnom * cwdLagged + betaNormCWD * normalCWD + betaNormTemp * normalTemp + intxnCWD_Biomass * cwdLagged * siteBiomass;
                 double p_surv = Math.Exp(logOdds) / (Math.Exp(logOdds) + 1);
                 p_mort = (1 - Math.Pow(p_surv, 0.1));
                 if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("p_mort from regression is {0}", p_mort);

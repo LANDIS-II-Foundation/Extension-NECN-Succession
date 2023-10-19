@@ -138,10 +138,10 @@ namespace Landis.Extension.Succession.NECN
         //Multiple regression parameters
         Landis.Library.Parameters.Species.AuxParm<double> Intercept { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get; }
-        Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaTempAnom { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get; }
-        Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaCWDAnom { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get; }
         Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get; }

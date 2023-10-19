@@ -113,9 +113,9 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> intercept; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaAge; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaBiomass; // optional
-        private Landis.Library.Parameters.Species.AuxParm<double> betaTemp; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaTempAnom; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaSWAAnom; // optional
-        private Landis.Library.Parameters.Species.AuxParm<double> betaCWD; // optional
+        private Landis.Library.Parameters.Species.AuxParm<double> betaCWDAnom; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaNormCWD; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> betaNormTemp; // optional
         private Landis.Library.Parameters.Species.AuxParm<double> intxnCWD_Biomass; // optional
@@ -506,10 +506,10 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2 { get { return mortalityAboveThreshold2; } }
         public Landis.Library.Parameters.Species.AuxParm<double> Intercept { get { return intercept; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get { return betaAge; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get { return betaTemp; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaTempAnom { get { return betaTempAnom; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get { return betaSWAAnom; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get { return betaBiomass; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get { return betaCWD; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> BetaCWDAnom { get { return betaCWDAnom; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get { return betaNormCWD; } }
         public Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get { return betaNormTemp; } }
         public Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get { return intxnCWD_Biomass; } }
@@ -1466,10 +1466,10 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             betaAge[species] = VerifyRange(newValue, -10, 10, "DroughtBetaAge");
         }
-        public void SetBetaTemp(ISpecies species, double newValue)
+        public void SetBetaTempAnom(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaTemp[species] = VerifyRange(newValue, -10, 10, "DroughtBetaTemp");
+            betaTempAnom[species] = VerifyRange(newValue, -10, 10, "DroughtBetaTempAnom");
         }
         public void SetBetaSWAAnom(ISpecies species, double newValue)
         {
@@ -1482,10 +1482,10 @@ namespace Landis.Extension.Succession.NECN
             betaBiomass[species] = VerifyRange(newValue, -10, 10, "DroughtBetaBiomass");
         }
 
-        public void SetBetaCWD(ISpecies species, double newValue)
+        public void SetBetaCWDAnom(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            betaCWD[species] = VerifyRange(newValue, -10, 10, "DroghtBetaCWD");
+            betaCWDAnom[species] = VerifyRange(newValue, -10, 10, "DroughtBetaCWDAnom");
         }
 
         public void SetBetaNormCWD(ISpecies species, double newValue)
@@ -1562,10 +1562,10 @@ namespace Landis.Extension.Succession.NECN
             mortalityAboveThreshold2 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intercept = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaAge = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            betaTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaTempAnom = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaSWAAnom = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaBiomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            betaCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            betaCWDAnom = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaNormCWD = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             betaNormTemp = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             intxnCWD_Biomass = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);

@@ -545,10 +545,10 @@ namespace Landis.Extension.Succession.NECN
 
                     parameters.SetIntercept(species, System.Convert.ToDouble(row["Intercept"]));
                     parameters.SetBetaAge(species, System.Convert.ToDouble(row["BetaAge"]));
-                    parameters.SetBetaTemp(species, System.Convert.ToDouble(row["BetaTemp"]));
+                    parameters.SetBetaTempAnom(species, System.Convert.ToDouble(row["BetaTempAnom"]));
                     parameters.SetBetaSWAAnom(species, System.Convert.ToDouble(row["BetaSWAAnom"]));
                     parameters.SetBetaBiomass(species, System.Convert.ToDouble(row["BetaBiomass"]));
-                    parameters.SetBetaCWD(species, System.Convert.ToDouble(row["BetaCWD"]));
+                    parameters.SetBetaCWDAnom(species, System.Convert.ToDouble(row["BetaCWDAnom"]));
                     parameters.SetBetaNormCWD(species, System.Convert.ToDouble(row["BetaNormCWD"]));
                     parameters.SetBetaNormTemp(species, System.Convert.ToDouble(row["BetaNormTemp"]));
                     parameters.SetIntxnCWD_Biomass(species, System.Convert.ToDouble(row["IntxnCWD_Biomass"]));
