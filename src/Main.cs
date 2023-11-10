@@ -2,7 +2,7 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 using Landis.Library.Climate;
 
@@ -27,7 +27,7 @@ namespace Landis.Extension.Succession.NECN
                                        bool        isSuccessionTimeStep)
         {
             
-            ISiteCohorts siteCohorts = SiteVars.Cohorts[site];
+            SiteCohorts siteCohorts = SiteVars.Cohorts[site];
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
             for (int y = 0; y < years; ++y) {
@@ -236,9 +236,16 @@ namespace Landis.Extension.Succession.NECN
         {
             int total = 0;
             if (cohorts != null)
+            {
                 foreach (ISpeciesCohorts speciesCohorts in cohorts)
+                {
                     foreach (ICohort cohort in speciesCohorts)
-                        total += (int) (cohort.WoodBiomass + cohort.LeafBiomass);
+                    {
+                        dynamic additionalParameters = cohort.Data.AdditionalParameters;
+                        total += (int)(additionalParameters.WoodBiomass + additionalParameters.LeafBiomass);
+                    }
+                }
+            }
             return total;
         }
 
@@ -248,9 +255,16 @@ namespace Landis.Extension.Succession.NECN
         {
             int total = 0;
             if (cohorts != null)
+            {
                 foreach (ISpeciesCohorts speciesCohorts in cohorts)
+                {
                     foreach (ICohort cohort in speciesCohorts)
-                        total += (int)(cohort.LeafBiomass);
+                    {
+                        dynamic additionalParameters = cohort.Data.AdditionalParameters;
+                        total += (int)(additionalParameters.LeafBiomass);
+                    }
+                }
+            }
             return total;
         }
         //---------------------------------------------------------------------
@@ -259,9 +273,16 @@ namespace Landis.Extension.Succession.NECN
         {
             double woodBiomass = 0;
             if (SiteVars.Cohorts[site] != null)
+            {
                 foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
+                {
                     foreach (ICohort cohort in speciesCohorts)
-                        woodBiomass += cohort.WoodBiomass;
+                    {
+                        dynamic additionalParameters = cohort.Data.AdditionalParameters;
+                        woodBiomass += additionalParameters.WoodBiomass;
+                    }
+                }
+            }
             return woodBiomass;
         }
 
@@ -289,10 +310,11 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         private static void CalculateCohortCN(ActiveSite site, ICohort cohort)
         {
+            dynamic additionalParameters = cohort.Data.AdditionalParameters;
             ISpecies species = cohort.Species;
 
-            double leafC = cohort.LeafBiomass * 0.47;
-            double woodC = cohort.WoodBiomass * 0.47;
+            double leafC = additionalParameters.LeafBiomass * 0.47;
+            double woodC = additionalParameters.WoodBiomass * 0.47;
 
             double fRootC = Roots.CalculateFineRoot(cohort, leafC);
             double cRootC = Roots.CalculateCoarseRoot(cohort, woodC);

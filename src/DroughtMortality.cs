@@ -4,7 +4,7 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Utilities;
 using Landis.Library.Succession;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -495,7 +495,8 @@ namespace Landis.Extension.Succession.NECN
 
         public static double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
-            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Calculating drought mortality for species {0}", cohort.Species.Name);
+            dynamic additionalParameters = cohort.Data;
+            if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Calculating drought mortality for species {0}", cohort.Species.Name);
 
             //Predictor variables
             double normalSWA = SiteVars.NormalSWA[site];
@@ -514,7 +515,7 @@ namespace Landis.Extension.Succession.NECN
 
             double cwdLagged = SiteVars.CWDLagged[site][cohort.Species.Index];
 
-            double cohortAge = cohort.Age;
+            double cohortAge = cohort.Data.Age;
             double siteBiomass = SiteVars.ActualSiteBiomass(site);
 
 
@@ -587,8 +588,8 @@ namespace Landis.Extension.Succession.NECN
             if (p_mort > random)
             {
 
-                M_leaf = cohort.LeafBiomass;
-                M_wood = cohort.WoodBiomass;
+                M_leaf = additionalParameters.LeafBiomass;
+                M_wood = additionalParameters.WoodBiomass;
                 double aboveground_Biomass_Died = M_leaf + M_wood;
 
                 SiteVars.DroughtMort[site] += aboveground_Biomass_Died;

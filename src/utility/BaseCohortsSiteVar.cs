@@ -1,5 +1,4 @@
-﻿using AgeOnlyCohorts = Landis.Library.AgeOnlyCohorts;
-using BiomassCohorts = Landis.Library.LeafBiomassCohorts;
+﻿using Landis.Library.UniversalCohorts;
 using Landis.SpatialModeling;
 
 namespace Landis.Extension.Succession.NECN
@@ -9,11 +8,11 @@ namespace Landis.Extension.Succession.NECN
     /// site variable of base cohorts.
     /// </summary>
     public class BaseCohortsSiteVar
-        : ISiteVar<AgeOnlyCohorts.ISiteCohorts>
+        : ISiteVar<ISiteCohorts>
     {
-        private ISiteVar<BiomassCohorts.ISiteCohorts> biomassCohortSiteVar;
+        private ISiteVar<ISiteCohorts> biomassCohortSiteVar;
 
-        public BaseCohortsSiteVar(ISiteVar<BiomassCohorts.ISiteCohorts> siteVar)
+        public BaseCohortsSiteVar(ISiteVar<ISiteCohorts> siteVar)
         {
             biomassCohortSiteVar = siteVar;
         }
@@ -23,7 +22,7 @@ namespace Landis.Extension.Succession.NECN
         {
             get
             {
-                return typeof(AgeOnlyCohorts.SiteCohorts);
+                return typeof(SiteCohorts);
             }
         }
 
@@ -49,11 +48,11 @@ namespace Landis.Extension.Succession.NECN
         // site-cohorts object at any site.
 
 
-        AgeOnlyCohorts.ISiteCohorts ISiteVar<AgeOnlyCohorts.ISiteCohorts>.this[Site site]
+        ISiteCohorts ISiteVar<ISiteCohorts>.this[Site site]
         {
             get
             {
-                return (AgeOnlyCohorts.ISiteCohorts) biomassCohortSiteVar[site]; 
+                return (ISiteCohorts) biomassCohortSiteVar[site]; 
             }
             set
             {
@@ -61,7 +60,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-        AgeOnlyCohorts.ISiteCohorts ISiteVar<AgeOnlyCohorts.ISiteCohorts>.ActiveSiteValues
+        ISiteCohorts ISiteVar<ISiteCohorts>.ActiveSiteValues
         {
             set
             {
@@ -69,7 +68,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-        AgeOnlyCohorts.ISiteCohorts ISiteVar<AgeOnlyCohorts.ISiteCohorts>.InactiveSiteValues
+        ISiteCohorts ISiteVar<ISiteCohorts>.InactiveSiteValues
         {
             set
             {
@@ -77,7 +76,7 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-        AgeOnlyCohorts.ISiteCohorts ISiteVar<AgeOnlyCohorts.ISiteCohorts>.SiteValues
+        ISiteCohorts ISiteVar<ISiteCohorts>.SiteValues
         {
             set
             {

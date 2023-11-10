@@ -3,9 +3,9 @@
 using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Utilities;
-using Landis.Library.InitialCommunities;
+using Landis.Library.InitialCommunities.Universal;
 using System.Collections.Generic;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 using Landis.Library.Climate;
 using System;
 //using Landis.Cohorts;
@@ -44,13 +44,13 @@ namespace Landis.Extension.Succession.NECN
         }
 
 
-        private static IDictionary<uint, List<Landis.Library.LeafBiomassCohorts.ICohort>> mapCodeCohorts;
+        private static IDictionary<uint, List<Landis.Library.UniversalCohorts.ICohort>> mapCodeCohorts;
 
         //---------------------------------------------------------------------
 
         static InitialBiomass()
         {
-            mapCodeCohorts = new Dictionary<uint, List<Landis.Library.LeafBiomassCohorts.ICohort>>();
+            mapCodeCohorts = new Dictionary<uint, List<Landis.Library.UniversalCohorts.ICohort>>();
         }
 
         //---------------------------------------------------------------------
@@ -90,7 +90,7 @@ namespace Landis.Extension.Succession.NECN
 
             InitialBiomass initialBiomass;
 
-            List<Landis.Library.LeafBiomassCohorts.ICohort> sortedAgeCohorts = SortCohorts(initialCommunity.Cohorts);
+            List<Landis.Library.UniversalCohorts.ICohort> sortedAgeCohorts = SortCohorts(initialCommunity.Cohorts);
 
             ISiteCohorts cohorts = MakeBiomassCohorts(sortedAgeCohorts, site);
             initialBiomass = new InitialBiomass(cohorts);
@@ -99,28 +99,29 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------
-        public static ISiteCohorts MakeBiomassCohorts(List<Landis.Library.LeafBiomassCohorts.ICohort> sortedCohorts, ActiveSite site)
+        public static ISiteCohorts MakeBiomassCohorts(List<Landis.Library.UniversalCohorts.ICohort> sortedCohorts, ActiveSite site)
         {
 
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
-            SiteVars.Cohorts[site] = new Library.LeafBiomassCohorts.SiteCohorts();
+            SiteVars.Cohorts[site] = new SiteCohorts();
 
             foreach (ICohort cohort in sortedCohorts)
             {
+                dynamic additionalParameters = cohort.Data;
                 //foreach(ICohort cohort in cohorts)
-                SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Age, cohort.WoodBiomass, cohort.LeafBiomass);
+                SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Data.Age, additionalParameters.WoodBiomass, additionalParameters.LeafBiomass);
             }
             return SiteVars.Cohorts[site];
         }
 
 
-        public static List<Landis.Library.LeafBiomassCohorts.ICohort> SortCohorts(List<Landis.Library.LeafBiomassCohorts.ISpeciesCohorts> sppCohorts)
+        public static List<Landis.Library.UniversalCohorts.ICohort> SortCohorts(List<Landis.Library.UniversalCohorts.ISpeciesCohorts> sppCohorts)
         {
-            List<Landis.Library.LeafBiomassCohorts.ICohort> cohorts = new List<Landis.Library.LeafBiomassCohorts.ICohort>();
-            foreach (Landis.Library.LeafBiomassCohorts.ISpeciesCohorts speciesCohorts in sppCohorts)
+            List<Landis.Library.UniversalCohorts.ICohort> cohorts = new List<Landis.Library.UniversalCohorts.ICohort>();
+            foreach (Landis.Library.UniversalCohorts.ISpeciesCohorts speciesCohorts in sppCohorts)
             {
-                foreach (Landis.Library.LeafBiomassCohorts.ICohort cohort in speciesCohorts)
+                foreach (Landis.Library.UniversalCohorts.ICohort cohort in speciesCohorts)
                 {
                     cohorts.Add(cohort);
                     //PlugIn.ModelCore.UI.WriteLine("ADDED:  {0} {1}.", cohort.Species.Name, cohort.Age);
@@ -132,7 +133,7 @@ namespace Landis.Extension.Succession.NECN
 
         private static int WhichIsOlderCohort(ICohort x, ICohort y)
         {
-            return WhichIsOlder(x.Age, y.Age);
+            return WhichIsOlder(x.Data.Age, y.Data.Age);
         }
 
         private static int WhichIsOlder(ushort x, ushort y)

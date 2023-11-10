@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -115,15 +115,16 @@ namespace Landis.Extension.Succession.NECN
             {
                 foreach (ICohort cohort in speciesCohorts)
                 {
+                    dynamic additionalParameters = cohort.Data;
                     int cohortAddYear = GetAddYear(cohort); 
                     //PlugIn.ModelCore.UI.WriteLine("CALCMineralNfraction: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Main.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
                     
                     //Nallocation is a measure of how much N a cohort can gather relative to other cohorts
                     //double Nallocation = Roots.CalculateFineRoot(cohort.LeafBiomass); 
-                    double Nallocation = 1- Math.Exp((-Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass)*0.02));
+                    double Nallocation = 1- Math.Exp((-Roots.CalculateCoarseRoot(cohort, additionalParameters.WoodBiomass)*0.02));
 
                     if (Nallocation <= 0.0) 
-                        Nallocation = Math.Max(Nallocation, cohort.WoodBiomass * 0.01);
+                        Nallocation = Math.Max(Nallocation, additionalParameters.WoodBiomass * 0.01);
                     
                     NAllocTotal += Nallocation;
                     Dictionary<int, double> newEntry = new Dictionary<int, double>();
@@ -149,6 +150,7 @@ namespace Landis.Extension.Succession.NECN
                 //PlugIn.ModelCore.UI.WriteLine(" SpeciesCohorts = {0}", speciesCohorts.Species.Name);
                 foreach (ICohort cohort in speciesCohorts)
                 {
+                    dynamic additionalParameters = cohort.Data;
                     int cohortAddYear = GetAddYear(cohort); 
                     double Nallocation = CohortMineralNfraction[cohort.Species.Index][cohortAddYear];
                     double relativeNallocation = Nallocation / NAllocTotal;
@@ -159,7 +161,7 @@ namespace Landis.Extension.Succession.NECN
                         PlugIn.ModelCore.UI.WriteLine("  N ALLOCATION CALCULATION = NaN!  ");
                         PlugIn.ModelCore.UI.WriteLine("  Site_Row={0:0}, Site_Column={1:0}.", site.Location.Row, site.Location.Column);
                         PlugIn.ModelCore.UI.WriteLine("  Nallocation={0:0.00}, NAllocTotal={1:0.00}, relativeNallocation={2:0.00}.", Nallocation, NAllocTotal, relativeNallocation);
-                        PlugIn.ModelCore.UI.WriteLine("  Wood={0:0.00}, Leaf={1:0.00}.", cohort.WoodBiomass, cohort.LeafBiomass);
+                        PlugIn.ModelCore.UI.WriteLine("  Wood={0:0.00}, Leaf={1:0.00}.", additionalParameters.WoodBiomass, additionalParameters.LeafBiomass);
                     }                    
                 }
             }
@@ -343,7 +345,7 @@ namespace Landis.Extension.Succession.NECN
         private static int GetAddYear(ICohort cohort)
         {
             int currentYear = PlugIn.ModelCore.CurrentTime;
-            int cohortAddYear = currentYear - (cohort.Age - Main.Year);
+            int cohortAddYear = currentYear - (cohort.Data.Age - Main.Year);
             if (Main.MonthCnt == 11)
                 cohortAddYear++; 
             return cohortAddYear;
