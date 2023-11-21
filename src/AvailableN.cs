@@ -115,7 +115,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 foreach (ICohort cohort in speciesCohorts)
                 {
-                    dynamic additionalParameters = cohort.Data;
+                    dynamic additionalParameters = cohort.Data.AdditionalParameters;
                     int cohortAddYear = GetAddYear(cohort); 
                     //PlugIn.ModelCore.UI.WriteLine("CALCMineralNfraction: year={0}, mo={1}, species={2}, cohortAge={3}, cohortAddYear={4}.", PlugIn.ModelCore.CurrentTime, Main.Month, cohort.Species.Name, cohort.Age, cohortAddYear);
                     
@@ -150,7 +150,7 @@ namespace Landis.Extension.Succession.NECN
                 //PlugIn.ModelCore.UI.WriteLine(" SpeciesCohorts = {0}", speciesCohorts.Species.Name);
                 foreach (ICohort cohort in speciesCohorts)
                 {
-                    dynamic additionalParameters = cohort.Data;
+                    dynamic additionalParameters = cohort.Data.AdditionalParameters;
                     int cohortAddYear = GetAddYear(cohort); 
                     double Nallocation = CohortMineralNfraction[cohort.Species.Index][cohortAddYear];
                     double relativeNallocation = Nallocation / NAllocTotal;

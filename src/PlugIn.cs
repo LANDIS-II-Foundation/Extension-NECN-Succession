@@ -166,6 +166,7 @@ namespace Landis.Extension.Succession.NECN
             Reproduction.Establish = Establish;
             Reproduction.AddNewCohort = AddNewCohort;
             Reproduction.MaturePresent = MaturePresent;
+            Cohort.ComputeCohortData = ComputeCohortData;
             base.Initialize(modelCore, Parameters.SeedAlgorithm);
 
             // Delegate mortality routines:
@@ -737,7 +738,7 @@ namespace Landis.Extension.Succession.NECN
             tempObject.WoodBiomass = initialBiomass[0];
             tempObject.LeafBiomass = initialBiomass[1];
 
-            SiteVars.Cohorts[site].AddNewCohort(species, 1, 0, woodLeafBiomasses);
+            SiteVars.Cohorts[site].AddNewCohort(species, 1, System.Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), woodLeafBiomasses);
 
             if (reproductionType == "plant")
                 SpeciesByPlant[species.Index]++;
@@ -777,6 +778,17 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
+        public CohortData ComputeCohortData(ushort age, int biomass, int anpp, ExpandoObject parametersToAdd)
+        {
+            IDictionary<string, object> tempObject = parametersToAdd;
+
+            int newBiomass = System.Convert.ToInt32(tempObject["LeafBiomass"]) + System.Convert.ToInt32(tempObject["WoodBiomass"]);
+
+            return new CohortData(age, newBiomass, anpp, parametersToAdd);
+        }
+
+        //---------------------------------------------------------------------
+
         /// <summary>
         /// Determines if there is a mature cohort at a site.
         /// This is a Delegate method to base succession.
@@ -785,7 +797,6 @@ namespace Landis.Extension.Succession.NECN
         {
             return SiteVars.Cohorts[site].IsMaturePresent(species);
         }
-
 
         public override void InitializeSites(string initialCommunitiesText, string initialCommunitiesMap, ICore modelCore)
         {
@@ -812,6 +823,7 @@ namespace Landis.Extension.Succession.NECN
                     //modelCore.Log.WriteLine("ecoregion = {0}.", modelCore.Ecoregion[site]);
 
                     ActiveSite activeSite = (ActiveSite)site;
+
                     initialCommunity = communities.Find(mapCode);
                     if (initialCommunity == null)
                     {

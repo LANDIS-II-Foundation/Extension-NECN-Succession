@@ -108,9 +108,8 @@ namespace Landis.Extension.Succession.NECN
 
             foreach (ICohort cohort in sortedCohorts)
             {
-                dynamic additionalParameters = cohort.Data;
                 //foreach(ICohort cohort in cohorts)
-                SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Data.Age, additionalParameters.WoodBiomass, additionalParameters.LeafBiomass);
+                SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Data.Age, cohort.Data.Biomass, cohort.Data.AdditionalParameters);
             }
             return SiteVars.Cohorts[site];
         }

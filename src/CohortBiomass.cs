@@ -191,7 +191,7 @@ namespace Landis.Extension.Succession.NECN
                                          double siteBiomass,
                                          double[] mortalityAge)
         {
-            dynamic additionalParameters = cohort.Data;
+            dynamic additionalParameters = cohort.Data.AdditionalParameters;
             double leafFractionNPP = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FractionANPPtoLeaf;
             //double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
             double sitelai          = SiteVars.LAI[site];

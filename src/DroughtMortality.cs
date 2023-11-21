@@ -495,7 +495,7 @@ namespace Landis.Extension.Succession.NECN
 
         public static double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
-            dynamic additionalParameters = cohort.Data;
+            dynamic additionalParameters = cohort.Data.AdditionalParameters;
             if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Calculating drought mortality for species {0}", cohort.Species.Name);
 
             //Predictor variables
