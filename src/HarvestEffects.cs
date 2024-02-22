@@ -137,7 +137,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 //PlugIn.ModelCore.UI.WriteLine("   PrescriptionName={0}, Site={1}.", prescription.PrescriptionName, site);
 
-                if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
+                if (SiteVars.HarvestPrescriptionName[site].Trim().Trim('*') == prescription.PrescriptionName.Trim().Trim('*'))
                 {
                     woodRemoval = prescription.CohortWoodReduction;
                     prescription_found = true;
@@ -164,7 +164,7 @@ namespace Landis.Extension.Succession.NECN
 
             foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
-                if (SiteVars.HarvestPrescriptionName[site].Trim() == prescription.PrescriptionName.Trim())
+                if (SiteVars.HarvestPrescriptionName[site].Trim().Trim('*') == prescription.PrescriptionName.Trim().Trim('*'))
                 {
                     leafRemoval = prescription.CohortLeafReduction;
                     prescription_found = true;
@@ -196,7 +196,7 @@ namespace Landis.Extension.Succession.NECN
             bool found = false;
             foreach (HarvestReductions prescription in PlugIn.Parameters.HarvestReductionsTable)
             {
-                if (SiteVars.HarvestPrescriptionName != null && prescriptionName.Trim() == prescription.PrescriptionName.Trim())
+                if (SiteVars.HarvestPrescriptionName != null && prescriptionName.Trim().Trim('*') == prescription.PrescriptionName.Trim().Trim('*'))
                 {
                     litterLossMultiplier = prescription.FineLitterReduction;
                     woodLossMultiplier = prescription.CoarseLitterReduction;
