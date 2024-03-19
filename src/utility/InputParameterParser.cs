@@ -230,6 +230,7 @@ namespace Landis.Extension.Succession.NECN
             if (ReadOptionalVar(write_CWD))
             {
                 parameters.OutputClimateWaterDeficit = write_CWD.Value;
+                PlugIn.ModelCore.UI.WriteLine("Write CWD Maps = TRUE");
             }
             else
                 parameters.OutputClimateWaterDeficit = false;

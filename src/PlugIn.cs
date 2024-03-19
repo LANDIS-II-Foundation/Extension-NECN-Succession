@@ -167,7 +167,7 @@ namespace Landis.Extension.Succession.NECN
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
-            if (DroughtMortality.UseDrought)
+            if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature | DroughtMortality.OutputClimateWaterDeficit)
             {
                 DroughtMortality.Initialize(Parameters);
             }
@@ -229,6 +229,7 @@ namespace Landis.Extension.Succession.NECN
                 Establishment.LogEstablishment();
                 if (PlugIn.InputCommunityMapNames != null && ModelCore.CurrentTime % PlugIn.InputCommunityMapFrequency == 0)
                     Outputs.WriteCommunityMaps();
+                if(DroughtMortality.UseDrought)   Outputs.WriteDroughtSpeciesFile(PlugIn.ModelCore.CurrentTime);
             }
 
         }

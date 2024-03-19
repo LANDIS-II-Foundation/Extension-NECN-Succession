@@ -128,6 +128,7 @@ namespace Landis.Extension.Succession.NECN
 
         public static ISiteVar<double> droughtMort;
         public static ISiteVar<Dictionary<int, double>> speciesDroughtMortality;
+        public static ISiteVar<Dictionary<int, double>> speciesDroughtProbability;
 
         public static ISiteVar<List<double>> swa10;
         public static ISiteVar<List<double>> temp10;
@@ -267,6 +268,7 @@ namespace Landis.Extension.Succession.NECN
                 cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
 
                 speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+                speciesDroughtProbability = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
             }
 
             slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -330,6 +332,7 @@ namespace Landis.Extension.Succession.NECN
                     temp10[site] = new List<double>(10);
                     cwd10[site] = new List<double>(10);
                     speciesDroughtMortality[site] = new Dictionary<int, double>();
+                    speciesDroughtProbability[site] = new Dictionary<int, double>();
                     swaLagged[site] = new Dictionary<int, double>();
                     tempLagged[site] = new Dictionary<int, double>();
                     cwdLagged[site] = new Dictionary<int, double>();
@@ -450,13 +453,17 @@ namespace Landis.Extension.Succession.NECN
             {
                 foreach (ISpecies species in PlugIn.ModelCore.Species)
                 {
+                    //Annual variables for each site/species
                     SiteVars.SpeciesDroughtMortality[site][species.Index] = 0.0;
+                    SiteVars.SpeciesDroughtProbability[site][species.Index] = 0.0;
                     SiteVars.TempLagged[site][species.Index] = 0.0;
                     SiteVars.CWDLagged[site][species.Index] = 0.0;
                     SiteVars.SWALagged[site][species.Index] = 0.0;
                 }
 
-                if (PlugIn.ModelCore.CurrentTime >= 11)
+                if (SiteVars.SoilWater10[site].Count >= 10) 
+                    //TODO SF check each list separately, make sure they all have the same number of elements
+                    //TODO Also, the first time values are reset, make sure lists are <= 10 elements long
                 {
                     SiteVars.SoilWater10[site].RemoveAt(0);
                     SiteVars.Temp10[site].RemoveAt(0);
@@ -1114,7 +1121,7 @@ namespace Landis.Extension.Succession.NECN
 
         // --------------------------------------------------------------------
         /// <summary>
-        /// Site-level drought mortality for each species, to map drought impacts
+        /// Site-level biomass mortality due to drought for each species, to map drought impacts and for log file
         /// //drought_todo
         /// </summary>
         public static ISiteVar<Dictionary<int, double>> SpeciesDroughtMortality
@@ -1126,6 +1133,22 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 speciesDroughtMortality = value;
+            }
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Site-level probability of mortality due to drought for each species, for output log file
+        /// </summary>
+        public static ISiteVar<Dictionary<int, double>> SpeciesDroughtProbability
+        {
+            get
+            {
+                return speciesDroughtProbability;
+            }
+            set
+            {
+                speciesDroughtProbability = value;
             }
 
 
