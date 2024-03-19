@@ -165,12 +165,6 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyLAI_GrassesLastMonth[site] = SiteVars.MonthlyLAI_Grasses[site][Month];
 
                     WoodLayer.Decompose(site);
-
-                    //if (OtherData.CalibrateMode)
-                    //{
-                    //    PlugIn.ModelCore.UI.WriteLine("currentDeadWoodC:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, string.Join(", ", SiteVars.CurrentDeadWoodC[site]));
-                    //    PlugIn.ModelCore.UI.WriteLine("SurfaceDeadWoodC: {0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, SiteVars.SurfaceDeadWood[site].Carbon);
-                    //}
                     LitterLayer.Decompose(site);
                     SoilLayer.Decompose(site);
 
@@ -191,10 +185,31 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyAGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyBGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] += SiteVars.SourceSink[site].Carbon;
-                    //SiteVars.FineFuels[site] = (System.Math.Min(1.0, (double) (PlugIn.ModelCore.CurrentTime - SiteVars.HarvestTime[site]) * 0.1));
                 }
 
-                
+                //Do this just once a year, after CWD is calculated above
+                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature) //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                {
+                    int year_index = PlugIn.ModelCore.CurrentTime - 1;
+
+                    SiteVars.CWD10[site].Add(0);
+
+                    if (year_index >= 10)
+                    {
+                        year_index = 9;
+                    }
+
+                    SiteVars.CWD10[site][year_index] = SiteVars.AnnualClimaticWaterDeficit[site];
+                }
+
+                if (DroughtMortality.UseDrought)
+                {
+                    foreach (ISpecies species in PlugIn.ModelCore.Species)
+                    {//TODO could speed up by only looping thorugh species with drought parameters (skip ones with zeroes)
+                        DroughtMortality.ComputeDroughtLaggedVars(site, species);
+                    }
+                }
+
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
             }
 
