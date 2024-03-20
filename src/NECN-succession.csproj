@@ -2,19 +2,19 @@
 
   <PropertyGroup>
     <RootNamespace>Landis.Extension.Succession.NECN</RootNamespace>
-    <AssemblyName>Landis.Extension.Succession.NECN-v7</AssemblyName>
+    <AssemblyName>Landis.Extension.Succession.NECN-v8</AssemblyName>
     <AssemblyTitle>Landis.Extension.Succession.NECN-v7</AssemblyTitle>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
-    <AssemblyVersion>7.0</AssemblyVersion>
-    <Version>7.0</Version>
-    <FileVersion>7.0</FileVersion>
+    <AssemblyVersion>8.0</AssemblyVersion>
+    <Version>8.0</Version>
+    <FileVersion>8.0</FileVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>English</NeutralLanguage>
     <Authors>LANDIS-II Foundation</Authors>
-    <Product>Landis.Extension.Succession.NECN-v7</Product>
+    <Product>Landis.Extension.Succession.NECN-v8</Product>
     <Copyright>Landis-II-Foundation</Copyright>
     <Company>LANDIS-II Foundation</Company>
     <Description></Description>
