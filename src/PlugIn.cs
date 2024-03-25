@@ -302,6 +302,8 @@ namespace Landis.Extension.Succession.NECN
 
                 SiteVars.SmolderConsumption[site] += live_woodFireConsumption;
                 SiteVars.FlamingConsumption[site] += live_foliarFireConsumption;
+                SiteVars.SourceSink[site].Carbon += live_woodFireConsumption * 0.47;
+                SiteVars.SourceSink[site].Carbon += live_foliarFireConsumption * 0.47;
                 woodInput -= (float)live_woodFireConsumption;
                 foliarInput -= (float)live_foliarFireConsumption;
 
@@ -420,8 +422,8 @@ namespace Landis.Extension.Succession.NECN
 
                     }
 
-                    double woodFireConsumption = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CoarseLitterReduction;
-                    double foliarFireConsumption = foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].FineLitterReduction;
+                    double woodFireConsumption = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortWoodReduction;
+                    double foliarFireConsumption = foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortLeafReduction;
 
                     SiteVars.SmolderConsumption[site] += woodFireConsumption;
                     SiteVars.FlamingConsumption[site] += foliarFireConsumption;
