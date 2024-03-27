@@ -167,12 +167,6 @@ namespace Landis.Extension.Succession.NECN
                     }
 
                     WoodLayer.Decompose(site);
-
-                    //if (OtherData.CalibrateMode)
-                    //{
-                    //    PlugIn.ModelCore.UI.WriteLine("currentDeadWoodC:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, string.Join(", ", SiteVars.CurrentDeadWoodC[site]));
-                    //    PlugIn.ModelCore.UI.WriteLine("SurfaceDeadWoodC: {0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, SiteVars.SurfaceDeadWood[site].Carbon);
-                    //}
                     LitterLayer.Decompose(site);
                     SoilLayer.Decompose(site);
 
@@ -193,7 +187,6 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyAGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyBGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] += SiteVars.SourceSink[site].Carbon;
-                    //SiteVars.FineFuels[site] = (System.Math.Min(1.0, (double) (PlugIn.ModelCore.CurrentTime - SiteVars.HarvestTime[site]) * 0.1));
                 }
 
                 //Do this just once a year, after CWD is calculated above
@@ -209,8 +202,6 @@ namespace Landis.Extension.Succession.NECN
                     }
 
                     SiteVars.CWD10[site][year_index] = SiteVars.AnnualClimaticWaterDeficit[site];
-
-                    //PlugIn.ModelCore.UI.WriteLine("AnnualCWD is {0}", SiteVars.AnnualClimaticWaterDeficit[site]);
                 }
 
                 if (DroughtMortality.UseDrought)

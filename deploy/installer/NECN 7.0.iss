@@ -1,7 +1,7 @@
 ; LANDIS-II Extension infomation
 #define CoreRelease "LANDIS-II-V7"
 #define ExtensionName "NECN Succession"
-#define AppVersion "7.0"
+#define AppVersion "7.0.1"
 #define AppPublisher "LANDIS-II Foundation"
 #define AppURL "http://www.landis-ii.org/"
 
@@ -19,7 +19,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{F1B6EC67-57AE-4362-8D31-B928E93C755A}
+AppId={{1D021C63-ED1F-44B6-823B-5B1EB5E94A0C}
 AppName={#CoreRelease} {#ExtensionName}
 AppVersion={#AppVersion}
 ; Name in "Programs and Features"
