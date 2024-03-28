@@ -4,14 +4,15 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Utilities;
 
-using Landis.Library.InitialCommunities;
+using Landis.Library.InitialCommunities.Universal;
 using Landis.Library.Succession;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 using Landis.Library.Climate;
 using Landis.Library.Metadata;
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using MathNet.Numerics.Distributions;
 
@@ -70,7 +71,6 @@ namespace Landis.Extension.Succession.NECN
             modelCore = mCore;
             InputParametersParser parser = new InputParametersParser();
             Parameters = Landis.Data.Load<IInputParameters>(dataFile, parser);
-
         }
 
         //---------------------------------------------------------------------
@@ -81,6 +81,13 @@ namespace Landis.Extension.Succession.NECN
             {
                 return modelCore;
             }
+        }
+
+        public override void AddCohortData()
+        {
+            dynamic tempObject = additionalCohortParameters;
+            tempObject.WoodBiomass = 0.0f;
+            tempObject.LeafBiomass = 0.0f;
         }
 
 
@@ -152,18 +159,19 @@ namespace Landis.Extension.Succession.NECN
             //  Cohorts must be created before the base class is initialized
             //  because the base class' reproduction module uses the core's
             //  SuccessionCohorts property in its Initialization method.
-            Library.LeafBiomassCohorts.Cohorts.Initialize(Timestep, new CohortBiomass());
+            Landis.Library.UniversalCohorts.Cohorts.Initialize(Timestep, new CohortBiomass());
 
             // Initialize Reproduction routines:
             Reproduction.SufficientResources = SufficientLight;
             Reproduction.Establish = Establish;
             Reproduction.AddNewCohort = AddNewCohort;
             Reproduction.MaturePresent = MaturePresent;
+            Cohort.ComputeCohortData = ComputeCohortData;
             base.Initialize(modelCore, Parameters.SeedAlgorithm);
 
             // Delegate mortality routines:
-            Landis.Library.LeafBiomassCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
-            Landis.Library.LeafBiomassCohorts.Cohort.DeathEvent += CohortTotalMortality;
+            Landis.Library.UniversalCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
+            Landis.Library.UniversalCohorts.Cohort.DeathEvent += CohortTotalMortality;
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
@@ -256,18 +264,19 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         // This method does not trigger reproduction
-        public void CohortPartialMortality(object sender, Landis.Library.BiomassCohorts.PartialDeathEventArgs eventArgs)
+        public void CohortPartialMortality(object sender, PartialDeathEventArgs eventArgs)
         {
             if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
 
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
             ActiveSite site = eventArgs.Site;
 
-            ICohort cohort = (Landis.Library.LeafBiomassCohorts.ICohort)eventArgs.Cohort;
+            ICohort cohort = (Landis.Library.UniversalCohorts.ICohort)eventArgs.Cohort;
+            dynamic additionalParameters = cohort.Data.AdditionalParameters;
 
             float fractionPartialMortality = (float)eventArgs.Reduction;
-            float foliarInput = cohort.LeafBiomass * fractionPartialMortality;
-            float woodInput = cohort.WoodBiomass * fractionPartialMortality;
+            float foliarInput = additionalParameters.LeafBiomass * fractionPartialMortality;
+            float woodInput = additionalParameters.WoodBiomass * fractionPartialMortality;
 
             if (disturbanceType.IsMemberOf("disturbance:harvest"))
             {
@@ -367,15 +376,15 @@ namespace Landis.Extension.Succession.NECN
             {
                 ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
 
-                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, (cohort.WoodBiomass + cohort.LeafBiomass) * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass) * fractionPartialMortality), cohort, cohort.Species, site);
             }
             else
             {
                 ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
                 ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
 
-                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
-                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, additionalParameters.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, additionalParameters.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
                 
             }
             
@@ -389,7 +398,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
         // Total mortality, including from disturbance or senescence.
 
-        public void CohortTotalMortality(object sender, Landis.Library.BiomassCohorts.DeathEventArgs eventArgs)
+        public void CohortTotalMortality(object sender, DeathEventArgs eventArgs)
         {
 
             //PlugIn.ModelCore.UI.WriteLine("Cohort Total Mortality: {0}", eventArgs.Site);
@@ -398,9 +407,10 @@ namespace Landis.Extension.Succession.NECN
 
             ActiveSite site = eventArgs.Site;
 
-            ICohort cohort = (Landis.Library.LeafBiomassCohorts.ICohort)eventArgs.Cohort;
-            double foliarInput = (double)cohort.LeafBiomass;
-            double woodInput = (double)cohort.WoodBiomass;
+            ICohort cohort = (Landis.Library.UniversalCohorts.ICohort)eventArgs.Cohort;
+            dynamic additionalParameters = cohort.Data.AdditionalParameters;
+            double foliarInput = (double)additionalParameters.LeafBiomass;
+            double woodInput = (double)additionalParameters.WoodBiomass;
 
             if (disturbanceType != null)
             {
@@ -463,7 +473,7 @@ namespace Landis.Extension.Succession.NECN
                 ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, eventArgs.Site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
 
                 // Assume that ALL dead root biomass stays on site.
-                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.WoodBiomass + cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
             }
             else
             {
@@ -472,8 +482,8 @@ namespace Landis.Extension.Succession.NECN
                 ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, eventArgs.Site);
 
                 // Assume that ALL dead root biomass stays on site.
-                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
-                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, additionalParameters.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, additionalParameters.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
             }
             
 
@@ -721,10 +731,16 @@ namespace Landis.Extension.Succession.NECN
         /// This is a Delegate method to base succession.
         /// </summary>
 
-        public void AddNewCohort(ISpecies species, ActiveSite site, string reproductionType)
+        public void AddNewCohort(ISpecies species, ActiveSite site, string reproductionType, double propBiomass = 1.0)
         {
             float[] initialBiomass = CohortBiomass.InitialBiomass(species, SiteVars.Cohorts[site], site);
-            SiteVars.Cohorts[site].AddNewCohort(species, 1, initialBiomass[0], initialBiomass[1]);
+
+            ExpandoObject woodLeafBiomasses = new ExpandoObject();
+            dynamic tempObject = woodLeafBiomasses;
+            tempObject.WoodBiomass = initialBiomass[0];
+            tempObject.LeafBiomass = initialBiomass[1];
+
+            SiteVars.Cohorts[site].AddNewCohort(species, 1, System.Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), woodLeafBiomasses);
 
             if (reproductionType == "plant")
                 SpeciesByPlant[species.Index]++;
@@ -764,6 +780,17 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
+        public CohortData ComputeCohortData(ushort age, int biomass, int anpp, ExpandoObject parametersToAdd)
+        {
+            IDictionary<string, object> tempObject = parametersToAdd;
+
+            int newBiomass = System.Convert.ToInt32(tempObject["LeafBiomass"]) + System.Convert.ToInt32(tempObject["WoodBiomass"]);
+
+            return new CohortData(age, newBiomass, anpp, parametersToAdd);
+        }
+
+        //---------------------------------------------------------------------
+
         /// <summary>
         /// Determines if there is a mature cohort at a site.
         /// This is a Delegate method to base succession.
@@ -773,19 +800,18 @@ namespace Landis.Extension.Succession.NECN
             return SiteVars.Cohorts[site].IsMaturePresent(species);
         }
 
-
         public override void InitializeSites(string initialCommunitiesText, string initialCommunitiesMap, ICore modelCore)
         {
             ModelCore.UI.WriteLine("   Loading initial communities from file \"{0}\" ...", initialCommunitiesText);
-            Landis.Library.InitialCommunities.DatasetParser parser = new Landis.Library.InitialCommunities.DatasetParser(Timestep, ModelCore.Species);
-            Landis.Library.InitialCommunities.IDataset communities = Landis.Data.Load<Landis.Library.InitialCommunities.IDataset>(initialCommunitiesText, parser);
+            Landis.Library.InitialCommunities.Universal.DatasetParser parser = new Landis.Library.InitialCommunities.Universal.DatasetParser(Timestep, ModelCore.Species, additionalCohortParameters);
+            Landis.Library.InitialCommunities.Universal.IDataset communities = Landis.Data.Load<Landis.Library.InitialCommunities.Universal.IDataset>(initialCommunitiesText, parser);
 
             ModelCore.UI.WriteLine("   Reading initial communities map \"{0}\" ...", initialCommunitiesMap);
-            IInputRaster<uintPixel> map;
-            map = ModelCore.OpenRaster<uintPixel>(initialCommunitiesMap);
+            IInputRaster<UIntPixel> map;
+            map = ModelCore.OpenRaster<UIntPixel>(initialCommunitiesMap);
             using (map)
             {
-                uintPixel pixel = map.BufferPixel;
+                UIntPixel pixel = map.BufferPixel;
                 foreach (Site site in ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
@@ -799,6 +825,7 @@ namespace Landis.Extension.Succession.NECN
                     //modelCore.Log.WriteLine("ecoregion = {0}.", modelCore.Ecoregion[site]);
 
                     ActiveSite activeSite = (ActiveSite)site;
+
                     initialCommunity = communities.Find(mapCode);
                     if (initialCommunity == null)
                     {

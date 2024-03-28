@@ -1,0 +1,1 @@
+<landisMetadata><core name="LANDIS-II v8.0"><inputs inputFile1="./single3.tif" inputFile2="./ecoregions.txt" inputFile3="species_LTB.txt" /><extensions><extension name="NECN Succession" version="8.0"><inputs inputFile1="NECN-succession-singlecell.txt" /></extension></extensions></core></landisMetadata>

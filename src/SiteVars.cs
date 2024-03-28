@@ -4,7 +4,7 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Utilities;
 using Landis.Library.Succession;
-using Landis.Library.LeafBiomassCohorts;  
+using Landis.Library.UniversalCohorts;  
 using System.Collections.Generic;
 using System;
 using System.Data;
@@ -20,8 +20,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<int> timeOfLast;
 
         // Live biomass:        
-        private static ISiteVar<Landis.Library.AgeOnlyCohorts.ISiteCohorts> baseCohortsSiteVar;
-        private static ISiteVar<Landis.Library.BiomassCohorts.ISiteCohorts> biomassCohortsSiteVar;
+        private static ISiteVar<ISiteCohorts> baseCohortsSiteVar;
         
         // Dead biomass:
         private static ISiteVar<Layer> surfaceDeadWood;
@@ -146,9 +145,8 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public static void Initialize()
         {
-            cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<Library.LeafBiomassCohorts.SiteCohorts>();
-            biomassCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.BiomassCohorts.ISiteCohorts>.Wrap(cohorts);
-            baseCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.AgeOnlyCohorts.ISiteCohorts>.Wrap(cohorts);
+            cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<SiteCohorts>();
+            baseCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<ISiteCohorts>.Wrap(cohorts);
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
@@ -270,8 +268,7 @@ namespace Landis.Extension.Succession.NECN
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
             PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
-            PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.AgeCohorts");
-            PlugIn.ModelCore.RegisterSiteVar(biomassCohortsSiteVar, "Succession.BiomassCohorts");
+            PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.UniversalCohorts");
             PlugIn.ModelCore.RegisterSiteVar(fineFuels, "Succession.FineFuels");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.SmolderConsumption, "Succession.SmolderConsumption");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.FlamingConsumption, "Succession.FlamingConsumption");
@@ -381,7 +378,7 @@ namespace Landis.Extension.Succession.NECN
                 return 0.0;
             
             int youngBiomass;
-            int totalBiomass = Library.LeafBiomassCohorts.Cohorts.ComputeBiomass(siteCohorts, out youngBiomass);
+            int totalBiomass = Library.UniversalCohorts.Cohorts.ComputeBiomass(siteCohorts, out youngBiomass);
             double B_ACT = totalBiomass - youngBiomass;
 
             return B_ACT;

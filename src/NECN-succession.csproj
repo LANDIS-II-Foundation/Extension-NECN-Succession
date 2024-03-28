@@ -2,19 +2,19 @@
 
   <PropertyGroup>
     <RootNamespace>Landis.Extension.Succession.NECN</RootNamespace>
-    <AssemblyName>Landis.Extension.Succession.NECN-v7</AssemblyName>
+    <AssemblyName>Landis.Extension.Succession.NECN-v8</AssemblyName>
     <AssemblyTitle>Landis.Extension.Succession.NECN-v7</AssemblyTitle>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
-    <AssemblyVersion>7.0.1</AssemblyVersion>
-    <Version>7.0.1</Version>
-    <FileVersion>7.0.1</FileVersion>
+    <AssemblyVersion>8.0</AssemblyVersion>
+    <Version>8.0</Version>
+    <FileVersion>8.0</FileVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>English</NeutralLanguage>
     <Authors>LANDIS-II Foundation</Authors>
-    <Product>Landis.Extension.Succession.NECN-v7</Product>
+    <Product>Landis.Extension.Succession.NECN-v8</Product>
     <Copyright>Landis-II-Foundation</Copyright>
     <Company>LANDIS-II Foundation</Company>
     <Description></Description>
@@ -25,30 +25,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Landis.Core" Version="2.0.0" />
-    <PackageReference Include="Landis.Core.Implementation" Version="2.0.0" />
+    <PackageReference Include="Landis.Core" Version="3.0.1" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 
 	</ItemGroup>
   
   <ItemGroup>
-    <Reference Include="Landis.Library.AgeOnlyCohorts-v3">
-      <HintPath>lib\Landis.Library.AgeOnlyCohorts-v3.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.Library.Biomass-v2">
-      <HintPath>lib\Landis.Library.Biomass-v2.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.Library.BiomassCohorts-v3">
-      <HintPath>lib\Landis.Library.BiomassCohorts-v3.dll</HintPath>
-    </Reference>
     <Reference Include="Landis.Library.Climate-v4">
       <HintPath>lib\Landis.Library.Climate-v4.3.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Cohorts-v2">
-      <HintPath>lib\Landis.Library.Cohorts-v2.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.Library.LeafBiomassCohorts-v2">
-      <HintPath>lib\Landis.Library.LeafBiomassCohorts-v2.dll</HintPath>
+    <Reference Include="Landis.Library.InitialCommunity.Universal">
+      <HintPath>lib\Landis.Library.InitialCommunity.Universal.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Metadata-v2">
       <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>
@@ -56,11 +44,12 @@
     <Reference Include="Landis.Library.Parameters-v2">
       <HintPath>lib\Landis.Library.Parameters-v2.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Succession-v8">
+    <Reference Include="Landis.Library.Succession-v9">
+      <HintPath>lib\Landis.Library.Succession-v9.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.InitialCommunity.LeafBiomass">
-      <HintPath>lib\Landis.Library.InitialCommunity.LeafBiomass.dll</HintPath>
-		</Reference>
+    <Reference Include="Landis.Library.UniversalCohorts-v1">
+      <HintPath>lib\Landis.Library.UniversalCohorts-v1.dll</HintPath>
+    </Reference>
 		<Reference Include="MathNet.Numerics">
 		</Reference>  
 </ItemGroup>
