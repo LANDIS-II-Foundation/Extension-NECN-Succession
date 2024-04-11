@@ -80,7 +80,7 @@ namespace Landis.Extension.Succession.NECN
             }*/
 
             //SF limit establishment on poorly-drailed soils
-            if (SiteVars.SoilDrain[site] < FunctionalType.Table[SpeciesData.FuncType[species]].MinSoilDrain)
+            if (SiteVars.SoilDrain[site] < SpeciesData.MinSoilDrain[species])
             {
                 //this stops trees from establishing in wetlands
                 soilDrainMultiplier = 0.0;

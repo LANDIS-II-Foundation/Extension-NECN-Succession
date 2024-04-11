@@ -100,7 +100,7 @@ namespace Landis.Extension.Succession.NECN
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
             MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); 
 
-            FunctionalType.Initialize(Parameters);
+            //FunctionalType.Initialize(Parameters);
             SpeciesData.Initialize(Parameters);
             SiteVars.Initialize(); // chihiro; this method use functional type data for initializing decay value
             ReadMaps.ReadSoilDepthMap(Parameters.SoilDepthMapName);
@@ -735,7 +735,7 @@ namespace Landis.Extension.Succession.NECN
         public override void InitializeSites(string initialCommunitiesText, string initialCommunitiesMap, ICore modelCore)
         {
             ModelCore.UI.WriteLine("   Loading initial communities from file \"{0}\" ...", initialCommunitiesText);
-            Landis.Library.InitialCommunities.Universal.DatasetParser parser = new Landis.Library.InitialCommunities.Universal.DatasetParser(Timestep, ModelCore.Species, additionalCohortParameters, initialCommunitiesText);
+            Landis.Library.InitialCommunities.Universal.DatasetParser parser = new Landis.Library.InitialCommunities.Universal.DatasetParser(Timestep, ModelCore.Species, additionalCohortParameters);
             Landis.Library.InitialCommunities.Universal.IDataset communities = Landis.Data.Load<Landis.Library.InitialCommunities.Universal.IDataset>(initialCommunitiesText, parser);
 
             ModelCore.UI.WriteLine("   Reading initial communities map \"{0}\" ...", initialCommunitiesMap);

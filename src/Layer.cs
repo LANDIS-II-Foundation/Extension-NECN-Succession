@@ -67,7 +67,7 @@ namespace Landis.Extension.Succession.NECN
                 foreach (ISpecies species in PlugIn.ModelCore.Species)
                 {
                     if (!SpeciesData.Grass[species])
-                        decayvalue += FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate;
+                        decayvalue += SpeciesData.WoodDecayRate[species];
                         n_of_tree_species += 1;
                 }
                 this.decayValue = decayvalue / n_of_tree_species;
