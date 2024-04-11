@@ -82,7 +82,7 @@ namespace Landis.Extension.Succession.NECN
 
             //---------------------------------------------------------------------------------
 
-            InputVar<string> initCommunities = new InputVar<string>("InitialCommunities");
+            InputVar<string> initCommunities = new InputVar<string>("InitialCommunitiesCSV");
             ReadVar(initCommunities);
             parameters.InitialCommunities = initCommunities.Value;
 

@@ -29,7 +29,6 @@ namespace Landis.Extension.Succession.NECN
         public static double[] ShadeLAI;
         public static double AnnualWaterBalance;
 
-        //private List<ISufficientLight> sufficientLight;
         public static string SoilCarbonMapNames = null;
         public static int SoilCarbonMapFrequency;
         public static string SoilNitrogenMapNames = null;
@@ -98,7 +97,6 @@ namespace Landis.Extension.Succession.NECN
             PlugIn.ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
             Timestep = Parameters.Timestep;
             SuccessionTimeStep = Timestep;
-            //sufficientLight = Parameters.LightClassProbabilities;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
             MetadataHandler.InitializeMetadata(Timestep, modelCore, SoilCarbonMapNames, SoilNitrogenMapNames, ANPPMapNames, ANEEMapNames, TotalCMapNames); 
 
@@ -152,7 +150,6 @@ namespace Landis.Extension.Succession.NECN
             FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
             ClimateRegionData.Initialize(Parameters);
 
-            //ShadeLAI = Parameters.MaximumShadeLAI;
             OtherData.Initialize(Parameters);
             FireEffects.Initialize(Parameters);
 
@@ -209,8 +206,6 @@ namespace Landis.Extension.Succession.NECN
             SpeciesBySerotiny = new int[ModelCore.Species.Count];
             SpeciesBySeed = new int[ModelCore.Species.Count];
 
-            //base.RunReproductionFirst();
-
             base.Run();
 
             if (Timestep > 0)
@@ -244,19 +239,15 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
         // Although this function is no longer referenced, it is required through inheritance from the succession library
-
         public override byte ComputeShade(ActiveSite site)
         {
-
             return (byte) SiteVars.LAI[site]; // finalShade;
         }
 
 
         //---------------------------------------------------------------------
-
         protected override void InitializeSite(ActiveSite site)
         {
-
             InitialBiomass initialBiomass = InitialBiomass.Compute(site, initialCommunity);
             SiteVars.MineralN[site] = Parameters.InitialMineralN;
         }
@@ -319,7 +310,7 @@ namespace Landis.Extension.Succession.NECN
             }
             if (disturbanceType.IsMemberOf("disturbance:browse"))
             {
-                //SF Initial effort to account for browsed biomass nutrient cycling
+                //Sam Flake: account for browsed biomass nutrient cycling
                 //all browser waste treated as leaves with high N content. This overestimates moose waste if 
                 //there is a lot of cohort mortality versus browse eaten. 
 
@@ -333,25 +324,17 @@ namespace Landis.Extension.Succession.NECN
                 {
                     SiteVars.LitterfallC[site] += foliarInput * 0.47;
                     foliarInput = foliarInput * (float) 0.1;                     //most carbon is respired
-
-
-                    //PlugIn.ModelCore.UI.WriteLine("waste input is {0}, CN ratio of waste is {1}", foliarInput, 50);
-
-                    //Nitrogen content of feces is approximately 1.6% for deer(Asada and Ochiai 1999),
-                    //between 1.45% and 2.26% for deer (Howery and Pfister, 1990),
-                    //2.5%  for deer (Euan et al. 2020),
-                    //1.33% in winter, 2.44% for moose in summer (Persson et al. 2000),
-                    //2.4% for moose (Kuijper et al. 2016)
+                    
+                    //N content of feces is approximately 1.6% for deer(Asada and Ochiai 1999),
+                    //between 1.45% and 2.26% for deer (Howery and Pfister, 1990), 2.5%  for deer (Euan et al. 2020),
+                    //1.33% in winter, 2.44% for moose in summer (Persson et al. 2000), 2.4% for moose (Kuijper et al. 2016)
                     //Feces N = 5.7 kg per moose per year (Persson et al. 2000)
 
-                    //Amount of nitrogen in urine is 0.5% in summer (Persson et al. 2000)
-                    //3675 L urine per moose per year (Persson et al. 2000)
+                    //N in urine is 0.5% in summer (Persson et al. 2000), 3675 L urine per moose per year (Persson et al. 2000)
                     //Urine is 0.5% N = 18.375 kg N per year per moose (assuming summer and winter N content is the same)
 
-                    //Total N for moose waste = 24 kg per moose per year
-                    //Each moose eats 2738 kg biomass per year
-                    //Foliar inputs are 2738 * 0.47 * 0.1 kg C  = 128.67 kg C per moose
-                    //CN ratio = 128/24 = 5.33
+                    //Total N for moose waste = 24 kg per moose per year; Each moose eats 2738 kg biomass per year
+                    //Foliar inputs are 2738 * 0.47 * 0.1 kg C  = 128.67 kg C per moose; CN ratio = 128/24 = 5.33
 
                     LitterLayer.PartitionResidue(
                                 foliarInput,
@@ -362,9 +345,6 @@ namespace Landis.Extension.Succession.NECN
                                 LayerName.Leaf,
                                 LayerType.Surface,
                                 site);
-                    //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
-                    //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
-                    //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
 
                     Disturbed[site] = false; 
 
@@ -503,26 +483,16 @@ namespace Landis.Extension.Succession.NECN
 
         }
         //---------------------------------------------------------------------
-        /// <summary>
-        /// Determines if there is sufficient light at a site for a species to
-        /// germinate/resprout.
-        /// This is a Delegate method to base succession.
-        /// </summary>
-        /// 
-        // W.Hotta and Chihiro modified
-        // 
-        // Description:
-        //     - Modify light probability based on the amount of nursery log on the site
-        //
-        //
-        
+        // <summary>
+        // Determines if there is sufficient light at a site for a species to
+        // germinate/resprout.
+        // This is a Delegate method to base succession.
+        // W.Hotta and Chihiro modified - Modify light probability based on the amount of nursery log on the site
+        // </summary>
+
         public bool SufficientLight(ISpecies species, ActiveSite site)
         {
 
-            //PlugIn.ModelCore.UI.WriteLine("  Calculating Sufficient Light from Succession.");
-            //byte siteShade = PlugIn.ModelCore.GetSiteVar<byte>("Shade")[site];
-            //int bestShadeClass = 0; // the best shade class for the species; Chihiro
-            //bool found = false;
             bool isSufficientlight = false;
             double lightProbability = 0.0;
 
@@ -578,17 +548,6 @@ namespace Landis.Extension.Succession.NECN
                     isSufficientlight = true;
                     regenType = "surface";
                 }
-                //else
-                //{
-                //    // 2. If (1) the site shade is darker than the best shade class for the species and 
-                //    //       (2) the light availability meets the species requirement,
-                //    //if (siteShade > bestShadeClass && modelCore.GenerateUniform() < lightProbability)
-                //    //{
-                //        // 3. check if threre are sufficient amounts of downed logs?
-                //        isSufficientlight = modelCore.GenerateUniform() < nurseryLogAvailability;
-                //        if (isSufficientlight) regenType = "nlog";
-                //    //}
-                //}
                 if (OtherData.CalibrateMode)
                 {
                     PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
@@ -601,31 +560,8 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------
-        /// <summary>
-        /// Compute the most suitable shade class for the species
-        /// This function identifies the peak of the light establishment table.
-        /// </summary>
-        // Chihiro 2020.01.22
-        //
-        //private static int ComputeBestShadeClass(ISufficientLight lights)
-        //{
-        //    int bestShadeClass = 0;
-        //    double maxProbabilityLight = 0.0;
-        //    if (lights.ProbabilityLight0 > maxProbabilityLight) bestShadeClass = 0;
-        //    if (lights.ProbabilityLight1 > maxProbabilityLight) bestShadeClass = 1;
-        //    if (lights.ProbabilityLight2 > maxProbabilityLight) bestShadeClass = 2;
-        //    if (lights.ProbabilityLight3 > maxProbabilityLight) bestShadeClass = 3;
-        //    if (lights.ProbabilityLight4 > maxProbabilityLight) bestShadeClass = 4;
-        //    if (lights.ProbabilityLight5 > maxProbabilityLight) bestShadeClass = 5;
-        //    return bestShadeClass;
-
-        //}
-
-
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// Compute the ratio of projected area (= occupancy area) of nursery logs to the grid area.
-        /// </summary>
+        // <summary>
+        // Compute the ratio of projected area (= occupancy area) of nursery logs to the grid area.
         // W.Hotta & Chihiro;
         //
         // Description: 
@@ -637,9 +573,8 @@ namespace Landis.Extension.Succession.NECN
         //     - Then, the volume is converted to the projected area (occupation area) 
         //       using the mean height of downed logs derived from field data.
         //         - The shape of downed logs were assumed to be an elliptical cylinder
-        //
-        //
-        
+        // </summary>
+
         private static double ComputeNurseryLogAreaRatio(ISpecies species, ActiveSite site)
         {
             // Hight of downed logs
@@ -677,16 +612,13 @@ namespace Landis.Extension.Succession.NECN
 
 
         //---------------------------------------------------------------------
-        /// <summary>
+        // <summary>
         /// Compute the amount of nursery log carbon based on its decay ratio
-        /// </summary>
-        // W.Hotta & Chihiro; 
-        //
-        // Description: 
+        // W.Hotta & Chihiro Description: 
         //     - In the process of decomposition of downed logs, 
         //       the volume remains the same, only the density changes.
-        //
-        
+        // </summary>
+
         private static double[] ComputeNurseryLogC(ActiveSite site, double densityDecayClass0, double densityDecayClass3, double densityDecayClass4, double densityDecayClass5)
         {
             // Define thresholds to identify decay class
@@ -818,11 +750,6 @@ namespace Landis.Extension.Succession.NECN
                     uint mapCode = pixel.MapCode.Value;
                     if (!site.IsActive)
                         continue;
-
-                    //if (!modelCore.Ecoregion[site].Active)
-                    //    continue;
-
-                    //modelCore.Log.WriteLine("ecoregion = {0}.", modelCore.Ecoregion[site]);
 
                     ActiveSite activeSite = (ActiveSite)site;
 
