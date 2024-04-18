@@ -2004,3 +2004,8 @@ testing/Core7-NECN7-Landscape/NECN/AG_NPP-30.img
 testing/Core7-NECN7-Landscape/NECN/AG_NPP-25.img
 testing/Core7-NECN7-Landscape/NECN/AG_NPP-20.img
 testing/Core7-NECN7-Landscape/NECN/AG_NPP-15.img
+/testing/Core8-NECN8-SingleCell/Metadata
+testing/Core8-NECN8-SingleCell/Landis-log.txt
+testing/Core8-NECN8-SingleCell/Landis-climate-log.txt
+testing/Core8-NECN8-SingleCell/Climate-annual-log.csv
+/testing/Core8-NECN8-SingleCell/NECN
