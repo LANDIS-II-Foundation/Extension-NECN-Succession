@@ -44,8 +44,6 @@ DecayRateSOM2			0.02
 DecayRateSOM3			0.0002
 
 SpeciesParameters NECN_Spp_Table.csv
-
-FunctionalGroupParameters NECN_Functional_Table.csv
 			
 FireReductionParameters
 >>	Severity	WoodLitter	Litter	CohortWood	CohortFoliar	SOM

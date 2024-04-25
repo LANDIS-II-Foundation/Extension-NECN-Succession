@@ -89,11 +89,11 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("dryDays multiplier = {0}, degree days multiplier = {1}, Jan temp multiplier = {2}, soil water multiplier = {3}," +
             //    "soil drain multiplier = {4}", soilMultiplier, tempMultiplier, minJanTempMultiplier, soilwaterMultiplier, soilDrainMultiplier); //debug
             // Liebig's Law of the Minimum is applied to the four multipliers for each year:
-            double minMultiplier = System.Math.Min(tempMultiplier, soilMultiplier);
-            minMultiplier = System.Math.Min(minJanTempMultiplier, minMultiplier);
-            minMultiplier = System.Math.Min(cwdMultiplier, minMultiplier);
-            minMultiplier = System.Math.Min(soilDrainMultiplier, minMultiplier);
-            if (OtherData.DGS_waterlimit) minMultiplier = System.Math.Min(minMultiplier, soilwaterMultiplier);
+            double minMultiplier = Math.Min(tempMultiplier, soilMultiplier);
+            minMultiplier = Math.Min(minJanTempMultiplier, minMultiplier);
+            minMultiplier = Math.Min(cwdMultiplier, minMultiplier);
+            minMultiplier = Math.Min(soilDrainMultiplier, minMultiplier);
+            if (OtherData.DGS_waterlimit) minMultiplier = Math.Min(minMultiplier, soilwaterMultiplier);
 
             establishProbability += minMultiplier;
             establishProbability *= PlugIn.ProbEstablishAdjust;
@@ -192,7 +192,7 @@ namespace Landis.Extension.Succession.NECN
             }
             else
             {
-                Soil_Moist_GF = System.Math.Sqrt((double)(maxDrought - dryDays) / maxDrought);
+                Soil_Moist_GF = Math.Sqrt((double)(maxDrought - dryDays) / maxDrought);
             }
 
             //PlugIn.ModelCore.UI.WriteLine("BeginGrow={0}, EndGrow={1}, dryDays={2}, maxDrought={3}", weather.BeginGrowing, weather.EndGrowing, dryDays, maxDrought); //debug

@@ -48,6 +48,9 @@ namespace Landis.Extension.Succession.NECN
             dynamic tempObject = new ExpandoObject();
             tempObject.WoodBiomass = 0;
             tempObject.LeafBiomass = 0;
+
+            
+
             ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
             // First call to the Calibrate Log:

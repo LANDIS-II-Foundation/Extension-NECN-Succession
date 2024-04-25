@@ -87,7 +87,7 @@ namespace Landis.Extension.Succession.NECN
                 if (ecoregion.Active)
                 {
                     //Climate.GenerateEcoregionClimateData(ecoregion, 0, PlugIn.Parameters.Latitude);
-                    DroughtMortality.SetSingleAnnualClimate(ecoregion, 0, Climate.Phase.SpinUp_Climate);  // Some placeholder data to get things started.
+                    SetSingleAnnualClimate(ecoregion, 0, Climate.Phase.SpinUp_Climate);  // Some placeholder data to get things started.
                 }
             }
 
@@ -204,18 +204,18 @@ namespace Landis.Extension.Succession.NECN
             //    PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
-            double Precipitation = DroughtMortality.SpinUpWeather[ecoregion].MonthlyPrecip[month];
-            double tave = DroughtMortality.SpinUpWeather[ecoregion].MonthlyTemp[month];
-            double tmax = DroughtMortality.SpinUpWeather[ecoregion].MonthlyMaxTemp[month];
-            double tmin = DroughtMortality.SpinUpWeather[ecoregion].MonthlyMinTemp[month];
-            double PET = DroughtMortality.SpinUpWeather[ecoregion].MonthlyPET[month];
+            double Precipitation = SpinUpWeather[ecoregion].MonthlyPrecip[month];
+            double tave = SpinUpWeather[ecoregion].MonthlyTemp[month];
+            double tmax = SpinUpWeather[ecoregion].MonthlyMaxTemp[month];
+            double tmin = SpinUpWeather[ecoregion].MonthlyMinTemp[month];
+            double PET = SpinUpWeather[ecoregion].MonthlyPET[month];
             
             //if (OtherData.CalibrateMode)
             //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
             //    month, tave, tmax, tmin, PET);
             int daysInMonth = AnnualClimate.DaysInMonth(month, year);
-            int beginGrowing = DroughtMortality.SpinUpWeather[ecoregion].BeginGrowing;
-            int endGrowing = DroughtMortality.SpinUpWeather[ecoregion].EndGrowing;
+            int beginGrowing = SpinUpWeather[ecoregion].BeginGrowing;
+            int endGrowing = SpinUpWeather[ecoregion].EndGrowing;
 
             double wiltingPoint = SiteVars.SoilWiltingPoint[site];
             double soilDepth = SiteVars.SoilDepth[site];
@@ -335,12 +335,12 @@ namespace Landis.Extension.Succession.NECN
                 double canopyIntercept = ((0.0003 * litterBiomass) + (0.0006 * standingBiomass)) * OtherData.WaterLossFactor1;
 
                 //...Bare soil evaporation, fraction of precip (bareSoilEvap):
-                bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
+                bareSoilEvap = 0.5 * Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
+                double soilEvaporation = Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
-                soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent);
+                soilEvaporation = Math.Min(soilEvaporation, soilWaterContent);
                 //if (OtherData.CalibrateMode)
                 //    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
                 //        soilEvaporation, bareSoilEvap, canopyIntercept);
@@ -617,9 +617,9 @@ namespace Landis.Extension.Succession.NECN
             double[] tempValue = new double[0];
             double[] cwdValue = new double[0];
 
-            int swayear = DroughtMortality.LagSWA[species];
-            int tempyear = DroughtMortality.LagTemp[species];
-            int cwdyear = DroughtMortality.LagCWD[species];
+            int swayear = LagSWA[species];
+            int tempyear = LagTemp[species];
+            int cwdyear = LagCWD[species];
 
             soilWater = SiteVars.SoilWater10[site].ToArray();
             tempValue = SiteVars.Temp10[site].ToArray();

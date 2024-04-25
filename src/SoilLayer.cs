@@ -30,7 +30,7 @@ namespace Landis.Extension.Succession.NECN
                     - OtherData.MinCNSurfMicrobes);
                 
                 double ratioCNtoSOM2 = (som1c_surface / SiteVars.SOM1surface[site].Nitrogen) + radds1;
-                ratioCNtoSOM2 = System.Math.Max(ratioCNtoSOM2, OtherData.SurfaceActivePoolCNMinimum);
+                ratioCNtoSOM2 = Math.Max(ratioCNtoSOM2, OtherData.SurfaceActivePoolCNMinimum);
         
                 //Compute total C flow out of surface microbes.
                 double totalCflow = som1c_surface

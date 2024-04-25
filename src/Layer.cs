@@ -243,7 +243,7 @@ namespace Landis.Extension.Succession.NECN
                                 // v6:  Replace the fixed value (0.39) with the user input value for surficial C decay
                                 * PlugIn.Parameters.DecayRateSurf
                                 * anerb
-                                * System.Math.Exp(-1.0 * OtherData.LigninDecayEffect * this.FractionLignin)
+                                * Math.Exp(-1.0 * OtherData.LigninDecayEffect * this.FractionLignin)
                                 * OtherData.MonthAdjust;
 
                 //Decompose structural into som1 and som2 with CO2 loss.
@@ -360,11 +360,11 @@ namespace Landis.Extension.Succession.NECN
 
                 // Compute ratios for surface  metabolic residue
                 if (this.Type == LayerType.Surface)
-                    ratioCNtoSOM1 = Layer.AbovegroundDecompositionRatio(this.Nitrogen, litterC);
+                    ratioCNtoSOM1 = AbovegroundDecompositionRatio(this.Nitrogen, litterC);
 
                 //Compute ratios for soil metabolic residue
                 else
-                    ratioCNtoSOM1 = Layer.BelowgroundDecompositionRatio(site,
+                    ratioCNtoSOM1 = BelowgroundDecompositionRatio(site,
                                         OtherData.MinCNenterSOM1,
                                         OtherData.MaxCNenterSOM1,
                                         OtherData.MinContentN_SOM1);

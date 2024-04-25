@@ -69,7 +69,7 @@ namespace Landis.Extension.Succession.NECN
         {
             modelCore = mCore;
             InputParametersParser parser = new InputParametersParser();
-            Parameters = Landis.Data.Load<IInputParameters>(dataFile, parser);
+            Parameters = Data.Load<IInputParameters>(dataFile, parser);
         }
 
         //---------------------------------------------------------------------
@@ -84,7 +84,7 @@ namespace Landis.Extension.Succession.NECN
 
         public override void AddCohortData()
         {
-            dynamic tempObject = additionalCohortParameters;
+            dynamic tempObject =  additionalCohortParameters;
             tempObject.WoodBiomass = 0.0f;
             tempObject.LeafBiomass = 0.0f;
         }
@@ -94,7 +94,7 @@ namespace Landis.Extension.Succession.NECN
 
         public override void Initialize()
         {
-            PlugIn.ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
+            ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
             Timestep = Parameters.Timestep;
             SuccessionTimeStep = Timestep;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
@@ -156,7 +156,7 @@ namespace Landis.Extension.Succession.NECN
             //  Cohorts must be created before the base class is initialized
             //  because the base class' reproduction module uses the core's
             //  SuccessionCohorts property in its Initialization method.
-            Landis.Library.UniversalCohorts.Cohorts.Initialize(Timestep, new CohortBiomass());
+            Library.UniversalCohorts.Cohorts.Initialize(Timestep, new CohortBiomass());
 
             // Initialize Reproduction routines:
             Reproduction.SufficientResources = SufficientLight;
@@ -164,11 +164,11 @@ namespace Landis.Extension.Succession.NECN
             Reproduction.AddNewCohort = AddNewCohort;
             Reproduction.MaturePresent = MaturePresent;
             Cohort.ComputeCohortData = ComputeCohortData;
-            base.Initialize(modelCore, Parameters.SeedAlgorithm);
+            Initialize(modelCore, Parameters.SeedAlgorithm);
 
             // Delegate mortality routines:
-            Landis.Library.UniversalCohorts.Cohort.PartialDeathEvent += CohortPartialMortality;
-            Landis.Library.UniversalCohorts.Cohort.DeathEvent += CohortTotalMortality;
+            Cohort.PartialDeathEvent += CohortPartialMortality;
+            Cohort.DeathEvent += CohortTotalMortality;
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
@@ -177,7 +177,7 @@ namespace Landis.Extension.Succession.NECN
                 DroughtMortality.Initialize(Parameters);
             }
 
-            foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
+            foreach (ActiveSite site in ModelCore.Landscape)
             {
                 Main.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
@@ -194,13 +194,13 @@ namespace Landis.Extension.Succession.NECN
         public override void Run()
         {
 
-            if (PlugIn.ModelCore.CurrentTime > 0)
+            if (ModelCore.CurrentTime > 0)
             {
                 Disturbed.ActiveSiteValues = false;
                 SiteVars.ResetDisturbances();
             }
 
-            ClimateRegionData.AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
+            ClimateRegionData.AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(ModelCore.Ecoregions);
             SpeciesByPlant = new int[ModelCore.Species.Count];
             SpeciesByResprout = new int[ModelCore.Species.Count];
             SpeciesBySerotiny = new int[ModelCore.Species.Count];
@@ -225,12 +225,12 @@ namespace Landis.Extension.Succession.NECN
                     int month = months[i];
                     Outputs.WriteMonthlyLogFile(month);
                 }
-                Outputs.WritePrimaryLogFile(PlugIn.ModelCore.CurrentTime);
-                Outputs.WriteShortPrimaryLogFile(PlugIn.ModelCore.CurrentTime);
+                Outputs.WritePrimaryLogFile(ModelCore.CurrentTime);
+                Outputs.WriteShortPrimaryLogFile(ModelCore.CurrentTime);
                 Outputs.WriteMaps();
-                Outputs.WriteReproductionLog(PlugIn.ModelCore.CurrentTime);
+                Outputs.WriteReproductionLog(ModelCore.CurrentTime);
                 Establishment.LogEstablishment();
-                if (PlugIn.InputCommunityMapNames != null && ModelCore.CurrentTime % PlugIn.InputCommunityMapFrequency == 0)
+                if (InputCommunityMapNames != null && ModelCore.CurrentTime % InputCommunityMapFrequency == 0)
                     Outputs.WriteCommunityMaps();
             }
 
@@ -257,7 +257,7 @@ namespace Landis.Extension.Succession.NECN
         // This method does not trigger reproduction
         public void CohortPartialMortality(object sender, PartialDeathEventArgs eventArgs)
         {
-            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
+            if(OtherData.CalibrateMode) ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
 
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
             ActiveSite site = eventArgs.Site;
@@ -271,7 +271,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (disturbanceType.IsMemberOf("disturbance:harvest"))
             {
-                SiteVars.HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
+                SiteVars.HarvestPrescriptionName = ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
                 if (ModelCore.CurrentTime > SiteVars.HarvestDisturbedYear[site]) // this is the first cohort killed/damaged
                 {
                     //PlugIn.ModelCore.UI.WriteLine("   Begin harvest layer reductions...");
@@ -284,7 +284,7 @@ namespace Landis.Extension.Succession.NECN
             if (disturbanceType.IsMemberOf("disturbance:fire"))
             {
 
-                SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
+                SiteVars.FireSeverity = ModelCore.GetSiteVar<byte>("Fire.Severity");
 
                 if (ModelCore.CurrentTime > SiteVars.FireDisturbedYear[site]) // this is the first cohort killed/damaged
                 {
@@ -398,8 +398,8 @@ namespace Landis.Extension.Succession.NECN
 
                 if (disturbanceType.IsMemberOf("disturbance:fire"))
                 {
-                    SiteVars.FireSeverity = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
-                    Landis.Library.Succession.Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
+                    SiteVars.FireSeverity = ModelCore.GetSiteVar<byte>("Fire.Severity");
+                    Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
 
                     if (ModelCore.CurrentTime > SiteVars.FireDisturbedYear[site])  // the first cohort killed/damaged
                     {
@@ -427,7 +427,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     if (disturbanceType.IsMemberOf("disturbance:harvest"))
                     {
-                        SiteVars.HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
+                        SiteVars.HarvestPrescriptionName = ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
                         if (ModelCore.CurrentTime > SiteVars.HarvestDisturbedYear[site])  // the first cohort killed/damaged
                         {
                             HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
@@ -442,7 +442,7 @@ namespace Landis.Extension.Succession.NECN
                     }
 
                     // If not fire, check for resprouting:
-                    Landis.Library.Succession.Reproduction.CheckForResprouting(eventArgs.Cohort, site);
+                    Reproduction.CheckForResprouting(eventArgs.Cohort, site);
                 }
             }
 
@@ -508,7 +508,7 @@ namespace Landis.Extension.Succession.NECN
 
             //if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:0.000}, at LAI = {2:0.00}", species.Name, lightProbability, SiteVars.LAI[site]);
             
-            double randomLAI = PlugIn.ModelCore.NormalDistribution.NextDouble();
+            double randomLAI = ModelCore.NormalDistribution.NextDouble();
             if (modelCore.GenerateUniform() < lightProbability)
                 isSufficientlight = true;
 
@@ -527,9 +527,9 @@ namespace Landis.Extension.Succession.NECN
             double nurseryLogAvailability = 1 - Math.Pow(ComputeNurseryLogAreaRatio(species, site) - 1, nurseryLogAvailabilityModifier);
             if (OtherData.CalibrateMode)
             {
-                PlugIn.ModelCore.UI.WriteLine("original_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
+                ModelCore.UI.WriteLine("original_lightProbability:{0},{1},{2}", ModelCore.CurrentTime, species.Name, lightProbability);
                 //PlugIn.ModelCore.UI.WriteLine("siteShade:{0}", siteShade);
-                PlugIn.ModelCore.UI.WriteLine("siteLAI:{0}", SiteVars.LAI[site]);
+                ModelCore.UI.WriteLine("siteLAI:{0}", SiteVars.LAI[site]);
             }
 
             // Case 1. CWD-dependent species (species which can only be established on nursery log)
@@ -550,9 +550,9 @@ namespace Landis.Extension.Succession.NECN
                 }
                 if (OtherData.CalibrateMode)
                 {
-                    PlugIn.ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
-                    PlugIn.ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, lightProbability);
-                    PlugIn.ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, species.Name, regenType);
+                    ModelCore.UI.WriteLine("nurseryLogPenalty:{0},{1},{2}", ModelCore.CurrentTime, species.Name, nurseryLogAvailability);
+                    ModelCore.UI.WriteLine("modified_lightProbability:{0},{1},{2}", ModelCore.CurrentTime, species.Name, lightProbability);
+                    ModelCore.UI.WriteLine("regeneration_type:{0},{1},{2}", ModelCore.CurrentTime, species.Name, regenType);
                 }
             }
 
@@ -604,8 +604,8 @@ namespace Landis.Extension.Succession.NECN
             double decayClass5AreaRatio = 4 * 2 * nurseryLogC[2] / (Math.PI * hight * densityDecayClass5) * Math.Pow(10, -4); // Decay class 5
             if (OtherData.CalibrateMode && species.Index == 0)
             {
-                PlugIn.ModelCore.UI.WriteLine("nurseryLogC:{0},{1},{2},{3}", PlugIn.ModelCore.CurrentTime, nurseryLogC[0], nurseryLogC[1], nurseryLogC[2]);
-                PlugIn.ModelCore.UI.WriteLine("decayClassAreaRatios:{0},{1},{2},{3}", PlugIn.ModelCore.CurrentTime, decayClass3AreaRatio, decayClass4AreaRatio, decayClass5AreaRatio);
+                ModelCore.UI.WriteLine("nurseryLogC:{0},{1},{2},{3}", ModelCore.CurrentTime, nurseryLogC[0], nurseryLogC[1], nurseryLogC[2]);
+                ModelCore.UI.WriteLine("decayClassAreaRatios:{0},{1},{2},{3}", ModelCore.CurrentTime, decayClass3AreaRatio, decayClass4AreaRatio, decayClass5AreaRatio);
             }
             return Math.Min(1.0, decayClass3AreaRatio + decayClass4AreaRatio + decayClass5AreaRatio);
         }
@@ -672,7 +672,7 @@ namespace Landis.Extension.Succession.NECN
             tempObject.WoodBiomass = initialBiomass[0];
             tempObject.LeafBiomass = initialBiomass[1];
 
-            SiteVars.Cohorts[site].AddNewCohort(species, 1, System.Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), woodLeafBiomasses);
+            SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), woodLeafBiomasses);
 
             if (reproductionType == "plant")
                 SpeciesByPlant[species.Index]++;
@@ -716,7 +716,7 @@ namespace Landis.Extension.Succession.NECN
         {
             IDictionary<string, object> tempObject = parametersToAdd;
 
-            int newBiomass = System.Convert.ToInt32(tempObject["LeafBiomass"]) + System.Convert.ToInt32(tempObject["WoodBiomass"]);
+            int newBiomass = Convert.ToInt32(tempObject["LeafBiomass"]) + Convert.ToInt32(tempObject["WoodBiomass"]);
 
             return new CohortData(age, newBiomass, anpp, parametersToAdd);
         }
@@ -735,8 +735,9 @@ namespace Landis.Extension.Succession.NECN
         public override void InitializeSites(string initialCommunitiesText, string initialCommunitiesMap, ICore modelCore)
         {
             ModelCore.UI.WriteLine("   Loading initial communities from file \"{0}\" ...", initialCommunitiesText);
-            Landis.Library.InitialCommunities.Universal.DatasetParser parser = new Landis.Library.InitialCommunities.Universal.DatasetParser(Timestep, ModelCore.Species, additionalCohortParameters);
-            Landis.Library.InitialCommunities.Universal.IDataset communities = Landis.Data.Load<Landis.Library.InitialCommunities.Universal.IDataset>(initialCommunitiesText, parser);
+            Landis.Library.InitialCommunities.Universal.DatasetParser parser = new Landis.Library.InitialCommunities.Universal.DatasetParser(Timestep, ModelCore.Species, additionalCohortParameters, initialCommunitiesText);
+            Landis.Library.InitialCommunities.Universal.IDataset communities = Data.Load<Landis.Library.InitialCommunities.Universal.IDataset>(initialCommunitiesText, parser);
+            //Landis.Library.InitialCommunities.Universal.IDataset communities = new Landis.Library.InitialCommunities.Universal.DatasetParser(Timestep, ModelCore.Species, additionalCohortParameters, initialCommunitiesText);
 
             ModelCore.UI.WriteLine("   Reading initial communities map \"{0}\" ...", initialCommunitiesMap);
             IInputRaster<UIntPixel> map;

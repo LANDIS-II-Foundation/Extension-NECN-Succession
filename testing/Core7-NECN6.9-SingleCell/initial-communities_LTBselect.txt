@@ -1,5 +1,0 @@
-LandisData   "Initial Communities"
-
->>Mature Jeffrey pine 
-MapCode  3
-	PinuJeff 50 (6000)

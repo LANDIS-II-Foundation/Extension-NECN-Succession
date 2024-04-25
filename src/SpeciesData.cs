@@ -148,7 +148,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 try
                 {
-                    double maxLAI = SpeciesData.MaxLAI[spp];
+                    double maxLAI = MaxLAI[spp];
                     //PlugIn.ModelCore.UI.WriteLine("Spp={0}, FT={1}", spp.Name, SpeciesData.FuncType[spp]);
 
                 }
