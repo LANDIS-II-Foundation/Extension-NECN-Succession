@@ -1484,7 +1484,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetTempCurve4(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            tempcurve3[species] = newValue;
+            tempcurve4[species] = newValue;
         }
         public void SetFractionANPPtoLeaf(ISpecies species, double newValue)
         {
