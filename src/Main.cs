@@ -232,8 +232,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     foreach (ICohort cohort in speciesCohorts)
                     {
-                        dynamic additionalParameters = cohort.Data.AdditionalParameters;
-                        total += (int)(additionalParameters.WoodBiomass + additionalParameters.LeafBiomass);
+                        total += (int)(cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass);
                     }
                 }
             }
@@ -251,8 +250,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     foreach (ICohort cohort in speciesCohorts)
                     {
-                        dynamic additionalParameters = cohort.Data.AdditionalParameters;
-                        total += (int)(additionalParameters.LeafBiomass);
+                        total += (int)(cohort.Data.AdditionalParameters.LeafBiomass);
                     }
                 }
             }
@@ -269,8 +267,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     foreach (ICohort cohort in speciesCohorts)
                     {
-                        dynamic additionalParameters = cohort.Data.AdditionalParameters;
-                        woodBiomass += additionalParameters.WoodBiomass;
+                        woodBiomass += cohort.Data.AdditionalParameters.WoodBiomass;
                     }
                 }
             }
@@ -301,11 +298,10 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         private static void CalculateCohortCN(ActiveSite site, ICohort cohort)
         {
-            dynamic additionalParameters = cohort.Data.AdditionalParameters;
             ISpecies species = cohort.Species;
 
-            double leafC = additionalParameters.LeafBiomass * 0.47;
-            double woodC = additionalParameters.WoodBiomass * 0.47;
+            double leafC = cohort.Data.AdditionalParameters.LeafBiomass * 0.47;
+            double woodC = cohort.Data.AdditionalParameters.WoodBiomass * 0.47;
 
             double fRootC = Roots.CalculateFineRoot(cohort, leafC);
             double cRootC = Roots.CalculateCoarseRoot(cohort, woodC);
