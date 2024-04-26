@@ -20,7 +20,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<int> timeOfLast;
 
         // Live biomass:        
-        private static ISiteVar<ISiteCohorts> baseCohortsSiteVar;
+        private static ISiteVar<ISiteCohorts> universalCohortsSiteVar;
         
         // Dead biomass:
         private static ISiteVar<Layer> surfaceDeadWood;
@@ -148,8 +148,7 @@ namespace Landis.Extension.Succession.NECN
         public static void Initialize()
         {
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<SiteCohorts>();
-            baseCohortsSiteVar = CohortSiteVar<ISiteCohorts>.Wrap(cohorts);
-
+            universalCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<ISiteCohorts>.Wrap(cohorts);
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             HarvestDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
@@ -269,8 +268,7 @@ namespace Landis.Extension.Succession.NECN
 
             CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
 
-            //PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
-            PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.UniversalCohorts");
+            PlugIn.ModelCore.RegisterSiteVar(universalCohortsSiteVar, "Succession.UniversalCohorts");
             PlugIn.ModelCore.RegisterSiteVar(fineFuels, "Succession.FineFuels");
             PlugIn.ModelCore.RegisterSiteVar(SmolderConsumption, "Succession.SmolderConsumption");
             PlugIn.ModelCore.RegisterSiteVar(FlamingConsumption, "Succession.FlamingConsumption");
