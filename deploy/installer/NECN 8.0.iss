@@ -6,7 +6,7 @@
 #define AppURL "http://www.landis-ii.org/"
 
 ; Build directory
-#define BuildDir "..\..\src\bin\Release\netstandard2.0"
+#define BuildDir "..\..\src\bin\Debug\netstandard2.0"
 #define LibraryDir "..\..\src\lib"
 
 ; LANDIS-II installation directories
@@ -56,7 +56,7 @@ Source: {#LibraryDir}\Landis.Library.Metadata-v2.dll; DestDir: {#ExtDir}; Flags:
 Source: {#LibraryDir}\Landis.Library.Parameters-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 Source: {#LibraryDir}\Landis.Library.Climate-v4.3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
 Source: {#LibraryDir}\Landis.Library.Succession-v9.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
-Source: {#LibraryDir}\Landis.Library.InitialCommunity.Universal.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall 
+Source: {#LibraryDir}\Landis.Library.InitialCommunity.Universal.dll; DestDir: {#ExtDir}; Flags: ignoreversion uninsneveruninstall 
 
 ; LANDIS-II identifies the extension with the info in this .txt file
 ; NB. New releases must modify the name of this file and the info in it

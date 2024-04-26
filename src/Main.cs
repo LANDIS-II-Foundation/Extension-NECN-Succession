@@ -76,22 +76,22 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyMeanSoilWaterContent[site][Month] = 0.0;
                     SiteVars.MonthlyAnaerobicEffect[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
-                    SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);
+                    SiteVars.TotalWoodBiomass[site] = ComputeWoodBiomass((ActiveSite) site);
 
                                                    
-                    double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month];
+                    double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Month];
 
                     double monthlyNdeposition;
                     if  (PlugIn.Parameters.AtmosNintercept !=-1 && PlugIn.Parameters.AtmosNslope !=-1)
                         monthlyNdeposition = PlugIn.Parameters.AtmosNintercept + (PlugIn.Parameters.AtmosNslope * ppt);
                     else 
                     {
-                        monthlyNdeposition = ClimateRegionData.AnnualWeather[ecoregion].MonthlyNDeposition[Main.Month];
+                        monthlyNdeposition = ClimateRegionData.AnnualWeather[ecoregion].MonthlyNDeposition[Month];
                     }
 
                     if (monthlyNdeposition < 0)
                     {
-                        string mesg = string.Format("Error: Nitrogen deposition = {0}. PPT={1}. Ecoregion={2}, Month={3}", monthlyNdeposition, ppt, ecoregion.Name, Main.Month);
+                        string mesg = string.Format("Error: Nitrogen deposition = {0}. PPT={1}. Ecoregion={2}, Month={3}", monthlyNdeposition, ppt, ecoregion.Name, Month);
                         throw new System.ApplicationException(mesg);
                     }
 

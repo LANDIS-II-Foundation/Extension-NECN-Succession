@@ -108,7 +108,7 @@ namespace Landis.Extension.Succession.NECN
 
         public static void CalculateMineralNfraction(Site site)
         {
-            AvailableN.CohortMineralNfraction = new Dictionary<int, Dictionary<int, double>>();
+            CohortMineralNfraction = new Dictionary<int, Dictionary<int, double>>();
             double NAllocTotal = 0.0;
             
             foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
@@ -170,7 +170,7 @@ namespace Landis.Extension.Succession.NECN
 
         public static void SetMineralNallocation(Site site)
         {
-            AvailableN.CohortMineralNallocation = new Dictionary<int, Dictionary<int, double>>();
+            CohortMineralNallocation = new Dictionary<int, Dictionary<int, double>>();
             
            double availableN = SiteVars.MineralN[site];  // g/m2
            Math.Max(availableN, 0.01);
@@ -186,7 +186,7 @@ namespace Landis.Extension.Succession.NECN
                     double Nfraction = 0.05;  //even a new cohort gets a little love
                     Dictionary<int, double> cohortDict = new Dictionary<int,double>();
 
-                    if (AvailableN.CohortMineralNfraction.TryGetValue(cohort.Species.Index, out cohortDict))
+                    if (CohortMineralNfraction.TryGetValue(cohort.Species.Index, out cohortDict))
                         cohortDict.TryGetValue(cohortAddYear, out Nfraction);
                     
                     double Nallocation = Math.Max(0.05, Nfraction * availableN);
@@ -225,7 +225,7 @@ namespace Landis.Extension.Succession.NECN
             double mineralNallocation = 0.0;
             Dictionary<int, double> cohortDict;
 
-            if (AvailableN.CohortMineralNallocation.TryGetValue(cohort.Species.Index, out cohortDict))
+            if (CohortMineralNallocation.TryGetValue(cohort.Species.Index, out cohortDict))
                 cohortDict.TryGetValue(cohortAddYear, out mineralNallocation);
 
             return mineralNallocation;
@@ -289,7 +289,7 @@ namespace Landis.Extension.Succession.NECN
         {
             // Because Growth used some Nitrogen, it must be subtracted from the appropriate pools, either resorbed or mineral.
             
-            double totalNdemand = AvailableN.CalculateCohortNDemand(cohort.Species, site, cohort, actualANPP);
+            double totalNdemand = CalculateCohortNDemand(cohort.Species, site, cohort, actualANPP);
             double adjNdemand = totalNdemand;
             double resorbedNused = 0.0;
             //double mineralNused = 0.0;
@@ -298,11 +298,11 @@ namespace Landis.Extension.Succession.NECN
             double leafLongevity = SpeciesData.LeafLongevity[cohort.Species];
             if ((leafLongevity <= 1.0 && Main.Month > 2 && Main.Month < 6) || leafLongevity > 1.0)
             {
-            double resorbedNallocation = Math.Max(0.0, AvailableN.GetResorbedNallocation(cohort, site));            
+            double resorbedNallocation = Math.Max(0.0, GetResorbedNallocation(cohort, site));            
 
-            resorbedNused = resorbedNallocation - Math.Max(0.0, resorbedNallocation - totalNdemand);            
+            resorbedNused = resorbedNallocation - Math.Max(0.0, resorbedNallocation - totalNdemand);
 
-            AvailableN.SetResorbedNallocation(cohort, Math.Max(0.0, resorbedNallocation - totalNdemand), site);
+                SetResorbedNallocation(cohort, Math.Max(0.0, resorbedNallocation - totalNdemand), site);
 
             adjNdemand = Math.Max(0.0, totalNdemand - resorbedNallocation);                            
             }
@@ -356,11 +356,11 @@ namespace Landis.Extension.Succession.NECN
            
             // Resorbed N:  We are assuming that any leaves dropped as a function of normal
             // growth and maintenance (e.g., fall senescence) will involve resorption of leaf N.
-            double resorbedN = AvailableN.CalculateResorbedN(site, cohort.Species, deadLeafRootsBiomass); //, month);
+            double resorbedN = CalculateResorbedN(site, cohort.Species, deadLeafRootsBiomass); //, month);
             //double resorbedN = AvailableN.CalculateResorbedN(site, cohort.Species, cohort.LeafBiomass); //, month);
             double previouslyResorbedN = GetResorbedNallocation(cohort, site);
 
-            AvailableN.SetResorbedNallocation(cohort, resorbedN + previouslyResorbedN, site);
+            SetResorbedNallocation(cohort, resorbedN + previouslyResorbedN, site);
                         
             return;
         }

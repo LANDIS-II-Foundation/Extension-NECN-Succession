@@ -204,12 +204,12 @@ namespace Landis.Extension.Succession.NECN
                 double canopyIntercept = ((0.0003 * litterBiomass) + (0.0006 * standingBiomass)) * OtherData.WaterLossFactor1;
 
                 //...Bare soil evaporation, fraction of precip (bareSoilEvap):
-                bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
+                bareSoilEvap = 0.5 * Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
+                double soilEvaporation = Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
-                soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent);
+                soilEvaporation = Math.Min(soilEvaporation, soilWaterContent);
                 //if (OtherData.CalibrateMode)
                 //    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
                 //        soilEvaporation, bareSoilEvap, canopyIntercept);
@@ -786,14 +786,14 @@ namespace Landis.Extension.Succession.NECN
                 if (availableWaterContent > 13.0)
                     W_Decomp = 1.0;
                 else
-                    W_Decomp = 1.0 / (1.0 + 4.0 * System.Math.Exp(-6.0 * availableWaterContent));
+                    W_Decomp = 1.0 / (1.0 + 4.0 * Math.Exp(-6.0 * availableWaterContent));
             }
             else if (waterDecayFunction == 1)
             {
                 if (ratioPlantAvailableWaterPET > 9)
                     W_Decomp = 1.0;
                 else
-                    W_Decomp = 1.0 / (1.0 + 30.0 * System.Math.Exp(-8.5 * ratioPlantAvailableWaterPET));
+                    W_Decomp = 1.0 / (1.0 + 30.0 * Math.Exp(-8.5 * ratioPlantAvailableWaterPET));
             }
 
             double tempModifier = T_Decomp(soilTemp);
@@ -826,7 +826,7 @@ namespace Landis.Extension.Succession.NECN
             double Teff1 = OtherData.TemperatureEffectSlope;
             double Teff2 = OtherData.TemperatureEffectExponent;
 
-            double r = Teff0 + (Teff1 * System.Math.Exp(Teff2 * soilTemp));
+            double r = Teff0 + (Teff1 * Math.Exp(Teff2 * soilTemp));
 
             return r;
         }

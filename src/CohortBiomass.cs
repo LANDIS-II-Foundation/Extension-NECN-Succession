@@ -47,6 +47,9 @@ namespace Landis.Extension.Succession.NECN
             dynamic tempObject = new ExpandoObject();
             tempObject.WoodBiomass = 0;
             tempObject.LeafBiomass = 0;
+
+            
+
             ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
             // First call to the Calibrate Log:
@@ -190,8 +193,7 @@ namespace Landis.Extension.Succession.NECN
                                          double siteBiomass,
                                          double[] mortalityAge)
         {
-            double leafFractionNPP = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FractionANPPtoLeaf;
-            //double maxBiomass       = SpeciesData.Max_Biomass[cohort.Species];
+            double leafFractionNPP = SpeciesData.FractionANPPtoLeaf[cohort.Species];
             double sitelai          = SiteVars.LAI[site];
             double maxNPP           = SpeciesData.Max_ANPP[cohort.Species];
             double limitH20 = 1.0;
@@ -308,7 +310,7 @@ namespace Landis.Extension.Succession.NECN
             double monthAdjust = 1.0 / 12.0;
             double totalBiomass = (double)(cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass);
             double max_age = (double)cohort.Species.Longevity;
-            double d = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].LongevityMortalityShape;
+            double d = SpeciesData.MortalityCurveShape[cohort.Species];
 
             double M_AGE_wood = cohort.Data.AdditionalParameters.WoodBiomass * monthAdjust *
                                     Math.Exp((double)cohort.Data.Age / max_age * d) / Math.Exp(d);
@@ -348,7 +350,7 @@ namespace Landis.Extension.Succession.NECN
             double maxBiomass = SpeciesData.Max_Biomass[cohort.Species];
             double NPPwood = (double)AGNPP[0];
 
-            double M_wood_fixed = cohort.Data.AdditionalParameters.WoodBiomass * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MonthlyWoodMortality;
+            double M_wood_fixed = cohort.Data.AdditionalParameters.WoodBiomass * SpeciesData.MonthlyWoodMortality[cohort.Species];
             double M_leaf = 0.0;
 
             double relativeBiomass = siteBiomass / maxBiomass;
@@ -373,12 +375,12 @@ namespace Landis.Extension.Succession.NECN
             }
             else
             {
-                if (Main.Month + 1 == FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth)
+                if (Main.Month + 1 == SpeciesData.FoliageDropMonth[cohort.Species])
                 {
                     M_leaf = cohort.Data.AdditionalParameters.LeafBiomass / 2.0;  //spread across 2 months
 
                 }
-                if (Main.Month + 2 > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth)
+                if (Main.Month + 2 > SpeciesData.FoliageDropMonth[cohort.Species])
                 {
                     M_leaf = cohort.Data.AdditionalParameters.LeafBiomass;  //drop the remainder
                 }
@@ -472,7 +474,7 @@ namespace Landis.Extension.Succession.NECN
         {
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
-            double leafFrac = FunctionalType.Table[SpeciesData.FuncType[species]].FractionANPPtoLeaf;
+            double leafFrac = SpeciesData.FractionANPPtoLeaf[species];
 
             double B_ACT = SiteVars.ActualSiteBiomass(site);
             double B_MAX = SpeciesData.Max_Biomass[species]; 
@@ -610,10 +612,10 @@ namespace Landis.Extension.Succession.NECN
 
             double lai = 0.0;
             double lai_to_growth = SpeciesData.GrowthLAI[cohort.Species] * -1.0;
-            double btolai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].BiomassToLAI;
-            double klai   = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].KLAI;
-            double maxlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MaxLAI;
-            double minlai = FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].MinLAI;
+            double btolai = SpeciesData.BiomassToLAI[cohort.Species];
+            double klai   = SpeciesData.K_LAI[cohort.Species];
+            double maxlai = SpeciesData.MaxLAI[cohort.Species];
+            double minlai = SpeciesData.MinLAI[cohort.Species];
             double monthly_cumulative_LAI = SiteVars.MonthlyLAI[site][Main.Month];
             
             // adjust for leaf on/off
@@ -642,7 +644,7 @@ namespace Landis.Extension.Succession.NECN
             //This allows LAI to go to zero for deciduous trees.
 
             if (SpeciesData.LeafLongevity[cohort.Species] <= 1.0 &&
-                (Main.Month > FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FoliageDropMonth || Main.Month < 3))
+                (Main.Month > SpeciesData.FoliageDropMonth[cohort.Species] || Main.Month < 3))
             {
                 lai = 0.0;
                 LAI_Growth_limit = 0.0;
@@ -728,10 +730,10 @@ namespace Landis.Extension.Succession.NECN
      //soil moisture and allows us to prevent rapid growth in wetlands by species that are intolerant of waterlogged soils
      //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
         {
-            var A1 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve1;
-            var A2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
-            var A3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
-            var A4 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve4;
+            var A1 = SpeciesData.MoistureCurve1[species];
+            var A2 = SpeciesData.MoistureCurve2[species];
+            var A3 = SpeciesData.MoistureCurve3[species];
+            var A4 = SpeciesData.MoistureCurve4[species];
             
             var frac = (A2 - volumetricWater) / (A2 - A1);
             var waterLimit = 0.0;
@@ -787,8 +789,8 @@ namespace Landis.Extension.Succession.NECN
             //...New way (with updated naming convention):
 
             double moisturecurve1 = 0.0; // OtherData.MoistureCurve1;
-            double moisturecurve2 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve2;
-            double moisturecurve3 = FunctionalType.Table[SpeciesData.FuncType[species]].MoistureCurve3;
+            double moisturecurve2 = SpeciesData.MoistureCurve2[species];
+            double moisturecurve3 = SpeciesData.MoistureCurve3[species];
 
             double intcpt = moisturecurve1 + (moisturecurve2 * waterContent);
             double slope = 1.0 / (moisturecurve3 - intcpt);
@@ -826,17 +828,17 @@ namespace Landis.Extension.Succession.NECN
             //       Fort collins, Colorado  80523
 
             double A1 = SiteVars.SoilTemperature[site];
-            double A2 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve1;
-            double A3 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve2;
-            double A4 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve3;
-            double A5 = FunctionalType.Table[SpeciesData.FuncType[species]].TempCurve4;
+            double A2 = SpeciesData.TempCurve1[species];
+            double A3 = SpeciesData.TempCurve2[species];
+            double A4 = SpeciesData.TempCurve3[species];
+            double A5 = SpeciesData.TempCurve4[species];
 
             double frac = (A3-A1) / (A3-A2);
             double U1 = 0.0;
             if (frac > 0.0)
                 U1 = Math.Exp(A4 / A5 * (1.0 - Math.Pow(frac, A5))) * Math.Pow(frac, A4);
 
-            //PlugIn.ModelCore.UI.WriteLine("  TEMPERATURE Limits:  Month={0}, Soil Temp={1:0.00}, Temp Limit={2:0.00}. [PPDF1={3:0.0},PPDF2={4:0.0},PPDF3={5:0.0},PPDF4={6:0.0}]", month+1, A1, U1,A2,A3,A4,A5);
+            //PlugIn.ModelCore.UI.WriteLine("  TEMPERATURE Limits:  Month={0}, Soil Temp={1:0.00}, Temp Limit={2:0.00}. [PPDF1={3:0.0},PPDF2={4:0.0},PPDF3={5:0.0},PPDF4={6:0.0}]", Main.Month+1, A1, U1,A2,A3,A4,A5);
 
             return U1;
         }

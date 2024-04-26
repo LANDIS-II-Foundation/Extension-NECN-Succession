@@ -623,7 +623,7 @@ namespace Landis.Extension.Succession.NECN
                 {
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (int)(Outputs.GetOrganicCarbon(site) +
+                        pixel.MapCode.Value = (int)(GetOrganicCarbon(site) +
                             SiteVars.CohortLeafC[site] +
                             SiteVars.CohortFRootC[site] +
                             SiteVars.CohortWoodC[site] +

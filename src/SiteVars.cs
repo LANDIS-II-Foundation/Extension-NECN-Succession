@@ -138,6 +138,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> slope;
         public static ISiteVar<double> aspect;
 
+        //public dynamic additionalParameters = cohort.Data.AdditionalParameters;
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -148,7 +150,6 @@ namespace Landis.Extension.Succession.NECN
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<SiteCohorts>();
             universalCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<ISiteCohorts>.Wrap(cohorts);
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             HarvestDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             FireDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
@@ -269,14 +270,26 @@ namespace Landis.Extension.Succession.NECN
 
             PlugIn.ModelCore.RegisterSiteVar(universalCohortsSiteVar, "Succession.UniversalCohorts");
             PlugIn.ModelCore.RegisterSiteVar(fineFuels, "Succession.FineFuels");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.SmolderConsumption, "Succession.SmolderConsumption");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.FlamingConsumption, "Succession.FlamingConsumption");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.AnnualClimaticWaterDeficit, "Succession.CWD");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.AnnualPotentialEvapotranspiration, "Succession.PET");
+            PlugIn.ModelCore.RegisterSiteVar(SmolderConsumption, "Succession.SmolderConsumption");
+            PlugIn.ModelCore.RegisterSiteVar(FlamingConsumption, "Succession.FlamingConsumption");
+            PlugIn.ModelCore.RegisterSiteVar(AnnualClimaticWaterDeficit, "Succession.CWD");
+            PlugIn.ModelCore.RegisterSiteVar(AnnualPotentialEvapotranspiration, "Succession.PET");
 
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
+                //foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
+                //{
+                //    foreach (ICohort cohort in speciesCohorts)
+                //    {
+
+                //        dynamic additionalParameters = cohort.Data.AdditionalParameters;
+                //        dynamic tempObject = PlugIn.additionalCohortParameters;
+                //        tempObject.WoodBiomass = 0.0f;
+                //        tempObject.LeafBiomass = 0.0f;
+                //    }
+                //}
+
                 surfaceDeadWood[site]       = new Layer(LayerName.Wood, LayerType.Surface);
                 soilDeadWood[site]          = new Layer(LayerName.CoarseRoot, LayerType.Soil);
                 
@@ -336,17 +349,12 @@ namespace Landis.Extension.Succession.NECN
         {
             FireSeverity        = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-            //SiteVars.HarvestDisturbedYear.SiteValues = false;
-            //SiteVars.FireDisturbedYear.SiteValues = false;
-            
-            //if(HarvestPrescriptionName == null)
-            //    throw new System.ApplicationException("TEST Error: Harvest Prescription Names NOT Initialized.");
         }
 
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Biomass cohorts at each site.
+        /// Cohorts at each site.
         /// </summary>
         private static ISiteVar<SiteCohorts> cohorts;
         public static ISiteVar<SiteCohorts> Cohorts
@@ -358,7 +366,7 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 cohorts = value;
-            }
+    }
         }
         //---------------------------------------------------------------------
 
@@ -371,7 +379,7 @@ namespace Landis.Extension.Succession.NECN
         public static double ActualSiteBiomass(ActiveSite site)
         {
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-            ISiteCohorts siteCohorts = SiteVars.Cohorts[site];
+            ISiteCohorts siteCohorts = Cohorts[site];
 
             if(siteCohorts == null)
                 return 0.0;
@@ -388,57 +396,57 @@ namespace Landis.Extension.Succession.NECN
         {
 
             // Reset these accumulators to zero:
-            
-            
-            SiteVars.DryDays[site] = 0;
 
-            SiteVars.CohortLeafN[site] = 0.0;
-            SiteVars.CohortFRootN[site] = 0.0;
-            SiteVars.CohortLeafC[site] = 0.0;
-            SiteVars.CohortFRootC[site] = 0.0;
-            SiteVars.CohortWoodN[site] = 0.0;
-            SiteVars.CohortCRootN[site] = 0.0;
-            SiteVars.CohortWoodC[site] = 0.0;
-            SiteVars.CohortCRootC[site] = 0.0;
-            SiteVars.GrossMineralization[site] = 0.0;
-            SiteVars.AGNPPcarbon[site] = 0.0;
-            SiteVars.BGNPPcarbon[site] = 0.0;
-            SiteVars.LitterfallC[site] = 0.0;
-            
-            SiteVars.Stream[site]          = new Layer(LayerName.Other, LayerType.Other);
-            SiteVars.SourceSink[site]      = new Layer(LayerName.Other, LayerType.Other);
-            
-            SiteVars.SurfaceDeadWood[site].NetMineralization = 0.0;
-            SiteVars.SurfaceStructural[site].NetMineralization = 0.0;
-            SiteVars.SurfaceMetabolic[site].NetMineralization = 0.0;
-            
-            SiteVars.SoilDeadWood[site].NetMineralization = 0.0;
-            SiteVars.SoilStructural[site].NetMineralization = 0.0;
-            SiteVars.SoilMetabolic[site].NetMineralization = 0.0;
-            
-            SiteVars.SOM1surface[site].NetMineralization = 0.0;
-            SiteVars.SOM1soil[site].NetMineralization = 0.0;
-            SiteVars.SOM2[site].NetMineralization = 0.0;
-            SiteVars.SOM3[site].NetMineralization = 0.0;
-            SiteVars.AnnualNEE[site] = 0.0;
-            SiteVars.Nvol[site] = 0.0;
-            SiteVars.AnnualNEE[site] = 0.0;
-            SiteVars.TotalNuptake[site] = 0.0;
-            SiteVars.ResorbedN[site] = 0.0;
-            SiteVars.FrassC[site] = 0.0;
-            SiteVars.LAI[site] = 0.0;
-            SiteVars.AnnualWaterBalance[site] = 0.0;
-            SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
-            SiteVars.AnnualPotentialEvapotranspiration[site] = 0.0;
-            SiteVars.WoodMortality[site] = 0.0;
 
-            SiteVars.DroughtMort[site] = 0.0;
+            DryDays[site] = 0;
+
+            CohortLeafN[site] = 0.0;
+            CohortFRootN[site] = 0.0;
+            CohortLeafC[site] = 0.0;
+            CohortFRootC[site] = 0.0;
+            CohortWoodN[site] = 0.0;
+            CohortCRootN[site] = 0.0;
+            CohortWoodC[site] = 0.0;
+            CohortCRootC[site] = 0.0;
+            GrossMineralization[site] = 0.0;
+            AGNPPcarbon[site] = 0.0;
+            BGNPPcarbon[site] = 0.0;
+            LitterfallC[site] = 0.0;
+
+            Stream[site]          = new Layer(LayerName.Other, LayerType.Other);
+            SourceSink[site]      = new Layer(LayerName.Other, LayerType.Other);
+
+            SurfaceDeadWood[site].NetMineralization = 0.0;
+            SurfaceStructural[site].NetMineralization = 0.0;
+            SurfaceMetabolic[site].NetMineralization = 0.0;
+
+            SoilDeadWood[site].NetMineralization = 0.0;
+            SoilStructural[site].NetMineralization = 0.0;
+            SoilMetabolic[site].NetMineralization = 0.0;
+
+            SOM1surface[site].NetMineralization = 0.0;
+            SOM1soil[site].NetMineralization = 0.0;
+            SOM2[site].NetMineralization = 0.0;
+            SOM3[site].NetMineralization = 0.0;
+            AnnualNEE[site] = 0.0;
+            Nvol[site] = 0.0;
+            AnnualNEE[site] = 0.0;
+            TotalNuptake[site] = 0.0;
+            ResorbedN[site] = 0.0;
+            FrassC[site] = 0.0;
+            LAI[site] = 0.0;
+            AnnualWaterBalance[site] = 0.0;
+            AnnualClimaticWaterDeficit[site] = 0.0;
+            AnnualPotentialEvapotranspiration[site] = 0.0;
+            WoodMortality[site] = 0.0;
+
+            DroughtMort[site] = 0.0;
             foreach(ISpecies species in PlugIn.ModelCore.Species)
             {
-                SiteVars.SpeciesDroughtMortality[site][species.Index] = 0.0;
-                SiteVars.TempLagged[site][species.Index] = 0.0;
-                SiteVars.CWDLagged[site][species.Index] = 0.0;
-                SiteVars.SWALagged[site][species.Index] = 0.0;
+                SpeciesDroughtMortality[site][species.Index] = 0.0;
+                TempLagged[site][species.Index] = 0.0;
+                CWDLagged[site][species.Index] = 0.0;
+                SWALagged[site][species.Index] = 0.0;
             }
             
 
@@ -446,9 +454,9 @@ namespace Landis.Extension.Succession.NECN
             {
                 if (PlugIn.ModelCore.CurrentTime >= 11)
                 {
-                    SiteVars.SoilWater10[site].RemoveAt(0);
-                    SiteVars.Temp10[site].RemoveAt(0);
-                    SiteVars.CWD10[site].RemoveAt(0);
+                    SoilWater10[site].RemoveAt(0);
+                    Temp10[site].RemoveAt(0);
+                    CWD10[site].RemoveAt(0);
                 }
             }
         }
