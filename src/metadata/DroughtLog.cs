@@ -32,5 +32,8 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Desc = "Average Probability of Mortality", Format = "0.0000")]
         public double AverageProbabilityMortality { get; set; }
 
+        [DataFieldAttribute(Desc = "Number of cohorts", Format = "0.0000")]
+        public double NumberCohorts { get; set; }
+
     }
 }

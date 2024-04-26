@@ -560,6 +560,7 @@ namespace Landis.Extension.Succession.NECN
                     dl.SpeciesIndex = species.Index;
                     dl.AverageBiomassKilled = droughtMort[ecoregion.Index][species.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion];
                     dl.AverageProbabilityMortality = droughtProb[ecoregion.Index][species.Index] / numberCohorts[ecoregion.Index][species.Index];
+                    dl.NumberCohorts = numberCohorts[ecoregion.Index][species.Index];
                     //dl.TotalCohortsKilled(droughtMort[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     droughtLog.AddObject(dl);
                     droughtLog.WriteToFile();
