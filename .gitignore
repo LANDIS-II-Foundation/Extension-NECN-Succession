@@ -2009,3 +2009,11 @@ testing/Core8-NECN8-SingleCell/Landis-log.txt
 testing/Core8-NECN8-SingleCell/Landis-climate-log.txt
 testing/Core8-NECN8-SingleCell/Climate-annual-log.csv
 /testing/Core8-NECN8-SingleCell/NECN
+testing/Core8-NECN8-SingleCell/Climate-future-input-log.csv
+testing/Core8-NECN8-SingleCell/Climate-spinup-input-log.csv
+testing/Core8-NECN8-SingleCell/NECN-calibrate-log.csv
+testing/Core8-NECN8-SingleCell/NECN-prob-establish-log.csv
+testing/Core8-NECN8-SingleCell/NECN-reproduction-log.csv
+testing/Core8-NECN8-SingleCell/NECN-succession-log-short.csv
+testing/Core8-NECN8-SingleCell/NECN-succession-log.csv
+testing/Core8-NECN8-SingleCell/NECN-succession-monthly-log.csv
