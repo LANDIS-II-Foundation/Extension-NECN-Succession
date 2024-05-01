@@ -1,2 +1,2 @@
-MapCode,SpeciesName,CohortAge,CohortBiomass,WoodBiomass,LeafBiomass
-3,PinuJeff,50,10,6000,1000
+MapCode,SpeciesName,CohortAge,CohortBiomass,WoodBiomass,LeafBiomass,MineralNallocation,MineralNfraction,Nresorption
+3,PinuJeff,50,10,6000,1000,2,1,0.5

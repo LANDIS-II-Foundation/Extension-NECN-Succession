@@ -93,7 +93,8 @@ namespace Landis.Extension.Succession.NECN
             minMultiplier = Math.Min(minJanTempMultiplier, minMultiplier);
             minMultiplier = Math.Min(cwdMultiplier, minMultiplier);
             minMultiplier = Math.Min(soilDrainMultiplier, minMultiplier);
-            if (OtherData.DGS_waterlimit) minMultiplier = Math.Min(minMultiplier, soilwaterMultiplier);
+            //if (OtherData.DGS_waterlimit) 
+            minMultiplier = Math.Min(minMultiplier, soilwaterMultiplier);
 
             establishProbability += minMultiplier;
             establishProbability *= PlugIn.ProbEstablishAdjust;

@@ -20,7 +20,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<int> timeOfLast;
 
         // Live biomass:        
-        private static ISiteVar<ISiteCohorts> baseCohortsSiteVar;
+        //private static ISiteVar<ISiteCohorts> baseCohortsSiteVar;
         
         // Dead biomass:
         private static ISiteVar<Layer> surfaceDeadWood;
@@ -101,7 +101,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> WoodMortality;
         public static ISiteVar<string> HarvestPrescriptionName;
         public static ISiteVar<int> HarvestTime;
-        public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
+        //public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
         public static ISiteVar<double> fineFuels;
         public static ISiteVar<double> SmolderConsumption;
         public static ISiteVar<double> FlamingConsumption;
@@ -138,8 +138,6 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> slope;
         public static ISiteVar<double> aspect;
 
-        //public dynamic additionalParameters = cohort.Data.AdditionalParameters;
-
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -148,7 +146,7 @@ namespace Landis.Extension.Succession.NECN
         public static void Initialize()
         {
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<SiteCohorts>();
-            baseCohortsSiteVar = CohortSiteVar<ISiteCohorts>.Wrap(cohorts);
+            //baseCohortsSiteVar = CohortSiteVar<ISiteCohorts>.Wrap(cohorts);
 
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
@@ -267,10 +265,7 @@ namespace Landis.Extension.Succession.NECN
             slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
-            CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
-
-            //PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
-            PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.UniversalCohorts");
+            PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.UniversalCohorts");
             PlugIn.ModelCore.RegisterSiteVar(fineFuels, "Succession.FineFuels");
             PlugIn.ModelCore.RegisterSiteVar(SmolderConsumption, "Succession.SmolderConsumption");
             PlugIn.ModelCore.RegisterSiteVar(FlamingConsumption, "Succession.FlamingConsumption");
@@ -280,17 +275,6 @@ namespace Landis.Extension.Succession.NECN
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
-                //foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
-                //{
-                //    foreach (ICohort cohort in speciesCohorts)
-                //    {
-
-                //        dynamic additionalParameters = cohort.Data.AdditionalParameters;
-                //        dynamic tempObject = PlugIn.additionalCohortParameters;
-                //        tempObject.WoodBiomass = 0.0f;
-                //        tempObject.LeafBiomass = 0.0f;
-                //    }
-                //}
 
                 surfaceDeadWood[site]       = new Layer(LayerName.Wood, LayerType.Surface);
                 soilDeadWood[site]          = new Layer(LayerName.CoarseRoot, LayerType.Soil);
@@ -326,8 +310,6 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyAnaerobicEffect[site] = new double[12];
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
-
-                CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
                 //Drought parameters
                 swa10[site] = new List<double>(10);

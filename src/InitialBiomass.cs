@@ -56,19 +56,6 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Initializes this class.
-        /// </summary>
-        /// <param name="timestep">
-        /// The plug-in's timestep.  It is used for growing biomass cohorts.
-        /// </param>
-        //public static void Initialize(int timestep)
-        //{
-        //    //successionTimestep = (ushort) timestep;
-        //}
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
         /// Computes the initial biomass at a site.
         /// </summary>
         /// <param name="site">

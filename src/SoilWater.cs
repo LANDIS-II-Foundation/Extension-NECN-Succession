@@ -130,12 +130,10 @@ namespace Landis.Extension.Succession.NECN
                 snow = Precipitation;
                 Precipitation = 0.0;
                 liquidSnowpack += snow;  //only tracking liquidsnowpack (water equivalent) and not the actual amount of snow on the ground (i.e. not snowpack).
-                //PlugIn.ModelCore.UI.WriteLine("Let it snow!! snow={0}, liquidsnowpack={1}.", snow, liquidSnowpack);
             }
             else
             {
                 soilWaterContent += Precipitation;
-                //PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", Precipitation, soilWaterContent);
             }
 
 
@@ -157,15 +155,11 @@ namespace Landis.Extension.Succession.NECN
                 addToSoil = liquidSnowpack * snowMeltFraction;  //Amount of liquidsnowpack that melts = liquidsnowpack multiplied by the fraction that melts.
                 if (addToSoil > liquidSnowpack) addToSoil = liquidSnowpack;
 
-                //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Snow melts, addToSoil = {0}", addToSoil);
-
                 // Subtracted melted snow from snowpack and add it to the soil
                 // We are not accounting for evaporation from snow ablation
                 liquidSnowpack = Math.Max(liquidSnowpack - addToSoil, 0.0);
                 soilWaterContent += addToSoil;
             }
-            //if (OtherData.CalibrateMode)
-            //    PlugIn.ModelCore.UI.WriteLine("   Snow before evaporation = {0}", liquidSnowpack);
             //...Evaporate water from the snow pack (rewritten by Pulliam 9/94)
             //...Coefficient 0.87 relates to heat of fusion for ice vs. liquid water
             if (liquidSnowpack > 0.0)
@@ -188,8 +182,6 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            //if (OtherData.CalibrateMode) 
-            //    PlugIn.ModelCore.UI.WriteLine("   snow after evaporation = {0}", liquidSnowpack);
             //...Calculate bare soil water loss and interception  when air temperature is above freezing and no snow cover.
             //...Mofified 9/94 to allow interception when t < 0 but no snow cover, Pulliam
             if (liquidSnowpack <= 0.0)
@@ -250,9 +242,6 @@ namespace Landis.Extension.Succession.NECN
             //  Bergström, 1992
             double tempAET = 0.0;
 
-            //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Before calculating AET: Month={0}, soilWaterContent = {1}, remainingPET = {2}, waterFull = {3}, waterEmpty = {4}.", 
-            //    month, soilWaterContent, remainingPET, waterFull, waterEmpty);
-            
             if (soilWaterContent - waterEmpty >= remainingPET)
 
             {

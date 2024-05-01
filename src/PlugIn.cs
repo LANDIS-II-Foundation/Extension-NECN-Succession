@@ -87,6 +87,9 @@ namespace Landis.Extension.Succession.NECN
             dynamic tempObject =  additionalCohortParameters;
             tempObject.WoodBiomass = 0.0f;
             tempObject.LeafBiomass = 0.0f;
+            tempObject.MineralNallocation = 0.0f;  // monthly allocation
+            tempObject.MineralNfraction = 0.0f; // annual fraction
+            tempObject.Nresorption = 0.0f;
         }
 
 
@@ -329,10 +332,8 @@ namespace Landis.Extension.Succession.NECN
                     //between 1.45% and 2.26% for deer (Howery and Pfister, 1990), 2.5%  for deer (Euan et al. 2020),
                     //1.33% in winter, 2.44% for moose in summer (Persson et al. 2000), 2.4% for moose (Kuijper et al. 2016)
                     //Feces N = 5.7 kg per moose per year (Persson et al. 2000)
-
                     //N in urine is 0.5% in summer (Persson et al. 2000), 3675 L urine per moose per year (Persson et al. 2000)
                     //Urine is 0.5% N = 18.375 kg N per year per moose (assuming summer and winter N content is the same)
-
                     //Total N for moose waste = 24 kg per moose per year; Each moose eats 2738 kg biomass per year
                     //Foliar inputs are 2738 * 0.47 * 0.1 kg C  = 128.67 kg C per moose; CN ratio = 128/24 = 5.33
 
@@ -513,7 +514,7 @@ namespace Landis.Extension.Succession.NECN
                 isSufficientlight = true;
 
             // ------------------------------------------------------------------------
-            // Modify light probability based on the amount of nursery log on the site
+            // Modify light probability modified by the amount of nursery log on the site
             // W.Hotta 2020.01.22
             //
             // Compute the availability of nursery log on the site

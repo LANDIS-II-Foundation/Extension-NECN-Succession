@@ -57,7 +57,7 @@ namespace Landis.Extension.Succession.NECN
                     // Calculate mineral N fractions based on coarse root biomass.  Only need to do once per year.
                     if (MonthCnt == 0)
                     {
-                        AvailableN.CalculateMineralNfraction(site);
+                        AvailableN.CalculateAnnualMineralNfraction(site);
                     }
                     //PlugIn.ModelCore.UI.WriteLine("SiteVars.MineralN = {0:0.00}, month = {1}.", SiteVars.MineralN[site], i);
 
@@ -103,15 +103,12 @@ namespace Landis.Extension.Succession.NECN
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET;
 
-                    //if(OtherData.SoilWaterVersion_Henne)
-                    //    SoilWater.Run_Henne(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
-                    //else
                     SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
                     PlugIn.AnnualWaterBalance += ppt - AET;
 
                     // Calculate N allocation for each cohort
-                    AvailableN.SetMineralNallocation(site);
+                    AvailableN.CalculateMonthlyMineralNallocation(site);
 
                     if (MonthCnt==11)
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
