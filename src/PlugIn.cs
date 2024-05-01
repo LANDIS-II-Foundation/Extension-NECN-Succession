@@ -266,11 +266,10 @@ namespace Landis.Extension.Succession.NECN
             ActiveSite site = eventArgs.Site;
 
             ICohort cohort = (Landis.Library.UniversalCohorts.ICohort)eventArgs.Cohort;
-            dynamic additionalParameters = cohort.Data.AdditionalParameters;
 
             float fractionPartialMortality = (float)eventArgs.Reduction;
-            float foliarInput = additionalParameters.LeafBiomass * fractionPartialMortality;
-            float woodInput = additionalParameters.WoodBiomass * fractionPartialMortality;
+            float foliarInput = cohort.Data.AdditionalParameters.LeafBiomass * fractionPartialMortality;
+            float woodInput = cohort.Data.AdditionalParameters.WoodBiomass * fractionPartialMortality;
 
             if (disturbanceType.IsMemberOf("disturbance:harvest"))
             {
@@ -357,15 +356,15 @@ namespace Landis.Extension.Succession.NECN
             {
                 ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
 
-                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass) * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, (cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass) * fractionPartialMortality), cohort, cohort.Species, site);
             }
             else
             {
                 ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
                 ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
 
-                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, additionalParameters.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
-                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, additionalParameters.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.Data.AdditionalParameters.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.Data.AdditionalParameters.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
                 
             }
             
@@ -389,9 +388,9 @@ namespace Landis.Extension.Succession.NECN
             ActiveSite site = eventArgs.Site;
 
             ICohort cohort = (Landis.Library.UniversalCohorts.ICohort)eventArgs.Cohort;
-            dynamic additionalParameters = cohort.Data.AdditionalParameters;
-            double foliarInput = (double)additionalParameters.LeafBiomass;
-            double woodInput = (double)additionalParameters.WoodBiomass;
+            double foliarInput = (double)cohort.Data.AdditionalParameters.LeafBiomass;
+            double woodInput = (double)cohort.Data.AdditionalParameters.WoodBiomass;
+            cohort.Data.AdditionalParameters.Test = 1;
 
             if (disturbanceType != null)
             {
@@ -454,7 +453,7 @@ namespace Landis.Extension.Succession.NECN
                 ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, eventArgs.Site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
 
                 // Assume that ALL dead root biomass stays on site.
-                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
             }
             else
             {
@@ -463,8 +462,8 @@ namespace Landis.Extension.Succession.NECN
                 ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, eventArgs.Site);
 
                 // Assume that ALL dead root biomass stays on site.
-                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, additionalParameters.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
-                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, additionalParameters.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
+                Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.Data.AdditionalParameters.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
+                Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.Data.AdditionalParameters.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
             }
             
 

@@ -495,7 +495,6 @@ namespace Landis.Extension.Succession.NECN
 
         public static double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
-            dynamic additionalParameters = cohort.Data.AdditionalParameters;
             if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Calculating drought mortality for species {0}", cohort.Species.Name);
 
             //Predictor variables
@@ -588,8 +587,8 @@ namespace Landis.Extension.Succession.NECN
             if (p_mort > random)
             {
 
-                M_leaf = additionalParameters.LeafBiomass;
-                M_wood = additionalParameters.WoodBiomass;
+                M_leaf = cohort.Data.AdditionalParameters.LeafBiomass;
+                M_wood = cohort.Data.AdditionalParameters.WoodBiomass;
                 double aboveground_Biomass_Died = M_leaf + M_wood;
 
                 SiteVars.DroughtMort[site] += aboveground_Biomass_Died;
