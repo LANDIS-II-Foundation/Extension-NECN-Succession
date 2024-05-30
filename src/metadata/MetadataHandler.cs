@@ -112,12 +112,12 @@ namespace Landis.Extension.Succession.NECN
             if (ANPPMapNames != null)
             {
                 PlugIn.ModelCore.UI.WriteLine("  ANPP Map Names = \"{0}\" ...", ANPPMapNames);
-                string[] paths = { @"NECN", "AG_NPP-{timestep}.img" };
+                string[] paths = { @"NECN", "AG_NPP-{timestep}.tif" };
                 OutputMetadata mapOut_ANPP = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Aboveground Net Primary Production",
-                    //FilePath = @"NECN\AG_NPP-{timestep}.img",  
+                    //FilePath = @"NECN\AG_NPP-{timestep}.tif",  
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
@@ -128,12 +128,12 @@ namespace Landis.Extension.Succession.NECN
 
             if (ANEEMapNames != null)
             {
-                string[] paths = { @"NECN", "NEE-{timestep}.img" };
+                string[] paths = { @"NECN", "NEE-{timestep}.tif" };
                 OutputMetadata mapOut_Nee = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Net Ecosystem Exchange",
-                    //FilePath = @"NECN\NEE-{timestep}.img",
+                    //FilePath = @"NECN\NEE-{timestep}.tif",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
@@ -143,12 +143,12 @@ namespace Landis.Extension.Succession.NECN
             }
             if (SoilCarbonMapNames != null)
             {
-                string[] paths = { @"NECN", "SOC-{timestep}.img" };
+                string[] paths = { @"NECN", "SOC-{timestep}.tif" };
                 OutputMetadata mapOut_SOC = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Soil Organic Carbon",
-                    //FilePath = @"NECN\SOC-{timestep}.img",
+                    //FilePath = @"NECN\SOC-{timestep}.tif",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
@@ -158,12 +158,12 @@ namespace Landis.Extension.Succession.NECN
             }
             if (SoilNitrogenMapNames != null)
             {
-                string[] paths = { @"NECN", "SON-{timestep}.img" };
+                string[] paths = { @"NECN", "SON-{timestep}.tif" };
                 OutputMetadata mapOut_SON = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Soil Organic Nitrogen",
-                    //FilePath = @"NECN\SON-{timestep}.img",
+                    //FilePath = @"NECN\SON-{timestep}.tif",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_N_m2,
@@ -173,12 +173,12 @@ namespace Landis.Extension.Succession.NECN
             }
             if (TotalCMapNames != null)
             {
-                string[] paths = { @"NECN", "TotalC-{timestep}.img" };
+                string[] paths = { @"NECN", "TotalC-{timestep}.tif" };
                 OutputMetadata mapOut_TotalC = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Total Carbon",
-                    //FilePath = @"NECN\TotalC-{timestep}.img",
+                    //FilePath = @"NECN\TotalC-{timestep}.tif",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.g_C_m2,
@@ -189,7 +189,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (DroughtMortality.UseDrought)
             {
-                string[] paths = { @"NECN", "DroughtMortality-{timestep}.img" };
+                string[] paths = { @"NECN", "DroughtMortality-{timestep}.tif" };
                 OutputMetadata mapOut_DroughtMort = new OutputMetadata()
                 {
                     Type = OutputType.Map,
@@ -204,7 +204,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (DroughtMortality.OutputSoilWaterAvailable)
             {
-                string[] paths = { @"NECN", "SWA-{timestep}.img" };
+                string[] paths = { @"NECN", "SWA-{timestep}.tif" };
                 OutputMetadata mapOut_SWA = new OutputMetadata()
                 {
                     Type = OutputType.Map,
@@ -219,12 +219,12 @@ namespace Landis.Extension.Succession.NECN
 
             if (DroughtMortality.OutputClimateWaterDeficit)
             {
-                string[] paths = { @"NECN", "CWD-{timestep}.img" };
+                string[] paths = { @"NECN", "CWD-{timestep}.tif" };
                 OutputMetadata mapOut_CWD = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Drought Mortality",
-                    //FilePath = @"NECN\TotalC-{timestep}.img",
+                    //FilePath = @"NECN\TotalC-{timestep}.tif",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.cm, //SF check on units
@@ -235,12 +235,12 @@ namespace Landis.Extension.Succession.NECN
 
             if (DroughtMortality.OutputTemperature)
             {
-                string[] paths = { @"NECN", "Temperature-{timestep}.img" };
+                string[] paths = { @"NECN", "Temperature-{timestep}.tif" };
                 OutputMetadata mapOut_Temp = new OutputMetadata()
                 {
                     Type = OutputType.Map,
                     Name = "Temperature",
-                    //FilePath = @"NECN\TotalC-{timestep}.img",
+                    //FilePath = @"NECN\TotalC-{timestep}.tif",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.cm, //SF check on units
