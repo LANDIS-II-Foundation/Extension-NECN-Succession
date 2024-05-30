@@ -268,88 +268,93 @@ namespace Landis.Extension.Succession.NECN
 
             double fractionPartialMortality = (double)eventArgs.Reduction;
 
-            float foliarInput = cohort.Data.AdditionalParameters.LeafBiomass * fractionPartialMortality;
-            float woodInput = cohort.Data.AdditionalParameters.WoodBiomass * fractionPartialMortality;
+            double foliarInput = cohort.Data.AdditionalParameters.LeafBiomass * fractionPartialMortality;
+            double woodInput = cohort.Data.AdditionalParameters.WoodBiomass * fractionPartialMortality;
 
-            if (disturbanceType.IsMemberOf("disturbance:harvest"))
-            {
-                SiteVars.HarvestPrescriptionName = ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-                if (ModelCore.CurrentTime > SiteVars.HarvestDisturbedYear[site]) // this is the first cohort killed/damaged
-                {
-                    //PlugIn.ModelCore.UI.WriteLine("   Begin harvest layer reductions...");
-                    HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
-                    SiteVars.HarvestDisturbedYear[site] = ModelCore.CurrentTime;
-                }
-                woodInput -= woodInput * (float)HarvestEffects.GetCohortWoodRemoval(site);
-                foliarInput -= foliarInput * (float)HarvestEffects.GetCohortLeafRemoval(site);
-            }
-            if (disturbanceType.IsMemberOf("disturbance:fire"))
+            if (disturbanceType != null)
             {
 
-                SiteVars.FireSeverity = ModelCore.GetSiteVar<byte>("Fire.Severity");
-
-                if (ModelCore.CurrentTime > SiteVars.FireDisturbedYear[site]) // this is the first cohort killed/damaged
+                if (eventArgs.DisturbanceType != null && disturbanceType.IsMemberOf("disturbance:harvest"))
                 {
-                    SiteVars.SmolderConsumption[site] = 0.0;
-                    SiteVars.FlamingConsumption[site] = 0.0;
-                    if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-                        FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
+                    SiteVars.HarvestPrescriptionName = ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
+                    if (ModelCore.CurrentTime > SiteVars.HarvestDisturbedYear[site]) // this is the first cohort killed/damaged
+                    {
+                        //PlugIn.ModelCore.UI.WriteLine("   Begin harvest layer reductions...");
+                        HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
+                        SiteVars.HarvestDisturbedYear[site] = ModelCore.CurrentTime;
+                    }
+                    woodInput -= woodInput * HarvestEffects.GetCohortWoodRemoval(site);
+                    foliarInput -= foliarInput * HarvestEffects.GetCohortLeafRemoval(site);
+                }
+                if (eventArgs.DisturbanceType != null && disturbanceType.IsMemberOf("disturbance:fire"))
+                {
 
-                    SiteVars.FireDisturbedYear[site] = ModelCore.CurrentTime;
+                    SiteVars.FireSeverity = ModelCore.GetSiteVar<byte>("Fire.Severity");
+
+                    if (ModelCore.CurrentTime > SiteVars.FireDisturbedYear[site]) // this is the first cohort killed/damaged
+                    {
+                        SiteVars.SmolderConsumption[site] = 0.0;
+                        SiteVars.FlamingConsumption[site] = 0.0;
+                        if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
+                            FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
+
+                        SiteVars.FireDisturbedYear[site] = ModelCore.CurrentTime;
+
+                    }
+
+                    double live_woodFireConsumption = woodInput * FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortWoodReduction;
+                    double live_foliarFireConsumption = foliarInput * FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortLeafReduction;
+
+                    SiteVars.SmolderConsumption[site] += live_woodFireConsumption;
+                    SiteVars.FlamingConsumption[site] += live_foliarFireConsumption;
+                    SiteVars.SourceSink[site].Carbon += live_woodFireConsumption * 0.47;
+                    SiteVars.SourceSink[site].Carbon += live_foliarFireConsumption * 0.47;
+                    woodInput -= live_woodFireConsumption;
+                    foliarInput -= live_foliarFireConsumption;
 
                 }
-
-                double live_woodFireConsumption = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortWoodReduction;
-                double live_foliarFireConsumption = foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortLeafReduction;
-
-                SiteVars.SmolderConsumption[site] += live_woodFireConsumption;
-                SiteVars.FlamingConsumption[site] += live_foliarFireConsumption;
-                SiteVars.SourceSink[site].Carbon += live_woodFireConsumption * 0.47;
-                SiteVars.SourceSink[site].Carbon += live_foliarFireConsumption * 0.47;
-                woodInput -= (float)live_woodFireConsumption;
-                foliarInput -= (float)live_foliarFireConsumption;
-
-            }
-            if (disturbanceType.IsMemberOf("disturbance:browse"))
-            {
-                //Sam Flake: account for browsed biomass nutrient cycling
-                //all browser waste treated as leaves with high N content. This overestimates moose waste if 
-                //there is a lot of cohort mortality versus browse eaten. 
-
-                foliarInput += woodInput; 
-                woodInput = 0;
-
-                double inputDecayValue = 1.0;   // Decay value is calculated for surface/soil layers (leaf/fine root), 
-                                                // therefore, this is just a dummy value.
-
-                if (foliarInput > 0)
+                if (eventArgs.DisturbanceType != null && disturbanceType.IsMemberOf("disturbance:browse"))
                 {
-                    SiteVars.LitterfallC[site] += foliarInput * 0.47;
-                    foliarInput = foliarInput * (float) 0.1;                     //most carbon is respired
-                    
-                    //N content of feces is approximately 1.6% for deer(Asada and Ochiai 1999),
-                    //between 1.45% and 2.26% for deer (Howery and Pfister, 1990), 2.5%  for deer (Euan et al. 2020),
-                    //1.33% in winter, 2.44% for moose in summer (Persson et al. 2000), 2.4% for moose (Kuijper et al. 2016)
-                    //Feces N = 5.7 kg per moose per year (Persson et al. 2000)
-                    //N in urine is 0.5% in summer (Persson et al. 2000), 3675 L urine per moose per year (Persson et al. 2000)
-                    //Urine is 0.5% N = 18.375 kg N per year per moose (assuming summer and winter N content is the same)
-                    //Total N for moose waste = 24 kg per moose per year; Each moose eats 2738 kg biomass per year
-                    //Foliar inputs are 2738 * 0.47 * 0.1 kg C  = 128.67 kg C per moose; CN ratio = 128/24 = 5.33
+                    //Sam Flake: account for browsed biomass nutrient cycling
+                    //all browser waste treated as leaves with high N content. This overestimates moose waste if 
+                    //there is a lot of cohort mortality versus browse eaten. 
 
-                    LitterLayer.PartitionResidue(
-                                foliarInput,
-                                inputDecayValue,
-                                5.33, //CN ratio for browse waste -- metabolic
-                                1, //"lignin" content of waste
-                                5.33, //CN ratio for browse waste -- structural
-                                LayerName.Leaf,
-                                LayerType.Surface,
-                                site);
+                    foliarInput += woodInput;
+                    woodInput = 0;
 
-                    Disturbed[site] = false; 
+                    double inputDecayValue = 1.0;   // Decay value is calculated for surface/soil layers (leaf/fine root), 
+                                                    // therefore, this is just a dummy value.
 
-                    return;
+                    if (foliarInput > 0)
+                    {
+                        SiteVars.LitterfallC[site] += foliarInput * 0.47;
+                        foliarInput = foliarInput * 0.1;                     //most carbon is respired
+
+                        //N content of feces is approximately 1.6% for deer(Asada and Ochiai 1999),
+                        //between 1.45% and 2.26% for deer (Howery and Pfister, 1990), 2.5%  for deer (Euan et al. 2020),
+                        //1.33% in winter, 2.44% for moose in summer (Persson et al. 2000), 2.4% for moose (Kuijper et al. 2016)
+                        //Feces N = 5.7 kg per moose per year (Persson et al. 2000)
+                        //N in urine is 0.5% in summer (Persson et al. 2000), 3675 L urine per moose per year (Persson et al. 2000)
+                        //Urine is 0.5% N = 18.375 kg N per year per moose (assuming summer and winter N content is the same)
+                        //Total N for moose waste = 24 kg per moose per year; Each moose eats 2738 kg biomass per year
+                        //Foliar inputs are 2738 * 0.47 * 0.1 kg C  = 128.67 kg C per moose; CN ratio = 128/24 = 5.33
+
+                        LitterLayer.PartitionResidue(
+                                    foliarInput,
+                                    inputDecayValue,
+                                    5.33, //CN ratio for browse waste -- metabolic
+                                    1, //"lignin" content of waste
+                                    5.33, //CN ratio for browse waste -- structural
+                                    LayerName.Leaf,
+                                    LayerType.Surface,
+                                    site);
+
+                        Disturbed[site] = false;
+
+                        return;
+                    }
                 }
+                Disturbed[site] = true;
             }
             
             if (SpeciesData.Grass[cohort.Species])
@@ -368,12 +373,7 @@ namespace Landis.Extension.Succession.NECN
                 
             }
             
-            //PlugIn.ModelCore.UI.WriteLine("EVENT: Cohort Partial Mortality: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, disturbanceType);
-            //PlugIn.ModelCore.UI.WriteLine("       Cohort Reductions:  Foliar={0:0.00}.  Wood={1:0.00}.", HarvestEffects.GetCohortLeafRemoval(site), HarvestEffects.GetCohortLeafRemoval(site));
-            //PlugIn.ModelCore.UI.WriteLine("       InputB/TotalB:  Foliar={0:0.00}/{1:0.00}, Wood={2:0.0}/{3:0.0}.", foliarInput, cohort.LeafBiomass, woodInput, cohort.WoodBiomass);
-            Disturbed[site] = true;
-
-            return;
+           return;
         }
         //---------------------------------------------------------------------
         // Total mortality, including from disturbance or senescence.
@@ -392,8 +392,6 @@ namespace Landis.Extension.Succession.NECN
         //    double woodInput = (double)cohort.Data.AdditionalParameters.WoodBiomass;
         //    cohort.Data.AdditionalParameters.Test = 1;
 
-        //    if (disturbanceType != null)
-        //    {
         //        //PlugIn.ModelCore.UI.WriteLine("DISTURBANCE EVENT: Cohort Died: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, eventArgs.DisturbanceType);
 
         //        if (disturbanceType.IsMemberOf("disturbance:fire"))

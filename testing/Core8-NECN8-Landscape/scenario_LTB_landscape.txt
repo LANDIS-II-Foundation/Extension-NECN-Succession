@@ -6,9 +6,9 @@ Duration  50
 Species   species_LTB.txt
 
 
-Ecoregions      ./ecoregions.txt
+Ecoregions      ecoregions.txt
 
-EcoregionsMap   ./ecoregions.gis
+EcoregionsMap   ecoregions.tif
 
 
 CellLength  100 << meters, 100 x 100 m = 1 hectare
