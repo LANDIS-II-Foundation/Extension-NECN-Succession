@@ -26,7 +26,7 @@ namespace Landis.Extension.Succession.NECN
         public static readonly string ExtensionName = "NECN Succession";
         private static ICore modelCore;
         public static IInputParameters Parameters;
-        public static double[] ShadeLAI;
+        //public static double[] ShadeLAI;
         public static double AnnualWaterBalance;
 
         public static string SoilCarbonMapNames = null;
@@ -45,9 +45,7 @@ namespace Landis.Extension.Succession.NECN
         public static double ProbEstablishAdjust;
         public static double StormFlowOverride = 0.0;
 
-
         public static int FutureClimateBaseYear;
-        //public static int B_MAX;
         private ICommunity initialCommunity;
 
         public static int[] SpeciesByPlant;
@@ -258,7 +256,7 @@ namespace Landis.Extension.Succession.NECN
 
 
         //---------------------------------------------------------------------
-        // This method does not trigger reproduction
+        // The delegated cohort mortality method.  Triggers regeneration.
         public void CohortMortality(object sender, MortalityEventArgs eventArgs)
         {
             if(OtherData.CalibrateMode) ModelCore.UI.WriteLine("Cohort Partial Mortality:  {0}", eventArgs.Site);
@@ -266,7 +264,7 @@ namespace Landis.Extension.Succession.NECN
             ExtensionType disturbanceType = eventArgs.DisturbanceType;
             ActiveSite site = eventArgs.Site;
 
-            ICohort cohort = (Landis.Library.UniversalCohorts.ICohort)eventArgs.Cohort;
+            ICohort cohort = (Landis.Library.UniversalCohorts.ICohort) eventArgs.Cohort;
 
             double fractionPartialMortality = (double)eventArgs.Reduction;
 

@@ -535,8 +535,16 @@ namespace Landis.Extension.Succession.NECN
         {
 
             //Get Cohort Mineral and Resorbed N allocation.
-            double mineralNallocation = cohort.Data.AdditionalParameters.MineralNallocation; 
-            double resorbedNavailable = cohort.Data.AdditionalParameters.Nresorption; 
+            double mineralNallocation = cohort.Data.AdditionalParameters.MineralNallocation;
+            double resorbedNavailable = 0.0;
+            try
+            {
+                resorbedNavailable = cohort.Data.AdditionalParameters.Nresorption;
+            }
+            catch
+            {
+                cohort.Data.AdditionalParameters.Nresorption = 0.0;
+            }
 
             double LeafNPP = (NPP * leafFractionNPP);
             
