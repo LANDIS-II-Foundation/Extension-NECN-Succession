@@ -315,9 +315,8 @@ namespace Landis.Extension.Succession.NECN
                 }
                 if (eventArgs.DisturbanceType != null && disturbanceType.IsMemberOf("disturbance:browse"))
                 {
-                    //Sam Flake: account for browsed biomass nutrient cycling
-                    //all browser waste treated as leaves with high N content. This overestimates moose waste if 
-                    //there is a lot of cohort mortality versus browse eaten. 
+                    //Sam Flake: account for browsed biomass nutrient cycling. All browser waste treated as leaves with high N content. 
+                    // This overestimates moose waste if there is a lot of cohort mortality versus browse eaten. 
 
                     foliarInput += woodInput;
                     woodInput = 0;
@@ -330,8 +329,7 @@ namespace Landis.Extension.Succession.NECN
                         SiteVars.LitterfallC[site] += foliarInput * 0.47;
                         foliarInput = foliarInput * 0.1;                     //most carbon is respired
 
-                        //N content of feces is approximately 1.6% for deer(Asada and Ochiai 1999),
-                        //between 1.45% and 2.26% for deer (Howery and Pfister, 1990), 2.5%  for deer (Euan et al. 2020),
+                        //N content of feces is approximately 1.6% for deer(Asada and Ochiai 1999), between 1.45% and 2.26% for deer (Howery and Pfister, 1990), 2.5%  for deer (Euan et al. 2020),
                         //1.33% in winter, 2.44% for moose in summer (Persson et al. 2000), 2.4% for moose (Kuijper et al. 2016)
                         //Feces N = 5.7 kg per moose per year (Persson et al. 2000)
                         //N in urine is 0.5% in summer (Persson et al. 2000), 3675 L urine per moose per year (Persson et al. 2000)
@@ -526,7 +524,6 @@ namespace Landis.Extension.Succession.NECN
             if (OtherData.CalibrateMode)
             {
                 ModelCore.UI.WriteLine("original_lightProbability:{0},{1},{2}", ModelCore.CurrentTime, species.Name, lightProbability);
-                //PlugIn.ModelCore.UI.WriteLine("siteShade:{0}", siteShade);
                 ModelCore.UI.WriteLine("siteLAI:{0}", SiteVars.LAI[site]);
             }
 
@@ -736,7 +733,6 @@ namespace Landis.Extension.Succession.NECN
 
             Landis.Library.InitialCommunities.Universal.DatasetParser parser = new Landis.Library.InitialCommunities.Universal.DatasetParser(Timestep, ModelCore.Species, additionalCohortParameters, initialCommunitiesText);
             Landis.Library.InitialCommunities.Universal.IDataset communities = Data.Load<Landis.Library.InitialCommunities.Universal.IDataset>(initialCommunitiesText, parser);
-            //Landis.Library.InitialCommunities.Universal.IDataset communities = parser.Parse(); // Timestep, ModelCore.Species, additionalCohortParameters, initialCommunitiesText);
 
             ModelCore.UI.WriteLine("   Reading initial communities map \"{0}\" ...", initialCommunitiesMap);
             IInputRaster<UIntPixel> map;
