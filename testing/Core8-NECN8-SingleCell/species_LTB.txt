@@ -1,6 +1,4 @@
 LandisData	Species		
->> same species at Sarah's - 3 deleted	
-					
 
 >>				Sexual	Seed Disp Dist	Veg	Sprout	Age	Post-Fire
 >>	Name		Long	Maturit	Effecti	Maximum	Rep P	Min	Max	Regen
@@ -19,9 +17,6 @@ LandisData	Species
 	NonnSeed	80	5	30	1000	0	0	0	none
 	FixnResp	80	5	30	500	0.75	5	70	resprout
 	FixnSeed	80	5	30	800	0	0	0	none
-
->> changed max dist poputrem from 6000 to 1000
-
 
 
 
