@@ -10,15 +10,9 @@ using System.Diagnostics;
 
 namespace Landis.Extension.Succession.NECN
 {
-    /// <summary>
-    /// The parameters for biomass succession.
-    /// </summary>
     public class InputParameters : IInputParameters
     {
         private int timestep;
-        private SeedingAlgorithms seedAlg;
-
-        private string climateConfigFile;
         private string initCommunities;
         private string communitiesMap;
         private string soilDepthMapName;
@@ -48,60 +42,8 @@ namespace Landis.Extension.Succession.NECN
         //Maps to adjust PET based on topography
         private string slopeMapName;
         private string aspectMapName;
-
-        private bool calibrateMode;
-        private bool smokeModelOutputs;
-        //private bool henne_watermode;
-        private bool writeSWA; //write soil water maps, for calculating normal SWA
-        private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
-        private bool writeTemp; //write temperature maps, for calculating normal CWD
-        private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
-        private WaterType wtype;       
-        private string communityInputMapNames;
         private double probEstablishAdjust;
-        private double atmosNslope;
-        private double atmosNintercept;
-        private double latitude;
-        private double denitrif;
-        private double decayRateSurf;
-        private double decayRateSOM1;
-        private double decayRateSOM2;
-        private double decayRateSOM3;
-        private double initMineralN;
-        private double initFineFuels;
-
         private ISpeciesDataset speciesDataset;
-        
-        //private FunctionalTypeTable functionalTypes;
-        private FireReductions[] fireReductionsTable;
-        private List<HarvestReductions> harvestReductionsTable;
-        
-        //private Landis.Library.Parameters.Species.AuxParm<int> sppFunctionalType;
-        private Landis.Library.Parameters.Species.AuxParm<bool> nFixer;
-        private Landis.Library.Parameters.Species.AuxParm<int> gddMin;
-        private Landis.Library.Parameters.Species.AuxParm<int> gddMax;
-        private Landis.Library.Parameters.Species.AuxParm<int> minJanTemp;
-        private Landis.Library.Parameters.Species.AuxParm<double> maxDrought;
-        private Landis.Library.Parameters.Species.AuxParm<double> leafLongevity;
-        private Landis.Library.Parameters.Species.AuxParm<bool> epicormic;
-        private Landis.Library.Parameters.Species.AuxParm<double> leafLignin;
-        private Landis.Library.Parameters.Species.AuxParm<double> woodLignin;
-        private Landis.Library.Parameters.Species.AuxParm<double> coarseRootLignin;
-        private Landis.Library.Parameters.Species.AuxParm<double> fineRootLignin;
-        private Landis.Library.Parameters.Species.AuxParm<double> leafCN;
-        private Landis.Library.Parameters.Species.AuxParm<double> woodCN;
-        private Landis.Library.Parameters.Species.AuxParm<double> coarseRootCN;
-        private Landis.Library.Parameters.Species.AuxParm<double> foliageLitterCN;
-        private Landis.Library.Parameters.Species.AuxParm<double> fineRootCN;
-        private Landis.Library.Parameters.Species.AuxParm<int> maxANPP;
-        private Landis.Library.Parameters.Species.AuxParm<int> maxBiomass;
-        private Landis.Library.Parameters.Species.AuxParm<bool> grass;  // optional
-        private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
-        private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
-        private double grassThresholdMultiplier; // W.Hotta 2020.07.07
-        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIShape; 
-        private Landis.Library.Parameters.Species.AuxParm<double> lightLAIScale;
-        private Landis.Library.Parameters.Species.AuxParm<double> lightLAILocation;
 
         //Drought variables
         private Landis.Library.Parameters.Species.AuxParm<double> intercept; // optional
@@ -171,15 +113,7 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Seeding algorithm
         /// </summary>
-        public SeedingAlgorithms SeedAlgorithm
-        {
-            get {
-                return seedAlg;
-            }
-            set {
-                seedAlg = value;
-            }
-        }
+        public SeedingAlgorithms SeedAlgorithm { get; set; }
 
         //---------------------------------------------------------------------
 
@@ -226,62 +160,23 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------
-        public string ClimateConfigFile
-        {
-            get
-            {
-                return climateConfigFile;
-            }
-            set
-            {
+        public string ClimateConfigFile { get; set; }
 
-                climateConfigFile = value;
-            }
-        }
-        
         //---------------------------------------------------------------------
         /// <summary>
         /// Determines whether months are simulated 0 - 12 (calibration mode) or
         /// 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 (normal mode with disturbance at June 30).
         /// </summary>
-        public bool CalibrateMode
-        {
-            get {
-                return calibrateMode;
-            }
-            set {
-                calibrateMode = value;
-            }
-        }
+        public bool CalibrateMode { get; set; }
 
-        public string CommunityInputMapNames
-        {
-            get
-            {
-                return communityInputMapNames;
-            }
-            set
-            {
-                communityInputMapNames = value;
-            }
-        }
+        public string CommunityInputMapNames { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>
         /// Should yearly rasters of mean summer SWA be written? Used to generate input
         /// variables for drought mortality
         /// </summary>
-        public bool OutputSoilWaterAvailable
-        {
-            get
-            {
-                return writeSWA;
-            }
-            set
-            {
-                writeSWA = value;
-            }
-        }
+        public bool OutputSoilWaterAvailable { get; set; }
 
 
         //---------------------------------------------------------------------
@@ -289,81 +184,33 @@ namespace Landis.Extension.Succession.NECN
         /// Should annual rasters of CWD be written? Used to generate input
         /// variables for drought mortality
         /// </summary>
-        public bool OutputClimateWaterDeficit
-        {
-            get
-            {
-                return writeCWD;
-            }
-            set
-            {
-                writeCWD = value;
-            }
-        }
+        public bool OutputClimateWaterDeficit { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>
         /// Should annual rasters of Temperature be written? Used to generate input
         /// variables for drought mortality
         /// </summary>
-        public bool OutputTemp
-        {
-            get
-            {
-                return writeTemp;
-            }
-            set
-            {
-                writeTemp = value;
-            }
-        }
+        public bool OutputTemp { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>
         /// Should annual rasters of CWD be written? Used to generate input
         /// variables for drought mortality
         /// </summary>
-        public bool WriteSpeciesDroughtMaps
-        {
-            get
-            {
-                return writeSpeciesDroughtMaps;
-            }
-            set
-            {
-                writeSpeciesDroughtMaps = value;
-            }
-        }
+        public bool WriteSpeciesDroughtMaps { get; set; }
 
 
         //---------------------------------------------------------------------
         /// <summary>
         /// </summary>
-        public bool SmokeModelOutputs
-        {
-            get
-            {
-                return smokeModelOutputs;
-            }
-            set
-            {
-                smokeModelOutputs = value;
-            }
-        }
+        public bool SmokeModelOutputs { get; set; }
 
         //---------------------------------------------------------------------
         /// <summary>
         /// Determines whether moisture effects on decomposition follow a linear or ratio calculation.
         /// </summary>
-        public WaterType WType
-        {
-            get {
-                return wtype;
-            }
-            set {
-                wtype = value;
-            }
-        }
+        public WaterType WType { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// Adjust probability of establishment due to variable time step.  A multiplier.
@@ -382,81 +229,38 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
-        public double AtmosNslope
-        {
-            get
-            {
-                return atmosNslope;
-            }
-        }
+        public double AtmosNslope { get; private set; }
         //---------------------------------------------------------------------
-        public double AtmosNintercept
-        {
-            get
-            {
-                return atmosNintercept;
-            }
-        }
+        public double AtmosNintercept { get; private set; }
 
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// Functional type parameters.
-        /// </summary>
-        //public FunctionalTypeTable FunctionalTypes
-        //{
-        //    get {
-        //        return functionalTypes;
-        //    }
-        //    set {
-        //        functionalTypes = value;
-        //    }
-        //}
         //---------------------------------------------------------------------
         /// <summary>
         /// Fire reduction of leaf and wood litter parameters.
         /// </summary>
-        public FireReductions[] FireReductionsTable
-        {
-            get {
-                return fireReductionsTable;
-            }
-            set {
-                fireReductionsTable = value;
-            }
-        }
+        public FireReductions[] FireReductionsTable { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// Harvest reduction of leaf and wood litter parameters.
         /// </summary>
-        public List<HarvestReductions> HarvestReductionsTable
-        {
-            get
-            {
-                return harvestReductionsTable;
-            }
-            set
-            {
-                harvestReductionsTable = value;
-            }
-        }
- 
+        public List<HarvestReductions> HarvestReductionsTable { get; set; }
+
         //---------------------------------------------------------------------
 
         //public Landis.Library.Parameters.Species.AuxParm<int>     SppFunctionalType {get {return sppFunctionalType;}}
-        public Landis.Library.Parameters.Species.AuxParm<bool>     NFixer { get {return nFixer;}}
-        public Landis.Library.Parameters.Species.AuxParm<bool> Grass { get { return grass; } }
-        public Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend { get { return nlog_depend; } }
-        public Landis.Library.Parameters.Species.AuxParm<int>     GDDmin     { get { return gddMin; }}
-        public Landis.Library.Parameters.Species.AuxParm<int>     GDDmax     { get { return gddMax; }}
-        public Landis.Library.Parameters.Species.AuxParm<int>     MinJanTemp { get { return minJanTemp; }}
-        public Landis.Library.Parameters.Species.AuxParm<double>  MaxDrought { get { return maxDrought; }}
-        public Landis.Library.Parameters.Species.AuxParm<double>  LeafLongevity {get {return leafLongevity;}}
-        public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get { return growthLAI; } }
-        public double GrassThresholdMultiplier { get { return grassThresholdMultiplier; } }
+        public Landis.Library.Parameters.Species.AuxParm<bool> NFixer { get; }
+        public Landis.Library.Parameters.Species.AuxParm<bool> Grass { get; }
+        public Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend { get; }
+        public Landis.Library.Parameters.Species.AuxParm<int> GDDmin { get; }
+        public Landis.Library.Parameters.Species.AuxParm<int> GDDmax { get; }
+        public Landis.Library.Parameters.Species.AuxParm<int> MinJanTemp { get; }
+        public Landis.Library.Parameters.Species.AuxParm<double> MaxDrought { get; }
+        public Landis.Library.Parameters.Species.AuxParm<double> LeafLongevity { get; }
+        public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get; }
+        public double GrassThresholdMultiplier { get; private set; }
 
-        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get { return lightLAIShape; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get { return lightLAIScale; } }
-        public Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation { get { return lightLAILocation; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get; }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get; }
+        public Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation { get; }
         //Drought variables
 
         public Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get { return cwdThreshold; } }
@@ -507,181 +311,52 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Can the species resprout epicormically following a fire?
         /// </summary>
-        public Landis.Library.Parameters.Species.AuxParm<bool>    Epicormic 
-        {
-            get {
-                return epicormic;
-            }
-            set {
-                epicormic = value;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<bool> Epicormic { get; set; }
 
         //---------------------------------------------------------------------
-        public Landis.Library.Parameters.Species.AuxParm<double> LeafLignin
-        {
-            get {
-                return leafLignin;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> LeafLignin { get; }
         //---------------------------------------------------------------------
-        public Landis.Library.Parameters.Species.AuxParm<double> WoodLignin
-        {
-            get {
-                return woodLignin;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> WoodLignin { get; }
         //---------------------------------------------------------------------
-        public Landis.Library.Parameters.Species.AuxParm<double> CoarseRootLignin
-        {
-            get {
-                return coarseRootLignin;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> CoarseRootLignin { get; }
         //---------------------------------------------------------------------
-        public Landis.Library.Parameters.Species.AuxParm<double> FineRootLignin
-        {
-            get {
-                return fineRootLignin;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> FineRootLignin { get; }
         //---------------------------------------------------------------------
 
-        public Landis.Library.Parameters.Species.AuxParm<double> LeafCN
-        {
-            get {
-                return leafCN;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> LeafCN { get; }
         //---------------------------------------------------------------------
 
-        public Landis.Library.Parameters.Species.AuxParm<double> WoodCN
-        {
-            get {
-                return woodCN;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> WoodCN { get; }
         //---------------------------------------------------------------------
 
-        public Landis.Library.Parameters.Species.AuxParm<double> CoarseRootCN
-        {
-            get {
-                return coarseRootCN;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> CoarseRootCN { get; }
         //---------------------------------------------------------------------
 
-        public Landis.Library.Parameters.Species.AuxParm<double> FoliageLitterCN
-        {
-            get {
-                return foliageLitterCN;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> FoliageLitterCN { get; }
         //---------------------------------------------------------------------
 
-        public Landis.Library.Parameters.Species.AuxParm<double> FineRootCN
-        {
-            get {
-                return fineRootCN;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<double> FineRootCN { get; }
         //---------------------------------------------------------------------
 
-        public Landis.Library.Parameters.Species.AuxParm<int> MaxANPP
-        {
-            get
-            {
-                return maxANPP;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<int> MaxANPP { get; }
         //---------------------------------------------------------------------
 
-        public Landis.Library.Parameters.Species.AuxParm<int> MaxBiomass
-        {
-            get
-            {
-                return maxBiomass;
-            }
-        }
+        public Landis.Library.Parameters.Species.AuxParm<int> MaxBiomass { get; }
         //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Definitions of sufficient light probabilities.
-        ///// </summary>
-        //public List<ISufficientLight> LightClassProbabilities
-        //{
-        //    get {
-        //        return sufficientLight;
-        //    }
-        //    set 
-        //    {
-        //        Debug.Assert(sufficientLight.Count != 0);
-        //        sufficientLight = value;
-        //    }
-        //}
-        //---------------------------------------------------------------------
-        public double Latitude
-        {
-            get {
-                return latitude;
-            }
-        }
+        public double Latitude { get; private set; }
         //-----------------------------------------------
-        public double DecayRateSurf
-        {
-            get
-            {
-                return decayRateSurf;
-            }
-        }
+        public double DecayRateSurf { get; private set; }
         //-----------------------------------------------
-        public double DecayRateSOM1
-        {
-            get
-            {
-                return decayRateSOM1;
-            }
-        }//---------------------------------------------------------------------
-        public double DecayRateSOM2
-        {
-            get
-            {
-                return decayRateSOM2;
-            }
-        }
+        public double DecayRateSOM1 { get; private set; }
         //---------------------------------------------------------------------
-        public double DecayRateSOM3
-        {
-            get
-            {
-                return decayRateSOM3;
-            }
-        }
+        public double DecayRateSOM2 { get; private set; }
+        //---------------------------------------------------------------------
+        public double DecayRateSOM3 { get; private set; }
         //-----------------------------------------------
-        public double DenitrificationRate
-        {
-            get
-            {
-                return denitrif;
-            }
-        }
-        public double InitialMineralN { get { return initMineralN; } }
-        public double InitialFineFuels { get { return initFineFuels; } }
+        public double DenitrificationRate { get; private set; }
+        public double InitialMineralN { get; private set; }
+        public double InitialFineFuels { get; private set; }
 
-        //---------------------------------------------------------------------
-
-        //public string AgeOnlyDisturbanceParms
-        //{
-        //    get {
-        //        return ageOnlyDisturbanceParms;
-        //    }
-        //    set {
-        //        string path = value;
-        //        if (path.Trim(null).Length == 0)
-        //            throw new InputValueException(path,"\"{0}\" is not a valid path.",path);
-        //        ageOnlyDisturbanceParms = value;
-        //    }
-        //}
 
         //---------------------------------------------------------------------
         public string SoilDepthMapName
@@ -1101,7 +776,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetGDDmin(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
-            gddMin[species] = VerifyRange(newValue, 1, 4000, "GDDMin");
+            GDDmin[species] = VerifyRange(newValue, 1, 4000, "GDDMin");
         }
         //---------------------------------------------------------------------
 
@@ -1114,7 +789,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetGDDmax(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
-            gddMax[species] = VerifyRange(newValue, 500, 7000, "GDDmax");
+            GDDmax[species] = VerifyRange(newValue, 500, 7000, "GDDmax");
         }
         //---------------------------------------------------------------------
 
@@ -1127,7 +802,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetMinJanTemp(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
-            minJanTemp[species] = VerifyRange(newValue, -60, 20, "MinJanTemp");
+            MinJanTemp[species] = VerifyRange(newValue, -60, 20, "MinJanTemp");
         }
         //---------------------------------------------------------------------
 
@@ -1140,7 +815,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetMaxDrought(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            maxDrought[species] = VerifyRange(newValue, 0.0, 1.0, "MaxDrought");
+            MaxDrought[species] = VerifyRange(newValue, 0.0, 1.0, "MaxDrought");
         }
         //---------------------------------------------------------------------
         //CWD Establishment
@@ -1166,7 +841,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetLeafLongevity(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            leafLongevity[species] = VerifyRange(newValue, 1.0, 10.0, "LeafLongevity");
+            LeafLongevity[species] = VerifyRange(newValue, 1.0, 10.0, "LeafLongevity");
         }
 
         //---------------------------------------------------------------------
@@ -1180,7 +855,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetLeafLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            leafLignin[species] = VerifyRange(newValue, 0.0, 0.4, "LeafLignin");
+            LeafLignin[species] = VerifyRange(newValue, 0.0, 0.4, "LeafLignin");
         }
         //---------------------------------------------------------------------
 
@@ -1193,7 +868,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetWoodLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            woodLignin[species] = VerifyRange(newValue, 0.0, 0.4, "WoodLignin");
+            WoodLignin[species] = VerifyRange(newValue, 0.0, 0.4, "WoodLignin");
         }
         //---------------------------------------------------------------------
 
@@ -1206,7 +881,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetCoarseRootLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            coarseRootLignin[species] = VerifyRange(newValue, 0.0, 0.4, "CourseRootLignin");
+            CoarseRootLignin[species] = VerifyRange(newValue, 0.0, 0.4, "CourseRootLignin");
         }
         //---------------------------------------------------------------------
 
@@ -1219,7 +894,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetFineRootLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            fineRootLignin[species] = VerifyRange(newValue, 0.0, 0.4, "FineRootLignin");
+            FineRootLignin[species] = VerifyRange(newValue, 0.0, 0.4, "FineRootLignin");
         }
         //---------------------------------------------------------------------
 
@@ -1232,7 +907,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetLeafCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            leafCN[species] = VerifyRange(newValue, 5.0, 100.0, "LeafCN");
+            LeafCN[species] = VerifyRange(newValue, 5.0, 100.0, "LeafCN");
         }
         //---------------------------------------------------------------------
 
@@ -1245,65 +920,65 @@ namespace Landis.Extension.Succession.NECN
         public void SetWoodCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            woodCN[species] = VerifyRange(newValue, 5.0, 900.0, "WoodCN");
+            WoodCN[species] = VerifyRange(newValue, 5.0, 900.0, "WoodCN");
         }
         //---------------------------------------------------------------------
 
         public void SetCoarseRootCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            coarseRootCN[species] = VerifyRange(newValue, 5.0, 500.0, "CourseRootCN");
+            CoarseRootCN[species] = VerifyRange(newValue, 5.0, 500.0, "CourseRootCN");
         }
         //---------------------------------------------------------------------
 
         public void SetFoliageLitterCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            foliageLitterCN[species] = VerifyRange(newValue, 5.0, 100.0, "FoliarLitterCN");
+            FoliageLitterCN[species] = VerifyRange(newValue, 5.0, 100.0, "FoliarLitterCN");
         }
         //---------------------------------------------------------------------
 
         public void SetFineRootCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
-            fineRootCN[species] = VerifyRange(newValue, 5.0, 100.0, "FineRootCN");
+            FineRootCN[species] = VerifyRange(newValue, 5.0, 100.0, "FineRootCN");
         }
         //---------------------------------------------------------------------
         public void SetMaxANPP(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
-            maxANPP[species] = VerifyRange(newValue, 2, 1000, "MaxANPP");
+            MaxANPP[species] = VerifyRange(newValue, 2, 1000, "MaxANPP");
         }
         //---------------------------------------------------------------------
 
         public void SetMaxBiomass(ISpecies species, int newValue)
         {
             Debug.Assert(species != null);
-            maxBiomass[species] = VerifyRange(newValue, 2, 300000, "MaxBiomass");
+            MaxBiomass[species] = VerifyRange(newValue, 2, 300000, "MaxBiomass");
         }
 
         public void SetGrowthLAI(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            growthLAI[species] = VerifyRange(newValue, 0.0, 1.0, "GrowthLAI");
+            GrowthLAI[species] = VerifyRange(newValue, 0.0, 1.0, "GrowthLAI");
         }
 
         public void SetLightLAIShape(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            lightLAIShape[species] = VerifyRange(newValue, 0.0, 10.0, "LightLAIShape");
+            LightLAIShape[species] = VerifyRange(newValue, 0.0, 10.0, "LightLAIShape");
         }
 
         public void SetLightLAIScale(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            lightLAIScale[species] = VerifyRange(newValue, 0.0, 1000.0, "LightLAIScale"); //Scale parameter can be high for some shade-tolerant spp
+            LightLAIScale[species] = VerifyRange(newValue, 0.0, 1000.0, "LightLAIScale"); //Scale parameter can be high for some shade-tolerant spp
         }
 
         public void SetLightLAILocation(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            lightLAILocation[species] = VerifyRange(newValue, 0.0, 1, "LightLAILocation");
+            LightLAILocation[species] = VerifyRange(newValue, 0.0, 1, "LightLAILocation");
         }
 
 
@@ -1311,68 +986,68 @@ namespace Landis.Extension.Succession.NECN
 
         public void SetAtmosNslope(InputValue<double> newValue)
         {
-            atmosNslope = VerifyRange(newValue, -1.0, 2.0, "AtmosNslope");
+            AtmosNslope = VerifyRange(newValue, -1.0, 2.0, "AtmosNslope");
         }
         //---------------------------------------------------------------------
         public void SetAtmosNintercept(InputValue<double> newValue)
         {
-            atmosNintercept = VerifyRange(newValue, -1.0, 2.0, "AtmostNintercept");
+            AtmosNintercept = VerifyRange(newValue, -1.0, 2.0, "AtmostNintercept");
         }
         //---------------------------------------------------------------------
         public void SetLatitude(InputValue<double> newValue)
         {
-            latitude = VerifyRange(newValue, 0.0, 70.0, "Latitude");
+            Latitude = VerifyRange(newValue, 0.0, 70.0, "Latitude");
         }
         //---------------------------------------------------------------------
        
         public void SetDecayRateSurf(InputValue<double> newValue)
         {
-            decayRateSurf = VerifyRange(newValue, 0.0, 10.0, "DecayRateSurf");
+            DecayRateSurf = VerifyRange(newValue, 0.0, 10.0, "DecayRateSurf");
         }
         //---------------------------------------------------------------------
         public void SetDecayRateSOM1(InputValue<double> newValue)
         {
-            decayRateSOM1 = VerifyRange(newValue, 0.0, 10.0, "DecayRateSOM1");
+            DecayRateSOM1 = VerifyRange(newValue, 0.0, 10.0, "DecayRateSOM1");
         }
         //---------------------------------------------------------------------
         public void SetDecayRateSOM2(InputValue<double> newValue)
         {
-            decayRateSOM2 = VerifyRange(newValue, 0.0, 1.0, "DecayRateSOM2");
+            DecayRateSOM2 = VerifyRange(newValue, 0.0, 1.0, "DecayRateSOM2");
         }
         //---------------------------------------------------------------------
         public void SetDecayRateSOM3(InputValue<double> newValue)
         {
-            decayRateSOM3 = VerifyRange(newValue, 0.0, 1.0, "DecayRateSOM3");
+            DecayRateSOM3 = VerifyRange(newValue, 0.0, 1.0, "DecayRateSOM3");
         }
         // --------------------------------------------------------------------
         // Multiplier to adjust judgement whether a tree-cohort is larger than grass layer
         // W.Hotta 2020.07.07
         public void SetGrassThresholdMultiplier(InputValue<double> newValue)
         {
-            grassThresholdMultiplier = VerifyRange(newValue, 0.0, 10.0, "GrassThresholdMultiplier");
+            GrassThresholdMultiplier = VerifyRange(newValue, 0.0, 10.0, "GrassThresholdMultiplier");
         }
         //---------------------------------------------------------------------
         public void SetDenitrif(InputValue<double> newValue)
         {
-            denitrif = VerifyRange(newValue, 0.0, 1.0, "Denitrification");
+            DenitrificationRate = VerifyRange(newValue, 0.0, 1.0, "Denitrification");
         }
 
         //---------------------------------------------------------------------
         public void SetInitMineralN(InputValue<double> newValue)
         {
-            initMineralN = VerifyRange(newValue, 0.0, 5000.0, "InitialMineralN");
+            InitialMineralN = VerifyRange(newValue, 0.0, 5000.0, "InitialMineralN");
         }
         //---------------------------------------------------------------------
         public void SetInitFineFuels(InputValue<double> newValue)
         {
-            initFineFuels = VerifyRange(newValue, 0.0, 1.0, "InitialFineFuel");
+            InitialFineFuels = VerifyRange(newValue, 0.0, 1.0, "InitialFineFuel");
         }
         //---------------------------------------------------------------------
 
         public void SetNlog_depend(ISpecies species, bool newValue)
         {
             Debug.Assert(species != null);
-            nlog_depend[species] = newValue;
+            Nlog_depend[species] = newValue;
         }
 
 
@@ -1585,31 +1260,31 @@ namespace Landis.Extension.Succession.NECN
             this.speciesDataset = speciesDataset;
 
             //functionalTypes = new FunctionalTypeTable(functionalCnt);
-            fireReductionsTable = new FireReductions[11];
-            harvestReductionsTable = new List<HarvestReductions>();
+            FireReductionsTable = new FireReductions[11];
+            HarvestReductionsTable = new List<HarvestReductions>();
 
             //sppFunctionalType       = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
-            nFixer                  = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
-            grass                   = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
-            nlog_depend             = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
-            gddMin                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
-            gddMax                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
-            minJanTemp              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
-            maxDrought              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            leafLongevity           = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            epicormic               = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
-            leafLignin              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            woodLignin              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            coarseRootLignin        = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            fineRootLignin          = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            leafCN                  = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            woodCN                  = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            coarseRootCN            = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            foliageLitterCN         = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            fineRootCN              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            maxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
-            maxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
-            growthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            NFixer                  = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            Grass                   = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            Nlog_depend             = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            GDDmin                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            GDDmax                  = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            MinJanTemp              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            MaxDrought              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            LeafLongevity           = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            Epicormic               = new Landis.Library.Parameters.Species.AuxParm<bool>(speciesDataset);
+            LeafLignin              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            WoodLignin              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            CoarseRootLignin        = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            FineRootLignin          = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            LeafCN                  = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            WoodCN                  = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            CoarseRootCN            = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            FoliageLitterCN         = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            FineRootCN              = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            MaxANPP                 = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            MaxBiomass              = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            GrowthLAI               = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             //CWD Establishment
             cwdBegin = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             cwdMax = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
@@ -1631,9 +1306,9 @@ namespace Landis.Extension.Succession.NECN
             lagCWD = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
             lagSWA = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
 
-            lightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            lightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
-            lightLAILocation = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            LightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            LightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            LightLAILocation = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
 
             tempcurve1 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             tempcurve2 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);

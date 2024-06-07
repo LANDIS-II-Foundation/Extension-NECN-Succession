@@ -43,9 +43,7 @@ namespace Landis.Extension.Succession.NECN
         bool CalibrateMode { get; set; }
         WaterType WType {get;set;}
         double ProbEstablishAdjustment { get; set; }
-        //double[] MaximumShadeLAI { get; }
         bool SmokeModelOutputs { get; set; }
-        //bool SoilWater_Henne { get; set; }
         double GrassThresholdMultiplier { get; }
         string CommunityInputMapNames { get; set; }
 
@@ -54,14 +52,6 @@ namespace Landis.Extension.Succession.NECN
         bool OutputTemp { get; set; }
         bool WriteSpeciesDroughtMaps { get; set; }
 
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// A suite of parameters for species functional groups
-        /// </summary>
-        //FunctionalTypeTable FunctionalTypes
-        //{
-        //    get;set;
-        //}
         //---------------------------------------------------------------------
         /// <summary>
         /// Parameters for fire effects on wood and leaf litter
@@ -83,7 +73,6 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        //Landis.Library.Parameters.Species.AuxParm<int> SppFunctionalType{get;}
         Landis.Library.Parameters.Species.AuxParm<bool> NFixer{get;}
         Landis.Library.Parameters.Species.AuxParm<bool> Grass { get; }
         Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend { get; } // W.Hotta (2021.08.01)
