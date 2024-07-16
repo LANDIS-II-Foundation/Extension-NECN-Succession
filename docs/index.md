@@ -42,7 +42,7 @@ To use NECN, you need:
 
 # Download
 
-The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/installer/LANDIS-II-V7%20NECN%20Succession%207.0-setup.exe). To install it on your computer, just launch the installer.
+The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/installer/LANDIS-II-V7%20NECN%20Succession%207.0.2-setup.exe). To install it on your computer, just launch the installer.
 
 # Example Files
 
