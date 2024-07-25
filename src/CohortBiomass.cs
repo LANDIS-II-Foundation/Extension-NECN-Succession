@@ -162,6 +162,8 @@ namespace Landis.Extension.Succession.NECN
             tempObject.LeafBiomass = deltaLeaf;
             otherParams = tempObject;
 
+            double newBiomass = cohort.Data.Biomass + deltaWood + deltaLeaf;
+
             //if((totalMortality[1] + defoliatedLeafBiomass) > additionalParameters.LeafBiomass)
             //   PlugIn.ModelCore.UI.WriteLine("Warning: Leaf Mortality exceeds cohort leaf biomass. M={0:0.0}, B={1:0.0}, DefoLeafBiomass={2:0.0}, defoliationIndex={3:0.0}", totalMortality[1], additionalParameters.LeafBiomass, defoliatedLeafBiomass, defoliation);
 
@@ -178,7 +180,7 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.WriteLogFile();
             }
 
-            return 0;
+            return newBiomass;
         }
 
 
