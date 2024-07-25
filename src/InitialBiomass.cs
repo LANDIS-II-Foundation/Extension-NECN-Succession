@@ -2,13 +2,10 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Utilities;
 using Landis.Library.InitialCommunities.Universal;
 using System.Collections.Generic;
 using Landis.Library.UniversalCohorts;
 using Landis.Library.Climate;
-using System;
-//using Landis.Cohorts;
 
 
 namespace Landis.Extension.Succession.NECN

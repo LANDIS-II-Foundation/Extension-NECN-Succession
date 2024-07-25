@@ -3,11 +3,9 @@
 using Landis.Utilities;
 using Landis.Core;
 using Landis.SpatialModeling;
-using System.Collections.Generic;
 using Landis.Library.UniversalCohorts;
 using System;
 using System.Dynamic;
-using System.Linq;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -111,7 +109,7 @@ namespace Landis.Extension.Succession.NECN
                 if (PlugIn.ModelCore.CurrentTime > 0) //Skip this during initialization
                 {
                     int cohortBiomass = (int)(cohort.Data.AdditionalParameters.LeafBiomass + cohort.Data.AdditionalParameters.WoodBiomass);
-                    defoliation = CohortDefoliation.Compute(site, cohort.Species, cohortBiomass, (int)siteBiomass);
+                    defoliation = CohortDefoliation.Compute(site, cohort, cohortBiomass, (int)siteBiomass);
 
                 }
 
