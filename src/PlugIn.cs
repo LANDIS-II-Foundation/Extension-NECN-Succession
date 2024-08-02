@@ -751,12 +751,14 @@ namespace Landis.Extension.Succession.NECN
                     initialCommunity = communities.Find(mapCode);
                     if (initialCommunity == null)
                     {
-                        ModelCore.UI.WriteLine("   Map Code {0} has not initial community", mapCode);
+                        //ModelCore.UI.WriteLine("   Map Code {0} does not have an initial community", mapCode);
                         SiteVars.Cohorts[site] = new SiteCohorts();
-                        return;
                         //throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
                     }
-                    InitializeSite(activeSite); 
+                    else
+                    {
+                        InitializeSite(activeSite);
+                    }
 
                 }
             }
