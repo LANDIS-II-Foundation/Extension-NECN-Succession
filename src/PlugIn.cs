@@ -249,7 +249,7 @@ namespace Landis.Extension.Succession.NECN
         protected override void InitializeSite(ActiveSite site)
         {
             InitialBiomass initialBiomass = InitialBiomass.Compute(site, initialCommunity);
-            SiteVars.MineralN[site] = Parameters.InitialMineralN;
+            //SiteVars.MineralN[site] = Parameters.InitialMineralN;
         }
 
 
@@ -746,14 +746,18 @@ namespace Landis.Extension.Succession.NECN
                         continue;
 
                     ActiveSite activeSite = (ActiveSite)site;
+                    SiteVars.MineralN[site] = Parameters.InitialMineralN;
 
                     initialCommunity = communities.Find(mapCode);
                     if (initialCommunity == null)
                     {
-                        throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
+                        ModelCore.UI.WriteLine("   Map Code {0} has not initial community", mapCode);
+                        SiteVars.Cohorts[site] = new SiteCohorts();
+                        return;
+                        //throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
                     }
-
                     InitializeSite(activeSite); 
+
                 }
             }
         }

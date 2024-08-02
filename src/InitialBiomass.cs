@@ -5,7 +5,6 @@ using Landis.SpatialModeling;
 using Landis.Library.InitialCommunities.Universal;
 using System.Collections.Generic;
 using Landis.Library.UniversalCohorts;
-using Landis.Library.Climate;
 
 
 namespace Landis.Extension.Succession.NECN
@@ -41,13 +40,13 @@ namespace Landis.Extension.Succession.NECN
         }
 
 
-        private static IDictionary<uint, List<Landis.Library.UniversalCohorts.ICohort>> mapCodeCohorts;
+        private static IDictionary<uint, List<ICohort>> mapCodeCohorts;
 
         //---------------------------------------------------------------------
 
         static InitialBiomass()
         {
-            mapCodeCohorts = new Dictionary<uint, List<Landis.Library.UniversalCohorts.ICohort>>();
+            mapCodeCohorts = new Dictionary<uint, List<ICohort>>();
         }
 
         //---------------------------------------------------------------------
@@ -74,7 +73,7 @@ namespace Landis.Extension.Succession.NECN
 
             InitialBiomass initialBiomass;
 
-            List<Landis.Library.UniversalCohorts.ICohort> sortedAgeCohorts = SortCohorts(initialCommunity.Cohorts);
+            List<ICohort> sortedAgeCohorts = SortCohorts(initialCommunity.Cohorts);
 
             ISiteCohorts cohorts = MakeBiomassCohorts(sortedAgeCohorts, site);
             initialBiomass = new InitialBiomass(cohorts);
@@ -83,7 +82,7 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //---------------------------------------------------------------------
-        public static ISiteCohorts MakeBiomassCohorts(List<Landis.Library.UniversalCohorts.ICohort> sortedCohorts, ActiveSite site)
+        public static ISiteCohorts MakeBiomassCohorts(List<ICohort> sortedCohorts, ActiveSite site)
         {
 
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
@@ -99,12 +98,12 @@ namespace Landis.Extension.Succession.NECN
         }
 
 
-        public static List<Landis.Library.UniversalCohorts.ICohort> SortCohorts(List<Landis.Library.UniversalCohorts.ISpeciesCohorts> sppCohorts)
+        public static List<ICohort> SortCohorts(List<ISpeciesCohorts> sppCohorts)
         {
-            List<Landis.Library.UniversalCohorts.ICohort> cohorts = new List<Landis.Library.UniversalCohorts.ICohort>();
-            foreach (Landis.Library.UniversalCohorts.ISpeciesCohorts speciesCohorts in sppCohorts)
+            List<ICohort> cohorts = new List<ICohort>();
+            foreach (ISpeciesCohorts speciesCohorts in sppCohorts)
             {
-                foreach (Landis.Library.UniversalCohorts.ICohort cohort in speciesCohorts)
+                foreach (ICohort cohort in speciesCohorts)
                 {
                     cohorts.Add(cohort);
                     //PlugIn.ModelCore.UI.WriteLine("ADDED:  {0} {1}.", cohort.Species.Name, cohort.Age);
