@@ -2,10 +2,9 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 using Landis.Library.Climate;
-using System.Linq;
 
 
 namespace Landis.Extension.Succession.NECN
@@ -28,15 +27,18 @@ namespace Landis.Extension.Succession.NECN
                                        bool        isSuccessionTimeStep)
         {
             
-            ISiteCohorts siteCohorts = SiteVars.Cohorts[site];
+            SiteCohorts siteCohorts = SiteVars.Cohorts[site];
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
-            for (int y = 0; y < years; ++y) {
-
+            for (int y = 0; y < years; ++y) 
+            {
+                Year = y + 1;
                 //PlugIn.ModelCore.UI.WriteLine("Timestep is = {0}.", PlugIn.ModelCore.CurrentTime);
 
-                if (Climate.Future_MonthlyData.ContainsKey(PlugIn.FutureClimateBaseYear + y + PlugIn.ModelCore.CurrentTime - years))
-                    ClimateRegionData.AnnualWeather[ecoregion] = Climate.Future_MonthlyData[PlugIn.FutureClimateBaseYear + y - years + PlugIn.ModelCore.CurrentTime][ecoregion.Index];
+                //if (Climate.Future_MonthlyData.ContainsKey(PlugIn.FutureClimateBaseYear + y + PlugIn.ModelCore.CurrentTime - years))
+                //    ClimateRegionData.AnnualWeather[ecoregion] = Climate.Future_MonthlyData[PlugIn.FutureClimateBaseYear + y - years + PlugIn.ModelCore.CurrentTime][ecoregion.Index];
+
+                ClimateRegionData.AnnualClimate[ecoregion] = Climate.FutureEcoregionYearClimate[ecoregion.Index][Year - years + PlugIn.ModelCore.CurrentTime];
 
                 //PlugIn.ModelCore.UI.WriteLine("PlugIn_FutureClimateBaseYear={0}, y={1}, ModelCore_CurrentTime={2}, CenturyTimeStep = {3}, SimulatedYear = {4}.", PlugIn.FutureClimateBaseYear, y, PlugIn.ModelCore.CurrentTime, years, (PlugIn.FutureClimateBaseYear + y - years + PlugIn.ModelCore.CurrentTime));
 
@@ -58,7 +60,7 @@ namespace Landis.Extension.Succession.NECN
                     // Calculate mineral N fractions based on coarse root biomass.  Only need to do once per year.
                     if (MonthCnt == 0)
                     {
-                        AvailableN.CalculateMineralNfraction(site);
+                        AvailableN.CalculateAnnualMineralNfraction(site);
                     }
                     //PlugIn.ModelCore.UI.WriteLine("SiteVars.MineralN = {0:0.00}, month = {1}.", SiteVars.MineralN[site], i);
 
@@ -77,22 +79,22 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyMeanSoilWaterContent[site][Month] = 0.0;
                     SiteVars.MonthlyAnaerobicEffect[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
-                    SiteVars.TotalWoodBiomass[site] = Main.ComputeWoodBiomass((ActiveSite) site);
+                    SiteVars.TotalWoodBiomass[site] = ComputeWoodBiomass((ActiveSite) site);
 
-                                                   
-                    double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month];
+
+                    var ppt = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[Month];
 
                     double monthlyNdeposition;
                     if  (PlugIn.Parameters.AtmosNintercept !=-1 && PlugIn.Parameters.AtmosNslope !=-1)
                         monthlyNdeposition = PlugIn.Parameters.AtmosNintercept + (PlugIn.Parameters.AtmosNslope * ppt);
                     else 
                     {
-                        monthlyNdeposition = ClimateRegionData.AnnualWeather[ecoregion].MonthlyNDeposition[Main.Month];
+                        monthlyNdeposition = ClimateRegionData.AnnualClimate[ecoregion].MonthlyNDeposition[Month];
                     }
 
                     if (monthlyNdeposition < 0)
                     {
-                        string mesg = string.Format("Error: Nitrogen deposition = {0}. PPT={1}. Ecoregion={2}, Month={3}", monthlyNdeposition, ppt, ecoregion.Name, Main.Month);
+                        string mesg = string.Format("Error: Nitrogen deposition = {0}. PPT={1}. Ecoregion={2}, Month={3}", monthlyNdeposition, ppt, ecoregion.Name, Month);
                         throw new System.ApplicationException(mesg);
                     }
 
@@ -104,56 +106,12 @@ namespace Landis.Extension.Succession.NECN
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET;
 
-                    //if(OtherData.SoilWaterVersion_Henne)
-                    //    SoilWater.Run_Henne(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
-                    //else
                     SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
                     PlugIn.AnnualWaterBalance += ppt - AET;
 
                     // Calculate N allocation for each cohort
-                    AvailableN.SetMineralNallocation(site);
-
-                    //Drought vars
-                    //Update monthly temperature and soil water
-                    //TODO SF add to DroughtMortality class. This is mostly already duplicated in the drought climate spinup
-                    if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature | DroughtMortality.OutputClimateWaterDeficit)
-                    {
-                        //Initialize each year by adding a new list element
-                        if (MonthCnt == 0)
-                        {
-                            
-                            SiteVars.SoilWater10[site].Add(0);
-                            SiteVars.Temp10[site].Add(0);
-
-                        }
-
-                        int list_index = SiteVars.SoilWater10[site].Count - 1; //track how many elements are in the climate lists, to avoid them growing too long
-
-                       if (summer.Contains(Month))
-                            {
-                                //add monthly temperatures
-                                SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[Month];
-                            }
-                       //add monthly water content
-                        SiteVars.SoilWater10[site][list_index] += SiteVars.MeanSoilWaterContent[site];
-
-                        //Do this just once a year, after CWD is calculated above
-                        if (MonthCnt == 11) //TODO fix this so we don't have to always calculate all of these vars when writing maps
-                        {
-                            SiteVars.CWD10[site].Add(SiteVars.AnnualClimaticWaterDeficit[site]);
-                            SiteVars.Temp10[site][list_index] /= summer.Length; //get monthly average temp
-                        }
-                    }
-
-                    if (DroughtMortality.UseDrought & MonthCnt == 11)
-                    {
-                        foreach (ISpecies species in PlugIn.ModelCore.Species)
-                        {//TODO could speed up by only looping thorugh species with drought parameters (skip ones with zeroes)
-                            DroughtMortality.ComputeDroughtLaggedVars(site, species);
-                        }
-                    }
-                    //End drought calculations
+                    AvailableN.CalculateMonthlyMineralNallocation(site);
 
                     if (MonthCnt==11)
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
@@ -163,6 +121,50 @@ namespace Landis.Extension.Succession.NECN
                     // Track the grasses species LAI on the site
                     // Chihiro 2021.03.30: tentative
                     SiteVars.MonthlyLAI_GrassesLastMonth[site] = SiteVars.MonthlyLAI_Grasses[site][Month];
+
+                    //Drought vars
+                    //Update monthly temperature and soil water
+                    if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature)
+                    {
+                        int year_index = PlugIn.ModelCore.CurrentTime - 1;
+
+                        if(year_index >= 10)
+                        {
+                            year_index = 9;
+                        }
+                                            
+                        //check if the current month is in "summer" 
+                        foreach (var i in summer)
+                        {
+                            if (i == Month)
+                            {
+                                //Initialize each year by adding a new list element
+                                if (Month == summer[0])
+                                {
+                                    //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} before adding new year", SiteVars.SoilWater10[site].Count);
+                                    //Add a new entry to the list; in years before year 10, we're just adding to the list. For later
+                                    // years, we've already popped the first element when resetting the site vars, so the list stays
+                                    // ten elements long
+                                    SiteVars.SoilWater10[site].Add(0);
+                                    
+                                    //SiteVars.SoilWater10[site].ForEach(p => PlugIn.ModelCore.UI.WriteLine("SoilWater10 value is {0}", p));
+                                    SiteVars.Temp10[site].Add(0);
+
+                                    //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} after adding new year", SiteVars.SoilWater10[site].Count);
+                                }
+                                                             
+                                //PlugIn.ModelCore.UI.WriteLine("Month = {0}", Month);
+                                //PlugIn.ModelCore.UI.WriteLine("Monthly soil water content = {0}", SiteVars.MonthlySoilWaterContent[site][Month]);
+
+                                SiteVars.SoilWater10[site][year_index] += SiteVars.MonthlySoilWaterContent[site][Month];
+
+                                //PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year_index]);
+
+                                SiteVars.Temp10[site][year_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
+                                
+                            }
+                        }
+                    }
 
                     WoodLayer.Decompose(site);
                     LitterLayer.Decompose(site);
@@ -225,9 +227,15 @@ namespace Landis.Extension.Succession.NECN
         {
             int total = 0;
             if (cohorts != null)
+            {
                 foreach (ISpeciesCohorts speciesCohorts in cohorts)
+                {
                     foreach (ICohort cohort in speciesCohorts)
-                        total += (int) (cohort.WoodBiomass + cohort.LeafBiomass);
+                    {
+                        total += (int)(cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass);
+                    }
+                }
+            }
             return total;
         }
 
@@ -237,9 +245,15 @@ namespace Landis.Extension.Succession.NECN
         {
             int total = 0;
             if (cohorts != null)
+            {
                 foreach (ISpeciesCohorts speciesCohorts in cohorts)
+                {
                     foreach (ICohort cohort in speciesCohorts)
-                        total += (int)(cohort.LeafBiomass);
+                    {
+                        total += (int)(cohort.Data.AdditionalParameters.LeafBiomass);
+                    }
+                }
+            }
             return total;
         }
         //---------------------------------------------------------------------
@@ -248,9 +262,15 @@ namespace Landis.Extension.Succession.NECN
         {
             double woodBiomass = 0;
             if (SiteVars.Cohorts[site] != null)
+            {
                 foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
+                {
                     foreach (ICohort cohort in speciesCohorts)
-                        woodBiomass += cohort.WoodBiomass;
+                    {
+                        woodBiomass += cohort.Data.AdditionalParameters.WoodBiomass;
+                    }
+                }
+            }
             return woodBiomass;
         }
 
@@ -280,8 +300,8 @@ namespace Landis.Extension.Succession.NECN
         {
             ISpecies species = cohort.Species;
 
-            double leafC = cohort.LeafBiomass * 0.47;
-            double woodC = cohort.WoodBiomass * 0.47;
+            double leafC = cohort.Data.AdditionalParameters.LeafBiomass * 0.47;
+            double woodC = cohort.Data.AdditionalParameters.WoodBiomass * 0.47;
 
             double fRootC = Roots.CalculateFineRoot(cohort, leafC);
             double cRootC = Roots.CalculateCoarseRoot(cohort, woodC);
