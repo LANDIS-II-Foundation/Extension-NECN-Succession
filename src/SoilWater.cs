@@ -67,11 +67,11 @@ namespace Landis.Extension.Succession.NECN
             //    PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
-            Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
-            tave = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
-            tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
-            tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
-            PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
+            Precipitation = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[month];
+            tave = ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[month];
+            tmax = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMaxTemp[month];
+            tmin = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMinTemp[month];
+            PET = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPET[month];
             if (Double.IsNaN(PET) | PET < 0)
             {
                 throw new ApplicationException(string.Format("PET is missing or negative. PET = {0}", PET));
@@ -81,9 +81,9 @@ namespace Landis.Extension.Succession.NECN
             //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
             //    month, tave, tmax, tmin, PET);
 
-            daysInMonth = AnnualClimate.DaysInMonth(month, year);
-            beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
-            endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
+            daysInMonth = Climate.DaysInMonth[month];
+            beginGrowing = ClimateRegionData.AnnualClimate[ecoregion].BeginGrowingDay;
+            endGrowing = ClimateRegionData.AnnualClimate[ecoregion].EndGrowingDay;
 
             double wiltingPoint = SiteVars.SoilWiltingPoint[site];
             double soilDepth = SiteVars.SoilDepth[site];

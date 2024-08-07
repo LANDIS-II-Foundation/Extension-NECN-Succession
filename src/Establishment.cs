@@ -40,7 +40,7 @@ namespace Landis.Extension.Succession.NECN
             double soilDrainMultiplier = 1.0;
             double cwdMultiplier = 0.0; //SF added; TODO make this optional
 
-            AnnualClimate_Monthly ecoClimate = ClimateRegionData.AnnualWeather[climateRegion];
+            var ecoClimate = ClimateRegionData.AnnualClimate[climateRegion];
 
             if (ecoClimate == null)
                 throw new System.ApplicationException("Error in Establishment: CLIMATE NULL.");
@@ -113,8 +113,8 @@ namespace Landis.Extension.Succession.NECN
             
 
             avgDryDays[species.Index, climateRegion.Index] += ecoDryDays;
-            avgBeginGDD[species.Index, climateRegion.Index] += ecoClimate.BeginGrowing;
-            avgEndGDD[species.Index, climateRegion.Index] += ecoClimate.EndGrowing;
+            avgBeginGDD[species.Index, climateRegion.Index] += ecoClimate.BeginGrowingDay;
+            avgEndGDD[species.Index, climateRegion.Index] += ecoClimate.EndGrowingDay;
             avgCWD[species.Index, climateRegion.Index] += SiteVars.AnnualClimaticWaterDeficit[site];
 
             numberCalculations[species.Index, climateRegion.Index]++;
@@ -178,10 +178,10 @@ namespace Landis.Extension.Succession.NECN
             double maxDrought;
             double Soil_Moist_GF = 0.0;
 
-            growDays = weather.EndGrowing - weather.BeginGrowing + 1.0;
+            growDays = weather.EndGrowingDay - weather.BeginGrowingDay + 1.0;
             if (growDays < 2.0)
             {
-                PlugIn.ModelCore.UI.WriteLine("Begin Grow = {0}, End Grow = {1}", weather.BeginGrowing, weather.EndGrowing);
+                PlugIn.ModelCore.UI.WriteLine($"Begin Grow = {weather.BeginGrowingDay}, End Grow = {weather.EndGrowingDay}");
                 throw new System.ApplicationException("Error: Too few growing days.");
             }
             //Calc species soil moisture multipliers
@@ -242,7 +242,7 @@ namespace Landis.Extension.Succession.NECN
         }
         
         //---------------------------------------------------------------------------
-        private static double MinJanuaryTempModifier(AnnualClimate_Monthly weather, ISpecies species)
+        private static double MinJanuaryTempModifier(AnnualClimate weather, ISpecies species)
         // Is the January mean temperature greater than the species specified minimum?
         {
         

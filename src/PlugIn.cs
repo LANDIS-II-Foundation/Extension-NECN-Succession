@@ -43,7 +43,7 @@ namespace Landis.Extension.Succession.NECN
         public static double ProbEstablishAdjust;
         public static double StormFlowOverride = 0.0;
 
-        public static int FutureClimateBaseYear;
+        //public static int FutureClimateBaseYear;
         private ICommunity initialCommunity;
 
         public static int[] SpeciesByPlant;
@@ -146,7 +146,7 @@ namespace Landis.Extension.Succession.NECN
 
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
-            FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
+            //FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
             ClimateRegionData.Initialize(Parameters);
 
             OtherData.Initialize(Parameters);
@@ -209,7 +209,7 @@ namespace Landis.Extension.Succession.NECN
             base.Run();
 
             if (Timestep > 0)
-                ClimateRegionData.SetAllEcoregions_FutureAnnualClimate(ModelCore.CurrentTime);
+                ClimateRegionData.SetAllEcoregionsFutureAnnualClimate(ModelCore.CurrentTime);
 
             if (ModelCore.CurrentTime % Timestep == 0)
             {

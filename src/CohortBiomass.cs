@@ -814,9 +814,9 @@ namespace Landis.Extension.Succession.NECN
             // Ratio_AvailWaterToPET used to be pptprd and WaterLimit used to be pprdwc
             double Ratio_AvailWaterToPET = 0.0;
             double waterContent = SiteVars.SoilFieldCapacity[site] - SiteVars.SoilWiltingPoint[site];
-            double tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[Main.Month];
-            double H2Oinputs = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
-            double pet = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[Main.Month];
+            double tmin = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMinTemp[Main.Month];
+            double H2Oinputs = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
+            double pet = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPET[Main.Month];
             
             if (pet >= 0.01)
             {   

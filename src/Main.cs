@@ -30,12 +30,15 @@ namespace Landis.Extension.Succession.NECN
             SiteCohorts siteCohorts = SiteVars.Cohorts[site];
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
-            for (int y = 0; y < years; ++y) {
-
+            for (int y = 0; y < years; ++y) 
+            {
+                Year = y + 1;
                 //PlugIn.ModelCore.UI.WriteLine("Timestep is = {0}.", PlugIn.ModelCore.CurrentTime);
 
-                if (Climate.Future_MonthlyData.ContainsKey(PlugIn.FutureClimateBaseYear + y + PlugIn.ModelCore.CurrentTime - years))
-                    ClimateRegionData.AnnualWeather[ecoregion] = Climate.Future_MonthlyData[PlugIn.FutureClimateBaseYear + y - years + PlugIn.ModelCore.CurrentTime][ecoregion.Index];
+                //if (Climate.Future_MonthlyData.ContainsKey(PlugIn.FutureClimateBaseYear + y + PlugIn.ModelCore.CurrentTime - years))
+                //    ClimateRegionData.AnnualWeather[ecoregion] = Climate.Future_MonthlyData[PlugIn.FutureClimateBaseYear + y - years + PlugIn.ModelCore.CurrentTime][ecoregion.Index];
+
+                ClimateRegionData.AnnualClimate[ecoregion] = Climate.FutureEcoregionYearClimate[ecoregion.Index][Year - years + PlugIn.ModelCore.CurrentTime];
 
                 //PlugIn.ModelCore.UI.WriteLine("PlugIn_FutureClimateBaseYear={0}, y={1}, ModelCore_CurrentTime={2}, CenturyTimeStep = {3}, SimulatedYear = {4}.", PlugIn.FutureClimateBaseYear, y, PlugIn.ModelCore.CurrentTime, years, (PlugIn.FutureClimateBaseYear + y - years + PlugIn.ModelCore.CurrentTime));
 
@@ -78,15 +81,15 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = ComputeWoodBiomass((ActiveSite) site);
 
-                                                   
-                    double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Month];
+
+                    var ppt = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[Month];
 
                     double monthlyNdeposition;
                     if  (PlugIn.Parameters.AtmosNintercept !=-1 && PlugIn.Parameters.AtmosNslope !=-1)
                         monthlyNdeposition = PlugIn.Parameters.AtmosNintercept + (PlugIn.Parameters.AtmosNslope * ppt);
                     else 
                     {
-                        monthlyNdeposition = ClimateRegionData.AnnualWeather[ecoregion].MonthlyNDeposition[Month];
+                        monthlyNdeposition = ClimateRegionData.AnnualClimate[ecoregion].MonthlyNDeposition[Month];
                     }
 
                     if (monthlyNdeposition < 0)
@@ -157,7 +160,7 @@ namespace Landis.Extension.Succession.NECN
 
                                 //PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year_index]);
 
-                                SiteVars.Temp10[site][year_index] += ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[Month];
+                                SiteVars.Temp10[site][year_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
                                 
                             }
                         }

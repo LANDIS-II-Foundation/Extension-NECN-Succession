@@ -440,9 +440,9 @@ namespace Landis.Extension.Succession.NECN
             {
                 IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
-                ppt[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
-                airtemp[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
-                pet[ecoregion.Index] = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month]; //SF added 2023-6-27
+                ppt[ecoregion.Index] = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[month];
+                airtemp[ecoregion.Index] = ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[month];
+                pet[ecoregion.Index] = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPET[month]; //SF added 2023-6-27
                 avgCWD[ecoregion.Index] += SiteVars.MonthlyClimaticWaterDeficit[site][month]; //SF added 2023-6-27
                 avgAET[ecoregion.Index] += SiteVars.MonthlyActualEvapotranspiration[site][month]; //SF added 2023-6-27
 
@@ -475,9 +475,9 @@ namespace Landis.Extension.Succession.NECN
 
                     ml.NumSites = Convert.ToInt32(ClimateRegionData.ActiveSiteCount[ecoregion]);
 
-                    ml.Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
-                    ml.AirTemp = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
-                    ml.PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
+                    ml.Precipitation = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[month];
+                    ml.AirTemp = ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[month];
+                    ml.PET = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPET[month];
                     ml.avgAET = (avgAET[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.avgCWD = (avgCWD[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgTotalNPP_C = (avgNPPtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
