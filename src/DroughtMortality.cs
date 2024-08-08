@@ -42,7 +42,7 @@ namespace Landis.Extension.Succession.NECN
         public static bool OutputTemperature;
         public static bool WriteSpeciesDroughtMaps;
 
-        public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly> SpinUpWeather;
+        public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate> SpinUpWeather;
 
         //---------------------------------------------------------------------
         // This initialize will be called from PlugIn, dependent on whether drought=true.
@@ -74,7 +74,7 @@ namespace Landis.Extension.Succession.NECN
 
             //TODO let the climate normals be calculated during spinup (30 year spinup)
 
-            SpinUpWeather = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly>(PlugIn.ModelCore.Ecoregions);
+            SpinUpWeather = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate>(PlugIn.ModelCore.Ecoregions);
             
             int[] spinupYears = new int[10] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
             int[] months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
@@ -82,18 +82,18 @@ namespace Landis.Extension.Succession.NECN
 
             //Borrowed from ClimateRegionData.cs
             //Initialize spinup climate data
-            foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
-            {
-                if (ecoregion.Active)
-                {
-                    //Climate.GenerateEcoregionClimateData(ecoregion, 0, PlugIn.Parameters.Latitude);
-                    SetSingleAnnualClimate(ecoregion, 0, Climate.Phase.SpinUp_Climate);  // Some placeholder data to get things started.
-                }
-            }
+            //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
+            //{
+            //    if (ecoregion.Active)
+            //    {
+            //        //Climate.GenerateEcoregionClimateData(ecoregion, 0, PlugIn.Parameters.Latitude);
+            //        SetSingleAnnualClimate(ecoregion, 0, Climate.Phase.SpinUp_Climate);  // Some placeholder data to get things started.
+            //    }
+            //}
 
             foreach (int year in spinupYears)
             {
-                SetAllEcoregions_SpinupAnnualClimate(year);
+                SetAllEcoregionsSpinupAnnualClimate(year);
             }
 
             foreach(int year in spinupYears)
@@ -125,7 +125,7 @@ namespace Landis.Extension.Succession.NECN
                                 //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} after adding new year", SiteVars.SoilWater10[site].Count);
                             }
 
-                            SiteVars.Temp10[site][year] += ClimateRegionData.AnnualWeather[PlugIn.ModelCore.Ecoregion[site]].MonthlyTemp[month];
+                            SiteVars.Temp10[site][year] += ClimateRegionData.AnnualClimate[PlugIn.ModelCore.Ecoregion[site]].MonthlyTemp[month];
 
                         }
 
@@ -152,31 +152,37 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        private static void SetSingleAnnualClimate(IEcoregion ecoregion, int year, Climate.Phase spinupOrfuture)
-        {
-            int actualYear = Climate.Spinup_MonthlyData.Keys.Min() + year;
-            SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
-            //TODO add check if spinup climate data exists, throw error if missing
-        }
+        //private static void SetSingleAnnualClimate(IEcoregion ecoregion, int year, Climate.Phase spinupOrfuture)
+        //{
+        //    int actualYear = Climate.Spinup_MonthlyData.Keys.Min() + year;
+        //    SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
+        //    //TODO add check if spinup climate data exists, throw error if missing
+        //}
 
-        private static void SetAllEcoregions_SpinupAnnualClimate(int year)
+        private static void SetAllEcoregionsSpinupAnnualClimate(int year)
         {
-            int actualYear = Climate.Future_MonthlyData.Keys.Min() + year - 1;
-            foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
+            // grab the year's future climate
+            foreach (var ecoregion in PlugIn.ModelCore.Ecoregions.Where(x => x.Active))
             {
-                if (ecoregion.Active)
-                {
-                    //PlugIn.ModelCore.UI.WriteLine("Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
-                    if (Climate.Spinup_MonthlyData.ContainsKey(actualYear))
-                    {
-                        SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
-                    }
-
-                    //if (OtherData.CalibrateMode)PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
-                    
-                }
-
+                SpinUpWeather[ecoregion] = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year];      // Climate data year index is 1-based
             }
+
+            //int actualYear = Climate.Future_MonthlyData.Keys.Min() + year - 1;
+            //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
+            //{
+            //    if (ecoregion.Active)
+            //    {
+            //        //PlugIn.ModelCore.UI.WriteLine("Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
+            //        if (Climate.Spinup_MonthlyData.ContainsKey(actualYear))
+            //        {
+            //            SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
+            //        }
+
+            //        //if (OtherData.CalibrateMode)PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
+                    
+            //    }
+
+            //}
         }
 
         private static void SpinUpWater(int year, int month, Site site)
@@ -209,13 +215,14 @@ namespace Landis.Extension.Succession.NECN
             double tmax = SpinUpWeather[ecoregion].MonthlyMaxTemp[month];
             double tmin = SpinUpWeather[ecoregion].MonthlyMinTemp[month];
             double PET = SpinUpWeather[ecoregion].MonthlyPET[month];
-            
+
             //if (OtherData.CalibrateMode)
             //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
             //    month, tave, tmax, tmin, PET);
-            int daysInMonth = AnnualClimate.DaysInMonth(month, year);
-            int beginGrowing = SpinUpWeather[ecoregion].BeginGrowing;
-            int endGrowing = SpinUpWeather[ecoregion].EndGrowing;
+            int daysInMonth = Climate.DaysInMonth[month];
+            //int daysInMonth = AnnualClimate.DaysInMonth(month, year);
+            int beginGrowing = SpinUpWeather[ecoregion].BeginGrowingDay;
+            int endGrowing = SpinUpWeather[ecoregion].EndGrowingDay;
 
             double wiltingPoint = SiteVars.SoilWiltingPoint[site];
             double soilDepth = SiteVars.SoilDepth[site];
