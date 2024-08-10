@@ -2130,3 +2130,7 @@ testing/Core8-NECN8-Landscape/NECN/TotalC-40.tif
 testing/Core8-NECN8-Landscape/NECN/TotalC-45.tif
 testing/Core8-NECN8-Landscape/NECN/TotalC-5.tif
 testing/Core8-NECN8-Landscape/NECN/TotalC-50.tif
+testing/Core8-NECN8-Landscape/Metadata/Climate-Library/Future-Annual-Log_Metadata.xml
+testing/Core8-NECN8-Landscape/Metadata/Climate-Library/Spinup-Annual-Log_Metadata.xml
+testing/Core8-NECN8-Landscape/Climate-future-annual-log.csv
+testing/Core8-NECN8-Landscape/Climate-spinup-annual-log.csv
