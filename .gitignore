@@ -2134,3 +2134,5 @@ testing/Core8-NECN8-Landscape/Metadata/Climate-Library/Future-Annual-Log_Metadat
 testing/Core8-NECN8-Landscape/Metadata/Climate-Library/Spinup-Annual-Log_Metadata.xml
 testing/Core8-NECN8-Landscape/Climate-future-annual-log.csv
 testing/Core8-NECN8-Landscape/Climate-spinup-annual-log.csv
+testing/Core8-NECN8-SingleCell/Climate-future-annual-log.csv
+testing/Core8-NECN8-SingleCell/Climate-spinup-annual-log.csv
