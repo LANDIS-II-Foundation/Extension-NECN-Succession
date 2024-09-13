@@ -5,6 +5,7 @@ using Landis.SpatialModeling;
 using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 using Landis.Library.Climate;
+using System.Linq;
 
 
 namespace Landis.Extension.Succession.NECN
@@ -113,6 +114,47 @@ namespace Landis.Extension.Succession.NECN
                     // Calculate N allocation for each cohort
                     AvailableN.CalculateMonthlyMineralNallocation(site);
 
+                    //Drought vars
+                    //Update monthly temperature and soil water
+                    //TODO SF add to DroughtMortality class. This is mostly already duplicated in the drought climate spinup
+                    if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature | DroughtMortality.OutputClimateWaterDeficit)
+                    {
+                        //Initialize each year by adding a new list element
+                        if (MonthCnt == 0)
+                        {
+                            
+                            SiteVars.SoilWater10[site].Add(0);
+                            SiteVars.Temp10[site].Add(0);
+
+                        }
+
+                        int list_index = SiteVars.SoilWater10[site].Count - 1; //track how many elements are in the climate lists, to avoid them growing too long
+
+                       if (summer.Contains(Month))
+                            {
+                                //add monthly temperatures
+                                SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[Month];
+                            }
+                       //add monthly water content
+                        SiteVars.SoilWater10[site][list_index] += SiteVars.MeanSoilWaterContent[site];
+
+                        //Do this just once a year, after CWD is calculated above
+                        if (MonthCnt == 11) //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                        {
+                            SiteVars.CWD10[site].Add(SiteVars.AnnualClimaticWaterDeficit[site]);
+                            SiteVars.Temp10[site][list_index] /= summer.Length; //get monthly average temp
+                        }
+                    }
+
+                    if (DroughtMortality.UseDrought & MonthCnt == 11)
+                    {
+                        foreach (ISpecies species in PlugIn.ModelCore.Species)
+                        {//TODO could speed up by only looping thorugh species with drought parameters (skip ones with zeroes)
+                            DroughtMortality.ComputeDroughtLaggedVars(site, species);
+                        }
+                    }
+                    //End drought calculations
+
                     if (MonthCnt==11)
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
                     else
@@ -121,50 +163,6 @@ namespace Landis.Extension.Succession.NECN
                     // Track the grasses species LAI on the site
                     // Chihiro 2021.03.30: tentative
                     SiteVars.MonthlyLAI_GrassesLastMonth[site] = SiteVars.MonthlyLAI_Grasses[site][Month];
-
-                    //Drought vars
-                    //Update monthly temperature and soil water
-                    if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature)
-                    {
-                        int year_index = PlugIn.ModelCore.CurrentTime - 1;
-
-                        if(year_index >= 10)
-                        {
-                            year_index = 9;
-                        }
-                                            
-                        //check if the current month is in "summer" 
-                        foreach (var i in summer)
-                        {
-                            if (i == Month)
-                            {
-                                //Initialize each year by adding a new list element
-                                if (Month == summer[0])
-                                {
-                                    //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} before adding new year", SiteVars.SoilWater10[site].Count);
-                                    //Add a new entry to the list; in years before year 10, we're just adding to the list. For later
-                                    // years, we've already popped the first element when resetting the site vars, so the list stays
-                                    // ten elements long
-                                    SiteVars.SoilWater10[site].Add(0);
-                                    
-                                    //SiteVars.SoilWater10[site].ForEach(p => PlugIn.ModelCore.UI.WriteLine("SoilWater10 value is {0}", p));
-                                    SiteVars.Temp10[site].Add(0);
-
-                                    //PlugIn.ModelCore.UI.WriteLine("SoilWater10 has length = {0} after adding new year", SiteVars.SoilWater10[site].Count);
-                                }
-                                                             
-                                //PlugIn.ModelCore.UI.WriteLine("Month = {0}", Month);
-                                //PlugIn.ModelCore.UI.WriteLine("Monthly soil water content = {0}", SiteVars.MonthlySoilWaterContent[site][Month]);
-
-                                SiteVars.SoilWater10[site][year_index] += SiteVars.MonthlySoilWaterContent[site][Month];
-
-                                //PlugIn.ModelCore.UI.WriteLine("SoilWater10 for the year is = {0}", SiteVars.SoilWater10[site][year_index]);
-
-                                SiteVars.Temp10[site][year_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
-                                
-                            }
-                        }
-                    }
 
                     WoodLayer.Decompose(site);
                     LitterLayer.Decompose(site);

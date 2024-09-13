@@ -39,6 +39,7 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape;
         public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale;
         public static Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation;
+        public static Landis.Library.Parameters.Species.AuxParm<double> LightLAIAdjust;
 
         // Optional parameters:
         public static Landis.Library.Parameters.Species.AuxParm<bool> Grass;
@@ -52,10 +53,10 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> MortalityAboveThreshold2;
         public static Landis.Library.Parameters.Species.AuxParm<double> Intercept;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaAge;
-        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTemp;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaTempAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass;
-        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWD;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BetaCWDAnom;
         public static Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD;
         public static Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass;
 
@@ -118,10 +119,7 @@ namespace Landis.Extension.Succession.NECN
             CWDBegin            = parameters.CWDBegin;
             CWDMax              = parameters.CWDMax;
 
-            LightLAIShape        = parameters.LightLAIShape;
-            LightLAIScale       = parameters.LightLAIScale;
-            LightLAILocation = parameters.LightLAILocation;
-            
+         
             // Previously functional group parameters
             TempCurve1 = parameters.Tempcurve1;
             TempCurve2 = parameters.Tempcurve2;
@@ -143,6 +141,11 @@ namespace Landis.Extension.Succession.NECN
             CoarseRootFraction = parameters.CoarseRootFraction;
             FineRootFraction = parameters.FineRootFraction;
             FractionANPPtoLeaf = parameters.FractionANPPtoLeaf;
+
+            LightLAIShape        = parameters.LightLAIShape;
+            LightLAIScale       = parameters.LightLAIScale;
+            LightLAILocation = parameters.LightLAILocation;
+            LightLAIAdjust = parameters.LightLAIAdjust;   
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {

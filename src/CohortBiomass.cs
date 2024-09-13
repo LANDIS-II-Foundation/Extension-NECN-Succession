@@ -42,11 +42,17 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public double ComputeChange(ICohort cohort, ActiveSite site, out int ANPP, out ExpandoObject otherParams)
         {
+<<<<<<< HEAD
             //dynamic additionalParameters = cohort.Data.AdditionalParameters;
             dynamic tempObject = new ExpandoObject();
             tempObject.WoodBiomass = 0;
             tempObject.LeafBiomass = 0;
             
+=======
+
+            //PlugIn.ModelCore.UI.WriteLine("Computing cohort change for timestep {0}, month {1}", PlugIn.ModelCore.CurrentTime, Main.Month);
+
+>>>>>>> master
             ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
             // First call to the Calibrate Log:
@@ -76,6 +82,7 @@ namespace Landis.Extension.Succession.NECN
 
             //  Growth-related mortality
             double[] mortalityGrowth = ComputeGrowthMortality(cohort, site, siteBiomass, actualANPP);
+<<<<<<< HEAD
 
             // Drought mortality
             //Calculate drought mortality just in May, after annual CWD has been calculated
@@ -92,6 +99,10 @@ namespace Landis.Extension.Succession.NECN
             }
                                              
             double[] totalMortality = new double[2] { Math.Min(cohort.Data.AdditionalParameters.WoodBiomass, mortalityAge[0] + mortalityGrowth[0] + mortalityDrought[0]), Math.Min(cohort.Data.AdditionalParameters.LeafBiomass, mortalityAge[1] + mortalityGrowth[1] + mortalityDrought[1]) };
+=======
+                                                   
+            double[] totalMortality = new double[2] { Math.Min(cohort.WoodBiomass, mortalityAge[0] + mortalityGrowth[0]), Math.Min(cohort.LeafBiomass, mortalityAge[1] + mortalityGrowth[1]) };
+>>>>>>> master
             double nonDisturbanceLeafFall = totalMortality[1];
 
             double scorch = 0.0;
@@ -126,8 +137,22 @@ namespace Landis.Extension.Succession.NECN
                     ForestFloor.AddFrassLitter(defoliatedLeafBiomass, cohort.Species, site);
 
                 }
-             
+                                               
             }
+
+            // Drought mortality
+            //Calculate drought mortality in final month of year
+            //TODO sf move this to DroughtMortality and then ReduceOrKill cohorts from there
+            if (Main.Month == 5 & DroughtMortality.UseDrought)
+            {
+                double[] mortalityDrought = new double[2];
+                mortalityDrought = DroughtMortality.ComputeDroughtMortality(cohort, site);
+                totalMortality[0] += mortalityDrought[0];
+                totalMortality[0] = Math.Min(cohort.WoodBiomass, totalMortality[0]);
+                totalMortality[1] += mortalityDrought[1];
+                totalMortality[1] = Math.Min(cohort.LeafBiomass, totalMortality[1]);
+            }
+
             else
             {
                 defoliation = 0.0;

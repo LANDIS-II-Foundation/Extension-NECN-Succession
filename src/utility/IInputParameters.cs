@@ -50,7 +50,11 @@ namespace Landis.Extension.Succession.NECN
         bool OutputSoilWaterAvailable { get; set; }
         bool OutputClimateWaterDeficit { get; set; }
         bool OutputTemp { get; set; }
+        bool WriteMeanSoilWaterMap { get; set; }  
+        bool WritePETMap { get; set; }
+
         bool WriteSpeciesDroughtMaps { get; set; }
+
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -101,6 +105,7 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get; }
         Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get; }
         Landis.Library.Parameters.Species.AuxParm<double> LightLAILocation { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> LightLAIAdjust { get; }
 
         //Drought threshold parameters
         Landis.Library.Parameters.Species.AuxParm<int> CWDThreshold { get; }
@@ -110,10 +115,10 @@ namespace Landis.Extension.Succession.NECN
         //Multiple regression parameters
         Landis.Library.Parameters.Species.AuxParm<double> Intercept { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaAge { get; }
-        Landis.Library.Parameters.Species.AuxParm<double> BetaTemp { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaTempAnom { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaSWAAnom { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaBiomass { get; }
-        Landis.Library.Parameters.Species.AuxParm<double> BetaCWD { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BetaCWDAnom { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get; }
         Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get; }

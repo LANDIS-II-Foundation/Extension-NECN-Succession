@@ -74,7 +74,8 @@ namespace Landis.Extension.Succession.NECN
             PET = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPET[month];
             if (Double.IsNaN(PET) | PET < 0)
             {
-                throw new ApplicationException(string.Format("PET is missing or negative. PET = {0}", PET));
+                throw new ApplicationException(string.Format("PET is missing or negative. PET = {0}. In ecoregion {1}. Site is at row {2}, column {3}.",
+                    PET, ecoregion.MapCode, site.Location.Row, site.Location.Column));
             }
 
             //if (OtherData.CalibrateMode) 
@@ -267,7 +268,8 @@ namespace Landis.Extension.Succession.NECN
             */
 
 
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWaterContent = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWaterContent, waterFull, waterEmpty);
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWaterContent = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWaterContent, waterEmpty, waterFull);
+            //
             //Subtract ET from soil water content
             soilWaterContent = Math.Max(soilWaterContent - tempAET, 0.0); 
             AET = Math.Max(AET + tempAET, 0.0);
@@ -311,7 +313,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlyActualEvapotranspiration[site][Main.Month] = AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET);  
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET;  
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}.", month, PET, AET); //debug
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}, CWD = {3}.", month, PET, AET, SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month]); //debug
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;

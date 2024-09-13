@@ -221,6 +221,7 @@ namespace Landis.Extension.Succession.NECN
             if (ReadOptionalVar(write_CWD))
             {
                 parameters.OutputClimateWaterDeficit = write_CWD.Value;
+                PlugIn.ModelCore.UI.WriteLine("Write CWD Maps = TRUE");
             }
             else
                 parameters.OutputClimateWaterDeficit = false;
@@ -240,6 +241,22 @@ namespace Landis.Extension.Succession.NECN
             }
             else
                 parameters.WriteSpeciesDroughtMaps = false;
+
+            InputVar<bool> write_MeanSoilWater_Map = new InputVar<bool>("Write_MeanSoilWater_Map");
+            if (ReadOptionalVar(write_MeanSoilWater_Map))
+            {
+                parameters.WriteMeanSoilWaterMap = write_MeanSoilWater_Map.Value;
+            }
+            else
+                parameters.WriteMeanSoilWaterMap = false;
+
+            InputVar<bool> write_PET_Map = new InputVar<bool>("Write_PET_Map");
+            if (ReadOptionalVar(write_PET_Map))
+            {
+                parameters.WritePETMap = write_PET_Map.Value;
+            }
+            else
+                parameters.WritePETMap = false;
 
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
@@ -437,6 +454,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetLightLAIShape(species, System.Convert.ToDouble(row["LightLAIShape"]));
                 parameters.SetLightLAIScale(species, System.Convert.ToDouble(row["LightLAIScale"]));
                 parameters.SetLightLAILocation(species, System.Convert.ToDouble(row["LightLAILocation"]));
+                parameters.SetLightLAIAdjust(species, ReadLightLAIAdjust(row));
 
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
 
@@ -542,10 +560,10 @@ namespace Landis.Extension.Succession.NECN
 
                     parameters.SetIntercept(species, System.Convert.ToDouble(row["Intercept"]));
                     parameters.SetBetaAge(species, System.Convert.ToDouble(row["BetaAge"]));
-                    parameters.SetBetaTemp(species, System.Convert.ToDouble(row["BetaTemp"]));
+                    parameters.SetBetaTempAnom(species, System.Convert.ToDouble(row["BetaTempAnom"]));
                     parameters.SetBetaSWAAnom(species, System.Convert.ToDouble(row["BetaSWAAnom"]));
                     parameters.SetBetaBiomass(species, System.Convert.ToDouble(row["BetaBiomass"]));
-                    parameters.SetBetaCWD(species, System.Convert.ToDouble(row["BetaCWD"]));
+                    parameters.SetBetaCWDAnom(species, System.Convert.ToDouble(row["BetaCWDAnom"]));
                     parameters.SetBetaNormCWD(species, System.Convert.ToDouble(row["BetaNormCWD"]));
                     parameters.SetBetaNormTemp(species, System.Convert.ToDouble(row["BetaNormTemp"]));
                     parameters.SetIntxnCWD_Biomass(species, System.Convert.ToDouble(row["IntxnCWD_Biomass"]));
@@ -843,6 +861,19 @@ namespace Landis.Extension.Succession.NECN
             {
                 return 0.47;  // This is the value given for all biomes in the tree.100 file.
                 // This was the default value for all previous versions of NECN.
+            }
+        }
+
+        private double ReadLightLAIAdjust(DataRow row)
+        {
+            try
+            {
+                double adjustLAI = System.Convert.ToDouble(row["LightLAIAdjust"]);
+                return adjustLAI;
+            }
+            catch
+            {
+                return 1.0;  // value of 1.0 uses unadjusted Weibull distribution (area under the curve = 1)
             }
         }
     }

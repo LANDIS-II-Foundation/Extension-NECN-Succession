@@ -167,7 +167,7 @@ namespace Landis.Extension.Succession.NECN
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
-            if (DroughtMortality.UseDrought)
+            if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature | DroughtMortality.OutputClimateWaterDeficit)
             {
                 DroughtMortality.Initialize(Parameters);
             }
@@ -227,6 +227,7 @@ namespace Landis.Extension.Succession.NECN
                 Establishment.LogEstablishment();
                 if (InputCommunityMapNames != null && ModelCore.CurrentTime % InputCommunityMapFrequency == 0)
                     Outputs.WriteCommunityMaps();
+                if(DroughtMortality.UseDrought)   Outputs.WriteDroughtSpeciesFile(PlugIn.ModelCore.CurrentTime);
             }
 
         }
@@ -492,12 +493,14 @@ namespace Landis.Extension.Succession.NECN
             double a = SpeciesData.LightLAIShape[species];
             double b = SpeciesData.LightLAIScale[species];
             double c = SpeciesData.LightLAILocation[species];
+            double adjust = SpeciesData.LightLAIAdjust[species];
             double lai = SiteVars.LAI[site];
-            lightProbability = ((a / b) * Math.Pow((lai / b), (a - 1)) * Math.Exp(Math.Pow(-(lai / b), a))) + c; //3-parameter Weibull PDF equation
 
+            lightProbability = adjust * (((a / b) * Math.Pow((lai / b), (a - 1)) * Math.Exp(-Math.Pow((lai / b), a))) + c); //3-parameter Weibull PDF equation
+            lightProbability = Math.Min(lightProbability, 1.0);
             //if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:0.000}, at LAI = {2:0.00}", species.Name, lightProbability, SiteVars.LAI[site]);
             
-            //double randomLAI = ModelCore.NormalDistribution.NextDouble();
+
             if (modelCore.GenerateUniform() < lightProbability)
                 isSufficientlight = true;
 

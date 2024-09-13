@@ -45,6 +45,7 @@ namespace Landis.Extension.Succession.NECN
             Outputs.reproductionLog = new MetadataTable<ReproductionLog>("NECN-reproduction-log.csv");
             Outputs.establishmentLog = new MetadataTable<EstablishmentLog>("NECN-prob-establish-log.csv");
             Outputs.calibrateLog = new MetadataTable<CalibrateLog>("NECN-calibrate-log.csv");
+            Outputs.droughtLog = new MetadataTable<DroughtLog>("NECN-succession-drought-log.csv");
 
             OutputMetadata tblOut_monthly = new OutputMetadata()
             {
@@ -106,6 +107,16 @@ namespace Landis.Extension.Succession.NECN
             };
             tblOut_cali.RetriveFields(typeof(CalibrateLog));
             Extension.OutputMetadatas.Add(tblOut_cali);
+
+            OutputMetadata tblOut_drought = new OutputMetadata()
+            {
+                Type = OutputType.Table,
+                Name = "DroughtLog",
+                FilePath = Outputs.droughtLog.FilePath,
+                Visualize = true,
+            };
+            tblOut_drought.RetriveFields(typeof(DroughtLog));
+            Extension.OutputMetadatas.Add(tblOut_drought);
             //---------------------------------------            
             //          map outputs:         
             //---------------------------------------
@@ -223,8 +234,7 @@ namespace Landis.Extension.Succession.NECN
                 OutputMetadata mapOut_CWD = new OutputMetadata()
                 {
                     Type = OutputType.Map,
-                    Name = "Drought Mortality",
-                    //FilePath = @"NECN\TotalC-{timestep}.tif",
+                    Name = "Climatic Water Deficit",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
                     Map_Unit = FieldUnits.cm, //SF check on units
@@ -240,10 +250,9 @@ namespace Landis.Extension.Succession.NECN
                 {
                     Type = OutputType.Map,
                     Name = "Temperature",
-                    //FilePath = @"NECN\TotalC-{timestep}.tif",
                     FilePath = Path.Combine(paths),
                     Map_DataType = MapDataType.Continuous,
-                    Map_Unit = FieldUnits.cm, //SF check on units
+                    Map_Unit = FieldUnits.DegreeC, //SF check on units
                     Visualize = true,
                 };
                 Extension.OutputMetadatas.Add(mapOut_Temp);

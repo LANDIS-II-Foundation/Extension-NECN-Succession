@@ -12,6 +12,77 @@ namespace Landis.Extension.Succession.NECN
     /// </summary>
     public static class SiteVars
     {
+
+        // Time of last succession simulation:
+        private static ISiteVar<int> timeOfLast;
+
+        // Live biomass:        
+        private static ISiteVar<Landis.Library.AgeOnlyCohorts.ISiteCohorts> baseCohortsSiteVar;
+        private static ISiteVar<Landis.Library.BiomassCohorts.ISiteCohorts> biomassCohortsSiteVar;
+
+        // Dead biomass:
+        private static ISiteVar<Layer> surfaceDeadWood;
+        private static ISiteVar<Layer> soilDeadWood;
+
+        private static ISiteVar<Layer> surfaceStructural;
+        private static ISiteVar<Layer> surfaceMetabolic;
+        private static ISiteVar<Layer> soilStructural;
+        private static ISiteVar<Layer> soilMetabolic;
+
+        // Dead wood carbon for each year; Chihiro 2020.1.14
+        private static ISiteVar<double[]> originalDeadWoodC;
+        private static ISiteVar<double[]> currentDeadWoodC; // Carefully check the consistensiy with surfaceDeadWood
+
+        // Soil layers
+        private static ISiteVar<Layer> som1surface;
+        private static ISiteVar<Layer> som1soil;
+        private static ISiteVar<Layer> som2;
+        private static ISiteVar<Layer> som3;
+        private static ISiteVar<int> soilDepth;
+        private static ISiteVar<double> soilDrain;
+        private static ISiteVar<double> soilBaseFlowFraction;
+        private static ISiteVar<double> soilStormFlowFraction;
+        private static ISiteVar<double> soilFieldCapacity;
+        private static ISiteVar<double> soilWiltingPoint;
+        private static ISiteVar<double> soilPercentSand;
+        private static ISiteVar<double> soilPercentClay;
+
+
+        // Similar to soil layers with respect to their pools:
+        private static ISiteVar<Layer> stream;
+        private static ISiteVar<Layer> sourceSink;
+
+        // Other variables:
+        private static ISiteVar<double> mineralN;
+        private static ISiteVar<double> resorbedN;
+        private static ISiteVar<double> waterMovement;
+        private static ISiteVar<double> availableWater;
+        private static ISiteVar<double> soilWaterContent;
+        private static ISiteVar<double> meanSoilWaterContent;
+        private static ISiteVar<double> liquidSnowPack;
+        private static ISiteVar<double> decayFactor;
+        private static ISiteVar<double> soilTemperature;
+        private static ISiteVar<double> anaerobicEffect;
+
+        // Annual accumulators for reporting purposes.
+        private static ISiteVar<double> grossMineralization;
+        private static ISiteVar<double> ag_nppC;
+        private static ISiteVar<double> bg_nppC;
+        private static ISiteVar<double> litterfallC;
+        private static ISiteVar<double> cohortLeafN;
+        private static ISiteVar<double> cohortFRootN;
+        private static ISiteVar<double> cohortLeafC;
+        private static ISiteVar<double> cohortFRootC;
+        private static ISiteVar<double> cohortWoodN;
+        private static ISiteVar<double> cohortCRootN;
+        private static ISiteVar<double> cohortWoodC;
+        private static ISiteVar<double> cohortCRootC;
+        private static ISiteVar<double[]> monthlyAGNPPC;
+        private static ISiteVar<double[]> monthlyBGNPPC;
+        private static ISiteVar<double[]> monthlyNEE;
+        private static ISiteVar<double[]> monthlyStreamN;
+        private static ISiteVar<double> totalNuptake;
+
         private static ISiteVar<double[]> monthlymineralN;
 
         public static ISiteVar<double> AnnualNEE;
@@ -43,11 +114,15 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyActualEvapotranspiration;//SF added 2023-6-27
         public static ISiteVar<int> HarvestDisturbedYear;
         public static ISiteVar<int> FireDisturbedYear;
+        public static ISiteVar<double> slope;
+        public static ISiteVar<double> aspect;
 
         //Drought params
-        //drought_todo
+
         public static ISiteVar<double> droughtMort;
         public static ISiteVar<Dictionary<int, double>> speciesDroughtMortality;
+        public static ISiteVar<Dictionary<int, double>> speciesDroughtProbability;
+
         public static ISiteVar<List<double>> swa10;
         public static ISiteVar<List<double>> temp10;
         public static ISiteVar<List<double>> cwd10;
@@ -57,8 +132,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> normalSWA;
         public static ISiteVar<double> normalCWD;
         public static ISiteVar<double> normalTemp;
-        public static ISiteVar<double> slope;
-        public static ISiteVar<double> aspect;
+            
 
         //---------------------------------------------------------------------
 
@@ -170,19 +244,24 @@ namespace Landis.Extension.Succession.NECN
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
             droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
-            temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
-            cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
 
-            normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            normalTemp = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
+            {
+                swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+                temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
+                cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
 
-            swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
-            tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
-            cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+                normalSWA = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                normalCWD = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+                normalTemp = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
-            speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+                swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+                tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+                cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+
+                speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+                speciesDroughtProbability = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+            }
 
             slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -233,15 +312,21 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
 
-                //Drought parameters
-                swa10[site] = new List<double>(10);
-                temp10[site] = new List<double>(10);
-                cwd10[site] = new List<double>(10);
-                speciesDroughtMortality[site] =new Dictionary<int, double>();
-                swaLagged[site] = new Dictionary<int, double>();
-                tempLagged[site] = new Dictionary<int, double>();
-                cwdLagged[site] = new Dictionary<int, double>();
 
+                CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
+
+                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
+                {
+                    //Drought parameters
+                    swa10[site] = new List<double>(10);
+                    temp10[site] = new List<double>(10);
+                    cwd10[site] = new List<double>(10);
+                    speciesDroughtMortality[site] = new Dictionary<int, double>();
+                    speciesDroughtProbability[site] = new Dictionary<int, double>();
+                    swaLagged[site] = new Dictionary<int, double>();
+                    tempLagged[site] = new Dictionary<int, double>();
+                    cwdLagged[site] = new Dictionary<int, double>();
+                }
 
             }
             
@@ -302,6 +387,7 @@ namespace Landis.Extension.Succession.NECN
         {
 
             // Reset these accumulators to zero:
+<<<<<<< HEAD
 
 
             DryDays[site] = 0;
@@ -347,18 +433,22 @@ namespace Landis.Extension.Succession.NECN
             WoodMortality[site] = 0.0;
 
             DroughtMort[site] = 0.0;
-            foreach(ISpecies species in PlugIn.ModelCore.Species)
-            {
-                SpeciesDroughtMortality[site][species.Index] = 0.0;
-                TempLagged[site][species.Index] = 0.0;
-                CWDLagged[site][species.Index] = 0.0;
-                SWALagged[site][species.Index] = 0.0;
-            }
-            
-
+                        
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
             {
-                if (PlugIn.ModelCore.CurrentTime >= 11)
+                foreach (ISpecies species in PlugIn.ModelCore.Species)
+                {
+                    //Annual variables for each site/species
+                    SpeciesDroughtMortality[site][species.Index] = 0.0;
+                    SpeciesDroughtProbability[site][species.Index] = 0.0;
+                    TempLagged[site][species.Index] = 0.0;
+                    CWDLagged[site][species.Index] = 0.0;
+                    SWALagged[site][species.Index] = 0.0;
+                }
+
+                if (SoilWater10[site].Count >= 10) 
+                    //TODO SF check each list separately, make sure they all have the same number of elements
+                    //TODO Also, the first time values are reset, make sure lists are <= 10 elements long
                 {
                     SoilWater10[site].RemoveAt(0);
                     Temp10[site].RemoveAt(0);
@@ -659,7 +749,7 @@ namespace Landis.Extension.Succession.NECN
 
         // --------------------------------------------------------------------
         /// <summary>
-        /// Site-level drought mortality for each species, to map drought impacts
+        /// Site-level biomass mortality due to drought for each species, to map drought impacts and for log file
         /// //drought_todo
         /// </summary>
         public static ISiteVar<Dictionary<int, double>> SpeciesDroughtMortality
@@ -671,6 +761,22 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 speciesDroughtMortality = value;
+            }
+        }
+
+        // --------------------------------------------------------------------
+        /// <summary>
+        /// Site-level probability of mortality due to drought for each species, for output log file
+        /// </summary>
+        public static ISiteVar<Dictionary<int, double>> SpeciesDroughtProbability
+        {
+            get
+            {
+                return speciesDroughtProbability;
+            }
+            set
+            {
+                speciesDroughtProbability = value;
             }
 
 

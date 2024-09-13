@@ -471,10 +471,10 @@ namespace Landis.Extension.Succession.NECN
 
                     if (site.IsActive)
                     {
-                        if (mapValue < 0.0 || mapValue > 100)
+                        if (mapValue < 0.0 || mapValue > 1000)
                             throw new InputValueException(mapValue.ToString(),
                                                           "Normal SWA {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
-                                                          mapValue, 0, 100, site.Location.Row, site.Location.Column);
+                                                          mapValue, 0, 1000, site.Location.Row, site.Location.Column);
                         SiteVars.NormalSWA[site] = mapValue; 
                     }
                 }
@@ -519,10 +519,10 @@ namespace Landis.Extension.Succession.NECN
 
                     if (site.IsActive)
                     {
-                        if (mapValue < 100 || mapValue > 100)
+                        if (mapValue < -1000.0 || mapValue > 1000.0)
                             throw new InputValueException(mapValue.ToString(),
                                                           "Normal Temp {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
-                                                          mapValue, -100, 100, site.Location.Row, site.Location.Column);
+                                                          mapValue, -1000.0, 1000.0, site.Location.Row, site.Location.Column);
                         SiteVars.NormalTemp[site] = mapValue;
                     }
                 }
