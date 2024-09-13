@@ -3,7 +3,7 @@
 using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Utilities;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 
 using System;
 using System.Collections.Generic;

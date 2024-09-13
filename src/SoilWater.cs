@@ -67,11 +67,11 @@ namespace Landis.Extension.Succession.NECN
             //    PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
-            Precipitation = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[month];
-            tave = ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[month];
-            tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
-            tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
-            PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
+            Precipitation = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[month];
+            tave = ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[month];
+            tmax = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMaxTemp[month];
+            tmin = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMinTemp[month];
+            PET = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPET[month];
             if (Double.IsNaN(PET) | PET < 0)
             {
                 throw new ApplicationException(string.Format("PET is missing or negative. PET = {0}. In ecoregion {1}. Site is at row {2}, column {3}.",
@@ -82,9 +82,9 @@ namespace Landis.Extension.Succession.NECN
             //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
             //    month, tave, tmax, tmin, PET);
 
-            daysInMonth = AnnualClimate.DaysInMonth(month, year);
-            beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
-            endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
+            daysInMonth = Climate.DaysInMonth[month];
+            beginGrowing = ClimateRegionData.AnnualClimate[ecoregion].BeginGrowingDay;
+            endGrowing = ClimateRegionData.AnnualClimate[ecoregion].EndGrowingDay;
 
             double wiltingPoint = SiteVars.SoilWiltingPoint[site];
             double soilDepth = SiteVars.SoilDepth[site];
@@ -131,12 +131,10 @@ namespace Landis.Extension.Succession.NECN
                 snow = Precipitation;
                 Precipitation = 0.0;
                 liquidSnowpack += snow;  //only tracking liquidsnowpack (water equivalent) and not the actual amount of snow on the ground (i.e. not snowpack).
-                //PlugIn.ModelCore.UI.WriteLine("Let it snow!! snow={0}, liquidsnowpack={1}.", snow, liquidSnowpack);
             }
             else
             {
                 soilWaterContent += Precipitation;
-                //PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", Precipitation, soilWaterContent);
             }
 
 
@@ -158,15 +156,11 @@ namespace Landis.Extension.Succession.NECN
                 addToSoil = liquidSnowpack * snowMeltFraction;  //Amount of liquidsnowpack that melts = liquidsnowpack multiplied by the fraction that melts.
                 if (addToSoil > liquidSnowpack) addToSoil = liquidSnowpack;
 
-                //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Snow melts, addToSoil = {0}", addToSoil);
-
                 // Subtracted melted snow from snowpack and add it to the soil
                 // We are not accounting for evaporation from snow ablation
                 liquidSnowpack = Math.Max(liquidSnowpack - addToSoil, 0.0);
                 soilWaterContent += addToSoil;
             }
-            //if (OtherData.CalibrateMode)
-            //    PlugIn.ModelCore.UI.WriteLine("   Snow before evaporation = {0}", liquidSnowpack);
             //...Evaporate water from the snow pack (rewritten by Pulliam 9/94)
             //...Coefficient 0.87 relates to heat of fusion for ice vs. liquid water
             if (liquidSnowpack > 0.0)
@@ -189,8 +183,6 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            //if (OtherData.CalibrateMode) 
-            //    PlugIn.ModelCore.UI.WriteLine("   snow after evaporation = {0}", liquidSnowpack);
             //...Calculate bare soil water loss and interception  when air temperature is above freezing and no snow cover.
             //...Mofified 9/94 to allow interception when t < 0 but no snow cover, Pulliam
             if (liquidSnowpack <= 0.0)
@@ -205,12 +197,12 @@ namespace Landis.Extension.Succession.NECN
                 double canopyIntercept = ((0.0003 * litterBiomass) + (0.0006 * standingBiomass)) * OtherData.WaterLossFactor1;
 
                 //...Bare soil evaporation, fraction of precip (bareSoilEvap):
-                bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
+                bareSoilEvap = 0.5 * Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
+                double soilEvaporation = Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
-                soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent);
+                soilEvaporation = Math.Min(soilEvaporation, soilWaterContent);
                 //if (OtherData.CalibrateMode)
                 //    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
                 //        soilEvaporation, bareSoilEvap, canopyIntercept);
@@ -251,9 +243,6 @@ namespace Landis.Extension.Succession.NECN
             //  Bergström, 1992
             double tempAET = 0.0;
 
-            //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Before calculating AET: Month={0}, soilWaterContent = {1}, remainingPET = {2}, waterFull = {3}, waterEmpty = {4}.", 
-            //    month, soilWaterContent, remainingPET, waterFull, waterEmpty);
-            
             if (soilWaterContent - waterEmpty >= remainingPET)
 
             {
@@ -788,14 +777,14 @@ namespace Landis.Extension.Succession.NECN
                 if (availableWaterContent > 13.0)
                     W_Decomp = 1.0;
                 else
-                    W_Decomp = 1.0 / (1.0 + 4.0 * System.Math.Exp(-6.0 * availableWaterContent));
+                    W_Decomp = 1.0 / (1.0 + 4.0 * Math.Exp(-6.0 * availableWaterContent));
             }
             else if (waterDecayFunction == 1)
             {
                 if (ratioPlantAvailableWaterPET > 9)
                     W_Decomp = 1.0;
                 else
-                    W_Decomp = 1.0 / (1.0 + 30.0 * System.Math.Exp(-8.5 * ratioPlantAvailableWaterPET));
+                    W_Decomp = 1.0 / (1.0 + 30.0 * Math.Exp(-8.5 * ratioPlantAvailableWaterPET));
             }
 
             double tempModifier = T_Decomp(soilTemp);
@@ -828,7 +817,7 @@ namespace Landis.Extension.Succession.NECN
             double Teff1 = OtherData.TemperatureEffectSlope;
             double Teff2 = OtherData.TemperatureEffectExponent;
 
-            double r = Teff0 + (Teff1 * System.Math.Exp(Teff2 * soilTemp));
+            double r = Teff0 + (Teff1 * Math.Exp(Teff2 * soilTemp));
 
             return r;
         }

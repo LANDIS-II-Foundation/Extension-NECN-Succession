@@ -4,6 +4,8 @@ The NECN Succession extension was designed to provide total ecosystem accounting
 
 # Recent Additions
 
+- [x] New with v8
+  - [ ] Species and Functional Group tables have been merged
 - [x] New with v7
   - [ ] Integrated drought mortality via an optional table that defines statistical relationships
   - [ ] Updated soil water algorithms that improves low moisture estimates
@@ -27,8 +29,8 @@ Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effe
 
 # Release Notes
 
-- Latest official release: Version 7 — September 2023
-- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v7.0%20User%20Guide.pdf).
+- Latest official release: Version 8 — August 2023
+- [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v8.0%20User%20Guide.pdf).
 - [User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/master/docs/LANDIS-II%20Climate%20Library%20v4.2%20User%20Guide.pdf)
 - Full release details found in the NECN User Guide and on GitHub.
 - This extension was formerly named Century Succession.
@@ -37,20 +39,22 @@ Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effe
 
 To use NECN, you need:
 
-- The [LANDIS-II model v7.0](http://www.landis-ii.org/install) installed on your computer.
+- The [LANDIS-II model v8.0](http://www.landis-ii.org/install) installed on your computer.
 - Example files (see below)
 
-# Download
+# Download the Extension
 
-The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/installer/LANDIS-II-V7%20NECN%20Succession%207.0.2-setup.exe). To install it on your computer, just launch the installer.
+
+The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/installer/LANDIS-II-V8%20NECN%20Succession%208.0-setup.exe). (Look for the download icon in the upper right corner.) Launch the installer.
+
 
 # Example Files
 
 LANDIS-II requires a global parameter file for your scenario, and then different parameter files for each extension.
 
-Landscape example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN7-Landscape).
+Landscape example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core8-NECN8-Landscape).
 
-Single-cell example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core7-NECN7-SingleCell).
+Single-cell example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core8-NECN8-SingleCell).
 
 
 # Support
@@ -64,9 +68,6 @@ If you come across any issue or suspected bug when using NECN, please post about
 
 [Robert Scheller](https://sites.google.com/a/ncsu.edu/dynamic-ecosystems-landscape-lab/people/robert-scheller)
 
-Professor at the North Carolina State University
-
-Mail : rschell@ncsu.edu
 
 
 

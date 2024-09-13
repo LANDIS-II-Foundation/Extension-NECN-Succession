@@ -43,11 +43,7 @@ namespace Landis.Extension.Succession.NECN
         bool CalibrateMode { get; set; }
         WaterType WType {get;set;}
         double ProbEstablishAdjustment { get; set; }
-        //double[] MaximumShadeLAI { get; }
         bool SmokeModelOutputs { get; set; }
-      
-
-        //bool SoilWater_Henne { get; set; }
         double GrassThresholdMultiplier { get; }
         string CommunityInputMapNames { get; set; }
 
@@ -60,14 +56,6 @@ namespace Landis.Extension.Succession.NECN
         bool WriteSpeciesDroughtMaps { get; set; }
 
 
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// A suite of parameters for species functional groups
-        /// </summary>
-        FunctionalTypeTable FunctionalTypes
-        {
-            get;set;
-        }
         //---------------------------------------------------------------------
         /// <summary>
         /// Parameters for fire effects on wood and leaf litter
@@ -89,17 +77,6 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        /// <summary>
-        /// Definitions of sufficient light probabilities.
-        /// </summary>
-        //List<ISufficientLight> LightClassProbabilities
-        //{
-        //    get;
-        //}
-
-        //---------------------------------------------------------------------
-
-        Landis.Library.Parameters.Species.AuxParm<int> SppFunctionalType{get;}
         Landis.Library.Parameters.Species.AuxParm<bool> NFixer{get;}
         Landis.Library.Parameters.Species.AuxParm<bool> Grass { get; }
         Landis.Library.Parameters.Species.AuxParm<bool> Nlog_depend { get; } // W.Hotta (2021.08.01)
@@ -145,11 +122,30 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<double> BetaNormCWD { get; }
         Landis.Library.Parameters.Species.AuxParm<double> BetaNormTemp { get; }
         Landis.Library.Parameters.Species.AuxParm<double> IntxnCWD_Biomass { get; }
-
         Landis.Library.Parameters.Species.AuxParm<int> LagTemp { get; }
         Landis.Library.Parameters.Species.AuxParm<int> LagCWD { get; }
         Landis.Library.Parameters.Species.AuxParm<int> LagSWA { get; }
 
+        Landis.Library.Parameters.Species.AuxParm<double> Tempcurve1 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> Tempcurve2 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> Tempcurve3 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> Tempcurve4 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> FractionANPPtoLeaf { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> BiomassToLAI { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> K_LAI { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MinLAI { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MaxLAI { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve1 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve2 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve3 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve4 { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MinSoilDrain { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MonthlyWoodMortality { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> WoodDecayRate { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> MortalityCurveShape { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> LeafNeedleDrop { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> CoarseRootFraction { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> FineRootFraction { get; }
 
 
         double AtmosNslope {get;}

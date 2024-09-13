@@ -1,0 +1,16 @@
+LandisData "Climate Config"				
+		
+ClimateTimeSeries			Daily_RandomYears
+ClimateFile				LTB_daily_historic_fixed_singlecell_3.csv
+
+SpinUpClimateTimeSeries			Daily_AverageAllYears
+SpinUpClimateFile			LTB_daily_historic_fixed_singlecell_3.csv
+
+GenerateClimateOutputFiles		yes
+UsingFireClimate			yes
+FineFuelMoistureCode			100
+DuffMoistureCode			100
+DroughtCode				100
+FirstDayFire				30
+LastDayFire				320
+

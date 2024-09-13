@@ -17,7 +17,7 @@ namespace Landis.Extension.Succession.NECN
 
     public class SpeciesData 
     {
-        public static Landis.Library.Parameters.Species.AuxParm<int> FuncType;
+        //public static Landis.Library.Parameters.Species.AuxParm<int> FuncType;
         public static Landis.Library.Parameters.Species.AuxParm<bool> NFixer;
         public static Landis.Library.Parameters.Species.AuxParm<int> GDDmin;
         public static Landis.Library.Parameters.Species.AuxParm<int> GDDmax;
@@ -68,11 +68,32 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<int> CWDBegin;
         public static Landis.Library.Parameters.Species.AuxParm<int> CWDMax;
 
+        //Previously Functional Group Parameters
+        public static Landis.Library.Parameters.Species.AuxParm<double> TempCurve1;
+        public static Landis.Library.Parameters.Species.AuxParm<double> TempCurve2;
+        public static Landis.Library.Parameters.Species.AuxParm<double> TempCurve3;
+        public static Landis.Library.Parameters.Species.AuxParm<double> TempCurve4;
+        public static Landis.Library.Parameters.Species.AuxParm<double> BiomassToLAI;
+        public static Landis.Library.Parameters.Species.AuxParm<double> K_LAI;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MoistureCurve1;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MoistureCurve2;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MoistureCurve3;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MoistureCurve4;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MinSoilDrain;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MonthlyWoodMortality;
+        public static Landis.Library.Parameters.Species.AuxParm<double> WoodDecayRate;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MortalityCurveShape;
+        public static Landis.Library.Parameters.Species.AuxParm<int> FoliageDropMonth;
+        public static Landis.Library.Parameters.Species.AuxParm<double> CoarseRootFraction;
+        public static Landis.Library.Parameters.Species.AuxParm<double> FineRootFraction;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MinLAI;
+        public static Landis.Library.Parameters.Species.AuxParm<double> MaxLAI;
+        public static Landis.Library.Parameters.Species.AuxParm<double> FractionANPPtoLeaf;
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
         {
-            FuncType            = parameters.SppFunctionalType;
+            //FuncType            = parameters.SppFunctionalType;
             NFixer              = parameters.NFixer;
             GDDmin              = parameters.GDDmin;
             GDDmax              = parameters.GDDmax;
@@ -98,16 +119,39 @@ namespace Landis.Extension.Succession.NECN
             CWDBegin            = parameters.CWDBegin;
             CWDMax              = parameters.CWDMax;
 
+         
+            // Previously functional group parameters
+            TempCurve1 = parameters.Tempcurve1;
+            TempCurve2 = parameters.Tempcurve2;
+            TempCurve3 = parameters.Tempcurve3;
+            TempCurve4 = parameters.Tempcurve4;
+            BiomassToLAI = parameters.BiomassToLAI;
+            K_LAI = parameters.K_LAI;
+            MinLAI = parameters.MinLAI;
+            MaxLAI = parameters.MaxLAI;
+            MoistureCurve1 = parameters.Moisturecurve1;
+            MoistureCurve2 = parameters.Moisturecurve2;
+            MoistureCurve3 = parameters.Moisturecurve3;
+            MoistureCurve4 = parameters.Moisturecurve4;
+            MinSoilDrain = parameters.MinSoilDrain;
+            MonthlyWoodMortality = parameters.MonthlyWoodMortality;
+            WoodDecayRate = parameters.WoodDecayRate;
+            MortalityCurveShape = parameters.MortalityCurveShape;
+            FoliageDropMonth = parameters.LeafNeedleDrop;
+            CoarseRootFraction = parameters.CoarseRootFraction;
+            FineRootFraction = parameters.FineRootFraction;
+            FractionANPPtoLeaf = parameters.FractionANPPtoLeaf;
+
             LightLAIShape        = parameters.LightLAIShape;
             LightLAIScale       = parameters.LightLAIScale;
             LightLAILocation = parameters.LightLAILocation;
-            LightLAIAdjust = parameters.LightLAIAdjust;
+            LightLAIAdjust = parameters.LightLAIAdjust;   
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {
                 try
                 {
-                    double maxLAI = FunctionalType.Table[SpeciesData.FuncType[spp]].MaxLAI;
+                    double maxLAI = MaxLAI[spp];
                     //PlugIn.ModelCore.UI.WriteLine("Spp={0}, FT={1}", spp.Name, SpeciesData.FuncType[spp]);
 
                 }

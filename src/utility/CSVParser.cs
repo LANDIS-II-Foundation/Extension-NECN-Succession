@@ -36,8 +36,35 @@ namespace Landis.Extension.Succession.NECN
 
         public DataTable ParseToDataTable(string path)
         {
-            reader = new StreamReader(path);
+            try
+            {
+                // Attempt to open the file using StreamReader within a using block for automatic resource disposal
+                using (reader = new StreamReader(path))
+                {
+                    // File opened successfully
+                    //Console.WriteLine("File opened successfully.");
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                // Catch block for handling FileNotFoundException
+                string mesg = string.Format("Error: The file {0} does not exist", path);
+                throw new System.ApplicationException(mesg);
+            }
+            catch (IOException ex)
+            {
+                // Catch block for handling IOException while accessing the file
+                string mesg = string.Format("An error occurred while accessing the file: " + ex.Message);
+                throw new System.ApplicationException(mesg);
+            }
+            catch (Exception ex)
+            {
+                // Catch block for handling other types of exceptions
+                string mesg = string.Format("An unexpected error occurred: " + ex.Message);
+                throw new System.ApplicationException(mesg);
+            }
 
+            reader = new StreamReader(path);
             DataTable result = new DataTable();
             result.TableName = "CSV";
             int DeduceRowCount = 5;//rows of data to read for deducing data type

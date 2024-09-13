@@ -4,7 +4,7 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Utilities;
 using Landis.Library.Succession;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -79,7 +79,6 @@ namespace Landis.Extension.Succession.NECN
 
 
         //TODO sf let the climate normals be calculated during spinup (30 year spinup)
-
         SpinUpWeather = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly>(PlugIn.ModelCore.Ecoregions);
             
             int[] spinupYears = new int[10] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -104,6 +103,7 @@ namespace Landis.Extension.Succession.NECN
             {
 
                 SetAllEcoregions_SpinupAnnualClimate(year);
+
 
                 foreach (ActiveSite site in PlugIn.ModelCore.Landscape.ActiveSites)
                     //Add a new year
@@ -149,31 +149,37 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        private static void SetSingleAnnualClimate(IEcoregion ecoregion, int year, Climate.Phase spinupOrfuture)
-        {
-            int actualYear = Climate.Spinup_MonthlyData.Keys.Min() + year;
-            SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
-            //TODO add check if spinup climate data exists, throw error if missing
-        }
+        //private static void SetSingleAnnualClimate(IEcoregion ecoregion, int year, Climate.Phase spinupOrfuture)
+        //{
+        //    int actualYear = Climate.Spinup_MonthlyData.Keys.Min() + year;
+        //    SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
+        //    //TODO add check if spinup climate data exists, throw error if missing
+        //}
 
-        private static void SetAllEcoregions_SpinupAnnualClimate(int year)
+        private static void SetAllEcoregionsSpinupAnnualClimate(int year)
         {
-            int actualYear = Climate.Future_MonthlyData.Keys.Min() + year - 1;
-            foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
+            // grab the year's future climate
+            foreach (var ecoregion in PlugIn.ModelCore.Ecoregions.Where(x => x.Active))
             {
-                if (ecoregion.Active)
-                {
-                    //PlugIn.ModelCore.UI.WriteLine("Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
-                    if (Climate.Spinup_MonthlyData.ContainsKey(actualYear))
-                    {
-                        SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
-                    }
-
-                    //if (OtherData.CalibrateMode)PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
-                    
-                }
-
+                SpinUpWeather[ecoregion] = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year];      // Climate data year index is 1-based
             }
+
+            //int actualYear = Climate.Future_MonthlyData.Keys.Min() + year - 1;
+            //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
+            //{
+            //    if (ecoregion.Active)
+            //    {
+            //        //PlugIn.ModelCore.UI.WriteLine("Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
+            //        if (Climate.Spinup_MonthlyData.ContainsKey(actualYear))
+            //        {
+            //            SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
+            //        }
+
+            //        //if (OtherData.CalibrateMode)PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
+                    
+            //    }
+
+            //}
         }
 
         private static void SpinUpWater(int year, int month, Site site)
@@ -201,18 +207,19 @@ namespace Landis.Extension.Succession.NECN
             //    PlugIn.ModelCore.UI.WriteLine("    SoilWater:  Initial soil water = {0}", soilWaterContent);
             double liquidSnowpack = SiteVars.LiquidSnowPack[site];
 
-            double Precipitation = DroughtMortality.SpinUpWeather[ecoregion].MonthlyPrecip[month];
-            double tave = DroughtMortality.SpinUpWeather[ecoregion].MonthlyTemp[month];
-            double tmax = DroughtMortality.SpinUpWeather[ecoregion].MonthlyMaxTemp[month];
-            double tmin = DroughtMortality.SpinUpWeather[ecoregion].MonthlyMinTemp[month];
-            double PET = DroughtMortality.SpinUpWeather[ecoregion].MonthlyPET[month];
-            
+            double Precipitation = SpinUpWeather[ecoregion].MonthlyPrecip[month];
+            double tave = SpinUpWeather[ecoregion].MonthlyTemp[month];
+            double tmax = SpinUpWeather[ecoregion].MonthlyMaxTemp[month];
+            double tmin = SpinUpWeather[ecoregion].MonthlyMinTemp[month];
+            double PET = SpinUpWeather[ecoregion].MonthlyPET[month];
+
             //if (OtherData.CalibrateMode)
             //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
             //    month, tave, tmax, tmin, PET);
-            int daysInMonth = AnnualClimate.DaysInMonth(month, year);
-            int beginGrowing = DroughtMortality.SpinUpWeather[ecoregion].BeginGrowing;
-            int endGrowing = DroughtMortality.SpinUpWeather[ecoregion].EndGrowing;
+            int daysInMonth = Climate.DaysInMonth[month];
+            //int daysInMonth = AnnualClimate.DaysInMonth(month, year);
+            int beginGrowing = SpinUpWeather[ecoregion].BeginGrowingDay;
+            int endGrowing = SpinUpWeather[ecoregion].EndGrowingDay;
 
             double wiltingPoint = SiteVars.SoilWiltingPoint[site];
             double soilDepth = SiteVars.SoilDepth[site];
@@ -332,12 +339,12 @@ namespace Landis.Extension.Succession.NECN
                 double canopyIntercept = ((0.0003 * litterBiomass) + (0.0006 * standingBiomass)) * OtherData.WaterLossFactor1;
 
                 //...Bare soil evaporation, fraction of precip (bareSoilEvap):
-                bareSoilEvap = 0.5 * System.Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
+                bareSoilEvap = 0.5 * Math.Exp((-0.002 * litterBiomass) - (0.004 * standingBiomass)) * OtherData.WaterLossFactor2;
 
                 //...Calculate total surface evaporation losses, maximum allowable is 0.4 * pet. -rm 6/94
-                double soilEvaporation = System.Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
+                double soilEvaporation = Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
-                soilEvaporation = System.Math.Min(soilEvaporation, soilWaterContent);
+                soilEvaporation = Math.Min(soilEvaporation, soilWaterContent);
                 //if (OtherData.CalibrateMode)
                 //    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
                 //        soilEvaporation, bareSoilEvap, canopyIntercept);
@@ -492,6 +499,7 @@ namespace Landis.Extension.Succession.NECN
 
         public static double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
+
             if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Calculating drought mortality for species {0}", cohort.Species.Name);
             
             //Predictor variables
@@ -513,8 +521,7 @@ namespace Landis.Extension.Succession.NECN
             double cwdAnom = SiteVars.CWDLagged[site][cohort.Species.Index] - normalCWD;
             //PlugIn.ModelCore.UI.WriteLine("CWDLagged is {0}, cwdAnom is {1}", SiteVars.CWDLagged[site][cohort.Species.Index], cwdAnom);
 
-            double cohortAge = cohort.Age;
-            //PlugIn.ModelCore.UI.WriteLine("cohortAge is {0}", cohortAge);
+            double cohortAge = cohort.Data.Age;
 
             double siteBiomass = SiteVars.ActualSiteBiomass(site);
             //PlugIn.ModelCore.UI.WriteLine("siteBiomass is {0}", siteBiomass);
@@ -594,8 +601,8 @@ namespace Landis.Extension.Succession.NECN
             if (p_mort > random)
             {
 
-                M_leaf = cohort.LeafBiomass;
-                M_wood = cohort.WoodBiomass;
+                M_leaf = cohort.Data.AdditionalParameters.LeafBiomass;
+                M_wood = cohort.Data.AdditionalParameters.WoodBiomass;
                 double aboveground_Biomass_Died = M_leaf + M_wood;
 
                 SiteVars.DroughtMort[site] += aboveground_Biomass_Died;
@@ -627,9 +634,9 @@ namespace Landis.Extension.Succession.NECN
             double[] tempValue = new double[0];
             double[] cwdValue = new double[0];
 
-            int swayear = DroughtMortality.LagSWA[species];
-            int tempyear = DroughtMortality.LagTemp[species];
-            int cwdyear = DroughtMortality.LagCWD[species];
+            int swayear = LagSWA[species];
+            int tempyear = LagTemp[species];
+            int cwdyear = LagCWD[species];
 
             soilWater = SiteVars.SoilWater10[site].ToArray();
             tempValue = SiteVars.Temp10[site].ToArray();

@@ -4,7 +4,7 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Utilities;
 using Landis.Library.Succession;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 using System;
 
 namespace Landis.Extension.Succession.NECN
@@ -29,7 +29,7 @@ namespace Landis.Extension.Succession.NECN
 
             if(coarseRootBiomass > 0)
             WoodLayer.PartitionResidue(coarseRootBiomass,  
-                            FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate,
+                            SpeciesData.WoodDecayRate[species],
                             SpeciesData.CoarseRootCN[species], 
                             SpeciesData.CoarseRootLignin[species], 
                             LayerName.CoarseRoot,
@@ -68,11 +68,11 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public static double CalculateCoarseRoot(ICohort cohort, double wood)
         {
-            return (wood * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].CoarseRootFraction);
+            return (wood * SpeciesData.CoarseRootFraction[cohort.Species]);
         }
         public static double CalculateFineRoot(ICohort cohort, double foliarBiomass)
         {
-            return (foliarBiomass * FunctionalType.Table[SpeciesData.FuncType[cohort.Species]].FineRootFraction);
+            return (foliarBiomass * SpeciesData.FineRootFraction[cohort.Species]);
         }
     }
 }

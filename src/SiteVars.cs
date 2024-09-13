@@ -2,12 +2,8 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Utilities;
-using Landis.Library.Succession;
-using Landis.Library.LeafBiomassCohorts;  
+using Landis.Library.UniversalCohorts;  
 using System.Collections.Generic;
-using System;
-using System.Data;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -16,6 +12,7 @@ namespace Landis.Extension.Succession.NECN
     /// </summary>
     public static class SiteVars
     {
+
         // Time of last succession simulation:
         private static ISiteVar<int> timeOfLast;
 
@@ -85,11 +82,8 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double[]> monthlyNEE;
         private static ISiteVar<double[]> monthlyStreamN;
         private static ISiteVar<double> totalNuptake;
+
         private static ISiteVar<double[]> monthlymineralN;
-        private static ISiteVar<double> frassC;
-        private static ISiteVar<double> lai;
-        //private static ISiteVar<double> annualPPT_AET; //Annual water budget calculation. 
-        private static ISiteVar<int> dryDays;
 
         public static ISiteVar<double> AnnualNEE;
         public static ISiteVar<double> FireCEfflux;
@@ -101,7 +95,6 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> WoodMortality;
         public static ISiteVar<string> HarvestPrescriptionName;
         public static ISiteVar<int> HarvestTime;
-        public static ISiteVar<Dictionary<int, Dictionary<int, double>>> CohortResorbedNallocation;
         public static ISiteVar<double> fineFuels;
         public static ISiteVar<double> SmolderConsumption;
         public static ISiteVar<double> FlamingConsumption;
@@ -148,73 +141,72 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public static void Initialize()
         {
-            cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<Library.LeafBiomassCohorts.SiteCohorts>();
-            biomassCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.BiomassCohorts.ISiteCohorts>.Wrap(cohorts);
-            baseCohortsSiteVar = Landis.Library.Succession.CohortSiteVar<Landis.Library.AgeOnlyCohorts.ISiteCohorts>.Wrap(cohorts);
-            fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<SiteCohorts>();
+            //baseCohortsSiteVar = CohortSiteVar<ISiteCohorts>.Wrap(cohorts);
 
-            timeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
+            fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            TimeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             HarvestDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             FireDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
 
             // Dead biomass:
-            surfaceDeadWood = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            soilDeadWood        = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SurfaceDeadWood = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SoilDeadWood        = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
             
-            surfaceStructural   = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            surfaceMetabolic    = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            soilStructural      = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            soilMetabolic       = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SurfaceStructural   = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SurfaceMetabolic    = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SoilStructural      = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SoilMetabolic       = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
             
             // Dead wood carbon pools; Chihiro 2020.01.14
-            originalDeadWoodC   = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            currentDeadWoodC    = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            OriginalDeadWoodC   = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            CurrentDeadWoodC    = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             // ------------------------------------------
 
             // Soil Layers
-            som1surface         = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            som1soil            = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            som2                = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            som3                = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            soilDepth           = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
-            soilDrain           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilBaseFlowFraction = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilStormFlowFraction = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilFieldCapacity = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilWiltingPoint = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilPercentSand = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilPercentClay = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SOM1surface         = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SOM1soil            = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SOM2                = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SOM3                = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SoilDepth           = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
+            SoilDrain           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SoilBaseFlowFraction = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SoilStormFlowFraction = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SoilFieldCapacity = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SoilWiltingPoint = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SoilPercentSand = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SoilPercentClay = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             
             // Other Layers
-            stream              = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
-            sourceSink          = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            Stream              = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
+            SourceSink          = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
 
             // Other variables
             MonthlyLAI = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyLAI_Trees = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyLAI_Grasses = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();  // Chihiro, 2021.03.30: tentative
             MonthlyLAI_GrassesLastMonth = PlugIn.ModelCore.Landscape.NewSiteVar<double>();  // Chihiro, 2021.03.30: tentative
-            mineralN = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            resorbedN           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            waterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            meanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            decayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            anaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            dryDays             = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
+            MineralN = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            ResorbedN           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            WaterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            PlantAvailableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            LiquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SoilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            MeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            DecayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            SoilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            AnaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            DryDays             = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             
             // Annual accumulators
-            grossMineralization = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            ag_nppC             = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            bg_nppC             = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            litterfallC         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            monthlyAGNPPC       = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            monthlyBGNPPC       = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            monthlyNEE          = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            monthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            GrossMineralization = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            AGNPPcarbon             = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            BGNPPcarbon             = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            LitterfallC         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            MonthlyAGNPPcarbon       = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyBGNPPcarbon       = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyNEE          = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlySoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
@@ -225,23 +217,23 @@ namespace Landis.Extension.Succession.NECN
             FireCEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireNEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
-            cohortLeafN         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            cohortFRootN         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            cohortLeafC         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            cohortFRootC     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            cohortWoodN         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            cohortCRootN   = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            cohortWoodC         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            cohortCRootC = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            CohortLeafN         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            CohortFRootN         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            CohortLeafC         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            CohortFRootC     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            CohortWoodN         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            CohortCRootN   = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            CohortWoodC         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            CohortCRootC = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
                         
             TotalWoodBiomass    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             WoodMortality        = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             Nvol                = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             PrevYearMortality   = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
-            totalNuptake        = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            TotalNuptake        = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             monthlymineralN     = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            frassC              = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            lai                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            FrassC              = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            LAI                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualWaterBalance       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualClimaticWaterDeficit  = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualPotentialEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -274,44 +266,41 @@ namespace Landis.Extension.Succession.NECN
             slope = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             aspect = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
-            CohortResorbedNallocation = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, Dictionary<int, double>>>();
-
-            PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.LeafBiomassCohorts");
-            PlugIn.ModelCore.RegisterSiteVar(baseCohortsSiteVar, "Succession.AgeCohorts");
-            PlugIn.ModelCore.RegisterSiteVar(biomassCohortsSiteVar, "Succession.BiomassCohorts");
+            PlugIn.ModelCore.RegisterSiteVar(cohorts, "Succession.UniversalCohorts");
             PlugIn.ModelCore.RegisterSiteVar(fineFuels, "Succession.FineFuels");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.SmolderConsumption, "Succession.SmolderConsumption");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.FlamingConsumption, "Succession.FlamingConsumption");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.AnnualClimaticWaterDeficit, "Succession.CWD");
-            PlugIn.ModelCore.RegisterSiteVar(SiteVars.AnnualPotentialEvapotranspiration, "Succession.PET");
+            PlugIn.ModelCore.RegisterSiteVar(SmolderConsumption, "Succession.SmolderConsumption");
+            PlugIn.ModelCore.RegisterSiteVar(FlamingConsumption, "Succession.FlamingConsumption");
+            PlugIn.ModelCore.RegisterSiteVar(AnnualClimaticWaterDeficit, "Succession.CWD");
+            PlugIn.ModelCore.RegisterSiteVar(AnnualPotentialEvapotranspiration, "Succession.PET");
 
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
-                surfaceDeadWood[site]       = new Layer(LayerName.Wood, LayerType.Surface);
-                soilDeadWood[site]          = new Layer(LayerName.CoarseRoot, LayerType.Soil);
+
+                SurfaceDeadWood[site]       = new Layer(LayerName.Wood, LayerType.Surface);
+                SoilDeadWood[site]          = new Layer(LayerName.CoarseRoot, LayerType.Soil);
                 
                 // Dead wood carbons; Chihiro 2020.01.14
-                originalDeadWoodC[site]     = new double[PlugIn.ModelCore.EndTime];
-                currentDeadWoodC[site]      = new double[PlugIn.ModelCore.EndTime];
+                OriginalDeadWoodC[site]     = new double[PlugIn.ModelCore.EndTime];
+                CurrentDeadWoodC[site]      = new double[PlugIn.ModelCore.EndTime];
                 // -------------------------------------
 
-                surfaceStructural[site]     = new Layer(LayerName.Structural, LayerType.Surface);
-                surfaceMetabolic[site]      = new Layer(LayerName.Metabolic, LayerType.Surface);
-                soilStructural[site]        = new Layer(LayerName.Structural, LayerType.Soil);
-                soilMetabolic[site]         = new Layer(LayerName.Metabolic, LayerType.Soil);
-                som1surface[site]           = new Layer(LayerName.SOM1, LayerType.Surface);
-                som1soil[site]              = new Layer(LayerName.SOM1, LayerType.Soil);
-                som2[site]                  = new Layer(LayerName.SOM2, LayerType.Soil);
-                som3[site]                  = new Layer(LayerName.SOM3, LayerType.Soil);
+                SurfaceStructural[site]     = new Layer(LayerName.Structural, LayerType.Surface);
+                SurfaceMetabolic[site]      = new Layer(LayerName.Metabolic, LayerType.Surface);
+                SoilStructural[site]        = new Layer(LayerName.Structural, LayerType.Soil);
+                SoilMetabolic[site]         = new Layer(LayerName.Metabolic, LayerType.Soil);
+                SOM1surface[site]           = new Layer(LayerName.SOM1, LayerType.Surface);
+                SOM1soil[site]              = new Layer(LayerName.SOM1, LayerType.Soil);
+                SOM2[site]                  = new Layer(LayerName.SOM2, LayerType.Soil);
+                SOM3[site]                  = new Layer(LayerName.SOM3, LayerType.Soil);
                 
-                stream[site]                = new Layer(LayerName.Other, LayerType.Other);
-                sourceSink[site]            = new Layer(LayerName.Other, LayerType.Other);
+                Stream[site]                = new Layer(LayerName.Other, LayerType.Other);
+                SourceSink[site]            = new Layer(LayerName.Other, LayerType.Other);
                 
-                monthlyAGNPPC[site]           = new double[12];
-                monthlyBGNPPC[site]           = new double[12];
-                monthlyNEE[site]            = new double[12];
-                monthlyStreamN[site]         = new double[12];
+                MonthlyAGNPPcarbon[site]           = new double[12];
+                MonthlyBGNPPcarbon[site]           = new double[12];
+                MonthlyNEE[site]            = new double[12];
+                MonthlyStreamN[site]         = new double[12];
                 MonthlyHeteroResp[site]           = new double[12];
                 MonthlySoilResp[site] = new double[12];
                 MonthlyLAI[site] = new double[12];
@@ -322,6 +311,7 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyAnaerobicEffect[site] = new double[12];
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
+
 
                 CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
@@ -338,7 +328,6 @@ namespace Landis.Extension.Succession.NECN
                     cwdLagged[site] = new Dictionary<int, double>();
                 }
 
-
             }
             
         }
@@ -351,17 +340,12 @@ namespace Landis.Extension.Succession.NECN
         {
             FireSeverity        = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-            //SiteVars.HarvestDisturbedYear.SiteValues = false;
-            //SiteVars.FireDisturbedYear.SiteValues = false;
-            
-            //if(HarvestPrescriptionName == null)
-            //    throw new System.ApplicationException("TEST Error: Harvest Prescription Names NOT Initialized.");
         }
 
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Biomass cohorts at each site.
+        /// Cohorts at each site.
         /// </summary>
         private static ISiteVar<SiteCohorts> cohorts;
         public static ISiteVar<SiteCohorts> Cohorts
@@ -373,7 +357,7 @@ namespace Landis.Extension.Succession.NECN
             set
             {
                 cohorts = value;
-            }
+    }
         }
         //---------------------------------------------------------------------
 
@@ -386,13 +370,13 @@ namespace Landis.Extension.Succession.NECN
         public static double ActualSiteBiomass(ActiveSite site)
         {
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-            ISiteCohorts siteCohorts = SiteVars.Cohorts[site];
+            ISiteCohorts siteCohorts = Cohorts[site];
 
             if(siteCohorts == null)
                 return 0.0;
             
             int youngBiomass;
-            int totalBiomass = Library.LeafBiomassCohorts.Cohorts.ComputeBiomass(siteCohorts, out youngBiomass);
+            int totalBiomass = Library.UniversalCohorts.Cohorts.ComputeBiomass(siteCohorts, out youngBiomass);
             double B_ACT = totalBiomass - youngBiomass;
 
             return B_ACT;
@@ -403,222 +387,158 @@ namespace Landis.Extension.Succession.NECN
         {
 
             // Reset these accumulators to zero:
-            
-            
-            SiteVars.DryDays[site] = 0;
+<<<<<<< HEAD
 
-            SiteVars.CohortLeafN[site] = 0.0;
-            SiteVars.CohortFRootN[site] = 0.0;
-            SiteVars.CohortLeafC[site] = 0.0;
-            SiteVars.CohortFRootC[site] = 0.0;
-            SiteVars.CohortWoodN[site] = 0.0;
-            SiteVars.CohortCRootN[site] = 0.0;
-            SiteVars.CohortWoodC[site] = 0.0;
-            SiteVars.CohortCRootC[site] = 0.0;
-            SiteVars.GrossMineralization[site] = 0.0;
-            SiteVars.AGNPPcarbon[site] = 0.0;
-            SiteVars.BGNPPcarbon[site] = 0.0;
-            SiteVars.LitterfallC[site] = 0.0;
-            
-            SiteVars.Stream[site]          = new Layer(LayerName.Other, LayerType.Other);
-            SiteVars.SourceSink[site]      = new Layer(LayerName.Other, LayerType.Other);
-            
-            SiteVars.SurfaceDeadWood[site].NetMineralization = 0.0;
-            SiteVars.SurfaceStructural[site].NetMineralization = 0.0;
-            SiteVars.SurfaceMetabolic[site].NetMineralization = 0.0;
-            
-            SiteVars.SoilDeadWood[site].NetMineralization = 0.0;
-            SiteVars.SoilStructural[site].NetMineralization = 0.0;
-            SiteVars.SoilMetabolic[site].NetMineralization = 0.0;
-            
-            SiteVars.SOM1surface[site].NetMineralization = 0.0;
-            SiteVars.SOM1soil[site].NetMineralization = 0.0;
-            SiteVars.SOM2[site].NetMineralization = 0.0;
-            SiteVars.SOM3[site].NetMineralization = 0.0;
-            SiteVars.AnnualNEE[site] = 0.0;
-            SiteVars.Nvol[site] = 0.0;
-            SiteVars.AnnualNEE[site] = 0.0;
-            SiteVars.TotalNuptake[site] = 0.0;
-            SiteVars.ResorbedN[site] = 0.0;
-            SiteVars.FrassC[site] = 0.0;
-            SiteVars.LAI[site] = 0.0;
-            SiteVars.AnnualWaterBalance[site] = 0.0;
-            SiteVars.AnnualClimaticWaterDeficit[site] = 0.0;
-            SiteVars.AnnualPotentialEvapotranspiration[site] = 0.0;
-            SiteVars.WoodMortality[site] = 0.0;
 
-            SiteVars.DroughtMort[site] = 0.0;
-            
+            DryDays[site] = 0;
+
+            CohortLeafN[site] = 0.0;
+            CohortFRootN[site] = 0.0;
+            CohortLeafC[site] = 0.0;
+            CohortFRootC[site] = 0.0;
+            CohortWoodN[site] = 0.0;
+            CohortCRootN[site] = 0.0;
+            CohortWoodC[site] = 0.0;
+            CohortCRootC[site] = 0.0;
+            GrossMineralization[site] = 0.0;
+            AGNPPcarbon[site] = 0.0;
+            BGNPPcarbon[site] = 0.0;
+            LitterfallC[site] = 0.0;
+
+            Stream[site]          = new Layer(LayerName.Other, LayerType.Other);
+            SourceSink[site]      = new Layer(LayerName.Other, LayerType.Other);
+
+            SurfaceDeadWood[site].NetMineralization = 0.0;
+            SurfaceStructural[site].NetMineralization = 0.0;
+            SurfaceMetabolic[site].NetMineralization = 0.0;
+
+            SoilDeadWood[site].NetMineralization = 0.0;
+            SoilStructural[site].NetMineralization = 0.0;
+            SoilMetabolic[site].NetMineralization = 0.0;
+
+            SOM1surface[site].NetMineralization = 0.0;
+            SOM1soil[site].NetMineralization = 0.0;
+            SOM2[site].NetMineralization = 0.0;
+            SOM3[site].NetMineralization = 0.0;
+            AnnualNEE[site] = 0.0;
+            Nvol[site] = 0.0;
+            AnnualNEE[site] = 0.0;
+            TotalNuptake[site] = 0.0;
+            ResorbedN[site] = 0.0;
+            FrassC[site] = 0.0;
+            LAI[site] = 0.0;
+            AnnualWaterBalance[site] = 0.0;
+            AnnualClimaticWaterDeficit[site] = 0.0;
+            AnnualPotentialEvapotranspiration[site] = 0.0;
+            WoodMortality[site] = 0.0;
+
+            DroughtMort[site] = 0.0;
+                        
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
             {
                 foreach (ISpecies species in PlugIn.ModelCore.Species)
                 {
                     //Annual variables for each site/species
-                    SiteVars.SpeciesDroughtMortality[site][species.Index] = 0.0;
-                    SiteVars.SpeciesDroughtProbability[site][species.Index] = 0.0;
-                    SiteVars.TempLagged[site][species.Index] = 0.0;
-                    SiteVars.CWDLagged[site][species.Index] = 0.0;
-                    SiteVars.SWALagged[site][species.Index] = 0.0;
+                    SpeciesDroughtMortality[site][species.Index] = 0.0;
+                    SpeciesDroughtProbability[site][species.Index] = 0.0;
+                    TempLagged[site][species.Index] = 0.0;
+                    CWDLagged[site][species.Index] = 0.0;
+                    SWALagged[site][species.Index] = 0.0;
                 }
 
-                if (SiteVars.SoilWater10[site].Count >= 10) 
+                if (SoilWater10[site].Count >= 10) 
                     //TODO SF check each list separately, make sure they all have the same number of elements
                     //TODO Also, the first time values are reset, make sure lists are <= 10 elements long
                 {
-                    SiteVars.SoilWater10[site].RemoveAt(0);
-                    SiteVars.Temp10[site].RemoveAt(0);
-                    SiteVars.CWD10[site].RemoveAt(0);
+                    SoilWater10[site].RemoveAt(0);
+                    Temp10[site].RemoveAt(0);
+                    CWD10[site].RemoveAt(0);
                 }
             }
         }
 
         //---------------------------------------------------------------------
 
-        public static ISiteVar<int> TimeOfLast
-        {
-            get {
-                return timeOfLast;
-            }
-        }
+        public static ISiteVar<int> TimeOfLast { get; private set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The intact dead woody pools for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SurfaceDeadWood
-        {
-            get {
-                return surfaceDeadWood;
-            }
-        }
+        public static ISiteVar<Layer> SurfaceDeadWood { get; private set; }
 
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The DEAD coarse root pool for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SoilDeadWood
-        {
-            get {
-                return soilDeadWood;
-            }
-        }
+        public static ISiteVar<Layer> SoilDeadWood { get; private set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The dead surface pool for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SurfaceStructural
-        {
-            get {
-                return surfaceStructural;
-            }
-        }
+        public static ISiteVar<Layer> SurfaceStructural { get; private set; }
 
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The dead surface pool for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SurfaceMetabolic
-        {
-            get {
-                return surfaceMetabolic;
-            }
-        }
+        public static ISiteVar<Layer> SurfaceMetabolic { get; private set; }
 
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The fine root pool for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SoilStructural
-        {
-            get {
-                return soilStructural;
-            }
-        }
+        public static ISiteVar<Layer> SoilStructural { get; private set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The fine root pool for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SoilMetabolic
-        {
-            get {
-                return soilMetabolic;
-            }
-        }
-        
+        public static ISiteVar<Layer> SoilMetabolic { get; private set; }
+
         /// <summary>
         /// The original and current dead wood carbon for the landscape's sites.
         /// </summary>
         // Chihiro 2020.01.14
-        public static ISiteVar<double[]> OriginalDeadWoodC { get { return originalDeadWoodC; } }
-        public static ISiteVar<double[]> CurrentDeadWoodC { get { return currentDeadWoodC; } }
+        public static ISiteVar<double[]> OriginalDeadWoodC { get; private set; }
+        public static ISiteVar<double[]> CurrentDeadWoodC { get; private set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The soil organic matter (SOM1-Surface) for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SOM1surface
-        {
-            get {
-                return som1surface;
-            }
-        }
+        public static ISiteVar<Layer> SOM1surface { get; private set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The soil organic matter (SOM1-Soil) for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SOM1soil
-        {
-            get {
-                return som1soil;
-            }
-        }
+        public static ISiteVar<Layer> SOM1soil { get; private set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The soil organic matter (SOM2) for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SOM2
-        {
-            get {
-                return som2;
-            }
-        }
+        public static ISiteVar<Layer> SOM2 { get; private set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The soil organic matter (SOM3) for the landscape's sites.
         /// </summary>
-        public static ISiteVar<Layer> SOM3
-        {
-            get {
-                return som3;
-            }
-        }
-        public static ISiteVar<int> SoilDepth {get{return soilDepth;}}
-        public static ISiteVar<double> SoilDrain { get { return soilDrain; } }
-        public static ISiteVar<double> SoilBaseFlowFraction { get { return soilBaseFlowFraction; } }
-        public static ISiteVar<double> SoilStormFlowFraction { get { return soilStormFlowFraction; } }
-        public static ISiteVar<double> SoilFieldCapacity { get { return soilFieldCapacity; } }
-        public static ISiteVar<double> SoilWiltingPoint { get { return soilWiltingPoint; } }
-        public static ISiteVar<double> SoilPercentSand { get { return soilPercentSand; } }
-        public static ISiteVar<double> SoilPercentClay { get { return soilPercentClay; } }
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Leaching to a stream - using the soil layer object is a cheat
-        /// </summary>
-        public static ISiteVar<Layer> Stream
-        {
-            get {
-                return stream;
-            }
-        }
+        public static ISiteVar<Layer> SOM3 { get; private set; }
+        public static ISiteVar<int> SoilDepth { get; private set; }
+        public static ISiteVar<double> SoilDrain { get; private set; }
+        public static ISiteVar<double> SoilBaseFlowFraction { get; private set; }
+        public static ISiteVar<double> SoilStormFlowFraction { get; private set; }
+        public static ISiteVar<double> SoilFieldCapacity { get; private set; }
+        public static ISiteVar<double> SoilWiltingPoint { get; private set; }
+        public static ISiteVar<double> SoilPercentSand { get; private set; }
+        public static ISiteVar<double> SoilPercentClay { get; private set; }
+        public static ISiteVar<Layer> Stream { get; private set; }
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -635,470 +555,178 @@ namespace Landis.Extension.Succession.NECN
                 fineFuels = value;
             }
         }
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Water loss
-        /// </summary>
-        public static ISiteVar<double> WaterMovement
-        {
-            get {
-                return waterMovement;
-            }
-            set {
-                waterMovement = value;
-            }
-        }
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Water loss
-        /// </summary>
-        public static ISiteVar<double> PlantAvailableWater
-        {
-            get {
-                return availableWater;
-            }
-            set {
-                availableWater = value;
-            }
-        }
+        public static ISiteVar<double> WaterMovement { get; set; }
+        public static ISiteVar<double> PlantAvailableWater { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// End-of-month soil water content (cm)
         /// </summary>
-        public static ISiteVar<double> SoilWaterContent
-        {
-            get {
-                return soilWaterContent;
-            }
-            set {
-                soilWaterContent = value;
-            }
-        }
+        public static ISiteVar<double> SoilWaterContent { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// Mean volumetric water content (proportion)
         /// </summary>
-        public static ISiteVar<double> MeanSoilWaterContent
-        {
-            get
-            {
-                return meanSoilWaterContent;
-            }
-            set
-            {
-                meanSoilWaterContent = value;
-            }
-        }
+        public static ISiteVar<double> MeanSoilWaterContent { get; set; }
 
 
         /// <summary>
         /// Liquid Snowpack
         /// </summary>
-        public static ISiteVar<double> LiquidSnowPack
-        {
-            get
-            {
-                return liquidSnowPack;
-            }
-            set
-            {
-                liquidSnowPack = value;
-            }
-        }
+        public static ISiteVar<double> LiquidSnowPack { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// Available mineral Nitrogen
         /// </summary>
-        public static ISiteVar<double> MineralN
-        {
-            get {
-                return mineralN;
-            }
-            set {
-                mineralN = value;
-            }
-        }
+        public static ISiteVar<double> MineralN { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The amount of N resorbed before leaf fall
         /// </summary>
-        public static ISiteVar<double> ResorbedN
-        {
-            get
-            {
-                return resorbedN;
-            }
-            set
-            {
-                resorbedN = value;
-            }
-        }
+        public static ISiteVar<double> ResorbedN { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// A generic decay factor determined by soil water and soil temperature.
         /// </summary>
-        public static ISiteVar<double> DecayFactor
-        {
-            get {
-                return decayFactor;
-            }
-            set {
-                decayFactor = value;
-            }
-        }
+        public static ISiteVar<double> DecayFactor { get; set; }
         //---------------------------------------------------------------------
-        
+
         /// <summary>
         /// Soil temperature (C)
         /// </summary>
-        public static ISiteVar<double> SoilTemperature
-        {
-            get {
-                return soilTemperature;
-            }
-            set {
-                soilTemperature = value;
-            }
-        }
+        public static ISiteVar<double> SoilTemperature { get; set; }
         //---------------------------------------------------------------------
-        
+
         /// <summary>
         /// A generic decay factor determined by soil water and soil temperature.
         /// </summary>
-        public static ISiteVar<double> AnaerobicEffect
-        {
-            get {
-                return anaerobicEffect;
-            }
-            set {
-                anaerobicEffect = value;
-            }
-        }
+        public static ISiteVar<double> AnaerobicEffect { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// Soil moisture at the time of reproduction
         /// </summary>
-        public static ISiteVar<int> DryDays
-        {
-            get
-            {
-                return dryDays;
-            }
-            set
-            {
-                dryDays = value;
-            }
-        }
+        public static ISiteVar<int> DryDays { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// A summary of all Leaf Nitrogen in the Cohorts.
         /// </summary>
-        public static ISiteVar<double> CohortLeafN
-        {
-            get {
-                return cohortLeafN;
-            }
-            set {
-                cohortLeafN = value;
-            }
-        }
+        public static ISiteVar<double> CohortLeafN { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// A summary of all Fine Root Nitrogen in the Cohorts.
         /// </summary>
-        public static ISiteVar<double> CohortFRootN
-        {
-            get
-            {
-                return cohortFRootN;
-            }
-            set
-            {
-                cohortFRootN = value;
-            }
-        }
+        public static ISiteVar<double> CohortFRootN { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// A summary of all Carbon in the Leaves
         /// </summary>
-        public static ISiteVar<double> CohortLeafC
-        {
-            get {
-                return cohortLeafC;
-            }
-            set {
-                cohortLeafC = value;
-            }
-        }
+        public static ISiteVar<double> CohortLeafC { get; set; }
 
         /// <summary>
         /// A summary of all Carbon in the Fine Roots
         /// </summary>
-        public static ISiteVar<double> CohortFRootC
-        {
-            get
-            {
-                return cohortFRootC;
-            }
-            set
-            {
-                cohortFRootC = value;
-            }
-        }
+        public static ISiteVar<double> CohortFRootC { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// A summary of all Aboveground Wood Nitrogen in the Cohorts.
         /// </summary>
-        public static ISiteVar<double> CohortWoodN
-        {
-            get {
-                return cohortWoodN;
-            }
-            set {
-                cohortWoodN = value;
-            }
-        }
+        public static ISiteVar<double> CohortWoodN { get; set; }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// A summary of all Coarse Root Nitrogen in the Cohorts.
         /// </summary>
-        public static ISiteVar<double> CohortCRootN
-        {
-            get
-            {
-                return cohortCRootN;
-            }
-            set
-            {
-                cohortCRootN = value;
-            }
-        }
+        public static ISiteVar<double> CohortCRootN { get; set; }
 
 
 
         /// <summary>
         /// A summary of all Aboveground Wood Carbon in the Cohorts.
         /// </summary>
-        public static ISiteVar<double> CohortWoodC
-        {
-            get {
-                return cohortWoodC;
-            }
-            set {
-                cohortWoodC = value;
-            }
-        }
+        public static ISiteVar<double> CohortWoodC { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of all Carbon in the Coarse Roots
         /// </summary>
-        public static ISiteVar<double> CohortCRootC
-        {
-            get
-            {
-                return cohortCRootC;
-            }
-            set
-            {
-                cohortCRootC = value;
-            }
-        }
+        public static ISiteVar<double> CohortCRootC { get; set; }
 
         //-------------------------
 
         /// <summary>
         /// A summary of Gross Mineraliztion.
         /// </summary>
-        public static ISiteVar<double> GrossMineralization
-        {
-            get {
-                return grossMineralization;
-            }
-            set {
-                grossMineralization = value;
-            }
-        }
+        public static ISiteVar<double> GrossMineralization { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Aboveground Net Primary Productivity (g C/m2)
         /// </summary>
-        public static ISiteVar<double> AGNPPcarbon
-        {
-            get {
-                return ag_nppC;
-            }
-        }
-        
+        public static ISiteVar<double> AGNPPcarbon { get; private set; }
+
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Belowground Net Primary Productivity (g C/m2)
         /// </summary>
-        public static ISiteVar<double> BGNPPcarbon
-        {
-            get {
-                return bg_nppC;
-            }
-        }
+        public static ISiteVar<double> BGNPPcarbon { get; private set; }
 
-        
-        
-        
+
+
+
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Litter fall (g C/m2).
         /// </summary>
-        public static ISiteVar<double> LitterfallC
-        {
-            get {
-                return litterfallC;
-            }
-        }
+        public static ISiteVar<double> LitterfallC { get; private set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Aboveground Net Primary Productivity (g C/m2)
         /// </summary>
-        public static ISiteVar<double[]> MonthlyAGNPPcarbon
-        {
-            get {
-                return monthlyAGNPPC;
-            }
-            set {
-                monthlyAGNPPC = value;
-            }
-        }
+        public static ISiteVar<double[]> MonthlyAGNPPcarbon { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Belowground Net Primary Productivity (g C/m2)
         /// </summary>
-        public static ISiteVar<double[]> MonthlyBGNPPcarbon
-        {
-            get {
-                return monthlyBGNPPC;
-            }
-            set {
-                monthlyBGNPPC = value;
-            }
-        }
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// A summary of heterotrophic respiration, i.e. CO2 loss from decomposition (g C/m2)
-        /// </summary>
-        //public static ISiteVar<double[]> MonthlyHeterotrophicResp
-        //{
-        //    get {
-        //        return monthlyHeteroResp;
-        //    }
-        //    set {
-        //        monthlyHeteroResp = value;
-        //    }
-        //}
+        public static ISiteVar<double[]> MonthlyBGNPPcarbon { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of Net Ecosystem Exchange (g C/m2), from a flux tower's perspective,
         /// whereby positive values indicate terrestrial C loss, negative values indicate C gain.
         /// Replace SourceSink?
         /// </summary>
-        public static ISiteVar<double[]> MonthlyNEE
-        {
-            get {
-                return monthlyNEE;
-            }
-            set {
-                monthlyNEE = value;
-            }
-        }
+        public static ISiteVar<double[]> MonthlyNEE { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of N leaching
         /// </summary>
-        public static ISiteVar<double[]> MonthlyStreamN
-        {
-            get
-            {
-                return monthlyStreamN;
-            }
-            set
-            {
-                monthlyStreamN = value;
-            }
-        }
-        
+        public static ISiteVar<double[]> MonthlyStreamN { get; set; }
+
         /// <summary>
         /// Water loss
         /// </summary>
-        public static ISiteVar<Layer> SourceSink
-        {
-            get {
-                return sourceSink;
-            }
-            set {
-                sourceSink = value;
-            }
-        }
+        public static ISiteVar<Layer> SourceSink { get; set; }
         //---------------------------------------------------------------------
-               /// <summary>
+        /// <summary>
         /// A summary of N uptake (g N/m2)
         /// </summary>
-        public static ISiteVar<double> TotalNuptake
-        {
-            get
-            {
-                return totalNuptake;
-            }
-            set 
-            {
-                totalNuptake = value;
-            }
-                
-            
-        }
+        public static ISiteVar<double> TotalNuptake { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of frass deposition (g C/m2)
         /// </summary>
-        public static ISiteVar<double> FrassC
-        {
-            get
-            {
-                return frassC;
-            }
-            set
-            {
-                frassC = value;
-            }
-
-
-        }
+        public static ISiteVar<double> FrassC { get; set; }
         //---------------------------------------------------------------------
         /// <summary>
         /// A summary of LAI (m2/m2)
         /// </summary>
-        public static ISiteVar<double> LAI
-        {
-            get
-            {
-                return lai;
-            }
-            set
-            {
-                lai = value;
-            }
-
-
-        }
+        public static ISiteVar<double> LAI { get; set; }
 
         // --------------------------------------------------------------------
         /// <summary>

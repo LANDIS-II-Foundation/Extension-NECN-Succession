@@ -26,7 +26,7 @@ namespace Landis.Extension.Succession.NECN
             
             if (woodBiomass > 0)
                 WoodLayer.PartitionResidue(woodBiomass,
-                                FunctionalType.Table[SpeciesData.FuncType[species]].WoodDecayRate,
+                                SpeciesData.WoodDecayRate[species],
                                 SpeciesData.WoodCN[species],
                                 SpeciesData.WoodLignin[species],
                                 LayerName.Wood,
