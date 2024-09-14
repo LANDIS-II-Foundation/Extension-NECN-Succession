@@ -3064,3 +3064,10 @@ testing/Core8-NECN8-SingleCell/NECN/TotalC-8.img
 testing/Core8-NECN8-SingleCell/NECN/TotalC-8.tif
 testing/Core8-NECN8-SingleCell/NECN/TotalC-9.img
 testing/Core8-NECN8-SingleCell/NECN/TotalC-9.tif
+testing/Core8-NECN8-Landscape/Metadata/NECN-Succession/DroughtLog_Metadata.xml
+testing/Core8-NECN8-Landscape/NECN-succession-drought-log.csv
+testing/Core8-NECN8-Landscape/NECN/AnaerobicEffect-10.tif
+testing/Core8-NECN8-Landscape/NECN/AnaerobicEffect-5.tif
+testing/Core8-NECN8-Landscape/NECN/SoilWater-10.tif
+testing/Core8-NECN8-Landscape/NECN/SoilWater-5.tif
+testing/Core8-NECN8-SingleCell/NECN-succession-drought-log.csv

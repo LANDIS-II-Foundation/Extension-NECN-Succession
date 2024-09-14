@@ -21,16 +21,15 @@ namespace Landis.Extension.Succession.NECN
         //public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly> AnnualWeather;
 
         public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate> AnnualClimate;
+        public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate> AnnualClimateSpinup;
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
         {
             ActiveSiteCount = new Landis.Library.Parameters.Ecoregions.AuxParm<int>(PlugIn.ModelCore.Ecoregions);
-            //AnnualWeather = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly>(PlugIn.ModelCore.Ecoregions);
             AnnualClimate = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate>(PlugIn.ModelCore.Ecoregions);
-
+            AnnualClimateSpinup = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate>(PlugIn.ModelCore.Ecoregions);
             MonthlyNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double[]>(PlugIn.ModelCore.Ecoregions);
-
             AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(PlugIn.ModelCore.Ecoregions);
             
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
@@ -56,7 +55,7 @@ namespace Landis.Extension.Succession.NECN
             // grab the first year's spinup climate
             foreach (var ecoregion in PlugIn.ModelCore.Ecoregions.Where(x => x.Active))
             {
-                AnnualClimate[ecoregion] = Climate.SpinupEcoregionYearClimate[ecoregion.Index][1];      // Climate data year index is 1-based
+                AnnualClimateSpinup[ecoregion] = Climate.SpinupEcoregionYearClimate[ecoregion.Index][1];      // Climate data year index is 1-based
             }
         }
 

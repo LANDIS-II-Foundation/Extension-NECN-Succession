@@ -2,17 +2,10 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Utilities;
-using System.IO;
 using System;
 using System.Linq;
-
 using Landis.Library.Metadata;
-using System.Data;
-using System.Collections.Generic;
-using System.Collections;
-using Landis.Library.LeafBiomassCohorts;
-
+using Landis.Library.UniversalCohorts;
 
 
 namespace Landis.Extension.Succession.NECN
@@ -615,9 +608,9 @@ namespace Landis.Extension.Succession.NECN
             string pathPET = MapNames.ReplaceTemplateVars(@"NECN\PET-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathPET, PlugIn.ModelCore.Landscape.Dimensions))
             {
-                string pathPET = MapNames.ReplaceTemplateVars(@"NECN\PET-{timestep}.img", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathPET, PlugIn.ModelCore.Landscape.Dimensions))
-                {
+                //string pathPET = MapNames.ReplaceTemplateVars(@"NECN\PET-{timestep}.img", PlugIn.ModelCore.CurrentTime);
+                //using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathPET, PlugIn.ModelCore.Landscape.Dimensions))
+                //{
                     IntPixel pixel = outputRaster.BufferPixel;
                     foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                     {
@@ -632,7 +625,7 @@ namespace Landis.Extension.Succession.NECN
                         }
                         outputRaster.WriteBufferPixel();
                     }
-                }
+                //}
             }
 
             string path = MapNames.ReplaceTemplateVars(@"NECN\SOMTC-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
@@ -927,7 +920,7 @@ namespace Landis.Extension.Succession.NECN
             if (DroughtMortality.OutputSoilWaterAvailable)
             {
                 string pathSWA = MapNames.ReplaceTemplateVars(@"NECN\SWA-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathSWA, PlugIn.ModelCore.Landscape.Dimensions))
+                using (IOutputRaster<DoublePixel> outputRaster = PlugIn.ModelCore.CreateRaster<DoublePixel>(pathSWA, PlugIn.ModelCore.Landscape.Dimensions))
                 {
                     DoublePixel pixel = outputRaster.BufferPixel;
                     foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
@@ -956,7 +949,7 @@ namespace Landis.Extension.Succession.NECN
             if (DroughtMortality.OutputClimateWaterDeficit)
             {
                 string pathCWD = MapNames.ReplaceTemplateVars(@"NECN\CWD-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
-                using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathCWD, PlugIn.ModelCore.Landscape.Dimensions))
+                using (IOutputRaster<DoublePixel> outputRaster = PlugIn.ModelCore.CreateRaster<DoublePixel>(pathCWD, PlugIn.ModelCore.Landscape.Dimensions))
 
                 {
                     DoublePixel pixel = outputRaster.BufferPixel;

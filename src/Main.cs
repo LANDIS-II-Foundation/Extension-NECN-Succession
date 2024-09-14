@@ -133,7 +133,7 @@ namespace Landis.Extension.Succession.NECN
                        if (summer.Contains(Month))
                             {
                                 //add monthly temperatures
-                                SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualWeather[ecoregion].MonthlyTemp[Month];
+                                SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
                             }
                        //add monthly water content
                         SiteVars.SoilWater10[site][list_index] += SiteVars.MeanSoilWaterContent[site];

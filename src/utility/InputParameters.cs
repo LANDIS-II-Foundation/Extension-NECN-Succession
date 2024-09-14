@@ -42,60 +42,51 @@ namespace Landis.Extension.Succession.NECN
         //Maps to adjust PET based on topography
         private string slopeMapName;
         private string aspectMapName;
-<<<<<<< HEAD
-=======
 
-        private bool calibrateMode;
-        private bool smokeModelOutputs;
+        //private bool calibrateMode;
+        //private bool smokeModelOutputs;
         //private bool henne_watermode;
-        private bool writeSWA; //write soil water maps, for calculating normal SWA
-        private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
-        private bool writeTemp; //write temperature maps, for calculating normal CWD
-        private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
+        //private bool writeSWA; //write soil water maps, for calculating normal SWA
+        //private bool writeCWD; //write climatic water deficit maps, for calculating normal CWD
+        //private bool writeTemp; //write temperature maps, for calculating normal CWD
+        //private bool writeSpeciesDroughtMaps; //write a map of drought mortality for each species
         private bool writeMeanSoilWaterMap; //write a map of MeanSoilWater each year
         private bool writePETMap; //write a map of PET each year
-        private WaterType wtype;       
-        private string communityInputMapNames;
->>>>>>> master
+        //private WaterType wtype;       
+        //private string communityInputMapNames;
         private double probEstablishAdjust;
-        private ISpeciesDataset speciesDataset;
-<<<<<<< HEAD
-=======
+        //private ISpeciesDataset speciesDataset;
+        ////private FunctionalTypeTable functionalTypes;
+        //private FireReductions[] fireReductionsTable;
+        //private List<HarvestReductions> harvestReductionsTable;
         
-        private FunctionalTypeTable functionalTypes;
-        private FireReductions[] fireReductionsTable;
-        private List<HarvestReductions> harvestReductionsTable;
-        
-        private Landis.Library.Parameters.Species.AuxParm<int> sppFunctionalType;
-        private Landis.Library.Parameters.Species.AuxParm<bool> nFixer;
-        private Landis.Library.Parameters.Species.AuxParm<int> gddMin;
-        private Landis.Library.Parameters.Species.AuxParm<int> gddMax;
-        private Landis.Library.Parameters.Species.AuxParm<int> minJanTemp;
-        private Landis.Library.Parameters.Species.AuxParm<double> maxDrought;
-        private Landis.Library.Parameters.Species.AuxParm<double> leafLongevity;
-        private Landis.Library.Parameters.Species.AuxParm<bool> epicormic;
-        private Landis.Library.Parameters.Species.AuxParm<double> leafLignin;
-        private Landis.Library.Parameters.Species.AuxParm<double> woodLignin;
-        private Landis.Library.Parameters.Species.AuxParm<double> coarseRootLignin;
-        private Landis.Library.Parameters.Species.AuxParm<double> fineRootLignin;
-        private Landis.Library.Parameters.Species.AuxParm<double> leafCN;
-        private Landis.Library.Parameters.Species.AuxParm<double> woodCN;
-        private Landis.Library.Parameters.Species.AuxParm<double> coarseRootCN;
-        private Landis.Library.Parameters.Species.AuxParm<double> foliageLitterCN;
-        private Landis.Library.Parameters.Species.AuxParm<double> fineRootCN;
-        private Landis.Library.Parameters.Species.AuxParm<int> maxANPP;
-        private Landis.Library.Parameters.Species.AuxParm<int> maxBiomass;
-        private Landis.Library.Parameters.Species.AuxParm<bool> grass;  // optional
-        private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
-        private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
-        private double grassThresholdMultiplier; // W.Hotta 2020.07.07
+        //private Landis.Library.Parameters.Species.AuxParm<int> sppFunctionalType;
+        //private Landis.Library.Parameters.Species.AuxParm<bool> nFixer;
+        ////private Landis.Library.Parameters.Species.AuxParm<int> gddMin;
+        //private Landis.Library.Parameters.Species.AuxParm<int> gddMax;
+        //private Landis.Library.Parameters.Species.AuxParm<int> minJanTemp;
+        ////private Landis.Library.Parameters.Species.AuxParm<double> maxDrought;
+        //private Landis.Library.Parameters.Species.AuxParm<double> leafLongevity;
+        //private Landis.Library.Parameters.Species.AuxParm<bool> epicormic;
+        //private Landis.Library.Parameters.Species.AuxParm<double> leafLignin;
+        //private Landis.Library.Parameters.Species.AuxParm<double> woodLignin;
+        //private Landis.Library.Parameters.Species.AuxParm<double> coarseRootLignin;
+        //private Landis.Library.Parameters.Species.AuxParm<double> fineRootLignin;
+        //private Landis.Library.Parameters.Species.AuxParm<double> leafCN;
+        ////private Landis.Library.Parameters.Species.AuxParm<double> woodCN;
+        //private Landis.Library.Parameters.Species.AuxParm<double> coarseRootCN;
+        //private Landis.Library.Parameters.Species.AuxParm<double> foliageLitterCN;
+        //private Landis.Library.Parameters.Species.AuxParm<double> fineRootCN;
+        //private Landis.Library.Parameters.Species.AuxParm<int> maxANPP;
+        ////private Landis.Library.Parameters.Species.AuxParm<int> maxBiomass;
+        //private Landis.Library.Parameters.Species.AuxParm<bool> grass;  // optional
+        //private Landis.Library.Parameters.Species.AuxParm<double> growthLAI; // optional
+        //private Landis.Library.Parameters.Species.AuxParm<bool> nlog_depend;
+        //private double grassThresholdMultiplier; // W.Hotta 2020.07.07
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAIShape; 
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAIScale;
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAILocation;
         private Landis.Library.Parameters.Species.AuxParm<double> lightLAIAdjust; //optional
-
-        //private List<ISufficientLight> sufficientLight;
->>>>>>> master
 
         //Drought variables
         private Landis.Library.Parameters.Species.AuxParm<double> intercept; // optional
@@ -249,20 +240,7 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Should annual rasters of drought-associated mortality be written for each species?
         /// </summary>
-<<<<<<< HEAD
         public bool WriteSpeciesDroughtMaps { get; set; }
-=======
-        public bool WriteSpeciesDroughtMaps
-        {
-            get
-            {
-                return writeSpeciesDroughtMaps;
-            }
-            set
-            {
-                writeSpeciesDroughtMaps = value;
-            }
-        }
         //---------------------------------------------------------------------
         /// <summary>
         /// Should annual rasters of mean soil water be written? Primarily intended for 
@@ -296,7 +274,6 @@ namespace Landis.Extension.Succession.NECN
                 writePETMap = value;
             }
         }
->>>>>>> master
 
 
         //---------------------------------------------------------------------
@@ -1364,7 +1341,7 @@ namespace Landis.Extension.Succession.NECN
 
         public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
         {
-            this.speciesDataset = speciesDataset;
+            //this.speciesDataset = speciesDataset;
 
             //functionalTypes = new FunctionalTypeTable(functionalCnt);
             FireReductionsTable = new FireReductions[11];
