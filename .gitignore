@@ -3071,3 +3071,10 @@ testing/Core8-NECN8-Landscape/NECN/AnaerobicEffect-5.tif
 testing/Core8-NECN8-Landscape/NECN/SoilWater-10.tif
 testing/Core8-NECN8-Landscape/NECN/SoilWater-5.tif
 testing/Core8-NECN8-SingleCell/NECN-succession-drought-log.csv
+testing/Core8-NECN8-SingleCell/community-input-file-0.csv
+testing/Core8-NECN8-SingleCell/community-input-file-10.csv
+testing/Core8-NECN8-SingleCell/community-input-file-20.csv
+testing/Core8-NECN8-SingleCell/community-input-file-30.csv
+testing/Core8-NECN8-SingleCell/community-input-file-40.csv
+testing/Core8-NECN8-SingleCell/community-input-file-50.csv
+testing/Core8-NECN8-SingleCell/output-community-0.tif
