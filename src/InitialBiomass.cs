@@ -90,7 +90,7 @@ namespace Landis.Extension.Succession.NECN
 
             foreach (ICohort cohort in sortedCohorts)
             {
-                SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Data.Age, cohort.Data.Biomass, cohort.Data.AdditionalParameters);
+                SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Data.Age, cohort.Data.Biomass, 0, cohort.Data.AdditionalParameters);
             }
             return SiteVars.Cohorts[site];
         }

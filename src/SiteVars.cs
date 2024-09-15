@@ -13,75 +13,8 @@ namespace Landis.Extension.Succession.NECN
     public static class SiteVars
     {
 
-        // Time of last succession simulation:
-        //private static ISiteVar<int> timeOfLast;
-
-
-        // Dead biomass:
-        //private static ISiteVar<Layer> surfaceDeadWood;
-        //private static ISiteVar<Layer> soilDeadWood;
-
-        //private static ISiteVar<Layer> surfaceStructural;
-        //private static ISiteVar<Layer> surfaceMetabolic;
-        //private static ISiteVar<Layer> soilStructural;
-        //private static ISiteVar<Layer> soilMetabolic;
-
-        //// Dead wood carbon for each year; Chihiro 2020.1.14
-        ////private static ISiteVar<double[]> originalDeadWoodC;
-        //private static ISiteVar<double[]> currentDeadWoodC; // Carefully check the consistensiy with surfaceDeadWood
-
-        // Soil layers
-        //private static ISiteVar<Layer> som1surface;
-        //private static ISiteVar<Layer> som1soil;
-        //private static ISiteVar<Layer> som2;
-        //private static ISiteVar<Layer> som3;
-        ////private static ISiteVar<int> soilDepth;
-        //private static ISiteVar<double> soilDrain;
-        ////private static ISiteVar<double> soilBaseFlowFraction;
-        ////private static ISiteVar<double> soilStormFlowFraction;
-        ////private static ISiteVar<double> soilFieldCapacity;
-        //private static ISiteVar<double> soilWiltingPoint;
-        //private static ISiteVar<double> soilPercentSand;
-        //private static ISiteVar<double> soilPercentClay;
-
-
-        //// Similar to soil layers with respect to their pools:
-        //private static ISiteVar<Layer> stream;
-        //private static ISiteVar<Layer> sourceSink;
-
-        // Other variables:
-        //private static ISiteVar<double> mineralN;
-        //private static ISiteVar<double> resorbedN;
-        //private static ISiteVar<double> waterMovement;
-        //private static ISiteVar<double> availableWater;
-        ////private static ISiteVar<double> soilWaterContent;
-        //private static ISiteVar<double> meanSoilWaterContent;
-        ////private static ISiteVar<double> liquidSnowPack;
-        //private static ISiteVar<double> decayFactor;
-        //private static ISiteVar<double> soilTemperature;
-        //private static ISiteVar<double> anaerobicEffect;
-
-        // Annual accumulators for reporting purposes.
-        //private static ISiteVar<double> grossMineralization;
-        //private static ISiteVar<double> ag_nppC;
-        ////private static ISiteVar<double> bg_nppC;
-        //private static ISiteVar<double> litterfallC;
-        //private static ISiteVar<double> cohortLeafN;
-        //private static ISiteVar<double> cohortFRootN;
-        //private static ISiteVar<double> cohortLeafC;
-        //private static ISiteVar<double> cohortFRootC;
-        //private static ISiteVar<double> cohortWoodN;
-        //private static ISiteVar<double> cohortCRootN;
-        //private static ISiteVar<double> cohortWoodC;
-        //private static ISiteVar<double> cohortCRootC;
-        //private static ISiteVar<double[]> monthlyAGNPPC;
-        ////private static ISiteVar<double[]> monthlyBGNPPC;
-        //private static ISiteVar<double[]> monthlyNEE;
-        //private static ISiteVar<double[]> monthlyStreamN;
-        //private static ISiteVar<double> totalNuptake;
 
         private static ISiteVar<double[]> monthlymineralN;
-
         public static ISiteVar<double> AnnualNEE;
         public static ISiteVar<double> FireCEfflux;
         public static ISiteVar<double> FireNEfflux;
@@ -139,7 +72,6 @@ namespace Landis.Extension.Succession.NECN
         public static void Initialize()
         {
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<SiteCohorts>();
-            //baseCohortsSiteVar = CohortSiteVar<ISiteCohorts>.Wrap(cohorts);
 
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             TimeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
