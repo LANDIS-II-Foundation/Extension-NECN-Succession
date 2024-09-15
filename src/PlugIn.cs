@@ -245,7 +245,6 @@ namespace Landis.Extension.Succession.NECN
         protected override void InitializeSite(ActiveSite site)
         {
             InitialBiomass initialBiomass = InitialBiomass.Compute(site, initialCommunity);
-            //SiteVars.MineralN[site] = Parameters.InitialMineralN;
         }
 
 
@@ -367,102 +366,6 @@ namespace Landis.Extension.Succession.NECN
             
            return;
         }
-        //---------------------------------------------------------------------
-        // Total mortality, including from disturbance or senescence.
-
-        //public void CohortTotalMortality(object sender, DeathEventArgs eventArgs)
-        //{
-
-        //    //PlugIn.ModelCore.UI.WriteLine("Cohort Total Mortality: {0}", eventArgs.Site);
-
-        //    ExtensionType disturbanceType = eventArgs.DisturbanceType;
-
-        //    ActiveSite site = eventArgs.Site;
-
-        //    ICohort cohort = (Landis.Library.UniversalCohorts.ICohort)eventArgs.Cohort;
-        //    double foliarInput = (double)cohort.Data.AdditionalParameters.LeafBiomass;
-        //    double woodInput = (double)cohort.Data.AdditionalParameters.WoodBiomass;
-        //    cohort.Data.AdditionalParameters.Test = 1;
-
-        //        //PlugIn.ModelCore.UI.WriteLine("DISTURBANCE EVENT: Cohort Died: species={0}, age={1}, disturbance={2}.", cohort.Species.Name, cohort.Age, eventArgs.DisturbanceType);
-
-        //        if (disturbanceType.IsMemberOf("disturbance:fire"))
-        //        {
-        //            SiteVars.FireSeverity = ModelCore.GetSiteVar<byte>("Fire.Severity");
-        //            Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
-
-        //            if (ModelCore.CurrentTime > SiteVars.FireDisturbedYear[site])  // the first cohort killed/damaged
-        //            {
-        //                SiteVars.SmolderConsumption[site] = 0.0;
-        //                SiteVars.FlamingConsumption[site] = 0.0;
-        //                if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
-        //                    FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
-
-        //                SiteVars.FireDisturbedYear[site] = ModelCore.CurrentTime;
-
-        //            }
-
-        //            double woodFireConsumption = woodInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortWoodReduction;
-        //            double foliarFireConsumption = foliarInput * (float)FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortLeafReduction;
-
-        //            SiteVars.SmolderConsumption[site] += woodFireConsumption;
-        //            SiteVars.FlamingConsumption[site] += foliarFireConsumption;
-        //            SiteVars.SourceSink[site].Carbon += woodFireConsumption * 0.47;
-        //            SiteVars.SourceSink[site].Carbon += foliarFireConsumption * 0.47;
-        //            woodInput -= woodFireConsumption;
-        //            foliarInput -= foliarFireConsumption;
-
-        //        }
-        //        else
-        //        {
-        //            if (disturbanceType.IsMemberOf("disturbance:harvest"))
-        //            {
-        //                SiteVars.HarvestPrescriptionName = ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
-        //                if (ModelCore.CurrentTime > SiteVars.HarvestDisturbedYear[site])  // the first cohort killed/damaged
-        //                {
-        //                    HarvestEffects.ReduceLayers(SiteVars.HarvestPrescriptionName[site], site);
-        //                }
-        //                double woodLoss = woodInput * (float)HarvestEffects.GetCohortWoodRemoval(site);
-        //                double foliarLoss = foliarInput * (float)HarvestEffects.GetCohortLeafRemoval(site);
-        //                SiteVars.SourceSink[site].Carbon += woodLoss * 0.47;
-        //                SiteVars.SourceSink[site].Carbon += foliarLoss * 0.47;
-        //                woodInput -= woodLoss;
-        //                foliarInput -= foliarLoss;
-        //                SiteVars.HarvestDisturbedYear[site] = ModelCore.CurrentTime;
-        //            }
-
-        //            // If not fire, check for resprouting:
-        //            Reproduction.CheckForResprouting(eventArgs.Cohort, site);
-        //        }
-        //    }
-
-
-        //    if (SpeciesData.Grass[cohort.Species])
-        //    {
-        //        //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
-        //        ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, eventArgs.Site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
-
-        //        // Assume that ALL dead root biomass stays on site.
-        //        Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
-        //    }
-        //    else
-        //    {
-        //        //PlugIn.ModelCore.UI.WriteLine("Cohort Died: species={0}, age={1}, wood={2:0.00}, foliage={3:0.00}.", cohort.Species.Name, cohort.Age, wood, foliar);
-        //        ForestFloor.AddWoodLitter(woodInput, cohort.Species, eventArgs.Site);
-        //        ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, eventArgs.Site);
-
-        //        // Assume that ALL dead root biomass stays on site.
-        //        Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.Data.AdditionalParameters.WoodBiomass), cohort, cohort.Species, eventArgs.Site);
-        //        Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.Data.AdditionalParameters.LeafBiomass), cohort, cohort.Species, eventArgs.Site);
-        //    }
-            
-
-        //    if (disturbanceType != null)
-        //        Disturbed[site] = true;
-
-        //    return;
-        //}
-
         //---------------------------------------------------------------------
         //Grows the cohorts for future climate
         protected override void AgeCohorts(ActiveSite site,

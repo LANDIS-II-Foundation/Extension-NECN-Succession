@@ -60,8 +60,7 @@ namespace Landis.Extension.Succession.NECN
         /// <param name="initialCommunity">
         /// The initial community of age cohorts at the site.
         /// </param>
-        public static InitialBiomass Compute(ActiveSite site,
-                                             ICommunity initialCommunity)
+        public static InitialBiomass Compute(ActiveSite site, ICommunity initialCommunity)
         {
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
@@ -91,7 +90,6 @@ namespace Landis.Extension.Succession.NECN
 
             foreach (ICohort cohort in sortedCohorts)
             {
-                //foreach(ICohort cohort in cohorts)
                 SiteVars.Cohorts[site].AddNewCohort(cohort.Species, cohort.Data.Age, cohort.Data.Biomass, cohort.Data.AdditionalParameters);
             }
             return SiteVars.Cohorts[site];
