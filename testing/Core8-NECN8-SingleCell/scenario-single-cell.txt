@@ -16,6 +16,7 @@ CellLength  100 << meters, 100 x 100 m = 1 ha
 >> Succession Extension     Initialization File
 >> --------------------     -------------------
    "NECN Succession"     NECN-succession-singlecell.txt
+>>   "NECN Succession"     NECN-succession-singlecell-drought.txt
 
 
 >> Disturbance Extensions   Initialization File

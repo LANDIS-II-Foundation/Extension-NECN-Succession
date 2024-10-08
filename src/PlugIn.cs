@@ -143,7 +143,6 @@ namespace Landis.Extension.Succession.NECN
 
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
-            //FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
             ClimateRegionData.Initialize(Parameters);
 
             OtherData.Initialize(Parameters);

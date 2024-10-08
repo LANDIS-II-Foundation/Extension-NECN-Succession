@@ -45,8 +45,6 @@ namespace Landis.Extension.Succession.NECN
         public static double[][] speciesTotalBiomassMortalityEcoregion;
         public static double[][] speciesProbabiltyMortalityEcoregion;
 
-        //public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly> SpinUpWeather;
-
         //---------------------------------------------------------------------
         // This initialize will be called from PlugIn, dependent on whether drought=true.
         public static void Initialize(IInputParameters parameters)
@@ -78,32 +76,29 @@ namespace Landis.Extension.Succession.NECN
                 UseDrought, OutputSoilWaterAvailable, OutputClimateWaterDeficit, OutputTemperature, WriteSpeciesDroughtMaps); //debug
 
 
-        //TODO sf let the climate normals be calculated during spinup (30 year spinup)
-        //SpinUpWeather = new Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly>(PlugIn.ModelCore.Ecoregions);
-            
-            int[] spinupYears = new int[10] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+            //TODO sf let the climate normals be calculated during spinup (30 year spinup)
+            // Note:  Spinup climate contains years 1-900.  In this code, year 1 is regarded as the most recent; 
+            // year 10 is the oldest (10 years in the past).
+
+            int[] spinupYears = new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9,10 };
             int[] months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
             int[] summer = new int[6] { 6, 7, 8, 9, 4, 5 };
-
-            //Borrowed from ClimateRegionData.cs
-            //Initialize spinup climate data
 
             PlugIn.ModelCore.UI.WriteLine("Spinning up initial climate for drought mortality variables. Using {0} years of climate data.",
                 spinupYears.Length);
 
-            //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
+            //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions.Where(x => x.Active))
             //{
-            //    if (ecoregion.Active)
+            //    foreach (int year in spinupYears)
             //    {
-            //        DroughtMortality.SetSingleAnnualClimate(ecoregion, 0, Climate.Phase.SpinUp_Climate);  // Some placeholder data to get things started.
+            //        AnnualClimate temp = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year];
+            //        int maxTime = Climate.SpinupEcoregionYearClimate[ecoregion.Index].Count;
+            //        PlugIn.ModelCore.UI.WriteLine("   Year Count = {0}", maxTime);
             //    }
             //}
 
-            foreach(int year in spinupYears)
+            foreach (int year in spinupYears)
             {
-
-                //SetAllEcoregions_SpinupAnnualClimate(year);
-
 
                 foreach (ActiveSite site in PlugIn.ModelCore.Landscape.ActiveSites)
                     //Add a new year
@@ -124,7 +119,6 @@ namespace Landis.Extension.Succession.NECN
                         if (summer.Contains(month))
                         {
                             //Every summer month add to Temp10
-                            //ClimateRegionData.AnnualClimateSpinup[PlugIn.ModelCore.Ecoregion[site]] = Climate.SpinupEcoregionYearClimate[PlugIn.ModelCore.Ecoregion[site].Index][year];
                             SiteVars.Temp10[site][SiteVars.Temp10[site].Count - 1] += Climate.SpinupEcoregionYearClimate[PlugIn.ModelCore.Ecoregion[site].Index][year].MonthlyTemp[month];
                         }
                                                                        
@@ -132,10 +126,7 @@ namespace Landis.Extension.Succession.NECN
                        
                         //PlugIn.ModelCore.UI.WriteLine("Adding monthly SoilWater to SoilWater10. Monthly value is {0}. " +
                         //    "SoilWater10 for the year is = {1}", SiteVars.MeanSoilWaterContent[site], SiteVars.SoilWater10[site][year]);
-                       
-
                     }
-
                 }
 
                 //end of year -- add annual CWD to tracker
@@ -149,39 +140,6 @@ namespace Landis.Extension.Succession.NECN
             }
 
         }
-
-        //private static void SetSingleAnnualClimate(IEcoregion ecoregion, int year, Climate.Phase spinupOrfuture)
-        //{
-        //    int actualYear = Climate.Spinup_MonthlyData.Keys.Min() + year;
-        //    SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
-        //    //TODO add check if spinup climate data exists, throw error if missing
-        //}
-
-        //private static void SetAllEcoregionsSpinupAnnualClimate(int year)
-        //{
-        //    // grab the year's future climate
-        //    foreach (var ecoregion in PlugIn.ModelCore.Ecoregions.Where(x => x.Active))
-        //    {
-        //        AnnualClimate SpinUpWeather[ecoregion] = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year];      // Climate data year index is 1-based
-        //    }
-
-        //    //int actualYear = Climate.Future_MonthlyData.Keys.Min() + year - 1;
-        //    //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
-        //    //{
-        //    //    if (ecoregion.Active)
-        //    //    {
-        //    //        //PlugIn.ModelCore.UI.WriteLine("Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
-        //    //        if (Climate.Spinup_MonthlyData.ContainsKey(actualYear))
-        //    //        {
-        //    //            SpinUpWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
-        //    //        }
-
-        //    //        //if (OtherData.CalibrateMode)PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
-                    
-        //    //    }
-
-        //    //}
-        //}
 
         private static void SpinUpWater(int year, int month, Site site)
         {
@@ -214,11 +172,7 @@ namespace Landis.Extension.Succession.NECN
             double tmin = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year].MonthlyMinTemp[month];
             double PET = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year].MonthlyPET[month];
 
-            //if (OtherData.CalibrateMode)
-            //    PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, tave = {1}, tmax = {2}, tmin = {3}, PET={4}.",
-            //    month, tave, tmax, tmin, PET);
             int daysInMonth = Climate.DaysInMonth[month];
-            //int daysInMonth = AnnualClimate.DaysInMonth(month, year);
             int beginGrowing = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year].BeginGrowingDay;
             int endGrowing = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year].EndGrowingDay;
 
@@ -256,9 +210,6 @@ namespace Landis.Extension.Succession.NECN
                 PET = PET * (1 + SlAsp * 0.063);
             }
 
-            //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Slope = {0}, Aspect = {1}, SlAsp = {2}, Adjusted PET = {3}",
-            //        slope, aspect, SlAsp, PET);
-
             //...Calculating snow pack first. Occurs when mean monthly air temperature is equal to or below freezing,
             //     precipitation is in the form of snow.
 
@@ -267,19 +218,15 @@ namespace Landis.Extension.Succession.NECN
                 snow = Precipitation;
                 Precipitation = 0.0;
                 liquidSnowpack += snow;  //only tracking liquidsnowpack (water equivalent) and not the actual amount of snow on the ground (i.e. not snowpack).
-                                            //PlugIn.ModelCore.UI.WriteLine("Let it snow!! snow={0}, liquidsnowpack={1}.", snow, liquidSnowpack);
             }
             else
             {
                 soilWaterContent += Precipitation;
-                //PlugIn.ModelCore.UI.WriteLine("Let it rain and add it to soil! rain={0}, soilWaterContent={1}.", Precipitation, soilWaterContent);
             }
 
 
             //Set original remainingPET outside of the if(snow) sections, in case all the snow is melted
             remainingPET = PET;
-            //if (OtherData.CalibrateMode)
-            //    PlugIn.ModelCore.UI.WriteLine("   SoilWater: snowpack before melting = {0}", liquidSnowpack);
             //...Then melt snow if there is snow on the ground and air temperature (tmax) is above minimum.            
             if (liquidSnowpack > 0.0 && tmax > 0.0)
             {
@@ -294,16 +241,11 @@ namespace Landis.Extension.Succession.NECN
                 addToSoil = liquidSnowpack * snowMeltFraction;  //Amount of liquidsnowpack that melts = liquidsnowpack multiplied by the fraction that melts.
                 if (addToSoil > liquidSnowpack) addToSoil = liquidSnowpack;
 
-              //  if(OtherData.CalibrateMode) 
-             //       PlugIn.ModelCore.UI.WriteLine("   Snow melts, addToSoil = {0}", addToSoil);
-
                 // Subtracted melted snow from snowpack and add it to the soil
                 // We are not accounting for evaporation from snow ablation
                 liquidSnowpack = Math.Max(liquidSnowpack - addToSoil, 0.0);
                 soilWaterContent += addToSoil;
             }
-            //if (OtherData.CalibrateMode)
-            //    PlugIn.ModelCore.UI.WriteLine("   Snow before evaporation = {0}", liquidSnowpack);
             //...Evaporate water from the snow pack (rewritten by Pulliam 9/94)
             //...Coefficient 0.87 relates to heat of fusion for ice vs. liquid water
             if (liquidSnowpack > 0.0)
@@ -321,13 +263,8 @@ namespace Landis.Extension.Succession.NECN
                 remainingPET = Math.Max(remainingPET - evaporatedSnow / 0.87, 0.0);
                 AET += evaporatedSnow / 0.87;
 
-             //   if (OtherData.CalibrateMode)
-             //       PlugIn.ModelCore.UI.WriteLine("   SoilWater:  month={0}, Remaining PET after evaporation ={1}.", month, remainingPET);
-
             }
 
-            //if (OtherData.CalibrateMode)
-             //   PlugIn.ModelCore.UI.WriteLine("   snow after evaporation = {0}", liquidSnowpack);
             //...Calculate bare soil water loss and interception  when air temperature is above freezing and no snow cover.
             //...Mofified 9/94 to allow interception when t < 0 but no snow cover, Pulliam
             if (liquidSnowpack <= 0.0)
@@ -346,10 +283,7 @@ namespace Landis.Extension.Succession.NECN
                 double soilEvaporation = Math.Min(((bareSoilEvap + canopyIntercept) * Precipitation), (0.4 * remainingPET));
 
                 soilEvaporation = Math.Min(soilEvaporation, soilWaterContent);
-                //if (OtherData.CalibrateMode)
-                //    PlugIn.ModelCore.UI.WriteLine("   soilEvaporation = {0}, bareSoilEvap = {1}, canopyIntercept = {2}",
-                //        soilEvaporation, bareSoilEvap, canopyIntercept);
-
+                
                 //Subtract soil evaporation from soil water content
                 soilWaterContent = Math.Max(soilWaterContent - soilEvaporation, 0.0); // Do not allow to go negative
                 AET += soilEvaporation;
@@ -361,9 +295,6 @@ namespace Landis.Extension.Succession.NECN
             //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             availableWaterMax = Math.Max(soilWaterContent - waterEmpty, 0.0);
             waterContentMax = soilWaterContent;
-            //if (OtherData.CalibrateMode)
-            //    PlugIn.ModelCore.UI.WriteLine("   Max soil water (after adding ppt and snowmelt, " +
-            //    "and substracting soil evaporation) = {0}", waterContentMax); //debug
 
             //Allow excess water to run off when soil is greater than field capacity
             double waterMovement = 0.0;
@@ -386,9 +317,6 @@ namespace Landis.Extension.Succession.NECN
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
             //  Bergström, 1992
             double tempAET = 0.0;
-
-            //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("   Before calculating AET: Month={0}, soilWaterContent = {1}, remainingPET = {2}, waterFull = {3}, waterEmpty = {4}.",
-            //    month, soilWaterContent, remainingPET, waterFull, waterEmpty);
 
             if (soilWaterContent - waterEmpty >= remainingPET)
 
@@ -416,9 +344,6 @@ namespace Landis.Extension.Succession.NECN
             baseFlow = soilWaterContent * baseFlowFraction; //Calculate baseflow as proportion of remaining soil water; this can draw down soil water below PWP
             baseFlow = Math.Max(baseFlow, 0.0); // make sure baseflow >= 0 
             soilWaterContent = Math.Max(soilWaterContent - baseFlow, 0.0);  //remove baseFlow from soil water
-
-            //if (OtherData.CalibrateMode)
-            //    PlugIn.ModelCore.UI.WriteLine("   Baseflow = {0}. soilWaterContent = {1}", baseFlow, soilWaterContent);
 
             // Limit soil moisture that carries over to the next month.
             // Soil moisture carried forward cannot exceed field capacity; everything else runs off and is added to baseflow
@@ -652,8 +577,6 @@ namespace Landis.Extension.Succession.NECN
             SWA_lagged = GetSmallestSum(soilWater, swayear);
             Temp_lagged = GetLargestSum(tempValue, tempyear);
             CWD_lagged = GetLargestSum(cwdValue, cwdyear);
-            //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("swayear = {0}, tempyear = {1}, cwdyear = {2}",
-            //     swayear, tempyear, cwdyear);
 
             //get average annual value
             SWA_lagged /= swayear;
@@ -664,20 +587,6 @@ namespace Landis.Extension.Succession.NECN
             if(swayear == 0)  SWA_lagged = soilWater.Last();
             if (tempyear == 0) Temp_lagged = tempValue.Last();
             if (cwdyear == 0) CWD_lagged = cwdValue.Last();
-
-            /*
-            if (OtherData.CalibrateMode)
-            {
-                PlugIn.ModelCore.UI.WriteLine("SWA_lagged = {0}, Temp_lagged = {1}, CWD_lagged = {2}",
-                 SWA_lagged, Temp_lagged, CWD_lagged);
-                if (swayear == 0) PlugIn.ModelCore.UI.WriteLine("SWA lag set to 0; using current-year value {0}",
-                    soilWater.Last());
-                if (tempyear == 0) PlugIn.ModelCore.UI.WriteLine("SummerTemp lag set to 0; using current-year value {0}",
-                    tempValue.Last());
-                if (cwdyear == 0) PlugIn.ModelCore.UI.WriteLine("CWD lag set to 0; using current-year value {0}",
-                    cwdValue.Last());
-            }
-            */
 
             SiteVars.SWALagged[site][species.Index] = SWA_lagged;
             SiteVars.TempLagged[site][species.Index] = Temp_lagged;
