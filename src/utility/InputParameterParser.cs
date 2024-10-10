@@ -457,6 +457,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetLightLAIAdjust(species, ReadLightLAIAdjust(row));
 
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
+                parameters.SetMinSoilDrain(species, ReadMinSoilDrain(row)); //optional
 
                 //Optional parameters for CWD-limited establishment
                 parameters.SetCWDBeginLimit(species, ReadCWDBeginLimit(row));
@@ -481,7 +482,6 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetFoliageDropMonth(species, System.Convert.ToInt32(row["FoliageDropMonth"]));
                 parameters.SetCoarseRootFraction(species, System.Convert.ToDouble(row["CoarseRootFraction"]));
                 parameters.SetFineRootFraction(species, System.Convert.ToDouble(row["FineRootFraction"]));
-                parameters.SetMinSoilDrain(species, System.Convert.ToDouble(row["MinSoilDrain"]));
 
 
             }
