@@ -9,7 +9,7 @@ namespace Landis.Extension.Succession.NECN
     public class CalibrateLog
     {
 
-        public static int year, month, climateRegionIndex, cohortAge;
+        public static int year, month, climateRegionIndex, cohortAge, cohortBiomass, cohortANPP;
         public static double cohortWoodB, cohortLeafB;
         public static string speciesName;
         public static double mortalityAGEwood, mortalityAGEleaf;
@@ -21,7 +21,6 @@ namespace Landis.Extension.Succession.NECN
         public static double actualWoodNPP, actualLeafNPP;
         public static double deltaWood, deltaLeaf;
         public static double mortalityBIOwood, mortalityBIOleaf;
-        //    CalibrateLog.Write("NPPwood_C, NPPleaf_C, ");  //from ComputeNPPcarbon
         public static double resorbedNused, mineralNused, demand_N;
 
         public static void WriteLogFile()
@@ -89,14 +88,29 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit= FieldUnits.Year, Desc = "CohortAge")]
         public int CohortAge { set; get; }
         // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Cohort Total Biomass", Format = "0.0")]
+        public double CohortBiomass { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.g_B_m2_yr1, Desc = "Cohort ANPP", Format = "0.0")]
+        public double CohortANPP { set; get; }
+        // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Cohort Wood Biomass", Format = "0.0")]
         public double CohortWoodBiomass { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Cohort Leaf Biomass", Format = "0.0")]
         public double CohortLeafBiomass { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Cohort Total Biomass", Format = "0.0")]
-        public double CohortBiomass { set; get; }
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Actual Wood ANPP", Format = "0.000")]
+        public double ActualWoodANPP { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Actual Leaf ANPP", Format = "0.0000")]
+        public double ActualLeafANPP { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Change in Wood Biomass", Format = "0.000")]
+        public double DeltaWood { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Change in Leaf Biomass", Format = "0.0000")]
+        public double DeltaLeaf { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Mortality Age Wood Biomass", Format = "0.000")]
         public double MortalityAGEwoodBiomass { set; get; }
@@ -146,18 +160,6 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Maximum ANPP")]
         public double MaximumANPP { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Actual Wood ANPP", Format = "0.000")]
-        public double ActualWoodANPP { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Actual Leaf ANPP", Format = "0.0000")]
-        public double ActualLeafANPP { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Change in Wood Biomass", Format = "0.000")]
-        public double DeltaWood { set; get; }
-        // ********************************************************************
-        [DataFieldAttribute(Unit = "g_B_m2_month1", Desc = "Change in Leaf Biomass", Format = "0.0000")]
-        public double DeltaLeaf { set; get; }
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Cohort Maximum Biomass")]
         public double CohortMaximumBiomass { set; get; }

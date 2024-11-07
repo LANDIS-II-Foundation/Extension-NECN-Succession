@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Landis.Library.Metadata;
+﻿using Landis.Library.Metadata;
 
 namespace Landis.Extension.Succession.NECN
 {
     public class PrimaryLog
     {
-            //log.WriteLine("");
-
         [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Simulation Year")]
         public int Time {set; get;}
 
@@ -18,9 +12,6 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Desc = "Climate Region Index")]
         public int ClimateRegionIndex { set; get; }
-
-        //[DataFieldAttribute(Desc = "Soil Water Holding Capacity")]
-        //public int SoilWaterHoldingCapacity { set; get; }
 
         [DataFieldAttribute(Unit = FieldUnits.Count, Desc = "Number of Sites")]
         public int NumSites { set; get; }
@@ -33,7 +24,16 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Aboveground Biomass", Format = "0.0")]
         public double AGB { get; set; }
-        
+
+        [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Leaf Biomass", Format = "0.0")]
+        public double LeafBiomass { get; set; }
+
+        [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Wood Biomass", Format = "0.0")]
+        public double WoodBiomass { get; set; }
+
+        [DataFieldAttribute(Unit = FieldUnits.g_B_m2_yr1, Desc = "Aboveground NPP", Format = "0.0")]
+        public double ANPP { get; set; }
+
         [DataFieldAttribute(Unit = FieldUnits.g_C_m2_yr1, Desc = "Aboveground NPP C", Format = "0.0")]
         public double AG_NPPC { get; set; }
         
@@ -43,8 +43,8 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.g_C_m2_yr1, Desc = "Litterfall C", Format = "0.0")]
         public double Litterfall { get; set; }
 
-        [DataFieldAttribute(Unit = FieldUnits.g_B_m2_yr1, Desc = "Age Mortality Biomass", Format = "0.0")]
-        public double AgeMortality { get; set; }
+        [DataFieldAttribute(Unit = FieldUnits.g_B_m2_yr1, Desc = "Wood Mortality Biomass", Format = "0.0")]
+        public double WoodMortalityBiomass { get; set; }
         
         [DataFieldAttribute(Unit = FieldUnits.g_N_m2, Desc = "Mineral N", Format = "0.00")]
         public double MineralN { get; set; }

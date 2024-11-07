@@ -565,7 +565,7 @@ namespace Landis.Extension.Succession.NECN
             tempObject.WoodBiomass = initialBiomass[0];
             tempObject.LeafBiomass = initialBiomass[1];
 
-            SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), woodLeafBiomasses);
+            SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), (int)(initialBiomass[1] / SpeciesData.LeafLongevity[species]), woodLeafBiomasses);
 
             if (reproductionType == "plant")
                 SpeciesByPlant[species.Index]++;
