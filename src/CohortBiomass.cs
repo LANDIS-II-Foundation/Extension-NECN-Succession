@@ -177,12 +177,12 @@ namespace Landis.Extension.Succession.NECN
 
             //ANPP = (int) actualANPP[0] + (int) actualANPP[1];
 
-            tempObject.WoodBiomass = Math.Max(0.0, tempObject.WoodBiomass + deltaWood);
-            tempObject.LeafBiomass = Math.Max(0.0, tempObject.LeafBiomass + deltaLeaf);
+            tempObject.WoodBiomass = deltaWood;
+            tempObject.LeafBiomass = deltaLeaf;
             
             otherParams = tempObject;
 
-            //double newBiomass = cohort.Data.Biomass + deltaWood + deltaLeaf;
+            double newBiomass = deltaWood + deltaLeaf;
 
             UpdateDeadBiomass(cohort, site, totalMortality);
 
@@ -198,8 +198,7 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.WriteLogFile();
             }
 
-            return deltaLeaf + deltaWood;
-            //return newBiomass;
+            return newBiomass;
         }
 
 
