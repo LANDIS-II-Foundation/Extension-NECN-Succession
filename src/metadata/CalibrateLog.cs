@@ -9,8 +9,8 @@ namespace Landis.Extension.Succession.NECN
     public class CalibrateLog
     {
 
-        public static int year, month, climateRegionIndex, cohortAge, cohortBiomass, cohortANPP;
-        public static double cohortWoodB, cohortLeafB;
+        public static int year, month, climateRegionIndex, cohortAge, cohortBiomass;
+        public static double cohortWoodB, cohortLeafB, cohortANPP;
         public static string speciesName;
         public static double mortalityAGEwood, mortalityAGEleaf;
         public static double availableWater;
@@ -64,6 +64,7 @@ namespace Landis.Extension.Succession.NECN
             clog.DeltaWood = deltaWood;
             clog.DeltaLeaf = deltaLeaf;
             clog.TotalNDemand = demand_N;
+            clog.CohortANPP = cohortANPP;
 
 
             Outputs.calibrateLog.AddObject(clog);

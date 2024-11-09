@@ -40,7 +40,7 @@ namespace Landis.Extension.Succession.NECN
         /// Productivity (ANPP), age-related mortality (M_AGE), and development-
         /// related mortality (M_BIO).
         /// </summary>
-        public double ComputeChange(ICohort cohort, ActiveSite site, out int ANPP, out ExpandoObject otherParams)
+        public double ComputeChange(ICohort cohort, ActiveSite site, out double ANPP, out ExpandoObject otherParams)
         {
             dynamic tempObject = new ExpandoObject();
             tempObject.WoodBiomass = 0.0;
@@ -74,7 +74,7 @@ namespace Landis.Extension.Succession.NECN
 
             // ****** Growth *******
             double[] actualANPP = ComputeActualANPP(cohort, site, siteBiomass, mortalityAge);
-            ANPP = (int)actualANPP[0] + (int)actualANPP[1];
+            ANPP = actualANPP[0] + actualANPP[1];
             PlugIn.ModelCore.UI.WriteLine("ANPPWood={0}, ANPPLeaf={1}", actualANPP[0], actualANPP[1]);
             
             //  Growth-related mortality
