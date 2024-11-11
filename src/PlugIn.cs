@@ -605,7 +605,7 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        public CohortData ComputeCohortData(ushort age, int biomass, int anpp, ExpandoObject parametersToAdd)
+        public CohortData ComputeCohortData(ushort age, int biomass, double anpp, ExpandoObject parametersToAdd)
         {
             IDictionary<string, object> tempObject = parametersToAdd;
 

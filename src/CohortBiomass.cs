@@ -40,7 +40,7 @@ namespace Landis.Extension.Succession.NECN
         /// Productivity (ANPP), age-related mortality (M_AGE), and development-
         /// related mortality (M_BIO).
         /// </summary>
-        public double ComputeChange(ICohort cohort, ActiveSite site, out int ANPP, out ExpandoObject otherParams)
+        public double ComputeChange(ICohort cohort, ActiveSite site, out double ANPP, out ExpandoObject otherParams)
         {
             dynamic tempObject = new ExpandoObject();
             tempObject.WoodBiomass = 0.0;
@@ -74,7 +74,7 @@ namespace Landis.Extension.Succession.NECN
 
             // ****** Growth *******
             double[] actualANPP = ComputeActualANPP(cohort, site, siteBiomass, mortalityAge);
-            ANPP = (int)actualANPP[0] + (int)actualANPP[1];
+            ANPP = actualANPP[0] + actualANPP[1];
             PlugIn.ModelCore.UI.WriteLine("ANPPWood={0}, ANPPLeaf={1}", actualANPP[0], actualANPP[1]);
             
             //  Growth-related mortality
@@ -177,12 +177,12 @@ namespace Landis.Extension.Succession.NECN
 
             //ANPP = (int) actualANPP[0] + (int) actualANPP[1];
 
-            tempObject.WoodBiomass = Math.Max(0.0, tempObject.WoodBiomass + deltaWood);
-            tempObject.LeafBiomass = Math.Max(0.0, tempObject.LeafBiomass + deltaLeaf);
+            tempObject.WoodBiomass = deltaWood;
+            tempObject.LeafBiomass = deltaLeaf;
             
             otherParams = tempObject;
 
-            //double newBiomass = cohort.Data.Biomass + deltaWood + deltaLeaf;
+            double newBiomass = deltaWood + deltaLeaf;
 
             UpdateDeadBiomass(cohort, site, totalMortality);
 
@@ -198,8 +198,7 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.WriteLogFile();
             }
 
-            return deltaLeaf + deltaWood;
-            //return newBiomass;
+            return newBiomass;
         }
 
 
