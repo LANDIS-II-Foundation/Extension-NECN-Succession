@@ -45,9 +45,6 @@ namespace Landis.Extension.Succession.NECN
                 int[] summer = new int[6] {6, 7, 8, 9, 4, 5}; //summer months for calculating summer T for drought mortality 
                 //TODO have these be user defined so drought can be used in southern hemisphere
 
-                //if (OtherData.CalibrateMode)//SF remove?
-                //    months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
-
                 PlugIn.AnnualWaterBalance = 0;
 
                 for (MonthCnt = 0; MonthCnt < 12; MonthCnt++)
@@ -57,7 +54,6 @@ namespace Landis.Extension.Succession.NECN
                     {
                         AvailableN.CalculateAnnualMineralNfraction(site);
                     }
-                    //PlugIn.ModelCore.UI.WriteLine("SiteVars.MineralN = {0:0.00}, month = {1}.", SiteVars.MineralN[site], i);
 
                     Month = months[MonthCnt];
 
@@ -224,12 +220,28 @@ namespace Landis.Extension.Succession.NECN
                 {
                     foreach (ICohort cohort in speciesCohorts)
                     {
-                        total += (int)(cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass);
+                        total += cohort.Data.Biomass; // (int)(cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass);
                     }
                 }
             }
             return total;
         }
+
+        //public static int ComputeANPP(ISiteCohorts cohorts)
+        //{
+        //    int total = 0;
+        //    if (cohorts != null)
+        //    {
+        //        foreach (ISpeciesCohorts speciesCohorts in cohorts)
+        //        {
+        //            foreach (ICohort cohort in speciesCohorts)
+        //            {
+        //                total += cohort.Data.ANPP; 
+        //            }
+        //        }
+        //    }
+        //    return total;
+        //}
 
         //---------------------------------------------------------------------
 

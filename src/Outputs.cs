@@ -90,6 +90,9 @@ namespace Landis.Extension.Succession.NECN
             double[] avgNEEc = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avgSOMtc = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avgAGB = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] avgANPP = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] avgLeafB = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] avgWoodB = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             double[] avgAGNPPtc = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] avgBGNPPtc = new double[PlugIn.ModelCore.Ecoregions.Count];
@@ -166,6 +169,9 @@ namespace Landis.Extension.Succession.NECN
                 avgNEEc[ecoregion.Index] = 0.0;
                 avgSOMtc[ecoregion.Index] = 0.0;
                 avgAGB[ecoregion.Index] = 0.0;
+                avgANPP[ecoregion.Index] = 0.0;
+                avgLeafB[ecoregion.Index] = 0.0;
+                avgWoodB[ecoregion.Index] = 0.0;
 
                 avgAGNPPtc[ecoregion.Index] = 0.0;
                 avgBGNPPtc[ecoregion.Index] = 0.0;
@@ -237,11 +243,27 @@ namespace Landis.Extension.Succession.NECN
 
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
+
+
                 IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+                if (SiteVars.Cohorts[site] != null)
+                {
+                    foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
+                    {
+                        foreach (ICohort cohort in speciesCohorts)
+                        {
+                            avgAGB[ecoregion.Index] += cohort.Data.Biomass;
+                            avgANPP[ecoregion.Index] += cohort.Data.ANPP;
+                            avgLeafB[ecoregion.Index] += cohort.Data.AdditionalParameters.LeafBiomass;
+                            avgWoodB[ecoregion.Index] += cohort.Data.AdditionalParameters.WoodBiomass;
+                        }
+                    }
+                }
 
                 avgNEEc[ecoregion.Index] += SiteVars.AnnualNEE[site];
                 avgSOMtc[ecoregion.Index] += GetOrganicCarbon(site);
-                avgAGB[ecoregion.Index] += Main.ComputeLivingBiomass(SiteVars.Cohorts[site]);
+                //avgAGB[ecoregion.Index] += Main.ComputeLivingBiomass();
+                //avgANPP[ecoregion.Index] += Main.ComputeANPP(SiteVars.Cohorts[site]);
 
                 avgAGNPPtc[ecoregion.Index] += SiteVars.AGNPPcarbon[site];
                 avgBGNPPtc[ecoregion.Index] += SiteVars.BGNPPcarbon[site];
@@ -326,10 +348,13 @@ namespace Landis.Extension.Succession.NECN
                 pl.NEEC = (avgNEEc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.SOMTC = (avgSOMtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.AGB = (avgAGB[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                pl.ANPP = (avgANPP[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                pl.LeafBiomass = (avgLeafB[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]); 
+                pl.WoodBiomass = (avgWoodB[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]); 
                 pl.AG_NPPC = (avgAGNPPtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.BG_NPPC = (avgBGNPPtc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.Litterfall = (avgLittertc[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                pl.AgeMortality = (avgWoodMortality[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                pl.WoodMortalityBiomass = (avgWoodMortality[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.MineralN = (avgMineralN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.TotalN = (avgTotalN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                 pl.GrossMineralization = (avgGrossMin[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
