@@ -486,8 +486,7 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Computes the initial biomass for a cohort at a site.
         /// </summary>
-        public static float[] InitialBiomass(ISpecies species, ISiteCohorts siteCohorts,
-                                            ActiveSite site)
+        public static float[] InitialBiomass(ISpecies species, ActiveSite site)
         {
             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
 
