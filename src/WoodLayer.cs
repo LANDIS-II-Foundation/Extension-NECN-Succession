@@ -25,7 +25,7 @@ namespace Landis.Extension.Succession.NECN
             if (wood2c > 0.0000001)
             {
 
-                double ligninFactor = System.Math.Exp(-1 * OtherData.LigninDecayEffect * SiteVars.SurfaceDeadWood[site].FractionLignin);
+                double ligninFactor = Math.Exp(-1 * OtherData.LigninDecayEffect * SiteVars.SurfaceDeadWood[site].FractionLignin);
 
                 double decayRate = Math.Min(1.0, SiteVars.DecayFactor[site]
                                                 * SiteVars.SurfaceDeadWood[site].DecayValue
@@ -63,7 +63,7 @@ namespace Landis.Extension.Succession.NECN
             if (wood3c > 0.0000001)
             {
                 //Compute total C flow out of coarse roots.
-                double ligninEffect = System.Math.Exp(-1 * OtherData.LigninDecayEffect * SiteVars.SoilDeadWood[site].FractionLignin);
+                double ligninEffect = Math.Exp(-1 * OtherData.LigninDecayEffect * SiteVars.SoilDeadWood[site].FractionLignin);
                 double totalCFlow = wood3c
                                     * SiteVars.DecayFactor[site]
                                     * SiteVars.SoilDeadWood[site].DecayValue
@@ -117,7 +117,7 @@ namespace Landis.Extension.Succession.NECN
             else
                 directAbsorb = OtherData.FractionSurfNAbsorbed
                                 * SiteVars.MineralN[site]
-                                * System.Math.Max(totalC / OtherData.ResidueMaxDirectAbsorb, 1.0);
+                                * Math.Max(totalC / OtherData.ResidueMaxDirectAbsorb, 1.0);
 
 
             // ...If C/N ratio is too low, transfer just enough to make

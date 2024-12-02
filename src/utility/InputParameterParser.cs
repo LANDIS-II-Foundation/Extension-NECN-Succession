@@ -82,7 +82,7 @@ namespace Landis.Extension.Succession.NECN
 
             //---------------------------------------------------------------------------------
 
-            InputVar<string> initCommunities = new InputVar<string>("InitialCommunities");
+            InputVar<string> initCommunities = new InputVar<string>("InitialCommunitiesCSV");
             ReadVar(initCommunities);
             parameters.InitialCommunities = initCommunities.Value;
 
@@ -209,15 +209,6 @@ namespace Landis.Extension.Succession.NECN
             else
                 parameters.SmokeModelOutputs = false;
 
-           /* InputVar<bool> version_Henne = new InputVar<bool>("Version_Henne_SoilWater");
-            if (ReadOptionalVar(version_Henne))
-            {
-                parameters.SoilWater_Henne = version_Henne.Value;
-            }
-            else
-                parameters.SoilWater_Henne = false;
-           */
-
             InputVar<bool> write_SWA = new InputVar<bool>("Write_SWA_Maps");
             if (ReadOptionalVar(write_SWA))
             {
@@ -230,6 +221,7 @@ namespace Landis.Extension.Succession.NECN
             if (ReadOptionalVar(write_CWD))
             {
                 parameters.OutputClimateWaterDeficit = write_CWD.Value;
+                PlugIn.ModelCore.UI.WriteLine("Write CWD Maps = TRUE");
             }
             else
                 parameters.OutputClimateWaterDeficit = false;
@@ -249,6 +241,22 @@ namespace Landis.Extension.Succession.NECN
             }
             else
                 parameters.WriteSpeciesDroughtMaps = false;
+
+            InputVar<bool> write_MeanSoilWater_Map = new InputVar<bool>("Write_MeanSoilWater_Map");
+            if (ReadOptionalVar(write_MeanSoilWater_Map))
+            {
+                parameters.WriteMeanSoilWaterMap = write_MeanSoilWater_Map.Value;
+            }
+            else
+                parameters.WriteMeanSoilWaterMap = false;
+
+            InputVar<bool> write_PET_Map = new InputVar<bool>("Write_PET_Map");
+            if (ReadOptionalVar(write_PET_Map))
+            {
+                parameters.WritePETMap = write_PET_Map.Value;
+            }
+            else
+                parameters.WritePETMap = false;
 
             InputVar<string> wt = new InputVar<string>("WaterDecayFunction");
             ReadVar(wt);
@@ -421,7 +429,7 @@ namespace Landis.Extension.Succession.NECN
             foreach (DataRow row in speciesTable.Rows)
             {
                 ISpecies species = ReadSpecies(System.Convert.ToString(row["SpeciesCode"]));
-                parameters.SetFunctionalType(species, System.Convert.ToInt32(row["FunctionalGroupIndex"]));
+                //parameters.SetFunctionalType(species, System.Convert.ToInt32(row["FunctionalGroupIndex"]));
                 parameters.NFixer[species] = System.Convert.ToBoolean(row["NitrogenFixer"]);
                 parameters.SetGDDmin(species, System.Convert.ToInt32(row["GDDMinimum"]));
                 parameters.SetGDDmax(species, System.Convert.ToInt32(row["GDDMaximum"]));
@@ -446,56 +454,80 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetLightLAIShape(species, System.Convert.ToDouble(row["LightLAIShape"]));
                 parameters.SetLightLAIScale(species, System.Convert.ToDouble(row["LightLAIScale"]));
                 parameters.SetLightLAILocation(species, System.Convert.ToDouble(row["LightLAILocation"]));
+                parameters.SetLightLAIAdjust(species, ReadLightLAIAdjust(row));
 
                 parameters.SetGrowthLAI(species, ReadGrowthLAI(row));
+                parameters.SetMinSoilDrain(species, ReadMinSoilDrain(row)); //optional
 
                 //Optional parameters for CWD-limited establishment
                 parameters.SetCWDBeginLimit(species, ReadCWDBeginLimit(row));
                 parameters.SetCWDMax(species, ReadCWDMax(row));
+
+                parameters.SetTempCurve1(species, System.Convert.ToDouble(row["TemperatureCurve1"]));
+                parameters.SetTempCurve2(species, System.Convert.ToDouble(row["TemperatureCurve2"]));
+                parameters.SetTempCurve3(species, System.Convert.ToDouble(row["TemperatureCurve3"]));
+                parameters.SetTempCurve4(species, System.Convert.ToDouble(row["TemperatureCurve4"]));
+                parameters.SetFractionANPPtoLeaf(species, System.Convert.ToDouble(row["FractionANPPtoLeaf"]));
+                parameters.SetBiomassToLAI(species, System.Convert.ToDouble(row["LeafBiomassToLAI"]));
+                parameters.SetKLAI(species, System.Convert.ToDouble(row["KLAI"]));
+                parameters.SetMaxLAI(species, System.Convert.ToDouble(row["MaximumLAI"]));
+                parameters.SetMinLAI(species, ReadMinLAI(row));
+                parameters.SetMoistureCurve1(species, System.Convert.ToDouble(row["MoistureCurve1"]));
+                parameters.SetMoistureCurve2(species, System.Convert.ToDouble(row["MoistureCurve2"]));
+                parameters.SetMoistureCurve3(species, System.Convert.ToDouble(row["MoistureCurve3"]));
+                parameters.SetMoistureCurve4(species, System.Convert.ToDouble(row["MoistureCurve4"]));
+                parameters.SetWoodDecayRate(species, System.Convert.ToDouble(row["WoodDecayRate"]));
+                parameters.SetMonthlyWoodMortality(species, System.Convert.ToDouble(row["MonthlyWoodMortality"]));
+                parameters.SetMortalityShapeCurve(species, System.Convert.ToDouble(row["LongevityMortalityShape"]));
+                parameters.SetFoliageDropMonth(species, System.Convert.ToInt32(row["FoliageDropMonth"]));
+                parameters.SetCoarseRootFraction(species, System.Convert.ToDouble(row["CoarseRootFraction"]));
+                parameters.SetFineRootFraction(species, System.Convert.ToDouble(row["FineRootFraction"]));
+
+
             }
 
             //--------- Read In Functional Group Table -------------------------------
-            PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
+            //PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
 
-            InputVar<string> func_csv = new InputVar<string>("FunctionalGroupParameters");
-            ReadVar(func_csv);
-                CSVParser functionalParser = new CSVParser();
-                DataTable functionalTable = functionalParser.ParseToDataTable(func_csv.Value);
-                foreach (DataRow row in functionalTable.Rows)
-                {
-                    string FunctionalTypeName = System.Convert.ToString(row["FunctionalGroupName"]);
-                    int funcIndex = System.Convert.ToInt32(row["FunctionalGroupIndex"]); 
+            //InputVar<string> func_csv = new InputVar<string>("FunctionalGroupParameters");
+            //ReadVar(func_csv);
+            //    CSVParser functionalParser = new CSVParser();
+            //    DataTable functionalTable = functionalParser.ParseToDataTable(func_csv.Value);
+            //    foreach (DataRow row in functionalTable.Rows)
+            //    {
+            //        string FunctionalTypeName = System.Convert.ToString(row["FunctionalGroupName"]);
+            //        int funcIndex = System.Convert.ToInt32(row["FunctionalGroupIndex"]); 
 
-                    if (funcIndex >= numFunctionalTypes)
-                        throw new InputValueException(funcIndex.ToString(),
-                                                  "The index:  {0} exceeds the allowable number of functional groups, {1}",
-                                                  funcIndex.ToString(), numFunctionalTypes);
+            //        if (funcIndex >= numFunctionalTypes)
+            //            throw new InputValueException(funcIndex.ToString(),
+            //                                      "The index:  {0} exceeds the allowable number of functional groups, {1}",
+            //                                      funcIndex.ToString(), numFunctionalTypes);
 
-                    FunctionalType funcTParms = new FunctionalType();
-                    parameters.FunctionalTypes[funcIndex] = funcTParms;
+            //        FunctionalType funcTParms = new FunctionalType();
+            //        //parameters.FunctionalTypes[funcIndex] = funcTParms;
 
-                    funcTParms.TempCurve1 = System.Convert.ToDouble(row["TemperatureCurve1"]);
-                    funcTParms.TempCurve2 = System.Convert.ToDouble(row["TemperatureCurve2"]); 
-                    funcTParms.TempCurve3 = System.Convert.ToDouble(row["TemperatureCurve3"]); 
-                    funcTParms.TempCurve4 = System.Convert.ToDouble(row["TemperatureCurve4"]); 
-                    funcTParms.FractionANPPtoLeaf = System.Convert.ToDouble(row["FractionANPPtoLeaf"]); 
-                    funcTParms.BiomassToLAI = System.Convert.ToDouble(row["LeafBiomassToLAI"]);
-                    funcTParms.KLAI = System.Convert.ToDouble(row["KLAI"]);
-                    funcTParms.MaxLAI = System.Convert.ToDouble(row["MaximumLAI"]);
-                    funcTParms.MoistureCurve2 = System.Convert.ToDouble(row["MoistureCurve2"]); 
-                    funcTParms.MoistureCurve3 = System.Convert.ToDouble(row["MoistureCurve3"]);
-                    funcTParms.WoodDecayRate = System.Convert.ToDouble(row["WoodDecayRate"]);
-                    funcTParms.MonthlyWoodMortality = System.Convert.ToDouble(row["MonthlyWoodMortality"]);
-                    funcTParms.LongevityMortalityShape = System.Convert.ToDouble(row["LongevityMortalityShape"]);
-                    funcTParms.FoliageDropMonth = System.Convert.ToInt32(row["FoliageDropMonth"]);
-                    funcTParms.CoarseRootFraction = System.Convert.ToDouble(row["CoarseRootFraction"]);
-                    funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
-                    funcTParms.MinLAI = ReadMinLAI(row);
-                    funcTParms.MoistureCurve1 = ReadMC1(row);
-                    funcTParms.MoistureCurve4 = ReadMC4(row);
-                    funcTParms.MinSoilDrain = ReadMinSoilDrain(row);
+            //        funcTParms.TempCurve1 = System.Convert.ToDouble(row["TemperatureCurve1"]);
+            //        funcTParms.TempCurve2 = System.Convert.ToDouble(row["TemperatureCurve2"]); 
+            //        funcTParms.TempCurve3 = System.Convert.ToDouble(row["TemperatureCurve3"]); 
+            //        funcTParms.TempCurve4 = System.Convert.ToDouble(row["TemperatureCurve4"]); 
+            //        funcTParms.FractionANPPtoLeaf = System.Convert.ToDouble(row["FractionANPPtoLeaf"]); 
+            //        funcTParms.BiomassToLAI = System.Convert.ToDouble(row["LeafBiomassToLAI"]);
+            //        funcTParms.KLAI = System.Convert.ToDouble(row["KLAI"]);
+            //        funcTParms.MaxLAI = System.Convert.ToDouble(row["MaximumLAI"]);
+            //        funcTParms.MoistureCurve2 = System.Convert.ToDouble(row["MoistureCurve2"]); 
+            //        funcTParms.MoistureCurve3 = System.Convert.ToDouble(row["MoistureCurve3"]);
+            //        funcTParms.WoodDecayRate = System.Convert.ToDouble(row["WoodDecayRate"]);
+            //        funcTParms.MonthlyWoodMortality = System.Convert.ToDouble(row["MonthlyWoodMortality"]);
+            //        funcTParms.LongevityMortalityShape = System.Convert.ToDouble(row["LongevityMortalityShape"]);
+            //        funcTParms.FoliageDropMonth = System.Convert.ToInt32(row["FoliageDropMonth"]);
+            //        funcTParms.CoarseRootFraction = System.Convert.ToDouble(row["CoarseRootFraction"]);
+            //        funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
+            //        funcTParms.MinLAI = ReadMinLAI(row);
+            //        funcTParms.MoistureCurve1 = ReadMC1(row);
+            //        funcTParms.MoistureCurve4 = ReadMC4(row);
+            //        funcTParms.MinSoilDrain = ReadMinSoilDrain(row);
 
-            }
+            //}
 
 
             //-------------------------
@@ -528,10 +560,10 @@ namespace Landis.Extension.Succession.NECN
 
                     parameters.SetIntercept(species, System.Convert.ToDouble(row["Intercept"]));
                     parameters.SetBetaAge(species, System.Convert.ToDouble(row["BetaAge"]));
-                    parameters.SetBetaTemp(species, System.Convert.ToDouble(row["BetaTemp"]));
+                    parameters.SetBetaTempAnom(species, System.Convert.ToDouble(row["BetaTempAnom"]));
                     parameters.SetBetaSWAAnom(species, System.Convert.ToDouble(row["BetaSWAAnom"]));
                     parameters.SetBetaBiomass(species, System.Convert.ToDouble(row["BetaBiomass"]));
-                    parameters.SetBetaCWD(species, System.Convert.ToDouble(row["BetaCWD"]));
+                    parameters.SetBetaCWDAnom(species, System.Convert.ToDouble(row["BetaCWDAnom"]));
                     parameters.SetBetaNormCWD(species, System.Convert.ToDouble(row["BetaNormCWD"]));
                     parameters.SetBetaNormTemp(species, System.Convert.ToDouble(row["BetaNormTemp"]));
                     parameters.SetIntxnCWD_Biomass(species, System.Convert.ToDouble(row["IntxnCWD_Biomass"]));
@@ -748,34 +780,34 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //Optional MoistureCurve1
-        private double ReadMC1(DataRow row)
-        {
-            try
-            {
-                double mc1 = System.Convert.ToDouble(row["MoistureCurve1"]);
-                return mc1;
-            }
-            catch
-            {
-                NewParseException("Error in moisture curve 1");
-                return 0.0;
-            }
-        }
-        //Optional MoistureCurve4 -- NECN uses 4-parameter water limit if MoistureCurve4 is present
-        private double ReadMC4(DataRow row)
-        {
-            try
-            {
-                double mc4 = System.Convert.ToDouble(row["MoistureCurve4"]);
-                OtherData.DGS_waterlimit = true; //SF set flag to turn on 4-parameter water limit mode
-                return mc4;
-            }
-            catch
-            {
-                NewParseException("Error in moisture curve 4");
-                return 0.0;
-            }
-        }
+        //private double ReadMC1(DataRow row)
+        //{
+        //    try
+        //    {
+        //        double mc1 = System.Convert.ToDouble(row["MoistureCurve1"]);
+        //        return mc1;
+        //    }
+        //    catch
+        //    {
+        //        NewParseException("Error in moisture curve 1");
+        //        return 0.0;
+        //    }
+        //}
+        ////Optional MoistureCurve4 -- NECN uses 4-parameter water limit if MoistureCurve4 is present
+        //private double ReadMC4(DataRow row)
+        //{
+        //    try
+        //    {
+        //        double mc4 = System.Convert.ToDouble(row["MoistureCurve4"]);
+        //        OtherData.DGS_waterlimit = true; //SF set flag to turn on 4-parameter water limit mode
+        //        return mc4;
+        //    }
+        //    catch
+        //    {
+        //        NewParseException("Error in moisture curve 4");
+        //        return 0.0;
+        //    }
+        //}
         //Optional minimum soil drainage -- prevents functional types from establishing on poorly drained soils
         private double ReadMinSoilDrain(DataRow row)
         {
@@ -829,6 +861,19 @@ namespace Landis.Extension.Succession.NECN
             {
                 return 0.47;  // This is the value given for all biomes in the tree.100 file.
                 // This was the default value for all previous versions of NECN.
+            }
+        }
+
+        private double ReadLightLAIAdjust(DataRow row)
+        {
+            try
+            {
+                double adjustLAI = System.Convert.ToDouble(row["LightLAIAdjust"]);
+                return adjustLAI;
+            }
+            catch
+            {
+                return 1.0;  // value of 1.0 uses unadjusted Weibull distribution (area under the curve = 1)
             }
         }
     }
