@@ -282,6 +282,7 @@ namespace Landis.Extension.Succession.NECN
                 {
 
                     SiteVars.FireSeverity = ModelCore.GetSiteVar<byte>("Fire.Severity");
+                    Landis.Library.Succession.Reproduction.CheckForPostFireRegen(eventArgs.Cohort, site);
 
                     if (ModelCore.CurrentTime > SiteVars.FireDisturbedYear[site]) // this is the first cohort killed/damaged
                     {
@@ -558,7 +559,7 @@ namespace Landis.Extension.Succession.NECN
 
         public void AddNewCohort(ISpecies species, ActiveSite site, string reproductionType, double propBiomass = 1.0)
         {
-            float[] initialBiomass = CohortBiomass.InitialBiomass(species, SiteVars.Cohorts[site], site);
+            float[] initialBiomass = CohortBiomass.InitialBiomass(species, site);
 
             ExpandoObject woodLeafBiomasses = new ExpandoObject();
             dynamic tempObject = woodLeafBiomasses;
