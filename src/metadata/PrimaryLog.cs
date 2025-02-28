@@ -193,6 +193,12 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Frass C", Format = "0.0")]
         public double FrassC { get; set; }
 
+        [DataFieldAttribute(Unit = "cm/yr", Desc = "Transpiration", Format = "0.0")]
+        public double AnnualTrans { get; set; }
+
+        [DataFieldAttribute(Unit = "cm/yr", Desc = "Evaporation", Format = "0.0")]
+        public double AnnualEvaporation { get; set; }
+
         [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Drought Mortality", Format = "0.0")]
         public double DroughtMort { get; set; }
 

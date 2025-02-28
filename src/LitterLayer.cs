@@ -132,8 +132,8 @@ namespace Landis.Extension.Succession.NECN
             //      which is lignin; restricting it to a maximum of .8
             fracStructuralLignin = fracLignin / (cAddToStructural / totalC);
 
-            if((int) type == (int) LayerType.Surface && cAddToMetabolic <= 0.0)
-                //PlugIn.ModelCore.UI.WriteLine("   SURFACE cAddToMetabolic={0}.", cAddToMetabolic);
+            //if((int) type == (int) LayerType.Surface && cAddToMetabolic <= 0.0)
+            //    PlugIn.ModelCore.UI.WriteLine("   SURFACE cAddToMetabolic={0}.", cAddToMetabolic);
 
             // ...Changed allowable maximum fraction from .6 to 1.0  -lh 1/93
             if (fracStructuralLignin > 1.0)

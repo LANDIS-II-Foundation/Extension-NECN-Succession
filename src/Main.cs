@@ -40,13 +40,13 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.ResetAnnualValues(site);
 
                 // Next, Grow and Decompose each month
+                //TODO need to check on Katie's months issue!
                 int[] months = new int[12]{6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
 
                 int[] summer = new int[6] {6, 7, 8, 9, 4, 5}; //summer months for calculating summer T for drought mortality 
                 //TODO have these be user defined so drought can be used in southern hemisphere
 
                 PlugIn.AnnualWaterBalance = 0;
-
                 for (MonthCnt = 0; MonthCnt < 12; MonthCnt++)
                 {
                     // Calculate mineral N fractions based on coarse root biomass.  Only need to do once per year.
@@ -71,7 +71,9 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyAnaerobicEffect[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = ComputeWoodBiomass((ActiveSite) site);
-
+                    SiteVars.monthlyTranspiration[site][Month] = 0.0;
+                                   
+                    double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month];
 
                     var ppt = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[Month];
 
@@ -94,8 +96,11 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MineralN[site] += monthlyNdeposition;
                     //PlugIn.ModelCore.UI.WriteLine("Ndeposition={0},MineralN={1:0.00}.", monthlyNdeposition, SiteVars.MineralN[site]);
 
+                    // KM: move variables up 
+                    //TODO check here
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET;
+                    double availableWaterMax, soilWaterContent;
 
                     SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
@@ -144,23 +149,46 @@ namespace Landis.Extension.Succession.NECN
                         }
                     }
                     //End drought calculations
+                    //TODO check here -- what is Katie running?
+                    // KM: Run the first half of the soil water routine necessary for growth/transpiration calcs 
+                    SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent);
+                    
+                    // KM: Calculate N allocation for each cohort
+                    AvailableN.SetMineralNallocation(site);
+                    
+                    // KM: Calculate soil water allocation for each cohort
+                    AvailableSoilWater.CalculateSWFraction(site);
+                    //AvailableSoilWater.SetSWAllocation(site);
+                    AvailableSoilWater.SetCapWater(site);
 
                     if (MonthCnt==11)
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
                     else
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
 
+                    // KM: After the growth/transpiration, run the second half of the soil water routine where water moves out of the cell 
+                    SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out stormFlow, out AET);
+                    
+                    // KM: Moved this down bc uses outputs from second half of soil water routine
+                    PlugIn.AnnualWaterBalance += ppt - AET;
+
                     // Track the grasses species LAI on the site
                     // Chihiro 2021.03.30: tentative
                     SiteVars.MonthlyLAI_GrassesLastMonth[site] = SiteVars.MonthlyLAI_Grasses[site][Month];
 
                     WoodLayer.Decompose(site);
+                    if (OtherData.CalibrateMode)
+                    {
+                        //PlugIn.ModelCore.UI.WriteLine("currentDeadWoodC:{0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, string.Join(", ", SiteVars.CurrentDeadWoodC[site]));
+                       // PlugIn.ModelCore.UI.WriteLine("SurfaceDeadWoodC: {0},{1},{2}", PlugIn.ModelCore.CurrentTime, Month, SiteVars.SurfaceDeadWood[site].Carbon);
+                    }
                     LitterLayer.Decompose(site);
                     SoilLayer.Decompose(site);
 
                     // Volatilization loss as a function of the mineral N which remains after uptake by plants.  
                     // ML added a correction factor for wetlands since their denitrification rate is double that of wetlands
                     // based on a review paper by Seitziner 2006.
+                    //TODO check on this correction factor -- where is it?
 
                     double volatilize = (SiteVars.MineralN[site] * PlugIn.Parameters.DenitrificationRate); 
 

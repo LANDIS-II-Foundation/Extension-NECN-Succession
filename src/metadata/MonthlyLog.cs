@@ -62,6 +62,16 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "cm", Desc = "Soil moisture, end-of-month/minimum", Format = "0.00")]
         public double SoilWaterContent { get; set; }
 
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Total Transpiration", Format = "0.00")] //
+        public double AvgTranspiration { get; set; } //
+
+        [DataFieldAttribute(Unit = "cm_m2_month1", Desc = "Soil Evaporation", Format = "0.00")] //
+        public double AvgEvaporation { get; set; } //
+
+        [DataFieldAttribute(Unit = "kpa", Desc = "vpd", Format = "0.00")] //
+        public double AvgVPD { get; set; } //
+
+
         [DataFieldAttribute(Unit = "unitless", Desc = "Anaerobic Effect", Format = "0.00")]
         public double AnaerobicEffect { get; set; }
     }

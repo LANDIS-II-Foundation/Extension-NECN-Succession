@@ -38,6 +38,27 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> MonthlyLAI_GrassesLastMonth; // Chihiro, 2021.03.30: tentative
         public static ISiteVar<double[]> MonthlyHeteroResp;
         public static ISiteVar<double[]> MonthlySoilWaterContent;
+
+        //TODO clean this up!
+        public static ISiteVar<double> AnnualTranspiration;
+        public static ISiteVar<double> AnnualEvaporation;
+        public static ISiteVar<double[]> MonthlyTranspiration;
+        public static ISiteVar<double[]> MonthlyAddToSoil;
+        public static ISiteVar<double[]> MonthlyEvaporation;
+        public static ISiteVar<double[]> MonthlyPriorAvailableWaterMin;
+        public static ISiteVar<double[]> MonthlyAvailableWaterMin;
+        public static ISiteVar<double[]> MonthlyAvailableWaterMax;
+        public static ISiteVar<double[]> MonthlyVPD;
+        public static ISiteVar<double[]> MonthlyEvaporatedSnow;
+        public static ISiteVar<double[]> MonthlyStormflow;
+        public static ISiteVar<double[]> MonthlyMaxWaterUse;
+        private static ISiteVar<double> availableWater;  
+        private static ISiteVar<double> availableWaterTranspiration;
+        private static ISiteVar<double> capWater;
+        private static ISiteVar<double> og_et;
+        private static ISiteVar<double> maxWaterUse;
+        private static ISiteVar<double> soilWaterContent;
+        private static ISiteVar<double> availableWaterMin;
         public static ISiteVar<double[]> MonthlyMeanSoilWaterContent;//SF added
         public static ISiteVar<double[]> MonthlyAnaerobicEffect;//SF added 2023-4-11
         public static ISiteVar<double[]> MonthlyClimaticWaterDeficit;//SF added 2023-6-27
@@ -127,6 +148,38 @@ namespace Landis.Extension.Succession.NECN
             AnaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             DryDays             = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             
+            /*  TODO double check all this stuff
+            mineralN = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            resorbedN           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            waterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            availableWaterTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            capWater = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            og_et = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            maxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            availableWaterMin   = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            decayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            soilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            anaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            dryDays             = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
+            */
+
+            AnnualTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            AnnualEvaporation = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            MonthlyTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyAddToSoil = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyEvaporation = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyPriorAvailableWaterMin = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyAvailableWaterMin = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyAvailableWaterMax = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyEvaporatedSnow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyStormflow = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyMaxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyVPD = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+
+
             // Annual accumulators
             GrossMineralization = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AGNPPcarbon             = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -240,10 +293,25 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyAnaerobicEffect[site] = new double[12];
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
+                //TODO double check here -- vars from Katie
+                MonthlyTranspiration[site] = new double[12];
+                MonthlyAddToSoil[site] = new double[12];
+                MonthlyEvaporation[site] = new double[12];
+                MonthlyPriorAvailableWaterMin[site] = new double[12];
+                MonthlyAvailableWaterMin[site] = new double[12];
+                MonthlyAvailableWaterMax[site] = new double[12];
+                MonthlyEvaporatedSnow[site] = new double[12];
+                MonthlyStormflow[site] = new double[12];
+                MonthlyMaxWaterUse[site] = new double[12];
+                MonthlyVPD[site] = new double[12];
+                CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
+            }
+            
+        }
 
                 //CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
-
+                //TODO double check if in right loop
                 if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
                 {
                     //Drought parameters
@@ -355,8 +423,10 @@ namespace Landis.Extension.Succession.NECN
             AnnualClimaticWaterDeficit[site] = 0.0;
             AnnualPotentialEvapotranspiration[site] = 0.0;
             WoodMortality[site] = 0.0;
+            Transpiration[site] = 0.0;   // TODO added
+            Evaporation[site] = 0.0; //TODO added
 
-            DroughtMort[site] = 0.0;
+    DroughtMort[site] = 0.0;
                         
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
             {
@@ -486,14 +556,89 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// End-of-month soil water content (cm)
         /// </summary>
-        public static ISiteVar<double> SoilWaterContent { get; set; }
+   
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> AvailableWaterTranspiration
+        {
+            get {
+                return availableWaterTranspiration;
+            }
+            set {
+                availableWaterTranspiration = value;
+            }
+        }
         //---------------------------------------------------------------------
 
         /// <summary>
         /// Mean volumetric water content (proportion)
         /// </summary>
-        public static ISiteVar<double> MeanSoilWaterContent { get; set; }
+        public static ISiteVar<double> CapWater
+        {
+            get {
+                return capWater;
+            }
+            set {
+                capWater = value;
+            }
+        }
+        //---------------------------------------------------------------------
 
+              /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> OG_ET
+        {
+            get {
+                return og_et;
+            }
+            set {
+                og_et = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> MaxWaterUse
+        {
+            get {
+                return maxWaterUse;
+            }
+            set {
+                maxWaterUse = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> SoilWaterContent
+        {
+            get {
+                return soilWaterContent;
+            }
+            set {
+                soilWaterContent = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Water loss
+        /// </summary>
+        public static ISiteVar<double> AvailableWaterMin
+        {
+            get {
+                return availableWaterMin;
+            }
+            set {
+                availableWaterMin = value;
+            }
+        }
 
         /// <summary>
         /// Liquid Snowpack
@@ -869,8 +1014,176 @@ namespace Landis.Extension.Succession.NECN
                 normalTemp = value;
             }
 
+
         }
 
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of Transpiration (cm)
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double> Transpiration
+        {
+            get {
+                return AnnualTranspiration;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of evaporation (cm)
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double> Evaporation
+        {
+            get {
+                return AnnualEvaporation;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of monthly transpiration (cm/mo)
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyTranspiration
+        {
+            get {
+                return MonthlyTranspiration;
+            }
+            set {
+                MonthlyTranspiration = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// add to soil 
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyAddToSoil
+        {
+            get {
+                return MonthlyAddToSoil;
+            }
+            set {
+                MonthlyAddToSoil = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// A summary of monthly evaporation
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyEvaporation
+        {
+            get {
+                return MonthlyEvaporation;
+            }
+            set {
+                MonthlyEvaporation = value;
+            }
+        }
+          //---------------------------------------------------------------------
+        /// <summary>
+        /// prior month min available water  
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyPriorAvailableWaterMin
+        {
+            get {
+                return MonthlyPriorAvailableWaterMin;
+            }
+            set {
+                MonthlyPriorAvailableWaterMin = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// min available water  
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyAvailableWaterMin
+        {
+            get {
+                return MonthlyAvailableWaterMin;
+            }
+            set {
+                MonthlyAvailableWaterMin = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// max available water 
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyAvailableWaterMax
+        {
+            get {
+                return MonthlyAvailableWaterMax;
+            }
+            set {
+                MonthlyAvailableWaterMax = value;
+            }
+        }
+    
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// evaporated snow 
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyEvaporatedSnow
+        {
+            get {
+                return MonthlyEvaporatedSnow;
+            }
+            set {
+                MonthlyEvaporatedSnow = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        ///monthly stormflow 
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyStormflow
+        {
+            get {
+                return MonthlyStormflow;
+            }
+            set {
+                MonthlyStormflow = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// max water use 
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyMaxWaterUse
+        {
+            get {
+                return MonthlyMaxWaterUse;
+            }
+            set {
+                MonthlyMaxWaterUse = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// VPD
+        /// Katie M. 
+        /// </summary>
+        public static ISiteVar<double[]> monthlyVPD
+        {
+            get {
+                return MonthlyVPD;
+            }
+            set {
+                MonthlyVPD = value;
+            }
+        }
         // --------------------------------------------------------------------
         /// <summary>
         /// Input value of Slope

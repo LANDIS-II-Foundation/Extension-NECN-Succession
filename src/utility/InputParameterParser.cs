@@ -420,7 +420,7 @@ namespace Landis.Extension.Succession.NECN
 
             //-------------------------
             //  Read Species Parameters table
-            PlugIn.ModelCore.UI.WriteLine("   Begin parsing NECN SPECIES table.");
+            //PlugIn.ModelCore.UI.WriteLine("   Begin parsing NECN SPECIES table.");
 
             InputVar<string> csv = new InputVar<string>("SpeciesParameters");
             ReadVar(csv);

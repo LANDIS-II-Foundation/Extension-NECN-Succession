@@ -209,10 +209,12 @@ namespace Landis.Extension.Succession.NECN
             {
                 // Write monthly log file:
                 // Output must reflect the order of operation:
-                int[] months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+                int[] months = new int[12] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+                //int[] months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
                 if (OtherData.CalibrateMode)
-                    months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+                    //months = new int[12] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+                   months = new int[12] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
                 for (int i = 0; i < 12; i++)
                 {
@@ -586,7 +588,7 @@ namespace Landis.Extension.Succession.NECN
         public bool Establish(ISpecies species, ActiveSite site)
         {
             double establishProbability = Establishment.Calculate(species, site);
-
+             
             return modelCore.GenerateUniform() < establishProbability;
         }
 
