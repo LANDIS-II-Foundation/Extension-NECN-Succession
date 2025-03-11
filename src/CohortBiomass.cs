@@ -962,7 +962,7 @@ namespace Landis.Extension.Succession.NECN
         }
 
         //  KM: Calculate cohort transpiration
-        private static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
+        public static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
         {
 
             // Calculate the VPD

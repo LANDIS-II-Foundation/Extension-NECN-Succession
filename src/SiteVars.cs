@@ -138,28 +138,34 @@ namespace Landis.Extension.Succession.NECN
             MonthlyLAI_GrassesLastMonth = PlugIn.ModelCore.Landscape.NewSiteVar<double>();  // Chihiro, 2021.03.30: tentative
             MineralN = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             ResorbedN           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
+            //Anual water balance
             WaterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             PlantAvailableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             LiquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             SoilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            MeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            //MeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); //TODO fix this
             DecayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             SoilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             DryDays             = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
-            
+
+            //New from Katie's code TODO
+            availableWaterTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            capWater = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            og_et = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            maxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            availableWaterMin = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
             /*  TODO double check all this stuff
             mineralN = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             resorbedN           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             waterMovement       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            availableWaterTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            capWater = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            og_et = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            maxWaterUse = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            
             liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            availableWaterMin   = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            
             decayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             anaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -168,6 +174,8 @@ namespace Landis.Extension.Succession.NECN
 
             AnnualTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualEvaporation = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
+            //Monthly water balance 
             MonthlyTranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyAddToSoil = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyEvaporation = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
@@ -304,13 +312,8 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyStormflow[site] = new double[12];
                 MonthlyMaxWaterUse[site] = new double[12];
                 MonthlyVPD[site] = new double[12];
-                CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
+                //CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>(); //TODO what's up with this one
 
-            }
-            
-        }
-
-                //CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
                 //TODO double check if in right loop
                 if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
                 {
@@ -327,7 +330,10 @@ namespace Landis.Extension.Succession.NECN
 
             }
             
+
         }
+            
+        
         //---------------------------------------------------------------------
 
         /// <summary>

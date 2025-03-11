@@ -28,17 +28,15 @@ namespace Landis.Extension.Succession.NECN
         // KM: The updated transpiration calculation is set up to run using the Henne approach with some modifications
         // KM: Split the soil water model into two parts so that transpiration can be calculated after the first part and then subtracted in the second part 
         public static void Run_Henne_One(int year, int month, double liveBiomass, Site site, out double availableWaterMax, out double soilWaterContent) 
-       {
-           //     Original Water Submodel for Century - written by Bill Parton
+        {
+            //     Original Water Submodel for Century - written by Bill Parton
             //     Updated from Fortran  - rm 2/92
             //     Rewritten by Bill Pulliam - 9/94
             //     Rewritten by Melissa Lucash - 11/2014
             //     Rewritten by Paul Henne, USGS - 6/2020
             //     Rewritten by Katie McQuillan, NCSU - 3/2022 
             //          KM: Split the Henne soil water routine into two parts to faciliate cohort specific transpiration calculations. 
-            //          KM: Outputs from the first part are used for transpiration calculations. Total transpiration is input to the second part.  
-            //     Rewritten by Melissa Lucash- 11/2014
-            //     Rewritten by Paul Henne, USGS - 6/2020
+            //          KM: Outputs from the first part are used for transpiration calculations. Total transpiration is input to the second part. 
             //     Rewritten by Sam Flake - 5/2023
             //TODO clean up
 
@@ -367,7 +365,7 @@ namespace Landis.Extension.Succession.NECN
 
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
             return;
-       }
+        }
 
        public static void Run_Henne_Two(int year, int month, Site site, double liveBiomass, double availableWaterMax, double soilWaterContent, out double baseFlow, out double stormFlow, out double AET)  
        {
@@ -458,7 +456,7 @@ namespace Landis.Extension.Succession.NECN
        }
 
 
-        }
+    
 
 
         public static double CalculateSlopeAspectEffect(double slope, double aspect)

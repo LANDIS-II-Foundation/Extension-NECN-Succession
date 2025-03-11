@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System;
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.LeafBiomassCohorts;
+using Landis.Library.UniversalCohorts;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -37,11 +37,11 @@ namespace Landis.Extension.Succession.NECN
                     
                     // Fraction based on cohort biomass. Use an exponential function to control how evenly water is distributed among cohorts based on biomass. 
                     // Transpiration is senstive to this fraction. To minimize water limitation of larger cohorts, allocate water less evenly and more closely by biomass 
-                    double SWallocation = 1-Math.Exp((-cohort.Biomass)*0.000002);  // 0.02 originally. Larger number produces more even allocation
+                    double SWallocation = 1-Math.Exp((-cohort.Data.Biomass)*0.000002);  // 0.02 originally. Larger number produces more even allocation
 
                     // Need a minimum for each cohort so they no cohort ends up with nothing. 
                     if(SWallocation <= 0.0)
-                        SWallocation = Math.Max(SWallocation, cohort.Biomass * 0.0000001); 
+                        SWallocation = Math.Max(SWallocation, cohort.Data.Biomass * 0.0000001); 
                     
                     // Allocations are summed so we can relativize in the next step to get the actual fractions
                     SWAllocTotal += SWallocation;
@@ -97,7 +97,7 @@ namespace Landis.Extension.Succession.NECN
         private static int GetAddYear(ICohort cohort)
         {
             int currentYear = PlugIn.ModelCore.CurrentTime;
-            int cohortAddYear = currentYear - (cohort.Age - Main.Year);
+            int cohortAddYear = currentYear - (cohort.Data.Age - Main.Year);
             if (Main.MonthCnt == 11)
                 cohortAddYear++; 
             return cohortAddYear;
