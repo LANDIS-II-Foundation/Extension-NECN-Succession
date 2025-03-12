@@ -118,6 +118,7 @@ namespace Landis.Extension.Succession.NECN
             AvailableSoilWater.CohortCapWater = new Dictionary<int, Dictionary<int, double>>();
             
             // This is the total water available to plants for growth/transpiration
+            // SF this is the maximum soil water after evaporation and stormflow, but before transpiration and baseflow
             double availableSW = SiteVars.CapWater[site];
             
             // Loop through cohorts and set the allocation in the dictionary 

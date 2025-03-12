@@ -107,32 +107,14 @@ namespace Landis.Extension.Succession.NECN
 
                     // Calculate N allocation for each cohort
                     AvailableN.CalculateMonthlyMineralNallocation(site);
-
-
-                    //TODO check here -- what is Katie running?
-                    // KM: Run the first half of the soil water routine necessary for growth/transpiration calcs 
-                    //SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent);
-                    
-                    // KM: Calculate N allocation for each cohort
-                    // SF TODO check if this is different from AvailableN.CalculateMonthlyMineralNallocation
-                    //AvailableN.SetMineralNallocation(site);
-                    
-                    // KM: Calculate soil water allocation for each cohort
-                    AvailableSoilWater.CalculateSWFraction(site);
-                    AvailableSoilWater.SetSWAllocation(site);
-                    AvailableSoilWater.SetCapWater(site);
-
+                                   
                     //SF NEW then run cohort growth using estimated AET
                     if (MonthCnt==11)
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
                     else
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
 
-                    // KM: After the growth/transpiration, run the second half of the soil water routine where water moves out of the cell 
-                    //SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out stormFlow, out AET);
-
                     //SF NEW adjust soil water after calculating transpiration
-                    
                     SoilWater.AdjustSoilWaterWithET(y, Month, liveBiomass, site, AET);
 
                     // KM: Moved this down bc uses outputs from second half of soil water routine

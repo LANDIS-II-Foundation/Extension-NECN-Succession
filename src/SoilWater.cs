@@ -216,9 +216,9 @@ namespace Landis.Extension.Succession.NECN
             //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             availableWaterMax = Math.Max(soilWaterContent - waterEmpty, 0.0);
             waterContentMax = soilWaterContent;
-
+            
             SiteVars.Evaporation[site] = AET; //set evaporation -- we'll use this in SoilWater.AdjustSoilWaterWithTranspiration
-
+            
             //if (OtherData.CalibrateMode)
             //    PlugIn.ModelCore.UI.WriteLine("   Max soil water (after adding ppt and snowmelt, " +
             //    "and substracting soil evaporation) = {0}", waterContentMax); //debug
@@ -240,6 +240,9 @@ namespace Landis.Extension.Succession.NECN
 
                 //PlugIn.ModelCore.UI.WriteLine("Water Runs Off. stormflow={0}. soilWaterContent = {1}", stormFlow, soilWaterContent); //debug
             }
+
+            SiteVars.CapWater[site] = availableWaterMax; //we need this to calculate transpiration. We'll also use it in the adjustment of soil water
+
 
             // Calculate actual evapotranspiration.  This equation is derived from the stand equation for calculating AET from PET
             //  Bergström, 1992
@@ -299,13 +302,16 @@ namespace Landis.Extension.Succession.NECN
             // Calculate the final amount of available water to the trees, which is the average of the max and min 
             plantAvailableWater = (availableWaterMax + availableWaterMin) / 2.0;//availableWaterMax is the initial soilWaterContent after precip, interception, and bare-soil evaporation  
 
-            SiteVars.CapWater[site] = soilWaterContent - waterEmpty;
-
             // SF added meanSoilWater as variable to calculate volumetric water to compare to empirical sources
             // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture is tracked in SoilWaterContent.
             double meanSoilWater = (waterContentMax + soilWaterContent) / 2.0;
             //PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWaterContent = {2}", 
             //   availableWaterMax, availableWaterMin, soilWaterContent);
+
+            // KM: Calculate soil water allocation for each cohort
+            AvailableSoilWater.CalculateSWFraction(site);
+            //AvailableSoilWater.SetSWAllocation(site);
+            AvailableSoilWater.SetCapWater(site);
 
             // Compute the ratio of precipitation to PET
             double ratioPlantAvailableWaterPET = 0.0;
@@ -371,6 +377,10 @@ namespace Landis.Extension.Succession.NECN
 
             end stuff from Kate*/
 
+            double remainingPET = xx;
+            double soilWaterMax = SiteVars[site].CapWater;
+
+            double AET = SiteVars[site].Evaporation + SiteVars[site].Transpiration;
 
             //Allow excess water to run off when soil is greater than field capacity
             double waterMovement = 0.0;
