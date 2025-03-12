@@ -58,6 +58,7 @@ namespace Landis.Extension.Succession.NECN
         private static ISiteVar<double> og_et;
         private static ISiteVar<double> maxWaterUse;
         private static ISiteVar<double> soilWaterContent;
+        private static ISiteVar<double> meanSoilWaterContent;
         private static ISiteVar<double> availableWaterMin;
         public static ISiteVar<double[]> MonthlyMeanSoilWaterContent;//SF added
         public static ISiteVar<double[]> MonthlyAnaerobicEffect;//SF added 2023-4-11
@@ -144,7 +145,7 @@ namespace Landis.Extension.Succession.NECN
             PlantAvailableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             LiquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             SoilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            //MeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); //TODO fix this
+            MeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double>(); //TODO fix this
             DecayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             SoilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnaerobicEffect     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -432,8 +433,7 @@ namespace Landis.Extension.Succession.NECN
             Transpiration[site] = 0.0;   // TODO added
             Evaporation[site] = 0.0; //TODO added
 
-    DroughtMort[site] = 0.0;
-                        
+            DroughtMort[site] = 0.0;                        
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
             {
                 foreach (ISpecies species in PlugIn.ModelCore.Species)
@@ -562,9 +562,9 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// End-of-month soil water content (cm)
         /// </summary>
-   
+
         /// <summary>
-        /// Water loss
+        /// TODO fix name
         /// </summary>
         public static ISiteVar<double> AvailableWaterTranspiration
         {
@@ -578,7 +578,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Mean volumetric water content (proportion)
+        ///  TODO fix name
         /// </summary>
         public static ISiteVar<double> CapWater
         {
@@ -591,8 +591,8 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-              /// <summary>
-        /// Water loss
+        /// <summary>
+        /// TODO fix name
         /// </summary>
         public static ISiteVar<double> OG_ET
         {
@@ -605,7 +605,7 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
         /// <summary>
-        /// Water loss
+        /// TODO fix name
         /// </summary>
         public static ISiteVar<double> MaxWaterUse
         {
@@ -619,7 +619,7 @@ namespace Landis.Extension.Succession.NECN
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Water loss
+        /// Water loss -- TODO fix name
         /// </summary>
         public static ISiteVar<double> SoilWaterContent
         {
@@ -628,6 +628,22 @@ namespace Landis.Extension.Succession.NECN
             }
             set {
                 soilWaterContent = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Mean volumetric water content (proportion) -- TODO which one is this?
+        /// </summary>
+        public static ISiteVar<double> MeanSoilWaterContent
+        {
+            get
+            {
+                return meanSoilWaterContent;
+            }
+            set
+            {
+                meanSoilWaterContent = value;
             }
         }
 

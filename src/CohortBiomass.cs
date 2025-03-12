@@ -172,7 +172,7 @@ namespace Landis.Extension.Succession.NECN
                 throw new ApplicationException("Error: LEAF Mortality exceeds cohort biomass");
 
             }
-            double deltaWood = actualANPP[0] - totalMortality[0];
+            double deltaWood = actualANPP[0] - totalMortality[0]; //TODO I think age mortality is being deducted twice!!!!
             double deltaLeaf = actualANPP[1] - totalMortality[1] - defoliatedLeafBiomass;
 
             tempObject.WoodBiomass = deltaWood;
@@ -236,7 +236,7 @@ namespace Landis.Extension.Succession.NECN
             //else
             //{
             //}
-            double limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+            double limitH20 = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
 
             double limitLAI = calculateLAI_Limit(cohort, site);
 
@@ -541,7 +541,7 @@ namespace Landis.Extension.Succession.NECN
             // KM: Calculate transpiration within the NPP function to make sure carbon and water fluxes are being calculated together and because npp is necessary for transpiration calculations 
             double NPP = AGNPP[0] + AGNPP[1] + (NPPcoarseRoot/0.47) + (NPPfineRoot/0.47);
             //double NPP = NPPwood + NPPleaf + NPPcoarseRoot + NPPfineRoot;
-            Calculate_Transpiration(cohort, site, ecoregion, NPP);
+            Calculate_Cohort_Transpiration(cohort, site, ecoregion, NPP);
 
             SiteVars.AGNPPcarbon[site] += NPPwood + NPPleaf;
             SiteVars.BGNPPcarbon[site] += NPPcoarseRoot + NPPfineRoot;
@@ -872,7 +872,7 @@ namespace Landis.Extension.Succession.NECN
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
-                CalibrateLog.availableWater = SiteVars.PlantAvailableWater[site];
+                CalibrateLog.availableSW = SiteVars.PlantAvailableWater[site]; //TODO make sure this matches Katie's water values
                 //Outputs.CalibrateLog.Write("{0:0.00},", SiteVars.AvailableWater[site]);
             }
 
@@ -932,10 +932,12 @@ namespace Landis.Extension.Succession.NECN
             return grassTotal;
         }
 
-       // public Percentage ComputeNonWoodyPercentage(ICohort cohort, ActiveSite site)
-        //{
-       //     throw new NotImplementedException();
-       // }
+        public Percentage ComputeNonWoodyPercentage(ICohort cohort, ActiveSite site)
+        {
+            throw new NotImplementedException();
+        }
+
+
         // KM: VPD used in transpiration calculation 
         // KM: VPD and transpiration calculations based on pnet approach developed by Mark Kubiske for LANDIS-II PnET extension (de Bruijna et al. 2014)
         // KM: Added relative humidity as a climate input for more accurate vpd estiamtion 
@@ -957,22 +959,24 @@ namespace Landis.Extension.Succession.NECN
             {
                 Es = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tday);
             }
-            double rh = (ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxRH[Main.Month] + ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinRH[Main.Month])/2;
+            double rh = (ClimateRegionData.AnnualClimate[ecoregion].MonthlyMaxRH[Main.Month] + ClimateRegionData.AnnualClimate[ecoregion].MonthlyMinRH[Main.Month])/2;
             return Es * (1-(rh/100));
         }
 
         //  KM: Calculate cohort transpiration
-        public static void Calculate_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
+        public static void Calculate_Cohort_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
+            //This needs cohort NPP, soil water before AET calculation
         {
 
             // Calculate the VPD
-            double Tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[Main.Month];
-            double Tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[Main.Month];
+            double Tmin = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMinTemp[Main.Month];
+            double Tmax = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMaxTemp[Main.Month];
             double Tave = (double)0.5 * (Tmin + Tmax);
             double Tday = (double)0.5 * (Tmax + Tave);
             double VPD = Calculate_VPD(Tday, Tmin, ecoregion);
 
             // Calculate the soil water limitation scalar
+            //TODO do we want to caluclate this twice? or add it as an argument?
             double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
             
             // Calcualte GPP  (GPP = NPP + Ra)
@@ -983,7 +987,7 @@ namespace Landis.Extension.Succession.NECN
             double FolN = 47/SpeciesData.LeafCN[cohort.Species];
 
             // Calculate leaf internal CO2 concentration 
-            double CO2 = ClimateRegionData.AnnualWeather[ecoregion].MonthlyCO2[Main.Month];
+            double CO2 = ClimateRegionData.AnnualClimate[ecoregion].MonthlyCO2[Main.Month];
             double CicaRatio = (-0.075f * FolN) + 0.875f;
             double ModCiCaRatio = CicaRatio * CiModifier;
             double CiElev = CO2 * ModCiCaRatio;

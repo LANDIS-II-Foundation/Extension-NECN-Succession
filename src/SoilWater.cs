@@ -27,7 +27,7 @@ namespace Landis.Extension.Succession.NECN
 
         // KM: The updated transpiration calculation is set up to run using the Henne approach with some modifications
         // KM: Split the soil water model into two parts so that transpiration can be calculated after the first part and then subtracted in the second part 
-        public static void Run_Henne_One(int year, int month, double liveBiomass, Site site, out double availableWaterMax, out double soilWaterContent) 
+        public static void Run(int year, int month, double liveBiomass, Site site, out double availableWaterMax, out double soilWaterContent, out double AET) 
         {
             //     Original Water Submodel for Century - written by Bill Parton
             //     Updated from Fortran  - rm 2/92
@@ -256,22 +256,7 @@ namespace Landis.Extension.Succession.NECN
             }
 
             tempAET = Math.Max(tempAET, 0.0);
-
-            //PH: Add liquid water to soil
-            soilWaterContent += addToSoil;
-            // KM: Delted the additional '+ addToSoil' because it's already taken out of soilwatercontent in line above 
-            //availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
-            availableWaterMax = soilWaterContent - waterEmpty;
-            
-            // KM: Transpiration calculations moved to a new script (cohortBiomass.cs) to be done at the species cohort level 
-            // KM: Output the plant available water for species cohort transpiration calculations 
-            // KM: Original approach to calculating available water is to find the average of an over and under estiamte.
-            // KM: However, MinAvailableWater can't be calculated until after transpiration. So instead use the MinAvailableWater from the prior month
-            SiteVars.AvailableWaterTranspiration[site] = System.Math.Min(((availableWaterMax + priorAvailableWaterMin) / 2.0), soilWaterContent - waterEmpty);
-           
-           // KM: Calculate the total water accessible to plants. This is used to cap the transpiration rate of each cohort
-           SiteVars.CapWater[site] = soilWaterContent - waterEmpty; 
-
+                       
             /*Here's the original equation from Bergstom (1992) HBV model: https://github.com/mxgiuliani00/hbv/blob/master/hbv_model.cpp
             It allows soil moisture to be drawn down to zero, with it becoming more difficult when soil moisture is below waterEmpty
              {
@@ -314,7 +299,7 @@ namespace Landis.Extension.Succession.NECN
             plantAvailableWater = (availableWaterMax + availableWaterMin)/ 2.0;//availableWaterMax is the initial soilWaterContent after precip, interception, and bare-soil evaporation  
 
             // SF added meanSoilWater as variable to calculate volumetric water to compare to empirical sources
-            // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture is tracked in SoilWaterContent.
+            // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture in cm is tracked in SoilWaterContent.
             double meanSoilWater = (waterContentMax + soilWaterContent) / 2.0;          
             //PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWaterContent = {2}", 
             //   availableWaterMax, availableWaterMin, soilWaterContent);
@@ -345,8 +330,36 @@ namespace Landis.Extension.Succession.NECN
             //    PlugIn.ModelCore.UI.WriteLine("   Max soil water = {0}, End-of-month soil water = {1}, Mean soil water = {2}", 
             //        waterContentMax, soilWaterContent, meanSoilWater); //debug
 
+
+            //Calculate some 
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
-            
+            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPlantAvailableWaterPET, month);
+            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPlantAvailableWaterPET, PET, tave);
+            SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11, to add as monthly output variable
+            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
+
+            return;
+        }
+
+       public static void AdjustSoilWaterWithET(int year, int month, Site site, double liveBiomass, double availableWaterMax, double soilWaterContent, out double baseFlow, out double stormFlow, out double AET)  
+       {
+            /*start stuff from Kate
+            //PH: Add liquid water to soil
+            soilWaterContent += addToSoil;
+            // KM: Delted the additional '+ addToSoil' because it's already taken out of soilwatercontent in line above 
+            //availableWaterMax = soilWaterContent - waterEmpty + addToSoil;
+            availableWaterMax = soilWaterContent - waterEmpty;
+
+            // KM: Transpiration calculations moved to a new script (cohortBiomass.cs) to be done at the species cohort level 
+            // KM: Output the plant available water for species cohort transpiration calculations 
+            // KM: Original approach to calculating available water is to find the average of an over and under estiamte.
+            // KM: However, MinAvailableWater can't be calculated until after transpiration. So instead use the MinAvailableWater from the prior month
+            SiteVars.AvailableWaterTranspiration[site] = System.Math.Min(((availableWaterMax + priorAvailableWaterMin) / 2.0), soilWaterContent - waterEmpty);
+
+            // KM: Calculate the total water accessible to plants. This is used to cap the transpiration rate of each cohort
+            SiteVars.CapWater[site] = soilWaterContent - waterEmpty;
+
+
             // KM: Tracking the water for testing purposes 
             SiteVars.MonthlyAddToSoil[site][Main.Month] = addToSoil;
             SiteVars.MonthlyPriorAvailableWaterMin[site][Main.Month] = priorAvailableWaterMin;
@@ -359,101 +372,11 @@ namespace Landis.Extension.Succession.NECN
                 CalibrateLog.precipitation = Precipitation;
             }
 
-            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPlantAvailableWaterPET, month);
-            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPlantAvailableWaterPET, PET, tave);
-            SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11, to add as monthly output variable
+            end stuff from Kate*/
 
-            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWaterContent);
-            return;
+
+
         }
-
-       public static void Run_Henne_Two(int year, int month, Site site, double liveBiomass, double availableWaterMax, double soilWaterContent, out double baseFlow, out double stormFlow, out double AET)  
-       {
-
-           //...Calculate external inputs
-            IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
-            double actualET = SiteVars.monthlyTranspiration[site][month];
-            AET = actualET;
-            baseFlow = 0.0;
-            stormFlow = 0.0;
-            double availableWaterMin = 0.0;   //amount of water available after stormflow (runoff) evaporation and transpiration, but before baseflow/leaching (under-estimate of available water)
-            double availableWater = 0.0;
-
-            double litterBiomass = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
-            tmax = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMaxTemp[month];
-            tmin = ClimateRegionData.AnnualWeather[ecoregion].MonthlyMinTemp[month];
-            PET = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPET[month];
-            beginGrowing = ClimateRegionData.AnnualWeather[ecoregion].BeginGrowing;
-            endGrowing = ClimateRegionData.AnnualWeather[ecoregion].EndGrowing;
-            double priorWaterAvail = SiteVars.AvailableWater[site];
-
-            double wiltingPoint = SiteVars.SoilWiltingPoint[site];
-            double soilDepth = SiteVars.SoilDepth[site];
-            double fieldCapacity = SiteVars.SoilFieldCapacity[site];
-            double stormFlowFraction = SiteVars.SoilStormFlowFraction[site];
-            double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];
-            double drain = SiteVars.SoilDrain[site];
-            double waterFull = soilDepth * fieldCapacity;  //units of cm
-            double waterEmpty = wiltingPoint * soilDepth;  // cm
-
-            //Subtract transpiration from soil water content
-            soilWaterContent -= actualET;
-
-            // KM: Updated the order of taking out stormflow and baseflow
-            // Allow excess water to run off during storm events (stormflow). If there is no excess water, just drain the baseflow 
-            double waterMovement = 0.0;
-            if (soilWaterContent > waterFull)
-            {
-                // How much water should move during a storm event, which is based on how much water the soil can hold.
-                waterMovement = Math.Max((soilWaterContent - waterFull), 0.0); 
-
-                // Compute storm flow and subtract from soil water content 
-                stormFlow = waterMovement * stormFlowFraction;
-                soilWaterContent -= stormFlow;
-
-                // Compute baseflow and subtract from soil water content 
-                baseFlow = soilWaterContent * baseFlowFraction;
-                soilWaterContent -= baseFlow;
-
-                // If soil water content is still greater than the amount the soil can hold, drop soil water content to water full 
-                if(soilWaterContent > waterFull)
-                {
-                    soilWaterContent = waterFull;
-                }
-
-            }
-            else
-            {
-                baseFlow = soilWaterContent * baseFlowFraction;
-                soilWaterContent -= baseFlow;
-            }
-
-            //Calculate the amount of available water after all the ET and leaching has taken place (minimum available water)           
-            availableWaterMin = Math.Max(soilWaterContent - waterEmpty, 0.0);
-            SiteVars.AvailableWaterMin[site] = availableWaterMin;
-
-            //Calculate the final amount of available water to the trees, which is the average of the max and min          
-            availableWater = (availableWaterMax + availableWaterMin) / 2.0;
-
-            // Compute the ratio of precipitation to PET
-            double ratioPrecipPET = 0.0;
-            if (PET > 0.0) ratioPrecipPET = availableWater / PET;  //assumes that the ratio is the amount of incoming precip divided by PET.
-            SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
-            SiteVars.AnnualClimaticWaterDeficit[site] += (PET - actualET) * 10.0;  // Convert to mm, the standard definition
-            SiteVars.WaterMovement[site] = waterMovement;
-            SiteVars.SoilWaterContent[site] = soilWaterContent;
-            SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
-            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], soilWaterContent, ratioPrecipPET, month);
-            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPrecipPET, PET, tave);
-            SiteVars.MonthlyAvailableWaterMin[site][Main.Month] = availableWaterMin;
-
-            if (month == 0)
-                SiteVars.DryDays[site] = 0;
-            else
-                SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWater, priorWaterAvail);           
-
-            return;
-       }
 
 
     

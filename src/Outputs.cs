@@ -810,7 +810,7 @@ namespace Landis.Extension.Succession.NECN
                 
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (int)((SiteVars.MeanSoilWaterContent[site])); //changed to mean
+                        pixel.MapCode.Value = (int)((SiteVars.MeanSoilWaterContent[site])); //changed to mean //TODO update
                     }
                     else
                     {
@@ -822,7 +822,7 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            string pathTransp = MapNames.ReplaceTemplateVars(Path.Combine(@"NECN", "Transpiration-{timestep}.img"), PlugIn.ModelCore.CurrentTime);
+            string pathTransp = MapNames.ReplaceTemplateVars(@"NECN\Transpiration-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathTransp, PlugIn.ModelCore.Landscape.Dimensions))
             {
                 IntPixel pixel = outputRaster.BufferPixel;
@@ -860,7 +860,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
 
-            string pathET = MapNames.ReplaceTemplateVars(Path.Combine(@"NECN", "ET-{timestep}.img"), PlugIn.ModelCore.CurrentTime);
+            string pathET = MapNames.ReplaceTemplateVars(@"NECN\ET-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathET, PlugIn.ModelCore.Landscape.Dimensions))
             {
                 IntPixel pixel = outputRaster.BufferPixel;
@@ -959,8 +959,7 @@ namespace Landis.Extension.Succession.NECN
                         outputRaster.WriteBufferPixel();
                     }
                 }
-            }
-
+        
             string pathAnerb= MapNames.ReplaceTemplateVars(@"NECN\AnaerobicEffect-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
             using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(pathAnerb, PlugIn.ModelCore.Landscape.Dimensions))
             {

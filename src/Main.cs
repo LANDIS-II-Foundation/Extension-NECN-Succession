@@ -73,8 +73,6 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.TotalWoodBiomass[site] = ComputeWoodBiomass((ActiveSite) site);
                     SiteVars.monthlyTranspiration[site][Month] = 0.0;
                                    
-                    double ppt = ClimateRegionData.AnnualWeather[ecoregion].MonthlyPrecip[Main.Month];
-
                     var ppt = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[Month];
 
                     double monthlyNdeposition;
@@ -99,9 +97,10 @@ namespace Landis.Extension.Succession.NECN
                     // KM: move variables up 
                     //TODO check here
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
-                    double baseFlow, stormFlow, AET;
+                    double baseFlow, stormFlow, AET; //needed to calculate leaching
                     double availableWaterMax, soilWaterContent;
 
+                    //SF NEW originally, run regular soil water
                     SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
                     PlugIn.AnnualWaterBalance += ppt - AET;
@@ -109,66 +108,33 @@ namespace Landis.Extension.Succession.NECN
                     // Calculate N allocation for each cohort
                     AvailableN.CalculateMonthlyMineralNallocation(site);
 
-                    //Drought vars
-                    //Update monthly temperature and soil water
-                    //TODO SF add to DroughtMortality class. This is mostly already duplicated in the drought climate spinup
-                    if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature | DroughtMortality.OutputClimateWaterDeficit)
-                    {
-                        //Initialize each year by adding a new list element
-                        if (MonthCnt == 0)
-                        {
-                            
-                            SiteVars.SoilWater10[site].Add(0);
-                            SiteVars.Temp10[site].Add(0);
 
-                        }
-
-                        int list_index = SiteVars.SoilWater10[site].Count - 1; //track how many elements are in the climate lists, to avoid them growing too long
-
-                       if (summer.Contains(Month))
-                            {
-                                //add monthly temperatures
-                                SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
-                            }
-                       //add monthly water content
-                        SiteVars.SoilWater10[site][list_index] += SiteVars.MeanSoilWaterContent[site];
-
-                        //Do this just once a year, after CWD is calculated above
-                        if (MonthCnt == 11) //TODO fix this so we don't have to always calculate all of these vars when writing maps
-                        {
-                            SiteVars.CWD10[site].Add(SiteVars.AnnualClimaticWaterDeficit[site]);
-                            SiteVars.Temp10[site][list_index] /= summer.Length; //get monthly average temp
-                        }
-                    }
-
-                    if (DroughtMortality.UseDrought & MonthCnt == 11)
-                    {
-                        foreach (ISpecies species in PlugIn.ModelCore.Species)
-                        {//TODO could speed up by only looping thorugh species with drought parameters (skip ones with zeroes)
-                            DroughtMortality.ComputeDroughtLaggedVars(site, species);
-                        }
-                    }
-                    //End drought calculations
                     //TODO check here -- what is Katie running?
                     // KM: Run the first half of the soil water routine necessary for growth/transpiration calcs 
-                    SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent);
+                    //SoilWater.Run_Henne_One(y, Month, liveBiomass, site, out availableWaterMax, out soilWaterContent);
                     
                     // KM: Calculate N allocation for each cohort
-                    AvailableN.SetMineralNallocation(site);
+                    // SF TODO check if this is different from AvailableN.CalculateMonthlyMineralNallocation
+                    //AvailableN.SetMineralNallocation(site);
                     
                     // KM: Calculate soil water allocation for each cohort
                     AvailableSoilWater.CalculateSWFraction(site);
-                    //AvailableSoilWater.SetSWAllocation(site);
+                    AvailableSoilWater.SetSWAllocation(site);
                     AvailableSoilWater.SetCapWater(site);
 
+                    //SF NEW then run cohort growth using estimated AET
                     if (MonthCnt==11)
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
                     else
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
 
                     // KM: After the growth/transpiration, run the second half of the soil water routine where water moves out of the cell 
-                    SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out stormFlow, out AET);
+                    //SoilWater.Run_Henne_Two(y, Month, site, liveBiomass, availableWaterMax, soilWaterContent, out baseFlow, out stormFlow, out AET);
+
+                    //SF NEW adjust soil water after calculating transpiration
                     
+                    SoilWater.AdjustSoilWaterWithET(y, Month, liveBiomass, site, AET);
+
                     // KM: Moved this down bc uses outputs from second half of soil water routine
                     PlugIn.AnnualWaterBalance += ppt - AET;
 
@@ -203,6 +169,48 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyAGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] -= SiteVars.MonthlyBGNPPcarbon[site][Month];
                     SiteVars.MonthlyNEE[site][Month] += SiteVars.SourceSink[site].Carbon;
+
+                    //Drought vars
+                    //Update monthly temperature and soil water, to calculate the lagged climate variables needed to calculate drought mortality
+                    //TODO SF add to DroughtMortality class. This code is mostly already duplicated in the drought climate spinup
+                    if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature | DroughtMortality.OutputClimateWaterDeficit)
+                    {
+                        //Initialize each year by adding a new list element
+                        if (MonthCnt == 0)
+                        {
+
+                            SiteVars.SoilWater10[site].Add(0);
+                            SiteVars.Temp10[site].Add(0);
+
+                        }
+
+                        int list_index = SiteVars.SoilWater10[site].Count - 1; //track how many elements are in the climate lists, to avoid them growing too long
+
+                        if (summer.Contains(Month))
+                        {
+                            //add monthly temperatures
+                            SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
+                        }
+                        //add monthly water content
+                        SiteVars.SoilWater10[site][list_index] += SiteVars.MeanSoilWaterContent[site];
+
+                        //Do this just once a year, after CWD is calculated above
+                        if (MonthCnt == 11) //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                        {
+                            SiteVars.CWD10[site].Add(SiteVars.AnnualClimaticWaterDeficit[site]);
+                            SiteVars.Temp10[site][list_index] /= summer.Length; //get monthly average temp
+                        }
+                    }
+
+                    if (DroughtMortality.UseDrought & MonthCnt == 11)
+                    {
+                        foreach (ISpecies species in PlugIn.ModelCore.Species)
+                        {//TODO could speed up by only looping thorugh species with drought parameters (skip ones with zeroes)
+                            DroughtMortality.ComputeDroughtLaggedVars(site, species);
+                        }
+                    }
+                    //End drought calculations
+
                 }
 
                 //Do this just once a year, after CWD is calculated above

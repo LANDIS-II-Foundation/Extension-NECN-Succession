@@ -61,6 +61,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
             }
+            //TODO this should be a cohort attribute
 
             // Next relativize to get the actual fraction
             foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
