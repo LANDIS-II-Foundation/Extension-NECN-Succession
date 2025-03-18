@@ -215,27 +215,7 @@ namespace Landis.Extension.Succession.NECN
 
             double limitT = calculateTemp_Limit(site, cohort.Species);
 
-            //if (OtherData.DGS_waterlimit) 
-            //    //SF added 4-parameter water limit calculation
-            //{
-            //    double wilt_point = SiteVars.SoilWiltingPoint[site];
-            //    double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
-
-            //    if (volumetric_water < 0.001) volumetric_water = 0.001;
-
-            //    limitH20 = calculateWater_Limit_versionDGS(volumetric_water, cohort.Species);
-            //    if (OtherData.CalibrateMode)
-            //    {
-            //        PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
-            //        volumetric_water, limitH20);
-            //    }
-
-            //    if (volumetric_water < wilt_point) limitH20 = 0.001;
-
-            //}
-            //else
-            //{
-            //}
+          
             double limitH20 = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
 
             double limitLAI = calculateLAI_Limit(cohort, site);
@@ -253,12 +233,7 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), SiteVars.SoilTemperature[site]);
-
-                double wilt_point = SiteVars.SoilWiltingPoint[site];
-                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
-
-                PlugIn.ModelCore.UI.WriteLine("wilt_point = {0}, volumetric_water = {1}", wilt_point, volumetric_water);
-
+                
             }
 
 
@@ -748,34 +723,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        public static double calculateWater_Limit_versionDGS(double volumetricWater, ISpecies species)
-     //This implements a 4-parameter water limit calculation, similar to soil T, which allows a unimodal response to 
-     //soil moisture and allows us to prevent rapid growth in wetlands by species that are intolerant of waterlogged soils
-     //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
-        {
-            var A1 = SpeciesData.MoistureCurve1[species];
-            var A2 = SpeciesData.MoistureCurve2[species];
-            var A3 = SpeciesData.MoistureCurve3[species];
-            var A4 = SpeciesData.MoistureCurve4[species];
-
-
-            
-            var frac = (A2 - volumetricWater) / (A2 - A1);
-            var waterLimit = 0.0;
-            if (frac > 0.0)
-                waterLimit = Math.Exp(A3 / A4 * (1.0 - Math.Pow(frac, A4))) * Math.Pow(frac, A3);
-
-            if (Double.IsNaN(waterLimit))
-            {
-                PlugIn.ModelCore.UI.WriteLine("soilWater = {0}, soil water limit = {1}, frac = {2}", volumetricWater, waterLimit, frac); //debug
-                PlugIn.ModelCore.UI.WriteLine("A1 = {0}, A2 = {1}, A3 = {2}, A4 = {3}", A1, A2, A3, A4);
-
-
-            }
-                return waterLimit;
-
-        }
-
         //---------------------------------------------------------------------------
         //... Originally from CENTURY
 
@@ -805,7 +752,7 @@ namespace Landis.Extension.Succession.NECN
             //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
             {
                 double wilt_point = SiteVars.SoilWiltingPoint[site];
-                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilMoistureVolumetric[site][Main.Month];
 
                 if (volumetric_water < 0.001) volumetric_water = 0.001;
 
@@ -873,6 +820,8 @@ namespace Landis.Extension.Succession.NECN
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
                 CalibrateLog.availableSW = SiteVars.PlantAvailableWater[site]; //TODO make sure this matches Katie's water values
+                //TODO reconcile this with using the 4-parameter water limit calculation
+                //TODO compare to line 789 where this is assigned a different value
                 //Outputs.CalibrateLog.Write("{0:0.00},", SiteVars.AvailableWater[site]);
             }
 
@@ -988,6 +937,10 @@ namespace Landis.Extension.Succession.NECN
 
             // Calculate leaf internal CO2 concentration 
             double CO2 = ClimateRegionData.AnnualClimate[ecoregion].MonthlyCO2[Main.Month];
+            //if(CO2 == 0 | object.ReferenceEquals(CO2, null)) //TODO what to do if CO2 isn't provided?
+            //{
+            //    CO2 = 400;
+            //}
             double CicaRatio = (-0.075f * FolN) + 0.875f;
             double ModCiCaRatio = CicaRatio * CiModifier;
             double CiElev = CO2 * ModCiCaRatio;

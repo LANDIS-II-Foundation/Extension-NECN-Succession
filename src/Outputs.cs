@@ -498,7 +498,7 @@ namespace Landis.Extension.Succession.NECN
                 transpiration[ecoregion.Index] += SiteVars.monthlyTranspiration[site][month];  
                 evaporation[ecoregion.Index] += SiteVars.monthlyEvaporation[site][month];
                 vpd[ecoregion.Index] += SiteVars.monthlyVPD[site][month];
-                meanSoilWaterContent[ecoregion.Index] += SiteVars.MonthlyMeanSoilWaterContent[site][month]; //SF added mean
+                meanSoilWaterContent[ecoregion.Index] += SiteVars.MonthlyMeanSoilMoistureVolumetric[site][month]; //SF added mean
                 anaerobicEffect[ecoregion.Index] += SiteVars.MonthlyAnaerobicEffect[site][month]; //SF added 2023-4-11
             }
 
