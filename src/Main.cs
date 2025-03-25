@@ -103,8 +103,6 @@ namespace Landis.Extension.Succession.NECN
                     //SF NEW originally, run regular soil water
                     SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
-                    PlugIn.AnnualWaterBalance += ppt - AET;
-
                     // Calculate N allocation for each cohort
                     AvailableN.CalculateMonthlyMineralNallocation(site);
                                    
