@@ -21,7 +21,6 @@ namespace Landis.Extension.Succession.NECN
         public static readonly string ExtensionName = "NECN Succession";
         private static ICore modelCore;
         public static IInputParameters Parameters;
-        //public static double[] ShadeLAI;
         public static double AnnualWaterBalance;
 
         public static string SoilCarbonMapNames = null;
@@ -40,8 +39,8 @@ namespace Landis.Extension.Succession.NECN
         public static double ProbEstablishAdjust;
         public static double StormFlowOverride = 0.0;
 
-        //public static int FutureClimateBaseYear;
         private ICommunity initialCommunity;
+        // private bool seedBankCohort //SEEDBANK
 
         public static int[] SpeciesByPlant;
         public static int[] SpeciesBySerotiny;
@@ -565,6 +564,10 @@ namespace Landis.Extension.Succession.NECN
             dynamic tempObject = woodLeafBiomasses;
             tempObject.WoodBiomass = initialBiomass[0];
             tempObject.LeafBiomass = initialBiomass[1];
+
+            // if(SpeciesData.SeedBanker[species] && reproductionType == "serotiny")  // SEEDBANK
+            // SiteVars.Seedbank[site][species] = CurrentYear; //SEEDBANK
+            // else //ADD NEW COHORT AS USUAL
 
             SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), 0, woodLeafBiomasses);
 
