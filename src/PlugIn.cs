@@ -306,6 +306,7 @@ namespace Landis.Extension.Succession.NECN
 
                     // SEEDBANK ***************
                     // if(SpeciesData.Seedbanker[cohort.Species])
+                    // if(!postfireRegen)  // NEEDS WORK
                     // if(SufficientLight(species,site) && Establish(species, site))
                     // if(SiteVars.SeedbankMinimumAge[site][species] < SpeciesData.SeedbankLongevity[cohort.Species])
                     // AddNewCohort(ISpecies species, ActiveSite site, string reproductionType, double propBiomass = 1.0)
@@ -577,9 +578,15 @@ namespace Landis.Extension.Succession.NECN
             else if (reproductionType == "serotiny")
                 SpeciesBySerotiny[species.Index]++;
             else if (reproductionType == "resprout")
+            {
                 SpeciesByResprout[species.Index]++;
+                //Postfire regen = true; //SEEDBANK
+            }
             else if (reproductionType == "seed")
+            {
                 SpeciesBySeed[species.Index]++;
+                // Postfire regen = true; //SEEDBANK
+            }
 
         }
         //---------------------------------------------------------------------
