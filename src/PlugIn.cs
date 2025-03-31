@@ -304,6 +304,13 @@ namespace Landis.Extension.Succession.NECN
                     woodInput -= live_woodFireConsumption;
                     foliarInput -= live_foliarFireConsumption;
 
+                    // SEEDBANK ***************
+                    // if(SpeciesData.Seedbanker[cohort.Species])
+                    // if(SufficientLight(species,site) && Establish(species, site))
+                    // if(SiteVars.SeedbankMinimumAge[site][species] < SpeciesData.SeedbankLongevity[cohort.Species])
+                    // AddNewCohort(ISpecies species, ActiveSite site, string reproductionType, double propBiomass = 1.0)
+                    // SEEDBANK ***************
+
                 }
                 if (eventArgs.DisturbanceType != null && disturbanceType.IsMemberOf("disturbance:browse"))
                 {
@@ -312,9 +319,7 @@ namespace Landis.Extension.Succession.NECN
 
                     foliarInput += woodInput;
                     woodInput = 0;
-
-                    double inputDecayValue = 1.0;   // Decay value is calculated for surface/soil layers (leaf/fine root), 
-                                                    // therefore, this is just a dummy value.
+                    double inputDecayValue = 1.0;   // Decay value is calculated for surface/soil layers (leaf/fine root), therefore, this is just a dummy value.
 
                     if (foliarInput > 0)
                     {
@@ -340,7 +345,6 @@ namespace Landis.Extension.Succession.NECN
                                     site);
 
                         Disturbed[site] = false;
-
                         return;
                     }
                 }
@@ -350,17 +354,14 @@ namespace Landis.Extension.Succession.NECN
             if (SpeciesData.Grass[cohort.Species])
             {
                 ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
-
                 Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, (cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass) * fractionPartialMortality), cohort, cohort.Species, site);
             }
             else
             {
                 ForestFloor.AddWoodLitter(woodInput, cohort.Species, site);
                 ForestFloor.AddFoliageLitter(foliarInput, cohort.Species, site);
-
                 Roots.AddCoarseRootLitter(Roots.CalculateCoarseRoot(cohort, cohort.Data.AdditionalParameters.WoodBiomass * fractionPartialMortality), cohort, cohort.Species, site);
                 Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.Data.AdditionalParameters.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
-                
             }
             
            return;
@@ -565,8 +566,8 @@ namespace Landis.Extension.Succession.NECN
             tempObject.WoodBiomass = initialBiomass[0];
             tempObject.LeafBiomass = initialBiomass[1];
 
-            // if(SpeciesData.SeedBanker[species] && reproductionType == "serotiny")  // SEEDBANK
-            // SiteVars.Seedbank[site][species] = CurrentYear; //SEEDBANK
+            // if(SpeciesData.SeedBanker[species] && reproductionType == "seed")  // SEEDBANK normal seed distribution not related to a fire event
+            // SiteVars.Seedbank[site][species] = CurrentYear; //SEEDBANK This is the latest year that seeds were added to a site
             // else //ADD NEW COHORT AS USUAL
 
             SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), 0, woodLeafBiomasses);
