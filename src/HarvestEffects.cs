@@ -266,6 +266,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SOM1surface[site].Nitrogen -= nitrogenLoss;
             SiteVars.SourceSink[site].Nitrogen += nitrogenLoss;
 
+            SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2;
+
         }
 
     }
