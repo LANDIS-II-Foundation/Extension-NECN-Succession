@@ -211,8 +211,8 @@ namespace Landis.Extension.Succession.NECN
 
             // Transfer 1% to mineral N.
             SiteVars.MineralN[site] += summaryNLoss * 0.01;
+            
 
-            SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2;
         }
         //---------------------------------------------------------------------
 
