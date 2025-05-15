@@ -89,7 +89,7 @@ namespace Landis.Extension.Succession.NECN
             double fieldCapacity = SiteVars.SoilFieldCapacity[site];
             double stormFlowFraction = SiteVars.SoilStormFlowFraction[site];
             double baseFlowFraction = SiteVars.SoilBaseFlowFraction[site];
-            double drain = SiteVars.SoilDrain[site];
+            //double drain = SiteVars.SoilDrain[site];
 
             double waterFull = soilDepth * fieldCapacity;  //units of cm
             double waterEmpty = wiltingPoint * soilDepth;  // cm
@@ -342,7 +342,7 @@ namespace Landis.Extension.Succession.NECN
             return;
         }
 
-       public static void AdjustSoilWaterWithET(int year, int month, Site site, double liveBiomass)  
+       public static void AdjustSoilWaterWithET(int year, int month, double liveBiomass, Site site, out double AET)  
        {
             /*start stuff from Kate
             
@@ -386,12 +386,19 @@ namespace Landis.Extension.Succession.NECN
             double waterContentMax= SiteVars.MonthlySoilWaterMax[site][month];
             double availableWaterMax = waterContentMax - waterEmpty;
 
-            double AET = SiteVars.Evaporation[site] + SiteVars.Transpiration[site];
-            
+            AET = SiteVars.Evaporation[site] + SiteVars.Transpiration[site]; //using AET calculated in SoilWater.Run and transpiration calculated in CohortBiomass.Calculate_Cohort_Transpiration
+
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWaterContent = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWaterContent, waterEmpty, waterFull);
             //
             //Subtract ET from soil water content
-            double soilWaterContent = Math.Max(waterContentMax - AET, 0.0);
+            if (AET > waterContentMax)
+            {
+                throw new ApplicationException(string.Format("AET exceeds maximum water content. AET = {0}, waterContentMax = {1}. Site is at row {2}, column {3}.",
+                    AET, waterContentMax, site.Location.Row, site.Location.Column));
+            }
+            
+
+            double soilWaterContent = Math.Max(waterContentMax - AET, 0.0); 
             remainingPET = Math.Max(remainingPET - AET, 0.0);
             //PlugIn.ModelCore.UI.WriteLine("tempAET = {0}, AET = {1}, remainingPET = {2}, soilWaterContent = {3}", 
             //    tempAET, AET, remainingPET, soilWaterContent); //debug

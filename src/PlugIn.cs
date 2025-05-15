@@ -600,7 +600,7 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public bool PlantingEstablish(ISpecies species, ActiveSite site)
         {
-            IEcoregion ecoregion = modelCore.Ecoregion[site];
+            //IEcoregion ecoregion = modelCore.Ecoregion[site];
             double establishProbability = Establishment.Calculate(species, site);
 
             return establishProbability > 0.0;

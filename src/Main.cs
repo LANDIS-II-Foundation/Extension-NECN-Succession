@@ -98,7 +98,7 @@ namespace Landis.Extension.Succession.NECN
                     //TODO check here
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET; //needed to calculate leaching
-                    double availableWaterMax, soilWaterContent;
+                    //double availableWaterMax, soilWaterContent;
 
                     //SF NEW originally, run regular soil water
                     SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
@@ -113,7 +113,7 @@ namespace Landis.Extension.Succession.NECN
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
 
                     //SF NEW adjust soil water after calculating transpiration
-                    SoilWater.AdjustSoilWaterWithET(y, Month, liveBiomass, site, AET);
+                    SoilWater.AdjustSoilWaterWithET(y, Month, liveBiomass, site, out AET);
 
                     // KM: Moved this down bc uses outputs from second half of soil water routine
                     PlugIn.AnnualWaterBalance += ppt - AET;

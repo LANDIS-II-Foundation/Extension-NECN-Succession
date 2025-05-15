@@ -52,7 +52,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyEvaporatedSnow;
         public static ISiteVar<double[]> MonthlyStormflow;
         public static ISiteVar<double[]> MonthlyMaxWaterUse;
-        private static ISiteVar<double> availableWater;  //TODO make these public?
+        //private static ISiteVar<double> availableWater;  //TODO make these public?
         private static ISiteVar<double> availableWaterTranspiration;
         private static ISiteVar<double> capWater;
         private static ISiteVar<double> og_et;
@@ -64,6 +64,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyAnaerobicEffect;//SF added 2023-4-11
         public static ISiteVar<double[]> MonthlyClimaticWaterDeficit;//SF added 2023-6-27
         public static ISiteVar<double[]> MonthlyActualEvapotranspiration;//SF added 2023-6-27
+        public static ISiteVar<double[]> MonthlyPotentialEvapotranspiration; //SF added 2025-5-2
+        public static ISiteVar<double[]> MonthlySoilWaterMax; //SF added 2025-5-2
         public static ISiteVar<int> HarvestDisturbedYear;
         public static ISiteVar<int> FireDisturbedYear;
         public static ISiteVar<double> slope;
@@ -204,6 +206,8 @@ namespace Landis.Extension.Succession.NECN
             MonthlyAnaerobicEffect = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyClimaticWaterDeficit = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyActualEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyPotentialEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlySoilWaterMax = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             AnnualNEE           = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireCEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             FireNEfflux         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -302,6 +306,8 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyAnaerobicEffect[site] = new double[12];
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
+                MonthlyPotentialEvapotranspiration[site] = new double[12];
+                MonthlySoilWaterMax[site] = new double[12];
                 //TODO double check here -- vars from Katie
                 MonthlyTranspiration[site] = new double[12];
                 MonthlyAddToSoil[site] = new double[12];

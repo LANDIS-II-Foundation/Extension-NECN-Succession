@@ -937,10 +937,10 @@ namespace Landis.Extension.Succession.NECN
 
             // Calculate leaf internal CO2 concentration 
             double CO2 = ClimateRegionData.AnnualClimate[ecoregion].MonthlyCO2[Main.Month];
-            //if(CO2 == 0 | object.ReferenceEquals(CO2, null)) //TODO what to do if CO2 isn't provided?
-            //{
-            //    CO2 = 400;
-            //}
+            if (CO2 == 0 | object.ReferenceEquals(CO2, null)) //TODO what to do if CO2 isn't provided?
+            {
+                CO2 = 400;
+            }
             double CicaRatio = (-0.075f * FolN) + 0.875f;
             double ModCiCaRatio = CicaRatio * CiModifier;
             double CiElev = CO2 * ModCiCaRatio;

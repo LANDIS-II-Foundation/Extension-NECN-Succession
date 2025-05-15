@@ -58,8 +58,8 @@ namespace Landis.Extension.Succession.NECN
         //private double fineRootFraction;
         //private double minLAI;
         //private double growthLAI;
-        private double fwue1;
-        private double fwue2;
+        //private double fwue1;
+        //private double fwue2;
 
         public static FunctionalTypeTable Table;
         
