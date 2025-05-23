@@ -436,8 +436,7 @@ namespace Landis.Extension.Succession.NECN
             AnnualClimaticWaterDeficit[site] = 0.0;
             AnnualPotentialEvapotranspiration[site] = 0.0;
             WoodMortality[site] = 0.0;
-            Transpiration[site] = 0.0;   // TODO added
-            Evaporation[site] = 0.0; //TODO added
+
 
             DroughtMort[site] = 0.0;                        
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)

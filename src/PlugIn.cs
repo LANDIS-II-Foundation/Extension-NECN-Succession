@@ -83,6 +83,9 @@ namespace Landis.Extension.Succession.NECN
             tempObject.MineralNallocation = 0.0f;  // monthly allocation
             tempObject.MineralNfraction = 0.0f; // annual fraction
             tempObject.Nresorption = 0.0f;
+            tempObject.SWAllocation = 0.0f;
+            tempObject.SWFraction = 0.0f;
+            tempObject.CapAllocation = 0.0f;
         }
 
 

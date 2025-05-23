@@ -72,7 +72,8 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = ComputeWoodBiomass((ActiveSite) site);
                     SiteVars.monthlyTranspiration[site][Month] = 0.0;
-                                   
+                    SiteVars.monthlyEvaporation[site][Month] = 0.0;
+
                     var ppt = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[Month];
 
                     double monthlyNdeposition;

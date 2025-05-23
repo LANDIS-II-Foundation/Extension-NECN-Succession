@@ -228,13 +228,12 @@ namespace Landis.Extension.Succession.NECN
 
             potentialNPP *= limitN;
 
-            if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(competition_limit) || Double.IsNaN(limitN))
-            {
-                PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
-                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
-                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), SiteVars.SoilTemperature[site]);
-                
-            }
+            //if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(competition_limit) || Double.IsNaN(limitN))
+            //{
+                //PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
+                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
+                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), SiteVars.SoilTemperature[site]);
+            //}
 
 
             //  Age mortality is discounted from ANPP to prevent the over-
@@ -786,6 +785,7 @@ namespace Landis.Extension.Succession.NECN
             
            
             // KM: Use available water based on max + min (prior month)
+            //SF: updated to use max and estimated min from the first step of soil water calculation
             double availableSW = SiteVars.AvailableWaterTranspiration[site];
 
             if (pet >= 0.01)
@@ -908,7 +908,15 @@ namespace Landis.Extension.Succession.NECN
             {
                 Es = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tday);
             }
+
             double rh = (ClimateRegionData.AnnualClimate[ecoregion].MonthlyMaxRH[Main.Month] + ClimateRegionData.AnnualClimate[ecoregion].MonthlyMinRH[Main.Month])/2;
+
+            if(double.IsNaN(rh) | double.IsInfinity(rh))
+            {
+                throw new ApplicationException("Error: Missing Relative Humidity data. Cannot calculate VPD.");
+            }
+
+
             return Es * (1-(rh/100));
         }
 
@@ -924,8 +932,10 @@ namespace Landis.Extension.Succession.NECN
             double Tday = (double)0.5 * (Tmax + Tave);
             double VPD = Calculate_VPD(Tday, Tmin, ecoregion);
 
+            //PlugIn.ModelCore.UI.WriteLine("Calculating cohort transpiration. Tmin = {0}, Tmax = {1}, Tave = {2}, Tday = {3}, VPD = {4}.", Tmin, Tmax, Tave, Tday, VPD);
+
             // Calculate the soil water limitation scalar
-            //TODO do we want to caluclate this twice? or add it as an argument?
+            //TODO do we need to calculate this twice? Maybe we can add it as an argument?
             double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
             
             // Calcualte GPP  (GPP = NPP + Ra)
@@ -936,8 +946,9 @@ namespace Landis.Extension.Succession.NECN
             double FolN = 47/SpeciesData.LeafCN[cohort.Species];
 
             // Calculate leaf internal CO2 concentration 
+            // If a value for atmospheric CO2 isn't provided, use 400 ppm as a reasonable default
             double CO2 = ClimateRegionData.AnnualClimate[ecoregion].MonthlyCO2[Main.Month];
-            if (CO2 == 0 | object.ReferenceEquals(CO2, null)) //TODO what to do if CO2 isn't provided?
+            if (CO2 == 0 | object.ReferenceEquals(CO2, null) | double.IsNaN(CO2)) 
             {
                 CO2 = 400;
             }
@@ -956,8 +967,11 @@ namespace Landis.Extension.Succession.NECN
             double Transpiration = (double)(0.01227 * (GrossPsn / WUE) /10); // the 10 converts to cm
 
             // Cap transpiration at upper limit of water in cell available to plants 
-            double AvailableSW = AvailableSoilWater.GetCapWater(cohort);
-            double AvailableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
+            //double AvailableSW = AvailableSoilWater.GetCapWater(cohort);
+            //double AvailableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
+            //double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
+            double AvailableSW = cohort.Data.AdditionalParameters.CapAllocation;
+            double AvailableSWfraction = cohort.Data.AdditionalParameters.SWFraction;
             double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
 
             // Add to overall site monthly and annual transpiration 
@@ -966,7 +980,10 @@ namespace Landis.Extension.Succession.NECN
             
             // Make VPD a monthly variable
             SiteVars.monthlyVPD[site][Main.Month] = VPD;
-            
+
+            //PlugIn.ModelCore.UI.WriteLine("CiModifier = {0}, GrossPsn = {1}, FolN = {2}, WUE = {3}, AvailSW = {4}, Transpiration = {5}, AdjustedAET = {6}.", 
+            //    CiModifier, GrossPsn, FolN, WUE, AvailableSW, Transpiration, ActualTranspiration);
+
             // write to the calibration log for testing purposes 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
                 {
