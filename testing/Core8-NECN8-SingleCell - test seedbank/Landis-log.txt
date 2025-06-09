@@ -1,0 +1,79 @@
+2025-05-23 12:18:51,841 - LANDIS-II 8.0 (8)
+2025-05-23 12:18:51,848 - 
+2025-05-23 12:18:51,929 - Loading scenario from file "scenario-single-cell.txt" ...
+2025-05-23 12:18:51,988 - Initialized random number generator with seed = 1,535,820,217
+2025-05-23 12:18:51,989 - Loading species data from file "species_LTB.txt" ...
+2025-05-23 12:18:51,998 - Loading ecoregions from file "./ecoregions.txt" ...
+2025-05-23 12:18:52,017 - Core metadata:
+2025-05-23 12:18:52,018 - LANDIS-II v8.0, Seed: , ./single3.tif, ./ecoregions.txt, species_LTB.txt
+Succession:
+NECN Succession Version: 8.0.1, Input: NECN-succession-singlecell.txt
+Disturbance Extensions:
+Other Extensions:
+
+2025-05-23 12:18:52,019 - Initializing landscape from ecoregions map "./single3.tif" ...
+2025-05-23 12:18:52,034 - Cell length = 100 m, cell area = 1 ha
+2025-05-23 12:18:52,038 - Map dimensions: 1 row by 1 column = 1 cell
+2025-05-23 12:18:52,048 - Sites: 1 active (100.0%), 0 inactive (0.0%)
+2025-05-23 12:18:52,055 - Loading NECN Succession extension ...
+2025-05-23 12:18:52,529 -    Begin parsing NECN SPECIES table.
+2025-05-23 12:18:52,574 -    Begin parsing Drought table.
+2025-05-23 12:18:52,575 -    Begin reading FIRE REDUCTION parameters.
+2025-05-23 12:18:52,577 -    Begin reading HARVEST REDUCTION parameters.
+2025-05-23 12:18:52,990 - Initializing NECN Succession ...
+2025-05-23 12:18:53,032 -    Registering Data:  Succession.UniversalCohorts.
+2025-05-23 12:18:53,033 -    Registering Data:  Succession.FineFuels.
+2025-05-23 12:18:53,034 -    Registering Data:  Succession.SmolderConsumption.
+2025-05-23 12:18:53,034 -    Registering Data:  Succession.FlamingConsumption.
+2025-05-23 12:18:53,035 -    Registering Data:  Succession.CWD.
+2025-05-23 12:18:53,035 -    Registering Data:  Succession.PET.
+2025-05-23 12:18:53,037 -   Read in data from single75.tif
+2025-05-23 12:18:53,040 -   Read in data from single0.691.tif
+2025-05-23 12:18:53,045 -   Read in data from single0.4.tif
+2025-05-23 12:18:53,047 -   Read in data from single0.4.tif
+2025-05-23 12:18:53,048 -   Read in data from single0.109.tif
+2025-05-23 12:18:53,049 -   Read in data from single0.055.tif
+2025-05-23 12:18:53,051 -   Read in data from single0.714.tif
+2025-05-23 12:18:53,053 -   Read in data from single0.07.tif
+2025-05-23 12:18:53,057 -   Read in data from single75.tif
+2025-05-23 12:18:53,057 -   Read in data from single3.tif
+2025-05-23 12:18:53,058 -   Read in data from single100.tif
+2025-05-23 12:18:53,060 -   Read in data from single10.tif
+2025-05-23 12:18:53,062 -   Read in data from single3000.tif
+2025-05-23 12:18:53,063 -   Read in data from single50.tif
+2025-05-23 12:18:53,064 -   Read in data from single300.tif
+2025-05-23 12:18:53,065 -   Read in data from single15.tif
+2025-05-23 12:18:53,067 -   Read in data from single110.tif
+2025-05-23 12:18:53,069 -   Read in data from single50.tif
+2025-05-23 12:18:59,381 -    Registering Data:  TimeOfLastSuccession.
+2025-05-23 12:18:59,383 -    Registering Data:  Shade.
+2025-05-23 12:18:59,385 -    Creating Dispersal Neighborhood List.
+2025-05-23 12:18:59,385 -    Dispersal:  NeighborRadius=5050, CellLength=100, numCellRadius=50
+2025-05-23 12:18:59,395 -    Loading initial communities from file "initial_community.csv" ...
+2025-05-23 12:18:59,408 -    Reading initial communities map "single3.tif" ...
+2025-05-23 12:18:59,532 - Using the following extensions ...
+   Extension Name            Extension Filename       
+   --------------            ------------------       
+   NECN Succession           NECN-succession-singlecell.txt
+
+2025-05-23 12:18:59,534 - Current time: 1
+2025-05-23 12:18:59,534 - Running NECN Succession ...
+2025-05-23 12:18:59,933 - Current time: 2
+2025-05-23 12:18:59,935 - Running NECN Succession ...
+2025-05-23 12:19:00,132 - Current time: 3
+2025-05-23 12:19:00,133 - Running NECN Succession ...
+2025-05-23 12:19:00,285 - Current time: 4
+2025-05-23 12:19:00,286 - Running NECN Succession ...
+2025-05-23 12:19:00,418 - Current time: 5
+2025-05-23 12:19:00,419 - Running NECN Succession ...
+2025-05-23 12:19:00,529 - Current time: 6
+2025-05-23 12:19:00,530 - Running NECN Succession ...
+2025-05-23 12:19:00,691 - Current time: 7
+2025-05-23 12:19:00,692 - Running NECN Succession ...
+2025-05-23 12:19:00,894 - Current time: 8
+2025-05-23 12:19:00,898 - Running NECN Succession ...
+2025-05-23 12:19:01,123 - Current time: 9
+2025-05-23 12:19:01,124 - Running NECN Succession ...
+2025-05-23 12:19:01,329 - Current time: 10
+2025-05-23 12:19:01,331 - Running NECN Succession ...
+2025-05-23 12:19:01,495 - Model run is complete.

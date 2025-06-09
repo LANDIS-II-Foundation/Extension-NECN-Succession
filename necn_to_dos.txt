@@ -1,0 +1,26 @@
+--Documentation for calibrate log
+
+--CWD Normal map
+		Found the name "NormalCWDMapName" but expected one of these names
+		
+		--CWD map works if it's above the slope an aspect maps, but not if it's below
+		
+		--TODO make it so it doesn't matter
+
+
+=
+1) order of maps shouldn't matter
+2) two versus four parameters -- 
+3) soil depth -- is it a bug or 
+4) integer column not being read properly
+
+TODO spin-up of LAI in NECN ??
+
+More informative flag if LeafBiomass and WoodBiomass are not provided
+
+
+Why does turning on drought affect year-0 NPP?
+
+
+
+
