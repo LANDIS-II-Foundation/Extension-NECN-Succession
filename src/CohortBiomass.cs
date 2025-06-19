@@ -172,7 +172,7 @@ namespace Landis.Extension.Succession.NECN
                 throw new ApplicationException("Error: LEAF Mortality exceeds cohort biomass");
 
             }
-            double deltaWood = actualANPP[0] - totalMortality[0];
+            double deltaWood = actualANPP[0] - totalMortality[0]; //TODO I think age mortality is being deducted twice!!!!
             double deltaLeaf = actualANPP[1] - totalMortality[1] - defoliatedLeafBiomass;
 
             tempObject.WoodBiomass = deltaWood;
@@ -215,28 +215,8 @@ namespace Landis.Extension.Succession.NECN
 
             double limitT = calculateTemp_Limit(site, cohort.Species);
 
-            //if (OtherData.DGS_waterlimit) 
-            //    //SF added 4-parameter water limit calculation
-            //{
-            //    double wilt_point = SiteVars.SoilWiltingPoint[site];
-            //    double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
-
-            //    if (volumetric_water < 0.001) volumetric_water = 0.001;
-
-            //    limitH20 = calculateWater_Limit_versionDGS(volumetric_water, cohort.Species);
-            //    if (OtherData.CalibrateMode)
-            //    {
-            //        PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
-            //        volumetric_water, limitH20);
-            //    }
-
-            //    if (volumetric_water < wilt_point) limitH20 = 0.001;
-
-            //}
-            //else
-            //{
-            //}
-            double limitH20 = calculateWater_Limit(site, ecoregion, cohort.Species);
+          
+            double limitH20 = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
 
             double limitLAI = calculateLAI_Limit(cohort, site);
 
@@ -248,18 +228,12 @@ namespace Landis.Extension.Succession.NECN
 
             potentialNPP *= limitN;
 
-            if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(competition_limit) || Double.IsNaN(limitN))
-            {
-                PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
-                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
-                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), SiteVars.SoilTemperature[site]);
-
-                double wilt_point = SiteVars.SoilWiltingPoint[site];
-                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
-
-                PlugIn.ModelCore.UI.WriteLine("wilt_point = {0}, volumetric_water = {1}", wilt_point, volumetric_water);
-
-            }
+            //if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(competition_limit) || Double.IsNaN(limitN))
+            //{
+                //PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
+                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
+                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), SiteVars.SoilTemperature[site]);
+            //}
 
 
             //  Age mortality is discounted from ANPP to prevent the over-
@@ -535,7 +509,13 @@ namespace Landis.Extension.Succession.NECN
                 if (Double.IsNaN(NPPfineRoot))
                     NPPfineRoot = 0.0;
             }
-
+            
+             IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+            //TODO CHECK HERE
+            // KM: Calculate transpiration within the NPP function to make sure carbon and water fluxes are being calculated together and because npp is necessary for transpiration calculations 
+            double NPP = AGNPP[0] + AGNPP[1] + (NPPcoarseRoot/0.47) + (NPPfineRoot/0.47);
+            //double NPP = NPPwood + NPPleaf + NPPcoarseRoot + NPPfineRoot;
+            Calculate_Cohort_Transpiration(cohort, site, ecoregion, NPP);
 
             SiteVars.AGNPPcarbon[site] += NPPwood + NPPleaf;
             SiteVars.BGNPPcarbon[site] += NPPcoarseRoot + NPPfineRoot;
@@ -742,34 +722,6 @@ namespace Landis.Extension.Succession.NECN
 
         }
 
-        public static double calculateWater_Limit_versionDGS(double volumetricWater, ISpecies species)
-     //This implements a 4-parameter water limit calculation, similar to soil T, which allows a unimodal response to 
-     //soil moisture and allows us to prevent rapid growth in wetlands by species that are intolerant of waterlogged soils
-     //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
-        {
-            var A1 = SpeciesData.MoistureCurve1[species];
-            var A2 = SpeciesData.MoistureCurve2[species];
-            var A3 = SpeciesData.MoistureCurve3[species];
-            var A4 = SpeciesData.MoistureCurve4[species];
-
-
-            
-            var frac = (A2 - volumetricWater) / (A2 - A1);
-            var waterLimit = 0.0;
-            if (frac > 0.0)
-                waterLimit = Math.Exp(A3 / A4 * (1.0 - Math.Pow(frac, A4))) * Math.Pow(frac, A3);
-
-            if (Double.IsNaN(waterLimit))
-            {
-                PlugIn.ModelCore.UI.WriteLine("soilWater = {0}, soil water limit = {1}, frac = {2}", volumetricWater, waterLimit, frac); //debug
-                PlugIn.ModelCore.UI.WriteLine("A1 = {0}, A2 = {1}, A3 = {2}, A4 = {3}", A1, A2, A3, A4);
-
-
-            }
-                return waterLimit;
-
-        }
-
         //---------------------------------------------------------------------------
         //... Originally from CENTURY
 
@@ -784,7 +736,7 @@ namespace Landis.Extension.Succession.NECN
         //                 thereby increase the slope of the line.
         //     pprpts(3):  The lowest ratio of available water to pet at which
         //                 there is no restriction on production.
-        private static double calculateWater_Limit(ActiveSite site, IEcoregion ecoregion, ISpecies species)
+        private static double calculateWater_Limit(ActiveSite site, ICohort cohort, IEcoregion ecoregion, ISpecies species)
         {
 
             var A1 = SpeciesData.MoistureCurve1[species];
@@ -799,7 +751,7 @@ namespace Landis.Extension.Succession.NECN
             //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
             {
                 double wilt_point = SiteVars.SoilWiltingPoint[site];
-                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] / SiteVars.SoilDepth[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilMoistureVolumetric[site][Main.Month];
 
                 if (volumetric_water < 0.001) volumetric_water = 0.001;
 
@@ -831,9 +783,16 @@ namespace Landis.Extension.Succession.NECN
             double H2Oinputs = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPrecip[Main.Month]; //rain + irract;
             double pet = ClimateRegionData.AnnualClimate[ecoregion].MonthlyPET[Main.Month];
             
+           
+            // KM: Use available water based on max + min (prior month)
+            //SF: updated to use max and estimated min from the first step of soil water calculation
+            double availableSW = SiteVars.AvailableWaterTranspiration[site];
+
             if (pet >= 0.01)
             {   
-                Ratio_AvailWaterToPET = (SiteVars.PlantAvailableWater[site] / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
+                //Ratio_AvailWaterToPET = (SiteVars.PlantAvailableWater[site] / pet);  //Modified by ML so that we weren't double-counting precip as in above equation
+               //Ratio_AvailWaterToPET = (availableSW / cohort_pet);  
+                Ratio_AvailWaterToPET = (availableSW / pet);
             }
             else Ratio_AvailWaterToPET = 0.01;
 
@@ -860,7 +819,9 @@ namespace Landis.Extension.Succession.NECN
 
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
-                CalibrateLog.availableWater = SiteVars.PlantAvailableWater[site];
+                CalibrateLog.availableSW = SiteVars.PlantAvailableWater[site]; //TODO make sure this matches Katie's water values
+                //TODO reconcile this with using the 4-parameter water limit calculation
+                //TODO compare to line 789 where this is assigned a different value
                 //Outputs.CalibrateLog.Write("{0:0.00},", SiteVars.AvailableWater[site]);
             }
 
@@ -924,5 +885,116 @@ namespace Landis.Extension.Succession.NECN
         {
             throw new NotImplementedException();
         }
+
+
+        // KM: VPD used in transpiration calculation 
+        // KM: VPD and transpiration calculations based on pnet approach developed by Mark Kubiske for LANDIS-II PnET extension (de Bruijna et al. 2014)
+        // KM: Added relative humidity as a climate input for more accurate vpd estiamtion 
+        
+        // Calculate Vapor Pressure 
+        private static double Calculate_VP(double a, double b, double c, double T)
+        {
+            return a * (double)Math.Exp(b * T / (T + c));
+        }
+        
+        // Calculate Vapor Pressure Deficit (VPD)
+        private static double Calculate_VPD(double Tday, double Tmin, IEcoregion ecoregion)
+        {
+
+            //saturated vapor pressure
+            double Es = Calculate_VP(0.61078f, 17.26939f, 237.3f, Tday);
+
+            if (Tday < 0)
+            {
+                Es = Calculate_VP(0.61078f, 21.87456f, 265.5f, Tday);
+            }
+
+            double rh = (ClimateRegionData.AnnualClimate[ecoregion].MonthlyMaxRH[Main.Month] + ClimateRegionData.AnnualClimate[ecoregion].MonthlyMinRH[Main.Month])/2;
+
+            if(double.IsNaN(rh) | double.IsInfinity(rh))
+            {
+                throw new ApplicationException("Error: Missing Relative Humidity data. Cannot calculate VPD.");
+            }
+
+
+            return Es * (1-(rh/100));
+        }
+
+        //  KM: Calculate cohort transpiration
+        public static void Calculate_Cohort_Transpiration(ICohort cohort, ActiveSite site, IEcoregion ecoregion, double npp)
+            //This needs cohort NPP, soil water before AET calculation
+        {
+
+            // Calculate the VPD
+            double Tmin = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMinTemp[Main.Month];
+            double Tmax = ClimateRegionData.AnnualClimate[ecoregion].MonthlyMaxTemp[Main.Month];
+            double Tave = (double)0.5 * (Tmin + Tmax);
+            double Tday = (double)0.5 * (Tmax + Tave);
+            double VPD = Calculate_VPD(Tday, Tmin, ecoregion);
+
+            //PlugIn.ModelCore.UI.WriteLine("Calculating cohort transpiration. Tmin = {0}, Tmax = {1}, Tave = {2}, Tday = {3}, VPD = {4}.", Tmin, Tmax, Tave, Tday, VPD);
+
+            // Calculate the soil water limitation scalar
+            //TODO do we need to calculate this twice? Maybe we can add it as an argument?
+            double CiModifier = calculateWater_Limit(site, cohort, ecoregion, cohort.Species);
+            
+            // Calcualte GPP  (GPP = NPP + Ra)
+            // Asssume Ra is 50% of GPP (Marthews et al., 2012; Chambers et al., 2004; Zhang, Xu, Chen, & Adams, 2009; iao et al., 2010)
+            double GrossPsn = (npp) * 2;
+
+            // Calculate foliar nitrogen assuming C 47% of leaf mass
+            double FolN = 47/SpeciesData.LeafCN[cohort.Species];
+
+            // Calculate leaf internal CO2 concentration 
+            // If a value for atmospheric CO2 isn't provided, use 400 ppm as a reasonable default
+            double CO2 = ClimateRegionData.AnnualClimate[ecoregion].MonthlyCO2[Main.Month];
+            if (CO2 == 0 | object.ReferenceEquals(CO2, null) | double.IsNaN(CO2)) 
+            {
+                CO2 = 400;
+            }
+            double CicaRatio = (-0.075f * FolN) + 0.875f;
+            double ModCiCaRatio = CicaRatio * CiModifier;
+            double CiElev = CO2 * ModCiCaRatio;
+
+            // Calculate mass flux of co2 and h20 
+            double V = (double)(8314.47 * ((Tmin + 273) / 101.3));
+            double JCO2 = (double)(0.139 * ((CO2 - CiElev) / V) * 0.00001);
+            double JH2Osp = (double)(0.239 * (VPD / (8314.47 * (Tmin + 273))));
+            double JH2O = JH2Osp * CiModifier;
+            double WUE = JCO2/JH2O;
+
+            // Calculate transpiraiton 
+            double Transpiration = (double)(0.01227 * (GrossPsn / WUE) /10); // the 10 converts to cm
+
+            // Cap transpiration at upper limit of water in cell available to plants 
+            //double AvailableSW = AvailableSoilWater.GetCapWater(cohort);
+            //double AvailableSWfraction = AvailableSoilWater.GetSWFraction(cohort); 
+            //double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
+            double AvailableSW = cohort.Data.AdditionalParameters.CapAllocation;
+            double AvailableSWfraction = cohort.Data.AdditionalParameters.SWFraction;
+            double ActualTranspiration = Math.Min(AvailableSW, Transpiration);
+
+            // Add to overall site monthly and annual transpiration 
+            SiteVars.Transpiration[site] += ActualTranspiration;
+            SiteVars.monthlyTranspiration[site][Main.Month] += ActualTranspiration;
+            
+            // Make VPD a monthly variable
+            SiteVars.monthlyVPD[site][Main.Month] = VPD;
+
+            //PlugIn.ModelCore.UI.WriteLine("CiModifier = {0}, GrossPsn = {1}, FolN = {2}, WUE = {3}, AvailSW = {4}, Transpiration = {5}, AdjustedAET = {6}.", 
+            //    CiModifier, GrossPsn, FolN, WUE, AvailableSW, Transpiration, ActualTranspiration);
+
+            // write to the calibration log for testing purposes 
+            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+                {
+                    CalibrateLog.transpiration = ActualTranspiration;
+                    CalibrateLog.availableSW = AvailableSW;
+                    CalibrateLog.availableSWFraction = AvailableSWfraction;
+                    CalibrateLog.vpd = VPD;
+                }
+        }
+
+
+
     }
 }

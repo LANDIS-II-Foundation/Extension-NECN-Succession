@@ -140,7 +140,7 @@ namespace Landis.Extension.Succession.NECN
             }
             catch
             {
-                PlugIn.ModelCore.UI.WriteLine("   NOTE:  The fire reductions table does not contain an entry for severity {0}.  DEFAULT REDUCTION = 0.", severity);
+                //PlugIn.ModelCore.UI.WriteLine("   NOTE:  The fire reductions table does not contain an entry for severity {0}.  DEFAULT REDUCTION = 0.", severity);
                 return;
             }
 

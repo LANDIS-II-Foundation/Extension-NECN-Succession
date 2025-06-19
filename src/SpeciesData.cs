@@ -90,6 +90,10 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> MaxLAI;
         public static Landis.Library.Parameters.Species.AuxParm<double> FractionANPPtoLeaf;
 
+        //Transpiration parameters
+        //public static Landis.Library.Parameters.Species.AuxParm<double> FWUE1;
+        //public static Landis.Library.Parameters.Species.AuxParm<double> FWUE2;
+
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
         {
@@ -145,7 +149,10 @@ namespace Landis.Extension.Succession.NECN
             LightLAIShape        = parameters.LightLAIShape;
             LightLAIScale       = parameters.LightLAIScale;
             LightLAILocation = parameters.LightLAILocation;
-            LightLAIAdjust = parameters.LightLAIAdjust;   
+            LightLAIAdjust = parameters.LightLAIAdjust;
+
+            //FWUE1 = parameters.FWue1;
+            //FWUE2 = parameters.FWue2;
 
             foreach (ISpecies spp in PlugIn.ModelCore.Species)
             {

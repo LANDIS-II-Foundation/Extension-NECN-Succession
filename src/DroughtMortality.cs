@@ -372,12 +372,12 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET;  
             
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
-            SiteVars.WaterMovement[site] = waterMovement;
+            //SiteVars.WaterMovement[site] = waterMovement;
             SiteVars.PlantAvailableWater[site] = plantAvailableWater;  //available to plants for growth     
             SiteVars.SoilWaterContent[site] = soilWaterContent; //lowest (end-of-month) soil water, after subtracting everything
             SiteVars.MeanSoilWaterContent[site] = meanSoilWater; //mean of lowest soil water and highest soil water
             SiteVars.MonthlySoilWaterContent[site][Main.Month] = soilWaterContent;
-            SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater / soilDepth; //Convert to volumetric water content
+            SiteVars.MonthlyMeanSoilMoistureVolumetric[site][Main.Month] = meanSoilWater / soilDepth; //Convert to volumetric water content
 
             //PlugIn.ModelCore.UI.WriteLine("Spinup climate: Month={0}, PET={1}, AET={2}, max soil water = {3}," +
             //   "end soil water = {4}.", month, PET, AET, waterContentMax, soilWaterContent); //debug

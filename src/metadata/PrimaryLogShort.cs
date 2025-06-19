@@ -30,6 +30,13 @@ namespace Landis.Extension.Succession.NECN
         
         [DataFieldAttribute(Unit = FieldUnits.g_C_m2, Desc = "Dead Wood C", Format = "0.0")]
         public double C_DeadWood { get; set; }
+        
+        [DataFieldAttribute(Unit = "cm/yr", Desc = "Transpiration", Format = "0.0")] 
+        public double AnnualTrans { get; set; }
+
+        [DataFieldAttribute(Unit = "cm/yr", Desc = "Evaporation", Format = "0.0")] 
+        public double Evaporation { get; set; }
+
 
 
     }

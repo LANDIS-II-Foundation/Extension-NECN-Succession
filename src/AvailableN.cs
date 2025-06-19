@@ -180,7 +180,7 @@ namespace Landis.Extension.Succession.NECN
             
             if(Ndemand < 0.0)
             {
-                PlugIn.ModelCore.UI.WriteLine("   ERROR:  TotalANPP-C={0:0.00} Nreduction={1:0.00}.", totalANPP_C, Ndemand);
+               // PlugIn.ModelCore.UI.WriteLine("   ERROR:  TotalANPP-C={0:0.00} Nreduction={1:0.00}.", totalANPP_C, Ndemand);
                 throw new ApplicationException("Error: N Reduction is < 0.  See AvailableN.cs");
             }
 

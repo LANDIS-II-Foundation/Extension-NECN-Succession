@@ -13,7 +13,6 @@ namespace Landis.Extension.Succession.NECN
         public static double cohortWoodB, cohortLeafB, cohortANPP;
         public static string speciesName;
         public static double mortalityAGEwood, mortalityAGEleaf;
-        public static double availableWater;
         public static double actual_LAI, actual_LAI_tree, base_lai, seasonal_adjustment, siteLAI;
         public static double mineralNalloc, resorbedNalloc;
         public static double limitLAI, limitH20, limitT, limitN, limitLAIcompetition;
@@ -22,6 +21,15 @@ namespace Landis.Extension.Succession.NECN
         public static double deltaWood, deltaLeaf;
         public static double mortalityBIOwood, mortalityBIOleaf;
         public static double resorbedNused, mineralNused, demand_N;
+
+        // KM added variables for tracking water 
+        public static double precipitation;
+        public static double vpd;
+        public static double availableSW;
+        public static double availableSWFraction;
+        public static double availableWaterTranspiration;  //  (availableWaterMax + priorAvailableWaterMin) / 2.0;
+        public static double transpiration;
+
 
         public static void WriteLogFile()
         {
@@ -39,7 +47,6 @@ namespace Landis.Extension.Succession.NECN
             clog.MortalityAGEleafBiomass = mortalityAGEleaf;
             clog.MortalityTHINwoodBiomass = mortalityBIOwood;
             clog.MortalityTHINleafBiomass = mortalityBIOleaf;
-            clog.AvailableWater = availableWater;
             clog.ActualLAI = actual_LAI; // Chihiro, 2021.03.26: renamed
             clog.TreeLAI = actual_LAI_tree;
             clog.SiteLAI = siteLAI; // Chihiro, 2021.03.26: added
@@ -66,7 +73,14 @@ namespace Landis.Extension.Succession.NECN
             clog.TotalNDemand = demand_N;
             clog.CohortANPP = cohortANPP;
 
-
+            // KM added variables for tracking water 
+            clog.Precipitation = precipitation;
+            clog.VPD = vpd;
+            clog.AvailableSW = availableSW; // Water available to the cohort based on available SW fraction
+            clog.AvailableSWFraction = availableSWFraction; // Fraction of available water allocated to the cohort
+            clog.AvailableWaterTranspiration = availableWaterTranspiration; // Total water available for transpiration in the cell 
+            clog.Transpiration = transpiration;
+            
             Outputs.calibrateLog.AddObject(clog);
             Outputs.calibrateLog.WriteToFile();
 
@@ -75,7 +89,6 @@ namespace Landis.Extension.Succession.NECN
 
         [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Simulation Year")]
         public int Year {set; get;}
-
         // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.Month, Desc = "Simulation Month")]
         public int Month { set; get; }
@@ -168,9 +181,6 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.g_B_m2, Desc = "Total Site Biomass")]
         public double TotalSiteBiomass { set; get; }
         // ********************************************************************
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Available Water", Format = "0.0")]
-        public double AvailableWater { set; get; }
-        // ********************************************************************
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Soil Temperature", Format = "0.0")]
         public double SoilTemperature { set; get; }
         // ********************************************************************
@@ -188,6 +198,27 @@ namespace Landis.Extension.Succession.NECN
         // ********************************************************************
         [DataFieldAttribute(Unit = "g_N_m2_month1", Desc = "Total N Demand", Format = "0.000")]
         public double TotalNDemand { set; get; }
+
+
+        // KM added variables for water tracking 
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "Precipitation", Format = "0.00")]
+        public double Precipitation { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "kPa", Desc = "VPD", Format = "0.00")]
+        public double VPD { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "SW available to transpiration in each cohort", Format = "0.0000")]
+        public double AvailableSW { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "Unitless fraction", Desc = "Fraction SW available to transpiration in each cohort", Format = "0.0000")]
+        public double AvailableSWFraction { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Total SW available to transpiration in the cell", Format = "0.0000")]
+        public double AvailableWaterTranspiration { set; get; }
+        // ********************************************************************
+        [DataFieldAttribute(Unit = "cm", Desc = "Transpiration", Format = "0.00")]
+        public double Transpiration { set; get; }
 
     }
 }

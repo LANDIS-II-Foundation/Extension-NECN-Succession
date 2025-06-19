@@ -6,7 +6,7 @@
     <AssemblyTitle>Landis.Extension.Succession.NECN-v8</AssemblyTitle>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
     <AssemblyVersion>8.0.2</AssemblyVersion>
-    <Version>8.0.2</Version>
+    <Version>8.1</Version>
     <FileVersion>8.0.2</FileVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -18,7 +18,7 @@
     <Copyright>Landis-II-Foundation</Copyright>
     <Company>LANDIS-II Foundation</Company>
     <Description></Description>
-    <PackageReleaseNotes>Update to Core v8</PackageReleaseNotes>
+    <PackageReleaseNotes>Update transpiration routine</PackageReleaseNotes>
     <PackageTags>NECN;LANDIS-II;Landis;Extension;Succession;Carbon;Nitrogen</PackageTags>
     <PackageLicenseUrl>https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>http://www.landis-ii.org</PackageProjectUrl>
