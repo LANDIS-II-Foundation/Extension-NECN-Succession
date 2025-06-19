@@ -146,6 +146,7 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<int> LeafNeedleDrop { get; }
         Landis.Library.Parameters.Species.AuxParm<double> CoarseRootFraction { get; }
         Landis.Library.Parameters.Species.AuxParm<double> FineRootFraction { get; }
+        Landis.Library.Parameters.Species.AuxParm<int> SeedbankLongevity { get; }
 
 
         double AtmosNslope {get;}

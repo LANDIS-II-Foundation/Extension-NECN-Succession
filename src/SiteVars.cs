@@ -62,7 +62,8 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> normalSWA;
         public static ISiteVar<double> normalCWD;
         public static ISiteVar<double> normalTemp;
-            
+        public static ISiteVar<Dictionary<ISpecies, int>> SeedbankAge; //seedbank
+        public static ISiteVar<Dictionary<ISpecies, bool>> SeedbankViability; //seedbank
 
         //---------------------------------------------------------------------
 
@@ -174,6 +175,9 @@ namespace Landis.Extension.Succession.NECN
 
             droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
 
+            SeedbankAge = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, int>>();//seedbank
+            SeedbankViability = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, bool>>();//seedbank
+
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
             {
                 swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
@@ -241,6 +245,8 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
 
+                SeedbankAge[site] = new Dictionary<ISpecies, int>(); //seedbank
+                SeedbankViability[site] = new Dictionary<ISpecies, bool>(); //seedbank viability
 
                 //CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 

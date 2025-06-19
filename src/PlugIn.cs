@@ -152,6 +152,8 @@ namespace Landis.Extension.Succession.NECN
             //  SuccessionCohorts property in its Initialization method.
             Library.UniversalCohorts.Cohorts.Initialize(Timestep, new CohortBiomass());
 
+            Seedbank.Initialize();
+
             // Initialize Reproduction routines:
             Reproduction.SufficientResources = SufficientLight;
             Reproduction.Establish = Establish;
@@ -303,6 +305,10 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SourceSink[site].Carbon += live_foliarFireConsumption * 0.47;
                     woodInput -= live_woodFireConsumption;
                     foliarInput -= live_foliarFireConsumption;
+
+                    Seedbank.PostfireGerminate(site);
+                    Seedbank.ClearSeedbank(site);
+
 
                     // SEEDBANK ***************
                     // if(SpeciesData.Seedbanker[cohort.Species])
@@ -558,7 +564,7 @@ namespace Landis.Extension.Succession.NECN
         /// This is a Delegate method to base succession.
         /// </summary>
 
-        public void AddNewCohort(ISpecies species, ActiveSite site, string reproductionType, double propBiomass = 1.0)
+        public static void AddNewCohort(ISpecies species, ActiveSite site, string reproductionType, double propBiomass = 1.0)
         {
             float[] initialBiomass = CohortBiomass.InitialBiomass(species, site);
 
@@ -567,7 +573,7 @@ namespace Landis.Extension.Succession.NECN
             tempObject.WoodBiomass = initialBiomass[0];
             tempObject.LeafBiomass = initialBiomass[1];
 
-            // if(SpeciesData.SeedBanker[species] && reproductionType == "seed")  // SEEDBANK normal seed distribution not related to a fire event
+            // if(SpeciesData.Seedbanker[species] && reproductionType == "seed")  // SEEDBANK normal seed distribution not related to a fire event
             // SiteVars.Seedbank[site][species] = CurrentYear; //SEEDBANK This is the latest year that seeds were added to a site
             // else //ADD NEW COHORT AS USUAL
 

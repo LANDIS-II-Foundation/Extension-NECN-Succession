@@ -133,7 +133,7 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> minLAI;
         private Landis.Library.Parameters.Species.AuxParm<double> maxLAI;
         private Landis.Library.Parameters.Species.AuxParm<double> fractionANPPtoLeaf;
-
+        private Landis.Library.Parameters.Species.AuxParm<int> seedbankLongevity;
 
 
         //---------------------------------------------------------------------
@@ -382,7 +382,7 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> CoarseRootFraction { get { return coarseRootFraction; } }
         public Landis.Library.Parameters.Species.AuxParm<double> FineRootFraction { get { return fineRootFraction; } }
         public Landis.Library.Parameters.Species.AuxParm<double> FractionANPPtoLeaf { get { return fractionANPPtoLeaf; } }
-
+        public Landis.Library.Parameters.Species.AuxParm<int> SeedbankLongevity { get { return seedbankLongevity; } }
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -1337,6 +1337,11 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             fineRootFraction[species] = VerifyRange(newValue, 0.0, 1.0, "FineRootFraction");
         }
+        public void SetSeedbankLongevity(ISpecies species, int newValue)
+        {
+            Debug.Assert(species != null);
+            seedbankLongevity[species] = VerifyRange(newValue, 0, 100, "SeedbankLongevity");
+        }
 
 
         public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
@@ -1410,6 +1415,7 @@ namespace Landis.Extension.Succession.NECN
             coarseRootFraction = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             fineRootFraction = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             fractionANPPtoLeaf = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            seedbankLongevity = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
 
             lightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);

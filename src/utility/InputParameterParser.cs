@@ -482,52 +482,10 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetFoliageDropMonth(species, System.Convert.ToInt32(row["FoliageDropMonth"]));
                 parameters.SetCoarseRootFraction(species, System.Convert.ToDouble(row["CoarseRootFraction"]));
                 parameters.SetFineRootFraction(species, System.Convert.ToDouble(row["FineRootFraction"]));
+                parameters.SetSeedbankLongevity(species, System.Convert.ToInt32(row["SeedbankLongevity"]));
 
 
             }
-
-            //--------- Read In Functional Group Table -------------------------------
-            //PlugIn.ModelCore.UI.WriteLine("   Begin parsing FUNCTIONAL GROUP table.");
-
-            //InputVar<string> func_csv = new InputVar<string>("FunctionalGroupParameters");
-            //ReadVar(func_csv);
-            //    CSVParser functionalParser = new CSVParser();
-            //    DataTable functionalTable = functionalParser.ParseToDataTable(func_csv.Value);
-            //    foreach (DataRow row in functionalTable.Rows)
-            //    {
-            //        string FunctionalTypeName = System.Convert.ToString(row["FunctionalGroupName"]);
-            //        int funcIndex = System.Convert.ToInt32(row["FunctionalGroupIndex"]); 
-
-            //        if (funcIndex >= numFunctionalTypes)
-            //            throw new InputValueException(funcIndex.ToString(),
-            //                                      "The index:  {0} exceeds the allowable number of functional groups, {1}",
-            //                                      funcIndex.ToString(), numFunctionalTypes);
-
-            //        FunctionalType funcTParms = new FunctionalType();
-            //        //parameters.FunctionalTypes[funcIndex] = funcTParms;
-
-            //        funcTParms.TempCurve1 = System.Convert.ToDouble(row["TemperatureCurve1"]);
-            //        funcTParms.TempCurve2 = System.Convert.ToDouble(row["TemperatureCurve2"]); 
-            //        funcTParms.TempCurve3 = System.Convert.ToDouble(row["TemperatureCurve3"]); 
-            //        funcTParms.TempCurve4 = System.Convert.ToDouble(row["TemperatureCurve4"]); 
-            //        funcTParms.FractionANPPtoLeaf = System.Convert.ToDouble(row["FractionANPPtoLeaf"]); 
-            //        funcTParms.BiomassToLAI = System.Convert.ToDouble(row["LeafBiomassToLAI"]);
-            //        funcTParms.KLAI = System.Convert.ToDouble(row["KLAI"]);
-            //        funcTParms.MaxLAI = System.Convert.ToDouble(row["MaximumLAI"]);
-            //        funcTParms.MoistureCurve2 = System.Convert.ToDouble(row["MoistureCurve2"]); 
-            //        funcTParms.MoistureCurve3 = System.Convert.ToDouble(row["MoistureCurve3"]);
-            //        funcTParms.WoodDecayRate = System.Convert.ToDouble(row["WoodDecayRate"]);
-            //        funcTParms.MonthlyWoodMortality = System.Convert.ToDouble(row["MonthlyWoodMortality"]);
-            //        funcTParms.LongevityMortalityShape = System.Convert.ToDouble(row["LongevityMortalityShape"]);
-            //        funcTParms.FoliageDropMonth = System.Convert.ToInt32(row["FoliageDropMonth"]);
-            //        funcTParms.CoarseRootFraction = System.Convert.ToDouble(row["CoarseRootFraction"]);
-            //        funcTParms.FineRootFraction = System.Convert.ToDouble(row["FineRootFraction"]);
-            //        funcTParms.MinLAI = ReadMinLAI(row);
-            //        funcTParms.MoistureCurve1 = ReadMC1(row);
-            //        funcTParms.MoistureCurve4 = ReadMC4(row);
-            //        funcTParms.MinSoilDrain = ReadMinSoilDrain(row);
-
-            //}
 
 
             //-------------------------
