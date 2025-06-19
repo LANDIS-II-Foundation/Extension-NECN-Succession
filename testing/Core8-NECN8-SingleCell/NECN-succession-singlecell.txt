@@ -42,6 +42,7 @@ DecayRateSurf			0.4
 DecayRateSOM1			1.0
 DecayRateSOM2			0.02
 DecayRateSOM3			0.0002
+>>GrassThresholdMultiplier 0.5
 
 SpeciesParameters NECN_Spp_Table.csv
 			
