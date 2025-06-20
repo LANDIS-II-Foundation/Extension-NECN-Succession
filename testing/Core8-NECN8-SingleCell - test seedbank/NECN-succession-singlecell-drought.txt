@@ -10,8 +10,8 @@ ClimateConfigFile		climate-generator-baseline.txt
 
 SoilDepthMapName			single75.tif<<75
 SoilDrainMapName			single0.691.tif<<.691
-SoilBaseFlowMapName			single0.4.tif<<0.4
-SoilStormFlowMapName		single0.4.tif<<0.4
+SoilBaseFlowMapName			single0.055.tif<<0.4
+SoilStormFlowMapName		single0.055.tif<<0.4
 SoilFieldCapacityMapName	single0.109.tif<<.109
 SoilWiltingPointMapName		single0.055.tif<<0.055
 SoilPercentSandMapName		single0.714.tif<<0.714

@@ -1040,8 +1040,40 @@ namespace Landis.Extension.Succession.NECN
                     }
 
                 }
+            }
+
+              
+            foreach (ISpecies species in PlugIn.ModelCore.Species)
+            {
+                if (SpeciesData.SeedbankLongevity[species] > 0)
+                {
+                    PlugIn.ModelCore.UI.WriteLine("Writing seedbank age map for species {0} at timestep {1}", species.Name, PlugIn.ModelCore.CurrentTime);
+                    string pathSeedbankSpecies = Seedbank.SpeciesMapNames.ReplaceTemplateVars(@"NECN\Seedbank-{species}-{timestep}.tif", species.Name, PlugIn.ModelCore.CurrentTime);
+                    using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathSeedbankSpecies, PlugIn.ModelCore.Landscape.Dimensions))
+                    {
+                        IntPixel pixel = outputRaster.BufferPixel;
+                        foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                        {
+                            if (site.IsActive)
+                            {
+                                if (SiteVars.SeedbankAge[site].ContainsKey(species))
+                                {
+                                    pixel.MapCode.Value = (int)SiteVars.SeedbankAge[site][species];
+                                }
+                                else
+                                {
+                                    //  Inactive site or no seedbank for this species
+                                    pixel.MapCode.Value = -1;
+                                }
+                            }
+                            outputRaster.WriteBufferPixel();
+                        }
+                    }
+                }
 
             }
+
+            
         }
     
 

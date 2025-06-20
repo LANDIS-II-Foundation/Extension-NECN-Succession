@@ -3,7 +3,7 @@ LandisData	Species
 >>				Sexual	Seed Disp Dist	Veg	Sprout	Age	Post-Fire
 >>	Name		Long	Maturit	Effecti	Maximum	Rep P	Min	Max	Regen
 >>	----		-------	-----	-----	----	------  -------	-----	----	-----	--------
-	PinuJeff	500	25	50	300	0	0	0	none
+	PinuJeff	60	25	50	300	0	0	0	none
 	PinuLamb	550	20	30	400	0	0	0	none
 	CaloDecu	500	30	30	2000	0	0	0	none
 	AbieConc	450	35	30	500	0	0	0	none

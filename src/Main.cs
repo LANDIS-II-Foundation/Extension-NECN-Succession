@@ -203,6 +203,8 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
             }
 
+            
+            Seedbank.UpdateSeedbank(site);
 
             ComputeTotalCohortCN(site, siteCohorts);
 
