@@ -1,11 +1,11 @@
 ﻿using Landis.Core;
-using Landis.Library.Succession.DensitySeeding;
 using Landis.Library.UniversalCohorts;
 using Landis.SpatialModeling;
 using Landis.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using Landis.Library.Succession;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -14,7 +14,7 @@ namespace Landis.Extension.Succession.NECN
         public static void Initialize()
         {
             //TODO set initial seedbank age
-            //TODO do we need to initialize, or can we just add to the dictionar for each site as we go?
+            //TODO do we need to initialize, or can we just add to the dictionary for each site as we go?
         }
 
 
@@ -47,7 +47,7 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SeedbankViability[site][species] = false;
                 }
 
-                SiteVars.SeedbankAge[site][species] += 1;
+                SiteVars.SeedbankAge[site][species] += 1; //TODO fix this for different NECN timestep lengths
 
                 if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1}: {2}", species.Name, site.Location, SiteVars.SeedbankAge[site][species]);
 
@@ -114,9 +114,12 @@ namespace Landis.Extension.Succession.NECN
             foreach (var speciesEntry in SiteVars.SeedbankAge[site])
             {
                 ISpecies species = speciesEntry.Key; // Extract the species from the dictionary entry
-                if (SiteVars.SeedbankViability[site][species])
+                if (SiteVars.SeedbankViability[site][species]) //&
+                    //Reproduction.SufficientResources(species, site) &
+                    //Reproduction.Establish(species, site))
                 {
-                    PlugIn.AddNewCohort(species, site, "Postfire", 1.0); // TODO SF I had to change this to static in PlugIn
+                    PlugIn.ModelCore.UI.WriteLine("Doing a postfire germinate");
+                    PlugIn.AddNewCohort(species, site, "seedbank", 1.0); // TODO SF I had to change this to static in PlugIn
                 }
             }
         }

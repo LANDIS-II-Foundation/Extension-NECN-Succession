@@ -46,6 +46,7 @@ namespace Landis.Extension.Succession.NECN
         public static int[] SpeciesBySerotiny;
         public static int[] SpeciesByResprout;
         public static int[] SpeciesBySeed;
+        public static int[] SpeciesBySeedbank;
 
         //---------------------------------------------------------------------
 
@@ -200,6 +201,7 @@ namespace Landis.Extension.Succession.NECN
             SpeciesByResprout = new int[ModelCore.Species.Count];
             SpeciesBySerotiny = new int[ModelCore.Species.Count];
             SpeciesBySeed = new int[ModelCore.Species.Count];
+            SpeciesBySeedbank = new int[ModelCore.Species.Count];
 
             base.Run();
 
@@ -310,14 +312,6 @@ namespace Landis.Extension.Succession.NECN
                     Seedbank.ClearSeedbank(site);
 
 
-                    // SEEDBANK ***************
-                    // if(SpeciesData.Seedbanker[cohort.Species])
-                    // if(!postfireRegen)  // NEEDS WORK
-                    // if(SufficientLight(species,site) && Establish(species, site))
-                    // if(SiteVars.SeedbankMinimumAge[site][species] < SpeciesData.SeedbankLongevity[cohort.Species])
-                    // AddNewCohort(ISpecies species, ActiveSite site, string reproductionType, double propBiomass = 1.0)
-                    // SEEDBANK ***************
-
                 }
                 if (eventArgs.DisturbanceType != null && disturbanceType.IsMemberOf("disturbance:browse"))
                 {
@@ -390,7 +384,7 @@ namespace Landis.Extension.Succession.NECN
         // W.Hotta and Chihiro modified - Modify light probability based on the amount of nursery log on the site
         // </summary>
 
-        public bool SufficientLight(ISpecies species, ActiveSite site)
+        public static bool SufficientLight(ISpecies species, ActiveSite site)
         {
 
             bool isSufficientlight = false;
@@ -591,7 +585,11 @@ namespace Landis.Extension.Succession.NECN
             else if (reproductionType == "seed")
             {
                 SpeciesBySeed[species.Index]++;
-                // Postfire regen = true; //SEEDBANK
+            }
+            else if (reproductionType == "seedbank")
+            {
+                SpeciesBySeedbank[species.Index]++;
+                PlugIn.ModelCore.UI.WriteLine("Adding seedbank cohort for {0} at site {1}", species.Name, site.Location);
             }
 
         }

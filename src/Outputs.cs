@@ -34,6 +34,7 @@ namespace Landis.Extension.Succession.NECN
                 rl.NumCohortsSerotiny = PlugIn.SpeciesBySerotiny[spp.Index];
                 rl.NumCohortsSeed = PlugIn.SpeciesBySeed[spp.Index];
                 rl.NumCohortsResprout = PlugIn.SpeciesByResprout[spp.Index];
+                rl.NumCohortsSeedbank = PlugIn.SpeciesBySeedbank[spp.Index];
 
                 reproductionLog.AddObject(rl);
                 reproductionLog.WriteToFile();
@@ -1042,7 +1043,7 @@ namespace Landis.Extension.Succession.NECN
                 }
             }
 
-              
+              //TODO remove for final version
             foreach (ISpecies species in PlugIn.ModelCore.Species)
             {
                 if (SpeciesData.SeedbankLongevity[species] > 0)

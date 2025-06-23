@@ -1,6 +1,6 @@
 LandisData	"NECN Succession"
 
-Timestep  5
+Timestep  1
 
 SeedingAlgorithm  WardSeedDispersal
 
@@ -32,7 +32,7 @@ SmokeModelOutputs no  << produces additional maps that are valuable for modeling
 WaterDecayFunction Ratio <<Linear or Ratio
 
 
-ProbabilityEstablishAdjust 	1.0
+ProbabilityEstablishAdjust 	0.5
 InitialMineralN			2.0
 InitialFineFuels 		0.99  << a fraction 0-1.0 of dead wood.
 AtmosphericNSlope		0.05
@@ -52,6 +52,9 @@ FireReductionParameters
 	1		0.0		0.5	0.05		0.85		0.1
 	2		0.5		0.75	0.15		0.95		0.5
 	3		1.0		1.0	0.35		1.0		0.75		
+	4		1.0		1.0	0.35		1.0		0.75		
+	5		1.0		1.0	0.35		1.0		0.75		
+
 
 HarvestReductionParameters
 >>	Name		WoodLitter	Litter	SOM		CohortWood	CohortLeaf

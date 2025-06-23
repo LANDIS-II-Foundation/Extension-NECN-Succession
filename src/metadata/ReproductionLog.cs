@@ -27,6 +27,9 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = FieldUnits.Count, Desc = "Seeding Number of Cohorts")]
         public int NumCohortsSeed { set; get; }
 
+        [DataFieldAttribute(Unit = FieldUnits.Count, Desc = "Postfire germination Number of Cohorts")]
+        public int NumCohortsSeedbank { set; get; }
+
 
 
     }

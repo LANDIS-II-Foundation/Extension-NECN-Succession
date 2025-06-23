@@ -29,6 +29,7 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 >> Disturbance Extensions   Initialization File
 
 >> ----------------------   -------------------
+	"Original Fire"		original-fire.txt
 
 
 >>   DisturbancesRandomOrder  yes  << optional parameter; default = no
