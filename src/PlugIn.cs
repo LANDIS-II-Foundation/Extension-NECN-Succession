@@ -567,11 +567,18 @@ namespace Landis.Extension.Succession.NECN
             tempObject.WoodBiomass = initialBiomass[0];
             tempObject.LeafBiomass = initialBiomass[1];
 
-            // if(SpeciesData.Seedbanker[species] && reproductionType == "seed")  // SEEDBANK normal seed distribution not related to a fire event
-            // SiteVars.Seedbank[site][species] = CurrentYear; //SEEDBANK This is the latest year that seeds were added to a site
-            // else //ADD NEW COHORT AS USUAL
-
-            SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), 0, woodLeafBiomasses);
+            //Seedbanking species have their seeds put into the seedbank, rather than immediately making a new cohort.
+            //After a fire, seedbanking species will have reproductionType == "seedbank" instead of "seed", so they
+            //will make a new cohort as usual
+            if (SpeciesData.SeedbankLongevity[species] > 0 && reproductionType == "seed")
+            { 
+                SiteVars.SeedbankAge[site][species] = 0;
+                SiteVars.SeedbankViability[site][species] = true;
+            }
+            else
+            {
+                SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), 0, woodLeafBiomasses);
+            }
 
             if (reproductionType == "plant")
                 SpeciesByPlant[species.Index]++;
@@ -580,10 +587,14 @@ namespace Landis.Extension.Succession.NECN
             else if (reproductionType == "resprout")
             {
                 SpeciesByResprout[species.Index]++;
-                //Postfire regen = true; //SEEDBANK
             }
             else if (reproductionType == "seed")
             {
+                if (SpeciesData.SeedbankLongevity[species] > 0)
+                {
+                    SpeciesBySeedbank[species.Index]++;
+                    PlugIn.ModelCore.UI.WriteLine("using the regular seeding algorithm for seedbank stuff");
+                }
                 SpeciesBySeed[species.Index]++;
             }
             else if (reproductionType == "seedbank")

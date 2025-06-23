@@ -175,37 +175,5 @@ namespace Landis.Extension.Succession.NECN
                 return OutputPath.ReplaceTemplateVars(template, varValues);
             }
         }
-
-        /* 
-         * TODO: Get seedbank dispersal set up; not included in current code
-        public List<ActiveSite> GetSeedbankDispersalList(ActiveSite site)
-        {
-            site.GetNeighbor();
-        }
-
-        
-        public void DisperseSeedsToNeighbors(ActiveSite site, ISpecies species)
-        {
-            var neighborList = GetSeedbankDispersalList();
-
-            // Get all neighboring sites (8-way, including diagonals)
-            foreach (ActiveSite neighbor in site.GetNeighbors())
-            {
-                // Only disperse to active sites (not water, inactive, etc.)
-                if (!neighbor.IsActive)
-                    continue;
-
-                // Initialize the dictionary for the neighbor if needed
-                if (!SiteVars.SeedbankAge[neighbor].ContainsKey(species))
-                    SiteVars.SeedbankAge[neighbor][species] = 0; //TODO check if we should initilize all sites to 0 or some other value
-                if (!SiteVars.SeedbankViability[neighbor].ContainsKey(species))
-                    SiteVars.SeedbankViability[neighbor][species] = false;
-
-                // Disperse seeds: reset age and set viability to true
-                SiteVars.SeedbankAge[neighbor][species] = 0;
-                SiteVars.SeedbankViability[neighbor][species] = true;
-            }
-        }
-        */
     }
 }
