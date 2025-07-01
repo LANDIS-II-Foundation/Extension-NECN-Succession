@@ -153,8 +153,6 @@ namespace Landis.Extension.Succession.NECN
             //  SuccessionCohorts property in its Initialization method.
             Library.UniversalCohorts.Cohorts.Initialize(Timestep, new CohortBiomass());
 
-            Seedbank.Initialize();
-
             // Initialize Reproduction routines:
             Reproduction.SufficientResources = SufficientLight;
             Reproduction.Establish = Establish;

@@ -6,22 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using Landis.Library.Succession;
+using Landis.Library.Succession.DemographicSeeding;
 
 namespace Landis.Extension.Succession.NECN
 {
     class Seedbank
     {
-        public static void Initialize()
-        {
-            //TODO set initial seedbank age
-            //TODO do we need to initialize, or can we just add to the dictionary for each site as we go?
-        }
-
-
         public static void UpdateSeedbank(ActiveSite site)
         {
-            //TODO make sure that we're adding keys to the dictionary for each species as needed
-
             //First, age up all the existing seedbanks and set viability to false if age exceeds longevity
             //Get the list of species present in the seedbank at this site
             var seedbankSpeciesList = new List<ISpecies>();
@@ -46,8 +38,8 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SeedbankAge[site][species] = 0;
                     SiteVars.SeedbankViability[site][species] = false;
                 }
-
-                SiteVars.SeedbankAge[site][species] += 1; //TODO fix this for different NECN timestep lengths
+                
+                SiteVars.SeedbankAge[site][species] += PlugIn.Parameters.Timestep; ; //increment seedbank age by timestep length
 
                 if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1}: {2}", species.Name, site.Location, SiteVars.SeedbankAge[site][species]);
 
@@ -62,7 +54,6 @@ namespace Landis.Extension.Succession.NECN
 
             //Next, update seedbank based on whether adults are present to disperse seeds to the seedbank
             //get all species in the site that can add to the seedbank
-            //TODO check for a faster way to do this
             var maturePresentList = new List<ISpecies>();
             foreach (ISpeciesCohorts cohort in SiteVars.Cohorts[site])
             {
@@ -78,7 +69,6 @@ namespace Landis.Extension.Succession.NECN
                 site.Location, string.Join(", ", maturePresentList.ConvertAll(s => s.Name)));
 
             //loop through all mature seedbanking species at the site 
-            //TODO combine with loop above to save looping through cohorts twice?
             foreach (ISpecies species in maturePresentList)
             {
                 if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Adding seeds for {0} at site {1}", species.Name, site.Location);
@@ -86,27 +76,6 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.SeedbankAge[site][species] = 0;
             }
 
-            
-
-            // TODO Disperse seeds to neighbors
-            //DisperseSeedsToNeighboringSeedbanks(site, species);
-            
-        }
-
-        //SF maybe use this function in UpdateSeedbank?
-        public static void AddSeedbank(ActiveSite site, ISpecies species)
-        {
-            /*
-            // Initialize the dictionary for the species if needed
-            if (!SiteVars.SeedbankAge[site].ContainsKey(species))
-                SiteVars.SeedbankAge[site][species] = 0;
-            if (!SiteVars.SeedbankViability[site].ContainsKey(species))
-                SiteVars.SeedbankViability[site][species] = false;
-            */
-            
-            // Set the seedbank age and viability
-            SiteVars.SeedbankAge[site][species] = 0;
-            SiteVars.SeedbankViability[site][species] = true;
         }
 
         public static void PostfireGerminate(ActiveSite site)
@@ -114,16 +83,15 @@ namespace Landis.Extension.Succession.NECN
             foreach (var speciesEntry in SiteVars.SeedbankAge[site])
             {
                 ISpecies species = speciesEntry.Key; // Extract the species from the dictionary entry
-                if (SiteVars.SeedbankViability[site][species]) //&
-                    //Reproduction.SufficientResources(species, site) &
-                    //Reproduction.Establish(species, site))
+                if (SiteVars.SeedbankViability[site][species] &&
+                    Reproduction.SufficientResources(species, site) &&
+                    Reproduction.Establish(species, site))
                 {
-                    PlugIn.ModelCore.UI.WriteLine("Doing a postfire germinate");
-                    PlugIn.AddNewCohort(species, site, "seedbank", 1.0); // TODO SF I had to change this to static in PlugIn
+                    //PlugIn.ModelCore.UI.WriteLine("Doing a postfire germinate");
+                    PlugIn.AddNewCohort(species, site, "seedbank", 1.0);
                 }
             }
         }
-
 
         public static void ClearSeedbank(ActiveSite site)
         {
@@ -136,7 +104,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SeedbankAge[site].Remove(species);
             SiteVars.SeedbankViability[site].Remove(species);
         }
-
 
         public static class SpeciesMapNames
         {

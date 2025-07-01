@@ -1,7 +1,7 @@
 MapCode,SpeciesName,CohortAge,CohortBiomass,WoodBiomass,LeafBiomass
 3,PinuJeff,10,50,45,5
 1,NonnResp,20,100,90,10
-1,NonnResp,50,100,90,10
+1,NonnResp,10,100,90,10
 1,PinuCont,20,1000,900,100
 1,PinuCont,30,1000,900,100
 1,PinuCont,40,1000,900,100
@@ -26,8 +26,8 @@ MapCode,SpeciesName,CohortAge,CohortBiomass,WoodBiomass,LeafBiomass
 2,CaloDecu,80,500,450,50
 2,FixnResp,20,100,90,10
 2,NonnResp,20,100,90,10
-2,FixnResp,50,100,90,10
-2,NonnResp,50,100,90,10
+2,FixnResp,10,100,90,10
+2,NonnResp,10,100,90,10
 0,PinuJeff,10,50,45,5
 4,AbieConc,30,1000,900,100
 4,AbieConc,40,1000,900,100
@@ -44,13 +44,13 @@ MapCode,SpeciesName,CohortAge,CohortBiomass,WoodBiomass,LeafBiomass
 4,CaloDecu,80,500,450,50
 4,FixnResp,20,100,90,10
 4,NonnResp,20,100,90,10
-4,FixnResp,50,100,90,10
-4,NonnResp,50,100,90,10
+4,FixnResp,10,100,90,10
+4,NonnResp,10,100,90,10
 4,CaloDecu,130,1500,1350,150
 4,CaloDecu,150,1500,1350,150
 4,CaloDecu,170,1500,1350,150
 5,NonnResp,20,100,90,10
-5,NonnResp,50,100,90,10
+5,NonnResp,10,100,90,10
 5,PinuCont,20,1000,900,100
 5,PinuCont,30,1000,900,100
 5,PinuCont,40,1000,900,100
