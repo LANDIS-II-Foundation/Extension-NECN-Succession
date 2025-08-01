@@ -2,12 +2,8 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Utilities;
-using Landis.Library.Succession;
 using Landis.Library.Climate;
-using System.Collections.Generic;
 using System.Linq;
-using System;
 
 
 namespace Landis.Extension.Succession.NECN
@@ -97,21 +93,6 @@ namespace Landis.Extension.Succession.NECN
                 AnnualClimate[ecoregion] = Climate.FutureEcoregionYearClimate[ecoregion.Index][year];      // Climate data year index is 1-based
             }
 
-            //int actualYear = Climate.Future_MonthlyData.Keys.Min() + year - 1;
-            //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
-            //{
-            //    if (ecoregion.Active)
-            //    {
-            //        //PlugIn.ModelCore.UI.WriteLine("Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
-            //        if (Climate.Future_MonthlyData.ContainsKey(actualYear))
-            //        {
-            //            AnnualWeather[ecoregion] = Climate.Future_MonthlyData[actualYear][ecoregion.Index];
-            //        }
-
-            //        //PlugIn.ModelCore.UI.WriteLine("Utilizing Climate Data: Simulated Year = {0}, actualClimateYearUsed = {1}.", actualYear, AnnualWeather[ecoregion].Year);
-            //    }
-
-            //}
         }
         
 
