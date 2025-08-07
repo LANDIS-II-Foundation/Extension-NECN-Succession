@@ -175,6 +175,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 Main.ComputeTotalCohortCN(site, SiteVars.Cohorts[site]);
                 SiteVars.FineFuels[site] = (SiteVars.SurfaceStructural[site].Carbon + SiteVars.SurfaceMetabolic[site].Carbon) * 2.0;
+                if (PlugIn.Parameters.GrassAsFineFuel) SiteVars.FineFuels[site] += CohortBiomass.ComputeGrassBiomass(site);
             }
 
             Outputs.WritePrimaryLogFile(0);
@@ -306,6 +307,7 @@ namespace Landis.Extension.Succession.NECN
                     woodInput -= live_woodFireConsumption;
                     foliarInput -= live_foliarFireConsumption;
 
+                    //TODO only do this once per timestep per site
                     Seedbank.PostfireGerminate(site);
                     Seedbank.ClearSeedbank(site);
 
@@ -588,17 +590,21 @@ namespace Landis.Extension.Succession.NECN
             }
             else if (reproductionType == "seed")
             {
-                if (SpeciesData.SeedbankLongevity[species] > 0)
+                if (!(SpeciesData.SeedbankLongevity[species] > 0))
                 {
-                    SpeciesBySeedbank[species.Index]++;
-                    PlugIn.ModelCore.UI.WriteLine("using the regular seeding algorithm for seedbank stuff");
+                    //Only add to the counter if the species is not a seedbanking species. If seedbanking,
+                    //the new cohort hasn't been created yet.
+                    SpeciesBySeed[species.Index]++;
+
+                    //SpeciesBySeedbank[species.Index]++;
+                    //PlugIn.ModelCore.UI.WriteLine("using the regular seeding algorithm for seedbank stuff");
                 }
-                SpeciesBySeed[species.Index]++;
+                
             }
             else if (reproductionType == "seedbank")
             {
                 SpeciesBySeedbank[species.Index]++;
-                PlugIn.ModelCore.UI.WriteLine("Adding seedbank cohort for {0} at site {1}", species.Name, site.Location);
+                //PlugIn.ModelCore.UI.WriteLine("Adding seedbank cohort for {0} at site {1}", species.Name, site.Location);
             }
 
         }

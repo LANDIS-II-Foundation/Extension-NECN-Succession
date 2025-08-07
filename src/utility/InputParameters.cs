@@ -332,6 +332,7 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> LeafLongevity { get; }
         public Landis.Library.Parameters.Species.AuxParm<double> GrowthLAI { get; }
         public double GrassThresholdMultiplier { get; private set; }
+        public bool GrassAsFineFuel { get; set; }
 
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAIShape { get { return lightLAIShape; } }
         public Landis.Library.Parameters.Species.AuxParm<double> LightLAIScale { get { return lightLAIScale; } }
@@ -1109,6 +1110,12 @@ namespace Landis.Extension.Succession.NECN
         public void SetGrassThresholdMultiplier(InputValue<double> newValue)
         {
             GrassThresholdMultiplier = VerifyRange(newValue, 0.0, 10.0, "GrassThresholdMultiplier");
+        }
+        // --------------------------------------------------------------------
+        // Should grasses be used to calculate fine fuel load?
+        public void SetGrassFineFuel(InputValue<bool> newValue)
+        {
+            GrassAsFineFuel = newValue;
         }
         //---------------------------------------------------------------------
         public void SetDenitrif(InputValue<double> newValue)

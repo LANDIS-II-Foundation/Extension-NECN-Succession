@@ -45,6 +45,7 @@ namespace Landis.Extension.Succession.NECN
         double ProbEstablishAdjustment { get; set; }
         bool SmokeModelOutputs { get; set; }
         double GrassThresholdMultiplier { get; }
+        bool GrassAsFineFuel { get; set; }
         string CommunityInputMapNames { get; set; }
 
         bool OutputSoilWaterAvailable { get; set; }
