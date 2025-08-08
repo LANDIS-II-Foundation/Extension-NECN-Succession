@@ -316,14 +316,15 @@ namespace Landis.Extension.Succession.NECN
                 //PlugIn.Grasses = true;
             }
 
+            //Should grass biomass be treated as fine fuel?
             InputVar<bool> grassFineFuel = new InputVar<bool>("GrassAsFineFuel");
             if (ReadOptionalVar(grassFineFuel))
             {
                 parameters.SetGrassFineFuel(grassFineFuel.Value);
             }
+            else { parameters.GrassAsFineFuel = false; }
 
-
-                InputVar<string> inputCommunityMaps = new InputVar<string>("CreateInputCommunityMaps");
+            InputVar<string> inputCommunityMaps = new InputVar<string>("CreateInputCommunityMaps");
             if (ReadOptionalVar(inputCommunityMaps))
             {
                 PlugIn.InputCommunityMapNames = inputCommunityMaps.Value;
