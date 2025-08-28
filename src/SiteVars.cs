@@ -4,6 +4,7 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Library.UniversalCohorts;  
 using System.Collections.Generic;
+using System.Dynamic;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -15,6 +16,7 @@ namespace Landis.Extension.Succession.NECN
 
 
         private static ISiteVar<double[]> monthlymineralN;
+        private static ISiteVar<ExpandoObject> additionalFields;
         public static ISiteVar<double> AnnualNEE;
         public static ISiteVar<double> FireCEfflux;
         public static ISiteVar<double> FireNEfflux;
@@ -72,6 +74,7 @@ namespace Landis.Extension.Succession.NECN
         public static void Initialize()
         {
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<SiteCohorts>();
+            additionalFields = PlugIn.ModelCore.Landscape.NewSiteVar<ExpandoObject>();
 
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             TimeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
@@ -271,6 +274,11 @@ namespace Landis.Extension.Succession.NECN
             HarvestPrescriptionName = PlugIn.ModelCore.GetSiteVar<string>("Harvest.PrescriptionName");
         }
 
+        public static void GetAdditionalFields()
+        {
+            additionalFields = PlugIn.ModelCore.GetSiteVar<ExpandoObject>("Other.AdditionalFields");
+        }
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -287,6 +295,22 @@ namespace Landis.Extension.Succession.NECN
             {
                 cohorts = value;
     }
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Additional Fields.
+        /// </summary>
+        public static ISiteVar<ExpandoObject> AdditionalFields
+        {
+            get
+            {
+                return additionalFields;
+            }
+            set
+            {
+                additionalFields = value;
+            }
         }
         //---------------------------------------------------------------------
 
