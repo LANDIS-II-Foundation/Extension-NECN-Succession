@@ -19,6 +19,7 @@ namespace Landis.Extension.Succession.NECN
         string ClimateConfigFile { get; set; }
         string SoilDepthMapName { get; set; }
         string SoilDrainMapName { get; set; }
+        string SoilMoistureMapName { get; set; }
         string SoilBaseFlowMapName { get; set; }
         string SoilStormFlowMapName { get; set; }
         string SoilFieldCapacityMapName { get; set; }
