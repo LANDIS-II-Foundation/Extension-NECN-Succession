@@ -507,12 +507,12 @@ namespace Landis.Extension.Succession.NECN
 
 
         //---------------------------------------------------------------------
-        // <summary>
+        /// <summary>
         /// Compute the amount of nursery log carbon based on its decay ratio
         // W.Hotta & Chihiro Description: 
         //     - In the process of decomposition of downed logs, 
         //       the volume remains the same, only the density changes.
-        // </summary>
+        /// </summary>
 
         private static double[] ComputeNurseryLogC(ActiveSite site, double densityDecayClass0, double densityDecayClass3, double densityDecayClass4, double densityDecayClass5)
         {
@@ -672,25 +672,40 @@ namespace Landis.Extension.Succession.NECN
                 foreach (Site site in ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    uint mapCode = pixel.MapCode.Value;
                     if (!site.IsActive)
                         continue;
 
                     ActiveSite activeSite = (ActiveSite)site;
                     SiteVars.MineralN[site] = Parameters.InitialMineralN;
 
+                    uint mapCode;
+                    try 
+                    {
+                        // Get the raw value before conversion to check its range
+                        var rawValue = pixel.MapCode.Value;
+                        if (rawValue < 0 || rawValue > uint.MaxValue)
+                        {
+                            ModelCore.UI.WriteLine($"   WARNING: Invalid map code at site {site.Location}. Map code value {rawValue} is outside the valid range for unsigned integers (0 to {uint.MaxValue}).");
+                            continue;
+                        }
+                        mapCode = (uint)rawValue;
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelCore.UI.WriteLine($"   WARNING: Error reading map code at site {site.Location}. Raw pixel value caused error: {ex.Message}");
+                        continue;
+                    }
+
                     initialCommunity = communities.Find(mapCode);
                     if (initialCommunity == null)
                     {
-                        //ModelCore.UI.WriteLine("   Map Code {0} does not have an initial community", mapCode);
                         SiteVars.Cohorts[site] = new SiteCohorts();
-                        //throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
+                        ModelCore.UI.WriteLine($"   WARNING: Map code {mapCode} at site {site.Location} does not have an initial community defined");
                     }
                     else
                     {
                         InitializeSite(activeSite);
                     }
-
                 }
             }
         }
