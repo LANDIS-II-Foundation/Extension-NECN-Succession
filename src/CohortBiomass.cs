@@ -814,8 +814,7 @@ namespace Landis.Extension.Succession.NECN
                 //limitH20 = calculateWater_Limit_versionDGS(volumetric_water, cohort.Species);
                 if (OtherData.CalibrateMode)
                 {
-                    PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
-                    volumetric_water, limitH20);
+                    //PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",volumetric_water, limitH20);
                 }
 
                 if (volumetric_water < wilt_point) limitH20 = 0.001;
