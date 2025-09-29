@@ -1064,7 +1064,7 @@ namespace Landis.Extension.Succession.NECN
             {
                 if (SpeciesData.SeedbankLongevity[species] > 0)
                 {
-                    PlugIn.ModelCore.UI.WriteLine("Writing seedbank age map for species {0} at timestep {1}", species.Name, PlugIn.ModelCore.CurrentTime);
+                    //PlugIn.ModelCore.UI.WriteLine("Writing seedbank age map for species {0} at timestep {1}", species.Name, PlugIn.ModelCore.CurrentTime);
                     string pathSeedbankSpecies = Seedbank.SpeciesMapNames.ReplaceTemplateVars(@"NECN\Seedbank-{species}-{timestep}.tif", species.Name, PlugIn.ModelCore.CurrentTime);
                     using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathSeedbankSpecies, PlugIn.ModelCore.Landscape.Dimensions))
                     {

@@ -175,6 +175,7 @@ namespace Landis.Extension.Succession.NECN
 
             SeedbankAge = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, int>>();//seedbank
             SeedbankViability = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, bool>>();//seedbank
+            NeedsPostFireGermination = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
 
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
             {
@@ -930,6 +931,11 @@ namespace Landis.Extension.Succession.NECN
             }
 
         }
+
+        /// <summary>
+        /// Indicates if a site needs post-fire germination
+        /// </summary>
+        public static ISiteVar<bool> NeedsPostFireGermination { get; set; }
 
     }
 

@@ -1,13 +1,12 @@
 //  Authors: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
-using Landis.SpatialModeling;
-
+using Landis.Library.Climate;
 using Landis.Library.InitialCommunities.Universal;
 using Landis.Library.Succession;
 using Landis.Library.UniversalCohorts;
-using Landis.Library.Climate;
-
+using Landis.SpatialModeling;
+using Landis.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -191,6 +190,11 @@ namespace Landis.Extension.Succession.NECN
             Outputs.WritePrimaryLogFile(0);
             Outputs.WriteShortPrimaryLogFile(0);
 
+            SpeciesByPlant = new int[ModelCore.Species.Count];
+            SpeciesByResprout = new int[ModelCore.Species.Count];
+            SpeciesBySerotiny = new int[ModelCore.Species.Count];
+            SpeciesBySeed = new int[ModelCore.Species.Count];
+            SpeciesBySeedbank = new int[ModelCore.Species.Count];
 
         }
 
@@ -210,9 +214,22 @@ namespace Landis.Extension.Succession.NECN
             SpeciesByResprout = new int[ModelCore.Species.Count];
             SpeciesBySerotiny = new int[ModelCore.Species.Count];
             SpeciesBySeed = new int[ModelCore.Species.Count];
-            SpeciesBySeedbank = new int[ModelCore.Species.Count];
 
             base.Run();
+
+            // Handle post - fire germination that was set during fire mortality events
+            // SF todo is there a better place to put this? See if we can put it somewhere that gets delegated to the Succession Library
+            foreach (ActiveSite site in ModelCore.Landscape)
+            {
+                if (SiteVars.NeedsPostFireGermination[site])
+                {
+                    //PlugIn.ModelCore.UI.WriteLine("   Post-fire germination at site {0}.", site.Location);
+                    Seedbank.PostfireGerminate(site);
+                    Seedbank.ClearSeedbank(site);
+                    SiteVars.NeedsPostFireGermination[site] = false;
+                }
+            }
+            SiteVars.NeedsPostFireGermination.ActiveSiteValues = false;
 
             if (Timestep > 0)
                 ClimateRegionData.SetAllEcoregionsFutureAnnualClimate(ModelCore.CurrentTime);
@@ -235,6 +252,7 @@ namespace Landis.Extension.Succession.NECN
                 Outputs.WriteShortPrimaryLogFile(ModelCore.CurrentTime);
                 Outputs.WriteMaps();
                 Outputs.WriteReproductionLog(ModelCore.CurrentTime);
+                SpeciesBySeedbank = new int[ModelCore.Species.Count]; //Clear this tracker after writing the log (otherwise we don't record seedbank germination)
                 Establishment.LogEstablishment();
                 if (InputCommunityMapNames != null && ModelCore.CurrentTime % InputCommunityMapFrequency == 0)
                     Outputs.WriteCommunityMaps();
@@ -317,11 +335,7 @@ namespace Landis.Extension.Succession.NECN
                     woodInput -= live_woodFireConsumption;
                     foliarInput -= live_foliarFireConsumption;
 
-                    //TODO only do this once per timestep per site
-                    Seedbank.PostfireGerminate(site);
-                    Seedbank.ClearSeedbank(site);
-
-
+                    SiteVars.NeedsPostFireGermination[site] = true;
                 }
                 if (eventArgs.DisturbanceType != null && disturbanceType.IsMemberOf("disturbance:browse"))
                 {
