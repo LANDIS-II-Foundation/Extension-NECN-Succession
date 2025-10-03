@@ -794,15 +794,15 @@ namespace Landis.Extension.Succession.NECN
 
 
             string pathsoilwaterContent = MapNames.ReplaceTemplateVars(@"NECN/SoilWaterContent-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
-            using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(pathsoilwater, PlugIn.ModelCore.Landscape.Dimensions))
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathsoilwaterContent, PlugIn.ModelCore.Landscape.Dimensions))
             {
-                ShortPixel pixel = outputRaster.BufferPixel;
+                IntPixel pixel = outputRaster.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
 
                     if (site.IsActive)
                     {
-                        pixel.MapCode.Value = (short)(SiteVars.MeanSoilWater[site] / SiteVars.SoilDepth[site]);
+                        pixel.MapCode.Value = (int)(SiteVars.MeanSoilWater[site] / SiteVars.SoilDepth[site]*100);
                     }
                     else
                     {
