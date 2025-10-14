@@ -96,8 +96,6 @@ namespace Landis.Extension.Succession.NECN
             double waterFull = soilDepth * fieldCapacity;  //units of cm
             double waterEmpty = wiltingPoint * soilDepth;  // cm
             
-            //PlugIn.ModelCore.UI.WriteLine("waterFull = {0}, waterEmpty = {1}", waterFull, waterEmpty); //debug
-
             if (waterFull == waterEmpty || wiltingPoint > fieldCapacity)
             {
                 throw new ApplicationException(string.Format("Field Capacity and Wilting Point EQUAL or wilting point {0} > field capacity {1}.  Row={2}, Column={3}", wiltingPoint, fieldCapacity, site.Location.Row, site.Location.Column));
@@ -268,16 +266,11 @@ namespace Landis.Extension.Succession.NECN
             */
 
 
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWater = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWater, waterEmpty, waterFull);
-            //
             //Subtract ET from soil water content
             soilWater = Math.Max(soilWater - tempAET, 0.0); 
             AET = Math.Max(AET + tempAET, 0.0);
             remainingPET = Math.Max(remainingPET - tempAET, 0.0);
-            //PlugIn.ModelCore.UI.WriteLine("tempAET = {0}, AET = {1}, remainingPET = {2}, soilWater = {3}", 
-            //    tempAET, AET, remainingPET, soilWater); //debug
 
-            //PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWater = {1}", AET, soilWater); //debug
             availableWaterMin = Math.Max(soilWater - waterEmpty, 0.0); //minimum amount of water for the month, aside from baseflow
 
             //Leaching occurs. Drain baseflow fraction from soil water
@@ -300,20 +293,16 @@ namespace Landis.Extension.Succession.NECN
             // SF added meanSoilWater as variable to calculate volumetric water to compare to empirical sources
             // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture is tracked in SoilWater.
             double meanSoilWater = (waterMax + soilWater) / 2.0;          
-            //PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWater = {2}", 
-            //   availableWaterMax, availableWaterMin, soilWater);
 
             // Compute the ratio of precipitation to PET
             double ratioPlantAvailableWaterPET = 0.0;  
             if (PET > 0.0) ratioPlantAvailableWaterPET = plantAvailableWater / PET; 
-            //PlugIn.ModelCore.UI.WriteLine("     PAW={0}, PET={1}, Ratio={2}.", plantAvailableWater, PET, ratioPlantAvailableWaterPET); //debug
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET);
             SiteVars.MonthlyActualEvapotranspiration[site][Main.Month] = AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET);  
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET;  
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}, CWD = {3}.", month, PET, AET, SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month]); //debug
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
@@ -333,7 +322,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPlantAvailableWaterPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPlantAvailableWaterPET, PET, tave);
             SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11, to add as monthly output variable
-
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWater);
             return;
         }
