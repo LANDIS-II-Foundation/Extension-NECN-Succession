@@ -96,6 +96,8 @@ namespace Landis.Extension.Succession.NECN
             double waterFull = soilDepth * fieldCapacity;  //units of cm
             double waterEmpty = wiltingPoint * soilDepth;  // cm
             
+            //PlugIn.ModelCore.UI.WriteLine("waterFull = {0}, waterEmpty = {1}", waterFull, waterEmpty); //debug
+
             if (waterFull == waterEmpty || wiltingPoint > fieldCapacity)
             {
                 throw new ApplicationException(string.Format("Field Capacity and Wilting Point EQUAL or wilting point {0} > field capacity {1}.  Row={2}, Column={3}", wiltingPoint, fieldCapacity, site.Location.Row, site.Location.Column));
@@ -266,11 +268,16 @@ namespace Landis.Extension.Succession.NECN
             */
 
 
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWater = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWater, waterEmpty, waterFull);
+            //
             //Subtract ET from soil water content
             soilWater = Math.Max(soilWater - tempAET, 0.0); 
             AET = Math.Max(AET + tempAET, 0.0);
             remainingPET = Math.Max(remainingPET - tempAET, 0.0);
+            //PlugIn.ModelCore.UI.WriteLine("tempAET = {0}, AET = {1}, remainingPET = {2}, soilWater = {3}", 
+            //    tempAET, AET, remainingPET, soilWater); //debug
 
+            //PlugIn.ModelCore.UI.WriteLine("AET = {0}. soilWater = {1}", AET, soilWater); //debug
             availableWaterMin = Math.Max(soilWater - waterEmpty, 0.0); //minimum amount of water for the month, aside from baseflow
 
             //Leaching occurs. Drain baseflow fraction from soil water
@@ -293,16 +300,20 @@ namespace Landis.Extension.Succession.NECN
             // SF added meanSoilWater as variable to calculate volumetric water to compare to empirical sources
             // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture is tracked in SoilWater.
             double meanSoilWater = (waterMax + soilWater) / 2.0;          
+            //PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWater = {2}", 
+            //   availableWaterMax, availableWaterMin, soilWater);
 
             // Compute the ratio of precipitation to PET
             double ratioPlantAvailableWaterPET = 0.0;  
             if (PET > 0.0) ratioPlantAvailableWaterPET = plantAvailableWater / PET; 
+            //PlugIn.ModelCore.UI.WriteLine("     PAW={0}, PET={1}, Ratio={2}.", plantAvailableWater, PET, ratioPlantAvailableWaterPET); //debug
 
             SiteVars.AnnualWaterBalance[site] += Precipitation - AET;
             SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month] = (PET - AET);
             SiteVars.MonthlyActualEvapotranspiration[site][Main.Month] = AET;
             SiteVars.AnnualClimaticWaterDeficit[site] += (PET - AET);  
             SiteVars.AnnualPotentialEvapotranspiration[site] += PET;  
+            //PlugIn.ModelCore.UI.WriteLine("Month={0}, PET={1}, AET={2}, CWD = {3}.", month, PET, AET, SiteVars.MonthlyClimaticWaterDeficit[site][Main.Month]); //debug
 
             SiteVars.LiquidSnowPack[site] = liquidSnowpack;
             SiteVars.WaterMovement[site] = waterMovement;
@@ -322,7 +333,8 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPlantAvailableWaterPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPlantAvailableWaterPET, PET, tave);
             SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11, to add as monthly output variable
-            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWater);
+
+            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, soilWater, waterMax);
             return;
         }
 /*
@@ -673,72 +685,97 @@ namespace Landis.Extension.Succession.NECN
 
             return x;
         }
-        private static int CalculateDryDays(int month, int beginGrowing, int endGrowing, double waterEmpty, double waterAvail, double minWaterAvailable)
+
+        private static int CalculateDryDays(int month, int beginGrowing, int endGrowing, double waterEmpty, double waterMin, double waterMax)
         {
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}.", month, beginGrowing, endGrowing);
-            int[] julianMidMonth = { 15, 45, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349 };
-            int dryDays = 0;
-            int oldJulianDay = 0;
-            int julianDay = julianMidMonth[month];
-            if (month > 0)
-                oldJulianDay = julianMidMonth[month - 1];
-            else
-                oldJulianDay = julianMidMonth[11];
-            double dryDayInterp = 0.0;
-            //PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}, wiltPt={3:0.0}, waterAvail={4:0.0}, priorWater={5:0.0}.", 
-            //   month, beginGrowing, endGrowing, wiltingPoint, soilMoisture, priorSoilMoisture); //debug
-            //Increment number of dry days, truncate at end of growing season
-            if ((julianDay > beginGrowing) && (oldJulianDay < endGrowing))
+            var beginJulianDay = Climate.FirstDayOfMonth[month];
+            var endJulianDay = beginJulianDay + Climate.DaysInMonth[month];
+
+            // number of days in the month that are within the growing season
+            var daysWithinGrowingSeason = Math.Max(0, Math.Min(endJulianDay, endGrowing) - Math.Max(beginJulianDay, beginGrowing));
+
+            // assume the water varies uniformly between waterMin and waterMax over the month
+            // calculate the fraction of the time that the water is below waterEmpty:
+            double fractionOfDaysBelowWaterEmpty;
+            if (waterMin < waterMax)
             {
-                if ((minWaterAvailable >= waterEmpty) && (waterAvail >= waterEmpty))
-                {
-                    dryDayInterp += 0.0;  // NONE below water empty
-                }
-                else if ((minWaterAvailable > waterEmpty) && (waterAvail < waterEmpty))
-                {
-                    dryDayInterp = daysInMonth * (waterEmpty - waterAvail) /
-                                    (minWaterAvailable - waterAvail);
-                    if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
-                        if ((julianDay - beginGrowing) < dryDayInterp)
-                            dryDayInterp = julianDay - beginGrowing;
-
-                    if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
-                        dryDayInterp = endGrowing - julianDay + dryDayInterp;
-
-                    if (dryDayInterp < 0.0)
-                        dryDayInterp = 0.0;
-
-                }
-                else if ((minWaterAvailable < waterEmpty) && (waterAvail > waterEmpty))
-                {
-                    dryDayInterp = daysInMonth * (waterEmpty - minWaterAvailable) /
-                                    (waterAvail - minWaterAvailable);
-
-                    if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
-                        dryDayInterp = oldJulianDay + dryDayInterp - beginGrowing;
-
-                    if (dryDayInterp < 0.0)
-                        dryDayInterp = 0.0;
-
-                    if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
-                        if ((endGrowing - oldJulianDay) < dryDayInterp)
-                            dryDayInterp = endGrowing - oldJulianDay;
-                }
-                else // ALL below water empty
-                {
-                    dryDayInterp = daysInMonth;
-
-                    if ((oldJulianDay < beginGrowing) && (julianDay > beginGrowing))
-                        dryDayInterp = julianDay - beginGrowing;
-
-                    if ((oldJulianDay < endGrowing) && (julianDay > endGrowing))
-                        dryDayInterp = endGrowing - oldJulianDay;
-                }
-
-                dryDays += (int)dryDayInterp;
+                fractionOfDaysBelowWaterEmpty = Math.Min(1.0, (Math.Max(waterEmpty, waterMin) - waterMin) / (waterMax - waterMin));
             }
-            //PlugIn.ModelCore.UI.WriteLine("dryDays = {0}", dryDays); //debug
+            else
+            {
+                fractionOfDaysBelowWaterEmpty = waterMin < waterEmpty ? 1.0 : 0.0;
+            }
+
+            // the number of dry days within the growing season:
+            var dryDays = (int)Math.Round(daysWithinGrowingSeason * fractionOfDaysBelowWaterEmpty, 0);
             return dryDays;
+
+            ////PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}.", month, beginGrowing, endGrowing);
+            ////int[] julianMidMonth = { 15, 45, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349 };
+            ////int[] julianDayBeginMonth = { 1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
+            //var dryDays = 0;
+            ////int julianDayEnd = 0;
+            ////int julianDayBegin = julianDayBeginMonth[month];
+            ////if (month > 0)
+            ////    julianDayEnd = julianDayBeginMonth[month + 1];
+            ////else
+            ////    julianDayEnd = julianDayBeginMonth[2];
+
+            //var dryDayInterp = 0.0;
+            ////PlugIn.ModelCore.UI.WriteLine("Month={0}, begin={1}, end={2}, wiltPt={3:0.0}, waterAvail={4:0.0}, priorWater={5:0.0}.", 
+            ////   month, beginGrowing, endGrowing, wiltingPoint, soilMoisture, priorSoilMoisture); //debug
+            ////Increment number of dry days, truncate at end of growing season
+            //if (beginJulianDay > beginGrowing && endJulianDay < endGrowing)
+            //{
+            //    if ((waterMax >= waterEmpty) && (waterMin >= waterEmpty))
+            //    {
+            //        dryDayInterp = 0.0;  // NONE below water empty
+            //    }
+            //    else if ((waterMax > waterEmpty) && (waterMin < waterEmpty))
+            //    {
+            //        dryDayInterp = daysInMonth * (waterEmpty - waterMin) /
+            //                        (waterMax - waterMin);
+            //        if ((endJulianDay < beginGrowing) && (beginJulianDay > beginGrowing))
+            //            if ((beginJulianDay - beginGrowing) < dryDayInterp)
+            //                dryDayInterp = beginJulianDay - beginGrowing;
+
+            //        if ((endJulianDay < endGrowing) && (beginJulianDay > endGrowing))
+            //            dryDayInterp = endGrowing - beginJulianDay + dryDayInterp;
+
+            //        if (dryDayInterp < 0.0)
+            //            dryDayInterp = 0.0;
+
+            //    }
+            //    else if ((waterMax < waterEmpty) && (waterMin > waterEmpty))
+            //    {
+            //        dryDayInterp = daysInMonth * (waterEmpty - waterMax) /
+            //                        (waterMin - waterMax);
+
+            //        if ((endJulianDay < beginGrowing) && (beginJulianDay > beginGrowing))
+            //            dryDayInterp = endJulianDay + dryDayInterp - beginGrowing;
+
+            //        if (dryDayInterp < 0.0)
+            //            dryDayInterp = 0.0;
+
+            //        if ((endJulianDay < endGrowing) && (beginJulianDay > endGrowing))
+            //            if ((endGrowing - endJulianDay) < dryDayInterp)
+            //                dryDayInterp = endGrowing - endJulianDay;
+            //    }
+            //    else // ALL below water empty
+            //    {
+            //        dryDayInterp = daysInMonth;
+
+            //        if ((endJulianDay < beginGrowing) && (beginJulianDay > beginGrowing))
+            //            dryDayInterp = beginJulianDay - beginGrowing;
+
+            //        if ((endJulianDay < endGrowing) && (beginJulianDay > endGrowing))
+            //            dryDayInterp = endGrowing - endJulianDay;
+            //    }
+
+            //    dryDays += (int)dryDayInterp;
+            //}
+            ////PlugIn.ModelCore.UI.WriteLine("dryDays = {0}", dryDays); //debug
+            //return dryDays;
         }
         
         private static double CalculateDecayFactor(int waterDecayFunction, double soilTemp, double availableWaterContent, double ratioPlantAvailableWaterPET, int month)
