@@ -41,13 +41,13 @@ namespace Landis.Extension.Succession.NECN
                 
                 SiteVars.SeedbankAge[site][species] += PlugIn.Parameters.Timestep; ; //increment seedbank age by timestep length
 
-                if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1}: {2}", species.Name, site.Location, SiteVars.SeedbankAge[site][species]);
+                //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1}: {2}", species.Name, site.Location, SiteVars.SeedbankAge[site][species]);
 
                 if (SiteVars.SeedbankAge[site][species] > seedbank_longevity)
                 {
                     SiteVars.SeedbankViability[site][species] = false;
-                    if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1} exceeds longevity ({2} > {3}), setting viability to false.", 
-                        species.Name, site.Location, SiteVars.SeedbankAge[site][species], seedbank_longevity);
+                    //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1} exceeds longevity ({2} > {3}), setting viability to false.", 
+                    //    species.Name, site.Location, SiteVars.SeedbankAge[site][species], seedbank_longevity);
                     Seedbank.ClearSeedbankSpecies(site, species);
                 }
             }
@@ -71,7 +71,7 @@ namespace Landis.Extension.Succession.NECN
             //loop through all mature seedbanking species at the site 
             foreach (ISpecies species in maturePresentList)
             {
-                if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Adding seeds for {0} at site {1}", species.Name, site.Location);
+                //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Adding seeds for {0} at site {1}", species.Name, site.Location);
                 SiteVars.SeedbankViability[site][species] = true;
                 SiteVars.SeedbankAge[site][species] = 0;
             }
@@ -83,12 +83,18 @@ namespace Landis.Extension.Succession.NECN
             foreach (var speciesEntry in SiteVars.SeedbankAge[site])
             {
                 ISpecies species = speciesEntry.Key; // Extract the species from the dictionary entry
-                if (SiteVars.SeedbankViability[site][species] &&
-                    Reproduction.SufficientResources(species, site) &&
-                    Reproduction.Establish(species, site))
+                if (SiteVars.SeedbankViability[site][species])
                 {
-                    //PlugIn.ModelCore.UI.WriteLine("Doing a postfire germinate");
-                    PlugIn.AddNewCohort(species, site, "seedbank", 1.0);
+                    bool sufficientResources = Reproduction.SufficientResources(species, site);
+                    bool canEstablish = Reproduction.Establish(species, site);
+                    double siteLAI = SiteVars.LAI[site];
+
+                    //PlugIn.ModelCore.UI.WriteLine($"Species: {species.Name}, Site LAI: {siteLAI:F2}, SufficientResources: {sufficientResources}, Establish: {canEstablish}");
+
+                    if (sufficientResources && canEstablish)
+                    {
+                        PlugIn.AddNewCohort(species, site, "seedbank", 1.0);
+                    }
                 }
             }
         }

@@ -56,7 +56,7 @@ namespace Landis.Extension.Succession.NECN
                     {
                         if (mapValue < 0.0 || mapValue > 1.0)
                             throw new InputValueException(mapValue.ToString(),
-                                                          "SOil drainage value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          "Soil drainage value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
                                                           mapValue, 0.0, 1.0, site.Location.Row, site.Location.Column);
                         SiteVars.SoilDrain[site] = mapValue;
                     }
@@ -64,6 +64,29 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
+
+        public static void ReadSoilMoistureMap(string path)
+        {
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    double mapValue = pixel.MapCode.Value;
+                    if (site.IsActive)
+                    {
+                        if (mapValue < 0.0 || mapValue > 1.0)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "Soil moisture value {0} is not between {1:0.0} and {2:0.0}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0.0, 1.0, site.Location.Row, site.Location.Column);
+                        SiteVars.SoilWater[site] = mapValue * SiteVars.SoilDepth[site];      // multiply by soil depth [cm] to convert soil moisture content map value [fract] to soil water [cm]
+                    }
+                }
+            }
+        }
 
         public static void ReadSoilBaseFlowMap(string path)
         {

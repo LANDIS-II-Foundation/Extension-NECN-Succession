@@ -66,7 +66,7 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyLAI[site][Month] = 0.0;
                     SiteVars.MonthlyLAI_Trees[site][Month] = 0.0;
                     SiteVars.MonthlyLAI_Grasses[site][Month] = 0.0; // Chihiro, 2020.03.30: tentative
-                    SiteVars.MonthlySoilWaterContent[site][Month] = 0.0;
+                    SiteVars.MonthlySoilWater[site][Month] = 0.0;
                     SiteVars.MonthlyMeanSoilWaterContent[site][Month] = 0.0;
                     SiteVars.MonthlyAnaerobicEffect[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
@@ -126,7 +126,7 @@ namespace Landis.Extension.Succession.NECN
                                 SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
                             }
                        //add monthly water content
-                        SiteVars.SoilWater10[site][list_index] += SiteVars.MeanSoilWaterContent[site];
+                        SiteVars.SoilWater10[site][list_index] += SiteVars.MeanSoilWater[site];
 
                         //Do this just once a year, after CWD is calculated above
                         if (MonthCnt == 11) //TODO fix this so we don't have to always calculate all of these vars when writing maps

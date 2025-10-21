@@ -14,12 +14,11 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Ecoregions.AuxParm<int> ActiveSiteCount;
         public static Landis.Library.Parameters.Ecoregions.AuxParm<double> AnnualNDeposition;    
         public static Landis.Library.Parameters.Ecoregions.AuxParm<double[]> MonthlyNDeposition; 
-        //public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate_Monthly> AnnualWeather;
-
         public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate> AnnualClimate;
         public static Landis.Library.Parameters.Ecoregions.AuxParm<AnnualClimate> AnnualClimateSpinup;
 
         //---------------------------------------------------------------------
+        // NOTE:  Climate data year index is 1-based
         public static void Initialize(IInputParameters parameters)
         {
             ActiveSiteCount = new Landis.Library.Parameters.Ecoregions.AuxParm<int>(PlugIn.ModelCore.Ecoregions);
@@ -37,12 +36,6 @@ namespace Landis.Extension.Succession.NECN
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
                 MonthlyNDeposition[ecoregion] = new double[12];
-
-                //if (ecoregion.Active)
-                //{
-                //    Climate.GenerateEcoregionClimateData(ecoregion, 0, PlugIn.Parameters.Latitude); 
-                //    SetSingleAnnualClimate(ecoregion, 0, Climate.Phase.SpinUp_Climate);  // Some placeholder data to get things started.
-                //}
             }
 
             // generate all climate data for all ecoregions 
@@ -54,33 +47,6 @@ namespace Landis.Extension.Succession.NECN
                 AnnualClimateSpinup[ecoregion] = Climate.SpinupEcoregionYearClimate[ecoregion.Index][1];      // Climate data year index is 1-based
             }
         }
-
-        ////---------------------------------------------------------------------
-        //// Generates new climate parameters for a SINGLE ECOREGION at an annual time step.
-        //public static void SetSingleAnnualClimate(IEcoregion ecoregion, int year, Climate.Phase spinupOrfuture)
-        //{
-        //    int actualYear = Climate.Future_MonthlyData.Keys.Min() + year;
-
-        //    if (spinupOrfuture == Climate.Phase.Future_Climate)
-        //    {
-        //        //PlugIn.ModelCore.UI.WriteLine("Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
-        //        if (Climate.Future_MonthlyData.ContainsKey(actualYear))
-        //        {
-        //            AnnualWeather[ecoregion] = Climate.Future_MonthlyData[actualYear][ecoregion.Index];
-        //        }
-        //        //else
-        //        //    PlugIn.ModelCore.UI.WriteLine("Key is missing: Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
-        //    }
-        //    else
-        //    {
-        //        //PlugIn.ModelCore.UI.WriteLine("Retrieving {0} for year {1}.", spinupOrfuture.ToString(), actualYear);
-        //        if (Climate.Spinup_MonthlyData.ContainsKey(actualYear))
-        //        {
-        //            AnnualWeather[ecoregion] = Climate.Spinup_MonthlyData[actualYear][ecoregion.Index];
-        //        }
-        //    }
-           
-        //}
 
         //---------------------------------------------------------------------
         // Generates new climate parameters for all ecoregions at an annual time step.
@@ -94,8 +60,5 @@ namespace Landis.Extension.Succession.NECN
             }
 
         }
-        
-
-        
     }
 }
