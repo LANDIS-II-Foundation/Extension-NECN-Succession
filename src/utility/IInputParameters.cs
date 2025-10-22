@@ -136,6 +136,7 @@ namespace Landis.Extension.Succession.NECN
         Landis.Library.Parameters.Species.AuxParm<double> K_LAI { get; }
         Landis.Library.Parameters.Species.AuxParm<double> MinLAI { get; }
         Landis.Library.Parameters.Species.AuxParm<double> MaxLAI { get; }
+        Landis.Library.Parameters.Species.AuxParm<double> CompetitionIndex { get; }
         Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve1 { get; }
         Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve2 { get; }
         Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve3 { get; }
