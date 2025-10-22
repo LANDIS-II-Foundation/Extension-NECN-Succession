@@ -89,6 +89,7 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> MinLAI;
         public static Landis.Library.Parameters.Species.AuxParm<double> MaxLAI;
         public static Landis.Library.Parameters.Species.AuxParm<double> FractionANPPtoLeaf;
+        public static Landis.Library.Parameters.Species.AuxParm<double> CompetitionIndex;
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
@@ -141,6 +142,7 @@ namespace Landis.Extension.Succession.NECN
             CoarseRootFraction = parameters.CoarseRootFraction;
             FineRootFraction = parameters.FineRootFraction;
             FractionANPPtoLeaf = parameters.FractionANPPtoLeaf;
+            CompetitionIndex = parameters.CompetitionIndex;
 
             LightLAIShape        = parameters.LightLAIShape;
             LightLAIScale       = parameters.LightLAIScale;

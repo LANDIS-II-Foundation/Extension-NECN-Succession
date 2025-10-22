@@ -6,6 +6,7 @@ using Landis.SpatialModeling;
 using Landis.Library.UniversalCohorts;
 using System;
 using System.Dynamic;
+using Landis.Library.Succession.DensitySeeding;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -707,7 +708,7 @@ namespace Landis.Extension.Succession.NECN
 
         private static double calculate_LAI_Competition(ICohort cohort, ActiveSite site)
         {
-            double k = -0.14;
+            //double k = -0.14;
             // This is the value given for all temperature ecosystems. 
             // The model is relatively insensitive to this parameter ZR 06/01/2021
 
@@ -736,7 +737,10 @@ namespace Landis.Extension.Succession.NECN
                 monthly_cumulative_LAI = SiteVars.MonthlyLAI_Trees[site][Main.Month] + SiteVars.MonthlyLAI_GrassesLastMonth[site]; // Chihiro, 2021.03.30: tentative. trees + grass layer
             }
 
-            double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
+            var k = SpeciesData.CompetitionIndex[cohort.Species];
+            //double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
+            double competition_limit = Math.Max(0.0, Math.Exp(-k * monthly_cumulative_LAI));
+
 
             return competition_limit;
 
