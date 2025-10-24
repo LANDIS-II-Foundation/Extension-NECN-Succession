@@ -4,6 +4,7 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Library.UniversalCohorts;  
 using System.Collections.Generic;
+using System.Dynamic;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -14,7 +15,8 @@ namespace Landis.Extension.Succession.NECN
     {
 
 
-        private static ISiteVar<double[]> monthlymineralN;
+        public static ISiteVar<double[]> MonthlymineralN;
+        public static ISiteVar<ExpandoObject> AdditionalFields;
         public static ISiteVar<double> AnnualNEE;
         public static ISiteVar<double> FireCEfflux;
         public static ISiteVar<double> FireNEfflux;
@@ -70,6 +72,7 @@ namespace Landis.Extension.Succession.NECN
         public static void Initialize()
         {
             cohorts = PlugIn.ModelCore.Landscape.NewSiteVar<SiteCohorts>();
+            AdditionalFields = PlugIn.ModelCore.Landscape.NewSiteVar<ExpandoObject>();
 
             fineFuels = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             TimeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
@@ -158,7 +161,7 @@ namespace Landis.Extension.Succession.NECN
             Nvol                = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             PrevYearMortality   = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             TotalNuptake        = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            monthlymineralN     = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlymineralN     = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             FrassC              = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             LAI                 = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             AnnualWaterBalance       = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -263,6 +266,12 @@ namespace Landis.Extension.Succession.NECN
         /// <summary>
         /// Initializes for disturbances.
         /// </summary>
+
+        public static void GetAdditionalFields()
+        {
+            AdditionalFields = PlugIn.ModelCore.GetSiteVar<ExpandoObject>("Other.AdditionalFields");
+        }
+
         public static void ResetDisturbances()
         {
             FireSeverity        = PlugIn.ModelCore.GetSiteVar<byte>("Fire.Severity");

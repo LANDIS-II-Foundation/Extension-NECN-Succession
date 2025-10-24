@@ -11,6 +11,7 @@ using Landis.Library.Climate;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 
 
 namespace Landis.Extension.Succession.NECN
@@ -20,6 +21,7 @@ namespace Landis.Extension.Succession.NECN
     {
         public static readonly string ExtensionName = "NECN Succession";
         private static ICore modelCore;
+        private bool retrievedAdditionalParameters = false;
         public static IInputParameters Parameters;
         //public static double[] ShadeLAI;
         public static double AnnualWaterBalance;
@@ -47,6 +49,7 @@ namespace Landis.Extension.Succession.NECN
         public static int[] SpeciesBySerotiny;
         public static int[] SpeciesByResprout;
         public static int[] SpeciesBySeed;
+        private ExpandoObject savedAdditionalParameters = new ExpandoObject();
 
         //---------------------------------------------------------------------
 
@@ -83,6 +86,7 @@ namespace Landis.Extension.Succession.NECN
             tempObject.MineralNallocation = 0.0f;  // monthly allocation
             tempObject.MineralNfraction = 0.0f; // annual fraction
             tempObject.Nresorption = 0.0f;
+            this.savedAdditionalParameters = DeepCopyExpandoObject(additionalCohortParameters);
         }
 
 
@@ -202,6 +206,12 @@ namespace Landis.Extension.Succession.NECN
             {
                 Disturbed.ActiveSiteValues = false;
                 SiteVars.ResetDisturbances();
+                if (retrievedAdditionalParameters == false)
+                {
+                    SiteVars.GetAdditionalFields();
+                    PrepAdditionalFields(SiteVars.AdditionalFields);
+                    retrievedAdditionalParameters = true;
+                }
             }
 
             ClimateRegionData.AnnualNDeposition = new Landis.Library.Parameters.Ecoregions.AuxParm<double>(ModelCore.Ecoregions);
@@ -571,12 +581,18 @@ namespace Landis.Extension.Succession.NECN
         {
             float[] initialBiomass = CohortBiomass.InitialBiomass(species, site);
 
-            ExpandoObject woodLeafBiomasses = new ExpandoObject();
-            dynamic tempObject = woodLeafBiomasses;
-            tempObject.WoodBiomass = initialBiomass[0];
-            tempObject.LeafBiomass = initialBiomass[1];
+            //ExpandoObject woodLeafBiomasses = new ExpandoObject();
+            //dynamic tempObject = woodLeafBiomasses;
+            //tempObject.WoodBiomass = initialBiomass[0];
+            //tempObject.LeafBiomass = initialBiomass[1];
 
-            SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), 0, woodLeafBiomasses);
+            ExpandoObject allAdditionalFields = DeepCopyExpandoObject(savedAdditionalParameters);
+            dynamic temp = allAdditionalFields;
+            temp.WoodBiomass = initialBiomass[0];
+            temp.LeafBiomass = initialBiomass[1];
+
+            //SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), 0, woodLeafBiomasses);
+            SiteVars.Cohorts[site].AddNewCohort(species, 1, Convert.ToInt32(initialBiomass[0] + initialBiomass[1]), 0, allAdditionalFields);
 
             if (reproductionType == "plant")
                 SpeciesByPlant[species.Index]++;
@@ -673,6 +689,45 @@ namespace Landis.Extension.Succession.NECN
 
                 }
             }
+        }
+
+        private void PrepAdditionalFields(ISiteVar<ExpandoObject> additionalFields)
+        {
+            if (additionalFields == null || modelCore?.Landscape?.ActiveSites == null)
+            {
+                return;
+            }
+
+            var toAdd = additionalFields[modelCore.Landscape.ActiveSites.FirstOrDefault()];
+            savedAdditionalParameters = AddAdditionalFields(savedAdditionalParameters, toAdd);
+        }
+
+        private ExpandoObject AddAdditionalFields(ExpandoObject Original, ExpandoObject ToAdd)
+        {
+            var _Original = (IDictionary<string, object>)Original;
+
+            var _ToAdd = (IDictionary<string, object>)ToAdd;
+
+            foreach (var field in _ToAdd)
+            {
+                _Original.Add(field.Key, field.Value is ExpandoObject ? DeepCopyExpandoObject((ExpandoObject)field.Value)
+                    : field.Value);
+            }
+
+            return Original;
+        }
+
+        private static ExpandoObject DeepCopyExpandoObject(ExpandoObject original)
+        {
+            var clone = new ExpandoObject();
+
+            var _original = (IDictionary<string, object>)original;
+            var _clone = (IDictionary<string, object>)clone;
+
+            foreach (var kvp in _original)
+                _clone.Add(kvp.Key, kvp.Value is ExpandoObject ? DeepCopyExpandoObject((ExpandoObject)kvp.Value) : kvp.Value);
+
+            return clone;
         }
     }
     }
