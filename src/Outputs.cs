@@ -1079,9 +1079,14 @@ namespace Landis.Extension.Succession.NECN
                                 }
                                 else
                                 {
-                                    //  Inactive site or no seedbank for this species
+                                    // No seedbank for this species at this site
                                     pixel.MapCode.Value = -1;
                                 }
+                            }
+                            else
+                            {
+                                // Inactive site
+                                pixel.MapCode.Value = -1;
                             }
                             outputRaster.WriteBufferPixel();
                         }
