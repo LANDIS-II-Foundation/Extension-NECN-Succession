@@ -27,9 +27,8 @@ Changes to NECN to accomodate the new transpiration algorithm:
 
 de Bruijn, A., Gustafson, E. J., Sturtevant, B. R., Foster, J. R., Miranda, B. R., Lichti, N. I., & Jacobs, D. F. (2014). Toward more robust projections of forest landscape dynamics under novel environmental conditions: Embedding PnET within LANDIS-II. Ecological Modelling, 287, 44-57. doi:10.1016/j.ecolmodel.2014.05.004
 
-The next generation NECN, v6.x
+The next generation NECN, v8.x
 
-
-The next generation NECN, v6.x
+Changes to this extension are governed by the [**Repository Rules**](https://sites.google.com/site/landismodel/developers) from the Technical Advisory Committee.
 
 Robert Scheller is the Maintainer of the original NECN repository.

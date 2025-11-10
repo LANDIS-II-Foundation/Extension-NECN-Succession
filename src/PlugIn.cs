@@ -94,6 +94,10 @@ namespace Landis.Extension.Succession.NECN
         public override void Initialize()
         {
             ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
+
+            //Console.WriteLine("Attach process to Visual Studio for debugging and hit return.");
+            //Console.ReadLine();
+
             Timestep = Parameters.Timestep;
             SuccessionTimeStep = Timestep;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
@@ -142,6 +146,12 @@ namespace Landis.Extension.Succession.NECN
             if (Parameters.AspectMapName != null)
             {
                 ReadMaps.ReadAspectMap(Parameters.AspectMapName);
+            }
+
+            // optional soil moisture map
+            if (Parameters.SoilMoistureMapName != null)
+            {
+                ReadMaps.ReadSoilMoistureMap(Parameters.SoilMoistureMapName);
             }
 
             //Initialize climate.

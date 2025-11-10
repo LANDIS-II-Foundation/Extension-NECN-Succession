@@ -16,6 +16,7 @@ namespace Landis.Extension.Succession.NECN
         private string initCommunities;
         private string communitiesMap;
         private string soilDepthMapName;
+        private string soilMoistureMapName;
         private string soilDrainMapName;
         private string soilBaseFlowMapName;
         private string soilStormFlowMapName;
@@ -451,6 +452,21 @@ namespace Landis.Extension.Succession.NECN
             }
         }
         //---------------------------------------------------------------------
+
+        public string SoilMoistureMapName
+        {
+            get
+            {
+                return soilMoistureMapName;
+            }
+            set
+            {
+                string path = value;
+                if (path.Trim().Length == 0)
+                    throw new InputValueException(path, "\"{0}\" is not a valid path.", path);
+                soilMoistureMapName = value;
+            }
+        }
 
         public string SoilDrainMapName
         {

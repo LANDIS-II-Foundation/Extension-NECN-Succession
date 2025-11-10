@@ -228,12 +228,18 @@ namespace Landis.Extension.Succession.NECN
 
             potentialNPP *= limitN;
 
-            //if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(competition_limit) || Double.IsNaN(limitN))
-            //{
-                //PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
-                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
-                //PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), SiteVars.SoilTemperature[site]);
-            //}
+            if (Double.IsNaN(limitT) || Double.IsNaN(limitH20) || Double.IsNaN(limitLAI) || Double.IsNaN(competition_limit) || Double.IsNaN(limitN))
+            {
+                PlugIn.ModelCore.UI.WriteLine("  A limit = NaN!  Will set to zero.");
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     GROWTH LIMITS: LAI={2:0.00}, H20={3:0.00}, N={4:0.00}, T={5:0.00}, Competition={6:0.0}", PlugIn.ModelCore.CurrentTime, Main.Month + 1, limitLAI, limitH20, limitN, limitT, competition_limit);
+                PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), SiteVars.SoilTemperature[site]);
+
+                double wilt_point = SiteVars.SoilWiltingPoint[site];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month];
+
+                PlugIn.ModelCore.UI.WriteLine("wilt_point = {0}, volumetric_water = {1}", wilt_point, volumetric_water);
+
+            }
 
 
             //  Age mortality is discounted from ANPP to prevent the over-
@@ -738,6 +744,10 @@ namespace Landis.Extension.Succession.NECN
         //                 there is no restriction on production.
         private static double calculateWater_Limit(ActiveSite site, ICohort cohort, IEcoregion ecoregion, ISpecies species)
         {
+            if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
+            {
+                CalibrateLog.availableWater = SiteVars.PlantAvailableWater[site];
+            }
 
             var A1 = SpeciesData.MoistureCurve1[species];
             var A2 = SpeciesData.MoistureCurve2[species];
@@ -751,7 +761,7 @@ namespace Landis.Extension.Succession.NECN
             //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
             {
                 double wilt_point = SiteVars.SoilWiltingPoint[site];
-                double volumetric_water = SiteVars.MonthlyMeanSoilMoistureVolumetric[site][Main.Month];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month];
 
                 if (volumetric_water < 0.001) volumetric_water = 0.001;
 
@@ -762,8 +772,7 @@ namespace Landis.Extension.Succession.NECN
                 //limitH20 = calculateWater_Limit_versionDGS(volumetric_water, cohort.Species);
                 if (OtherData.CalibrateMode)
                 {
-                    PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",
-                    volumetric_water, limitH20);
+                    //PlugIn.ModelCore.UI.WriteLine("Using four-parameter water limit calculation. Volumetric water is {0}. h20 limit is {1}.",volumetric_water, limitH20);
                 }
 
                 if (volumetric_water < wilt_point) limitH20 = 0.001;
@@ -773,6 +782,7 @@ namespace Landis.Extension.Succession.NECN
                     PlugIn.ModelCore.UI.WriteLine("soilWater = {0}, soil water limit = {1}, frac = {2}", volumetric_water, limitH20, frac); //debug
                     PlugIn.ModelCore.UI.WriteLine("A1 = {0}, A2 = {1}, A3 = {2}, A4 = {3}", A1, A2, A3, A4);
                 }
+
                 return limitH20;
             }
 
