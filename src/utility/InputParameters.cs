@@ -135,6 +135,7 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> maxLAI;
         private Landis.Library.Parameters.Species.AuxParm<double> fractionANPPtoLeaf;
         private Landis.Library.Parameters.Species.AuxParm<int> seedbankLongevity;
+        private Landis.Library.Parameters.Species.AuxParm<double> seedbankMaturityMultiplier;
 
 
         //---------------------------------------------------------------------
@@ -385,6 +386,8 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> FineRootFraction { get { return fineRootFraction; } }
         public Landis.Library.Parameters.Species.AuxParm<double> FractionANPPtoLeaf { get { return fractionANPPtoLeaf; } }
         public Landis.Library.Parameters.Species.AuxParm<int> SeedbankLongevity { get { return seedbankLongevity; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> SeedbankMaturityMultiplier { get { return seedbankMaturityMultiplier; } }
+
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -1365,7 +1368,11 @@ namespace Landis.Extension.Succession.NECN
             Debug.Assert(species != null);
             seedbankLongevity[species] = VerifyRange(newValue, 0, 100, "SeedbankLongevity");
         }
-
+        public void SetSeedbankMaturityMultiplier(ISpecies species, double value)
+        {
+            Debug.Assert(species != null);
+            seedbankMaturityMultiplier[species] = value;
+        }
 
         public InputParameters(ISpeciesDataset speciesDataset, int litterCnt, int functionalCnt)
         {
@@ -1439,6 +1446,7 @@ namespace Landis.Extension.Succession.NECN
             fineRootFraction = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             fractionANPPtoLeaf = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             seedbankLongevity = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
+            seedbankMaturityMultiplier = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
 
             lightLAIShape = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             lightLAIScale = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);

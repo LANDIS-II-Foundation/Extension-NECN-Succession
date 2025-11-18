@@ -90,6 +90,7 @@ namespace Landis.Extension.Succession.NECN
         public static Landis.Library.Parameters.Species.AuxParm<double> MaxLAI;
         public static Landis.Library.Parameters.Species.AuxParm<double> FractionANPPtoLeaf;
         public static Landis.Library.Parameters.Species.AuxParm<int> SeedbankLongevity;
+        public static Landis.Library.Parameters.Species.AuxParm<double> SeedbankMaturityMultiplier;
 
         //---------------------------------------------------------------------
         public static void Initialize(IInputParameters parameters)
@@ -143,6 +144,7 @@ namespace Landis.Extension.Succession.NECN
             FineRootFraction = parameters.FineRootFraction;
             FractionANPPtoLeaf = parameters.FractionANPPtoLeaf;
             SeedbankLongevity = parameters.SeedbankLongevity;
+            SeedbankMaturityMultiplier = parameters.SeedbankMaturityMultiplier;
 
             LightLAIShape        = parameters.LightLAIShape;
             LightLAIScale       = parameters.LightLAIScale;
