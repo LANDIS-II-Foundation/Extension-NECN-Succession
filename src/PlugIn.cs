@@ -321,8 +321,9 @@ namespace Landis.Extension.Succession.NECN
                         if (SiteVars.FireSeverity != null && SiteVars.FireSeverity[site] > 0)
                             FireEffects.ReduceLayers(SiteVars.FireSeverity[site], site);
 
+                        // Store the previous fire year before updating
+                        SiteVars.PreviousFireYear[site] = SiteVars.FireDisturbedYear[site];
                         SiteVars.FireDisturbedYear[site] = ModelCore.CurrentTime;
-
                     }
 
                     double live_woodFireConsumption = woodInput * FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortWoodReduction;

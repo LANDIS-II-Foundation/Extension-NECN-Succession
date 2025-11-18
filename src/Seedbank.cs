@@ -85,9 +85,22 @@ namespace Landis.Extension.Succession.NECN
                 ISpecies species = speciesEntry.Key; // Extract the species from the dictionary entry
                 if (SiteVars.SeedbankViability[site][species])
                 {
+                    // Only allow germination if time since fire exceeds species sexual maturity
+                    int timeSincePreviousFire = PlugIn.ModelCore.CurrentTime - SiteVars.PreviousFireYear[site];
+                    int sexualMaturity = species.Maturity;
+
+                    double maturityScalar = 1.0; //Change this if needed TODO make more stochastic?
+
+                    if (timeSincePreviousFire < sexualMaturity * maturityScalar)
+                    {
+                        //PlugIn.ModelCore.UI.WriteLine("   Seedbank germination blocked for {0} at site {1}: Time since fire ({2}) < Sexual maturity ({3})",
+                        //    species.Name, site.Location, timeSincePreviousFire, sexualMaturity);
+                        continue; // Skip germination for this species
+                    }
+
                     bool sufficientResources = Reproduction.SufficientResources(species, site);
                     bool canEstablish = Reproduction.Establish(species, site);
-                    double siteLAI = SiteVars.LAI[site];
+                    //double siteLAI = SiteVars.LAI[site];
 
                     //PlugIn.ModelCore.UI.WriteLine($"Species: {species.Name}, Site LAI: {siteLAI:F2}, SufficientResources: {sufficientResources}, Establish: {canEstablish}");
 

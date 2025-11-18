@@ -42,6 +42,7 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyActualEvapotranspiration;//SF added 2023-6-27
         public static ISiteVar<int> HarvestDisturbedYear;
         public static ISiteVar<int> FireDisturbedYear;
+        public static ISiteVar<int> PreviousFireYear { get; private set; }
         public static ISiteVar<double> slope;
         public static ISiteVar<double> aspect;
 
@@ -76,6 +77,7 @@ namespace Landis.Extension.Succession.NECN
             TimeOfLast = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             HarvestDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             FireDisturbedYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
+            PreviousFireYear = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
 
             // Dead biomass:
             SurfaceDeadWood = PlugIn.ModelCore.Landscape.NewSiteVar<Layer>();
