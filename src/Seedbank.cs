@@ -89,7 +89,7 @@ namespace Landis.Extension.Succession.NECN
                     int timeSincePreviousFire = PlugIn.ModelCore.CurrentTime - SiteVars.PreviousFireYear[site];
                     int sexualMaturity = species.Maturity;
 
-                    double maturityScalar = 1.0; //Change this if needed TODO make more stochastic?
+                    double maturityScalar = SpeciesData.SeedbankMaturityMultiplier[species];
 
                     if (timeSincePreviousFire < sexualMaturity * maturityScalar)
                     {

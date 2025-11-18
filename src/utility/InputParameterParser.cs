@@ -497,7 +497,7 @@ namespace Landis.Extension.Succession.NECN
                 parameters.SetCoarseRootFraction(species, System.Convert.ToDouble(row["CoarseRootFraction"]));
                 parameters.SetFineRootFraction(species, System.Convert.ToDouble(row["FineRootFraction"]));
                 parameters.SetSeedbankLongevity(species, System.Convert.ToInt32(row["SeedbankLongevity"]));
-
+                parameters.SetSeedbankMaturityMultiplier(species, ReadSeedbankMaturityMultiplier(row));
 
             }
 
@@ -846,6 +846,18 @@ namespace Landis.Extension.Succession.NECN
             catch
             {
                 return 1.0;  // value of 1.0 uses unadjusted Weibull distribution (area under the curve = 1)
+            }
+        }
+        private double ReadSeedbankMaturityMultiplier(DataRow row)
+        {
+            try
+            {
+                double maturityMultiplier = System.Convert.ToDouble(row["SeedbankMaturityMultiplier"]);
+                return maturityMultiplier;
+            }
+            catch
+            {
+                return 1.0; // Default to 1.0 (no adjustment to maturity requirement)
             }
         }
     }
