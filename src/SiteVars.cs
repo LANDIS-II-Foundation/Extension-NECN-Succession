@@ -61,8 +61,11 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double> normalSWA;
         public static ISiteVar<double> normalCWD;
         public static ISiteVar<double> normalTemp;
+
+        //Seedbank sitevars
         public static ISiteVar<Dictionary<ISpecies, int>> SeedbankAge; //seedbank
         public static ISiteVar<Dictionary<ISpecies, bool>> SeedbankViability; //seedbank
+        public static ISiteVar<HashSet<ISpecies>> SpeciesWithMatureCohortPreFire; //Track species with mature cohorts before fire
 
         //---------------------------------------------------------------------
 
@@ -177,6 +180,7 @@ namespace Landis.Extension.Succession.NECN
 
             SeedbankAge = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, int>>();//seedbank
             SeedbankViability = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, bool>>();//seedbank
+            SpeciesWithMatureCohortPreFire = PlugIn.ModelCore.Landscape.NewSiteVar<HashSet<ISpecies>>(); //Track species with mature cohorts before fire
             NeedsPostFireGermination = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
 
             if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
@@ -248,6 +252,7 @@ namespace Landis.Extension.Succession.NECN
 
                 SeedbankAge[site] = new Dictionary<ISpecies, int>(); //seedbank
                 SeedbankViability[site] = new Dictionary<ISpecies, bool>(); //seedbank viability
+                SpeciesWithMatureCohortPreFire[site] = new HashSet<ISpecies>(); //Track species with mature cohorts befo
 
                 //CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 

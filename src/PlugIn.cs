@@ -226,6 +226,7 @@ namespace Landis.Extension.Succession.NECN
                     //PlugIn.ModelCore.UI.WriteLine("   Post-fire germination at site {0}.", site.Location);
                     Seedbank.PostfireGerminate(site);
                     Seedbank.ClearSeedbank(site);
+                    SiteVars.SpeciesWithMatureCohortPreFire[site].Clear(); // Clear after using
                     SiteVars.NeedsPostFireGermination[site] = false;
                 }
             }
@@ -324,6 +325,16 @@ namespace Landis.Extension.Succession.NECN
                         // Store the previous fire year before updating
                         SiteVars.PreviousFireYear[site] = SiteVars.FireDisturbedYear[site];
                         SiteVars.FireDisturbedYear[site] = ModelCore.CurrentTime;
+                        
+                        //Track which species had mature cohorts before this fire
+                        SiteVars.SpeciesWithMatureCohortPreFire[site].Clear();
+                        foreach (ISpeciesCohorts cohorts in SiteVars.Cohorts[site])
+                        {
+                            if (cohorts.IsMaturePresent && SpeciesData.SeedbankLongevity[cohorts.Species] > 0)
+                            {
+                                SiteVars.SpeciesWithMatureCohortPreFire[site].Add(cohorts.Species);
+                            }
+                        }
                     }
 
                     double live_woodFireConsumption = woodInput * FireEffects.ReductionsTable[(int)SiteVars.FireSeverity[site]].CohortWoodReduction;

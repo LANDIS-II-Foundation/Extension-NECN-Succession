@@ -89,7 +89,12 @@ namespace Landis.Extension.Succession.NECN
                     int timeSincePreviousFire = PlugIn.ModelCore.CurrentTime - SiteVars.PreviousFireYear[site];
                     int sexualMaturity = species.Maturity;
 
-                    double maturityScalar = SpeciesData.SeedbankMaturityMultiplier[species];
+                    // Check if this species had mature cohorts before the fire
+                    bool hadMatureCohorts = SiteVars.SpeciesWithMatureCohortPreFire[site].Contains(species);
+                    
+                    // If mature cohorts were present, no maturity penalty for seedbank germination
+                    // Otherwise, apply the maturity multiplier for seed-dispersed species
+                    double maturityScalar = hadMatureCohorts ? 1.0 : SpeciesData.SeedbankMaturityMultiplier[species];
 
                     if (timeSincePreviousFire < sexualMaturity * maturityScalar)
                     {
