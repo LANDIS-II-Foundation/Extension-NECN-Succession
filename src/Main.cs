@@ -112,7 +112,7 @@ namespace Landis.Extension.Succession.NECN
                         //Initialize each year by adding a new list element
                         if (MonthCnt == 0)
                         {
-                            
+
                             SiteVars.SoilWater10[site].Add(0);
                             SiteVars.Temp10[site].Add(0);
 
@@ -120,33 +120,29 @@ namespace Landis.Extension.Succession.NECN
 
                         int list_index = SiteVars.SoilWater10[site].Count - 1; //track how many elements are in the climate lists, to avoid them growing too long
 
-                       if (summer.Contains(Month))
-                            {
-                                //add monthly temperatures
-                                SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
-                            }
-                       //add monthly water content
+                        if (summer.Contains(Month))
+                        {
+                            //add monthly temperatures
+                            SiteVars.Temp10[site][list_index] += ClimateRegionData.AnnualClimate[ecoregion].MonthlyTemp[Month];
+                        }
+                        //add monthly water content
                         SiteVars.SoilWater10[site][list_index] += SiteVars.MeanSoilWater[site];
 
                         //Do this just once a year, after CWD is calculated above
                         if (MonthCnt == 11) //TODO fix this so we don't have to always calculate all of these vars when writing maps
                         {
-                            SiteVars.CWD10[site].Add(SiteVars.AnnualClimaticWaterDeficit[site]);
-                            SiteVars.Temp10[site][list_index] /= summer.Length; //get monthly average temp
+                            // Only calculate average temperature here, don't add CWD yet
+                            if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature | DroughtMortality.OutputClimateWaterDeficit)
+                            {
+                                SiteVars.Temp10[site][list_index] /= summer.Length; //get monthly average temp
+                            }
                         }
                     }
 
-                    if (DroughtMortality.UseDrought & MonthCnt == 11)
+                    if (MonthCnt == 11)
                     {
-                        foreach (ISpecies species in PlugIn.ModelCore.Species)
-                        {//TODO could speed up by only looping thorugh species with drought parameters (skip ones with zeroes)
-                            DroughtMortality.ComputeDroughtLaggedVars(site, species);
-                        }
+                            siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
                     }
-                    //End drought calculations
-
-                    if (MonthCnt==11)
-                        siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), true);
                     else
                         siteCohorts.Grow(site, (y == years && isSuccessionTimeStep), false);
 
@@ -177,19 +173,12 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyNEE[site][Month] += SiteVars.SourceSink[site].Carbon;
                 }
 
-                //Do this just once a year, after CWD is calculated above
-                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature) //TODO fix this so we don't have to always calculate all of these vars when writing maps
+                //Do this just once a year, after all months are processed
+                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
                 {
-                    int year_index = PlugIn.ModelCore.CurrentTime - 1;
-
-                    SiteVars.CWD10[site].Add(0);
-
-                    if (year_index >= 10)
-                    {
-                        year_index = 9;
-                    }
-
-                    SiteVars.CWD10[site][year_index] = SiteVars.AnnualClimaticWaterDeficit[site];
+                    // Add the annual CWD value to the tracking list
+                    // Note: Old values are removed in SiteVars.ResetAnnualValues() to maintain 10-year window
+                    SiteVars.CWD10[site].Add(SiteVars.AnnualClimaticWaterDeficit[site]);
                 }
 
                 if (DroughtMortality.UseDrought)

@@ -830,46 +830,6 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
-        //---------------------------------------------------------------------
-
-        //public void SetMaximumShadeLAI(byte                   shadeClass,
-        //                                  //IEcoregion             ecoregion,
-        //                                  InputValue<double> newValue)
-        //{
-        //    Debug.Assert(1 <= shadeClass && shadeClass <= 5);
-        //    //Debug.Assert(ecoregion != null);
-        //    if (newValue != null) {
-        //        if (newValue.Actual < 0.0 || newValue.Actual > 20)
-        //            throw new InputValueException(newValue.String,
-        //                                          "{0} is not between 0 and 20", newValue.String);
-        //    }
-        //    maximumShadeLAI[shadeClass] = newValue;
-        //    //minRelativeBiomass[shadeClass][ecoregion] = newValue;
-        //}
-        //---------------------------------------------------------------------
-
-        //public void SetFunctionalType(ISpecies species, int newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    sppFunctionalType[species] = VerifyRange(newValue, 0, 100, "FunctionalType");
-        //}
-        //---------------------------------------------------------------------
-
-        //public void SetNFixer(ISpecies           species,
-        //                             InputValue<int> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    nTolerance[species] = CheckBiomassParm(newValue, 1, 4);
-        //}
-
-        //---------------------------------------------------------------------
-
-        //public void SetGDDmin(ISpecies           species,
-        //                             InputValue<int> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    gddMin[species] = VerifyRange(newValue, 1, 4000);
-        //}
         public void SetGDDmin(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
@@ -877,12 +837,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetGDDmax(ISpecies           species,
-        //                             InputValue<int> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    gddMax[species] = VerifyRange(newValue, 500, 7000);
-        //}
         public void SetGDDmax(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
@@ -890,12 +844,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetMinJanTemp(ISpecies           species,
-        //                             InputValue<int> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    minJanTemp[species] = VerifyRange(newValue, -60, 20);
-        //}
         public void SetMinJanTemp(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
@@ -903,12 +851,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetMaxDrought(ISpecies           species,
-        //                             InputValue<double> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    maxDrought[species] = VerifyRange(newValue, 0.0, 1.0);
-        //}
         public void SetMaxDrought(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
@@ -929,12 +871,6 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        //public void SetLeafLongevity(ISpecies           species,
-        //                             InputValue<double> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    leafLongevity[species] = VerifyRange(newValue, 1.0, 10.0, "Leaf Longevity");
-        //}
         public void SetLeafLongevity(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
@@ -943,12 +879,6 @@ namespace Landis.Extension.Succession.NECN
 
         //---------------------------------------------------------------------
 
-        //public void SetLeafLignin(ISpecies           species,
-        //                                  InputValue<double> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    leafLignin[species] = VerifyRange(newValue, 0.0, 0.4);
-        //}
         public void SetLeafLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
@@ -956,12 +886,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetWoodLignin(ISpecies           species,
-        //                                  InputValue<double> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    woodLignin[species] = VerifyRange(newValue, 0.0, 0.4);
-        //}
         public void SetWoodLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
@@ -969,12 +893,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetCoarseRootLignin(ISpecies           species,
-        //                                  InputValue<double> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    coarseRootLignin[species] = VerifyRange(newValue, 0.0, 0.4);
-        //}
         public void SetCoarseRootLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
@@ -982,12 +900,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetFineRootLignin(ISpecies           species,
-        //                                  InputValue<double> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    fineRootLignin[species] = VerifyRange(newValue, 0.0, 0.4);
-        //}
         public void SetFineRootLignin(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
@@ -995,12 +907,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetLeafCN(ISpecies           species,
-        //                                  InputValue<double> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    leafCN[species] = VerifyRange(newValue, 5.0, 100.0);
-        //}
         public void SetLeafCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
@@ -1008,12 +914,6 @@ namespace Landis.Extension.Succession.NECN
         }
         //---------------------------------------------------------------------
 
-        //public void SetWoodCN(ISpecies           species,
-        //                                  InputValue<double> newValue)
-        //{
-        //    Debug.Assert(species != null);
-        //    woodCN[species] = VerifyRange(newValue, 5.0, 900.0);
-        //}
         public void SetWoodCN(ISpecies species,double newValue)
         {
             Debug.Assert(species != null);
@@ -1509,5 +1409,16 @@ namespace Landis.Extension.Succession.NECN
                                               path);
         }
 
+        private string initialFireYearMapName;
+
+        public string InitialFireYearMapName
+        {
+            get {
+                return initialFireYearMapName;
+            }
+            set {
+                initialFireYearMapName = value;
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Landis.Library.Metadata;
 using Landis.Library.UniversalCohorts;
+using Landis.Library.Succession.DemographicSeeding;
 
 
 namespace Landis.Extension.Succession.NECN
@@ -988,6 +989,7 @@ namespace Landis.Extension.Succession.NECN
                     }
                 }
             }
+            
             if (DroughtMortality.OutputClimateWaterDeficit)
             {
                 string pathCWD = MapNames.ReplaceTemplateVars(@"NECN/CWD-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
@@ -1000,7 +1002,7 @@ namespace Landis.Extension.Succession.NECN
                         if (site.IsActive)
                         {
                             pixel.MapCode.Value = (int)SiteVars.AnnualClimaticWaterDeficit[site];
-                            //PlugIn.ModelCore.UI.WriteLine("Writing CWD value = {0}", pixel.MapCode.Value);
+                            PlugIn.ModelCore.UI.WriteLine("Writing CWD value = {0}", pixel.MapCode.Value);
                         }
                         else
                         {
@@ -1095,7 +1097,44 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
-            
+            string pathTimeSinceFire = MapNames.ReplaceTemplateVars(@"NECN/TimeSincePreviousFire-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathTimeSinceFire, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        int timeSincePreviousFire = PlugIn.ModelCore.CurrentTime - SiteVars.PreviousFireYear[site];
+                        pixel.MapCode.Value = timeSincePreviousFire;
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+            }
+
+            string pathPreviousFireYear = MapNames.ReplaceTemplateVars(@"NECN/PreviousFireYear-{timestep}.tif", PlugIn.ModelCore.CurrentTime);
+            using (IOutputRaster<IntPixel> outputRaster = PlugIn.ModelCore.CreateRaster<IntPixel>(pathPreviousFireYear, PlugIn.ModelCore.Landscape.Dimensions))
+            {
+                IntPixel pixel = outputRaster.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    if (site.IsActive)
+                    {
+                        pixel.MapCode.Value = SiteVars.PreviousFireYear[site];
+                    }
+                    else
+                    {
+                        //  Inactive site
+                        pixel.MapCode.Value = 0;
+                    }
+                    outputRaster.WriteBufferPixel();
+                }
+            }
         }
     
 

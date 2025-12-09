@@ -5,9 +5,9 @@
     <AssemblyName>Landis.Extension.Succession.NECN-v8</AssemblyName>
     <AssemblyTitle>Landis.Extension.Succession.NECN-v8</AssemblyTitle>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
-    <AssemblyVersion>8.1</AssemblyVersion>
-    <Version>8.1</Version>
-    <FileVersion>8.1</FileVersion>
+    <AssemblyVersion>8.2</AssemblyVersion>
+    <Version>8.2</Version>
+    <FileVersion>8.2</FileVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession</RepositoryUrl>

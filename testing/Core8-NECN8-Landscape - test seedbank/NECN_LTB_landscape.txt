@@ -26,6 +26,7 @@ InitialSOM3CMapName				random1294.tif
 InitialSOM3NMapName				random50.tif
 InitialDeadWoodSurfaceMapName	random110.tif 
 InitialDeadCoarseRootsMapName	random50.tif
+InitialTimeSinceFireMapName		random9.tif
 
 CalibrateMode 	no
 SmokeModelOutputs no  << produces additional maps that are valuable for modeling smoke
