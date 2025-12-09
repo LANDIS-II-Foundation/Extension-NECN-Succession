@@ -139,6 +139,17 @@ namespace Landis.Extension.Succession.NECN
 
             }
 
+            // Initialize lagged variables for all species using the spinup data
+            // This ensures the dictionaries are populated before the first year's cohort growth
+            PlugIn.ModelCore.UI.WriteLine("Initializing lagged climate variables from spinup data...");
+            foreach (ActiveSite site in PlugIn.ModelCore.Landscape.ActiveSites)
+            {
+                foreach (ISpecies species in PlugIn.ModelCore.Species)
+                {
+                    ComputeDroughtLaggedVars(site, species);
+                }
+            }
+            PlugIn.ModelCore.UI.WriteLine("Lagged climate variables initialized for {0} species.", PlugIn.ModelCore.Species.Count);
         }
 
         private static void SpinUpWater(int year, int month, Site site)
@@ -425,9 +436,30 @@ namespace Landis.Extension.Succession.NECN
 
         public static double[] ComputeDroughtMortality(ICohort cohort, ActiveSite site)
         {
-
-            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Calculating drought mortality for species {0}", cohort.Species.Name);
+            if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Calculating drought mortality for species {0}, Index: {1}", cohort.Species.Name, cohort.Species.Index);
             
+            // Defensive check: ensure the species exists in the dictionaries BEFORE trying to use them
+            if (!SiteVars.SpeciesDroughtMortality[site].ContainsKey(cohort.Species.Index))
+            {
+                PlugIn.ModelCore.UI.WriteLine("WARNING: Species {0} (Index {1}) not found in SpeciesDroughtMortality dictionary at site {2}. Initializing now.", 
+            cohort.Species.Name, cohort.Species.Index, site.Location);
+                PlugIn.ModelCore.UI.WriteLine("   Total species in ModelCore: {0}", PlugIn.ModelCore.Species.Count);
+                PlugIn.ModelCore.UI.WriteLine("   Dictionary contains {0} entries with keys: {1}", 
+            SiteVars.SpeciesDroughtMortality[site].Count,
+            string.Join(", ", SiteVars.SpeciesDroughtMortality[site].Keys));
+        
+                // Initialize the missing species
+                SiteVars.SpeciesDroughtMortality[site][cohort.Species.Index] = 0.0;
+                SiteVars.SpeciesDroughtProbability[site][cohort.Species.Index] = 0.0;
+            }
+    
+            // Similarly check the lagged variables dictionaries
+            if (!SiteVars.SWALagged[site].ContainsKey(cohort.Species.Index))
+            {
+                throw new ApplicationException(string.Format("ERROR: Species {0} (Index {1}) missing from SWALagged at site {2}. This species may not have been processed by ComputeDroughtLaggedVars yet.", 
+            cohort.Species.Name, cohort.Species.Index, site.Location));
+            }
+    
             //Predictor variables
             double normalSWA = SiteVars.NormalSWA[site];
             //PlugIn.ModelCore.UI.WriteLine("normalSWA is {0}", normalSWA);

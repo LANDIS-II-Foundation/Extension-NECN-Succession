@@ -102,12 +102,6 @@ namespace Landis.Extension.Succession.NECN
             ReadVar(soilDrainMapName);
             parameters.SoilDrainMapName = soilDrainMapName.Value;
 
-            InputVar<string> soilMoistureMapName = new InputVar<string>("SoilMoistureMapName");
-            if (ReadOptionalVar(soilMoistureMapName))
-            {
-                parameters.SoilMoistureMapName = soilMoistureMapName.Value;
-            }
-
             InputVar<string> soilBaseFlowMapName = new InputVar<string>("SoilBaseFlowMapName");
             ReadVar(soilBaseFlowMapName);
             parameters.SoilBaseFlowMapName = soilBaseFlowMapName.Value;
@@ -202,6 +196,19 @@ namespace Landis.Extension.Succession.NECN
             {
                 parameters.AspectMapName = aspectMapName.Value;
             }
+
+            InputVar<string> soilMoistureMapName = new InputVar<string>("SoilMoistureMapName");
+            if (ReadOptionalVar(soilMoistureMapName))
+            {
+                parameters.SoilMoistureMapName = soilMoistureMapName.Value;
+            }
+
+            InputVar<string> initialFireYearMapName = new InputVar<string>("InitialTimeSinceFireMapName");
+            if (ReadOptionalVar(initialFireYearMapName))
+            {
+                parameters.InitialFireYearMapName = initialFireYearMapName.Value;
+            }
+
 
             InputVar<bool> calimode = new InputVar<bool>("CalibrateMode");
             if (ReadOptionalVar(calimode))

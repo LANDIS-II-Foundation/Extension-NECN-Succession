@@ -176,15 +176,16 @@ namespace Landis.Extension.Succession.NECN
             HarvestTime = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             MonthlySoilResp = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
 
-            droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-
             SeedbankAge = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, int>>();//seedbank
             SeedbankViability = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<ISpecies, bool>>();//seedbank
             SpeciesWithMatureCohortPreFire = PlugIn.ModelCore.Landscape.NewSiteVar<HashSet<ISpecies>>(); //Track species with mature cohorts before fire
             NeedsPostFireGermination = PlugIn.ModelCore.Landscape.NewSiteVar<bool>();
 
-            if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
+            droughtMort = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+
+            if (DroughtMortality.UseDrought | PlugIn.Parameters.OutputSoilWaterAvailable | PlugIn.Parameters.OutputClimateWaterDeficit | PlugIn.Parameters.OutputTemp)
             {
+                
                 swa10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
                 temp10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
                 cwd10 = PlugIn.ModelCore.Landscape.NewSiteVar<List<double>>();
@@ -196,7 +197,11 @@ namespace Landis.Extension.Succession.NECN
                 swaLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
                 tempLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
                 cwdLagged = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
+            }
 
+            // Only initialize mortality dictionaries if UseDrought is true
+            if (DroughtMortality.UseDrought)
+            {
                 speciesDroughtMortality = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
                 speciesDroughtProbability = PlugIn.ModelCore.Landscape.NewSiteVar<Dictionary<int, double>>();
             }
@@ -256,17 +261,39 @@ namespace Landis.Extension.Succession.NECN
 
                 //CohortResorbedNallocation[site] = new Dictionary<int, Dictionary<int, double>>();
 
-                if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
+                if (DroughtMortality.UseDrought | PlugIn.Parameters.OutputSoilWaterAvailable | PlugIn.Parameters.OutputClimateWaterDeficit | PlugIn.Parameters.OutputTemp)
                 {
                     //Drought parameters
                     swa10[site] = new List<double>(10);
                     temp10[site] = new List<double>(10);
                     cwd10[site] = new List<double>(10);
-                    speciesDroughtMortality[site] = new Dictionary<int, double>();
-                    speciesDroughtProbability[site] = new Dictionary<int, double>();
                     swaLagged[site] = new Dictionary<int, double>();
                     tempLagged[site] = new Dictionary<int, double>();
                     cwdLagged[site] = new Dictionary<int, double>();
+                }
+
+                // Only initialize mortality dictionaries if UseDrought is true
+                if (DroughtMortality.UseDrought)
+                {
+                    speciesDroughtMortality[site] = new Dictionary<int, double>();
+                    speciesDroughtProbability[site] = new Dictionary<int, double>();
+                    
+                    // Initialize all species keys
+                    foreach (ISpecies species in PlugIn.ModelCore.Species)
+                    {
+                        speciesDroughtMortality[site][species.Index] = 0.0;
+                        speciesDroughtProbability[site][species.Index] = 0.0;
+                    }
+                    
+                    // Diagnostic output for the first site only
+                    if (site.Location.Row == 1 && site.Location.Column == 1)
+                    {
+                        PlugIn.ModelCore.UI.WriteLine("   Initialized drought mortality dictionaries for {0} species", PlugIn.ModelCore.Species.Count);
+                        foreach (ISpecies species in PlugIn.ModelCore.Species)
+                        {
+                            PlugIn.ModelCore.UI.WriteLine("      Species: {0}, Index: {1}", species.Name, species.Index);
+                        }
+                    }
                 }
 
             }
@@ -368,30 +395,32 @@ namespace Landis.Extension.Succession.NECN
             AnnualPotentialEvapotranspiration[site] = 0.0;
             WoodMortality[site] = 0.0;
 
-            DroughtMort[site] = 0.0;
-                        
-            if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputClimateWaterDeficit | DroughtMortality.OutputTemperature)
+            // Only reset drought-specific variables if they were initialized
+            if (DroughtMortality.UseDrought | PlugIn.Parameters.OutputSoilWaterAvailable | PlugIn.Parameters.OutputClimateWaterDeficit | PlugIn.Parameters.OutputTemp)
             {
-                foreach (ISpecies species in PlugIn.ModelCore.Species)
+                DroughtMort[site] = 0.0;
+                
+                // Only reset mortality dictionaries if UseDrought is enabled
+                if (DroughtMortality.UseDrought && speciesDroughtMortality != null)
                 {
-                    //Annual variables for each site/species
-                    SpeciesDroughtMortality[site][species.Index] = 0.0;
-                    SpeciesDroughtProbability[site][species.Index] = 0.0;
-                    TempLagged[site][species.Index] = 0.0;
-                    CWDLagged[site][species.Index] = 0.0;
-                    SWALagged[site][species.Index] = 0.0;
+                    foreach (ISpecies species in PlugIn.ModelCore.Species)
+                    {
+                        SpeciesDroughtMortality[site][species.Index] = 0.0;
+                        SpeciesDroughtProbability[site][species.Index] = 0.0;
+                    }
                 }
 
-                if (SoilWater10[site].Count >= 10) 
-                    //TODO SF check each list separately, make sure they all have the same number of elements
-                    //TODO Also, the first time values are reset, make sure lists are <= 10 elements long
+                // Remove oldest values from the 10-year tracking lists to maintain rolling window
+                // This happens BEFORE the new year's value is added in Main.Run()
+                if (swa10 != null && SoilWater10[site] != null && SoilWater10[site].Count >= 10) 
                 {
-                    SoilWater10[site].RemoveAt(0);
+                    SoilWater10[site].RemoveAt(0);  // Remove oldest
                     Temp10[site].RemoveAt(0);
                     CWD10[site].RemoveAt(0);
                 }
             }
         }
+    
 
         //---------------------------------------------------------------------
 
@@ -887,8 +916,7 @@ namespace Landis.Extension.Succession.NECN
 
         // --------------------------------------------------------------------
         /// <summary>
-        /// Input value of Normal CWD
-        /// //TODO sam //drought_todo
+        /// Input value of Normal Temperature
         /// </summary>
         public static ISiteVar<double> NormalTemp
         {
@@ -906,10 +934,9 @@ namespace Landis.Extension.Succession.NECN
         // --------------------------------------------------------------------
         /// <summary>
         /// Input value of Slope
-        /// //TODO sam
         /// </summary>
         public static ISiteVar<double> Slope
-        { //drought_todo
+        { 
             get
             {
                 return slope;
@@ -924,7 +951,6 @@ namespace Landis.Extension.Succession.NECN
         // --------------------------------------------------------------------
         /// <summary>
         /// Input value of Aspect
-        /// //TODO sam
         /// </summary>
         public static ISiteVar<double> Aspect
         { //drought_todo
@@ -947,4 +973,3 @@ namespace Landis.Extension.Succession.NECN
     }
 
 }
- 

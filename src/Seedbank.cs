@@ -39,15 +39,15 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.SeedbankViability[site][species] = false;
                 }
                 
-                SiteVars.SeedbankAge[site][species] += PlugIn.Parameters.Timestep; ; //increment seedbank age by timestep length
+                SiteVars.SeedbankAge[site][species] += PlugIn.Parameters.Timestep; //increment seedbank age by timestep length
 
-                //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1}: {2}", species.Name, site.Location, SiteVars.SeedbankAge[site][species]);
+                if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1}: {2}", species.Name, site.Location, SiteVars.SeedbankAge[site][species]);
 
                 if (SiteVars.SeedbankAge[site][species] > seedbank_longevity)
                 {
                     SiteVars.SeedbankViability[site][species] = false;
-                    //if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1} exceeds longevity ({2} > {3}), setting viability to false.", 
-                    //    species.Name, site.Location, SiteVars.SeedbankAge[site][species], seedbank_longevity);
+                    if (OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Seedbank age for {0} at site {1} exceeds longevity ({2} > {3}), setting viability to false.", 
+                        species.Name, site.Location, SiteVars.SeedbankAge[site][species], seedbank_longevity);
                     Seedbank.ClearSeedbankSpecies(site, species);
                 }
             }
@@ -95,20 +95,18 @@ namespace Landis.Extension.Succession.NECN
                     // If mature cohorts were present, no maturity penalty for seedbank germination
                     // Otherwise, apply the maturity multiplier for seed-dispersed species
                     double maturityScalar = hadMatureCohorts ? 1.0 : SpeciesData.SeedbankMaturityMultiplier[species];
+                    double maturityThreshold = sexualMaturity * maturityScalar;
 
-                    if (timeSincePreviousFire < sexualMaturity * maturityScalar)
+                    if (timeSincePreviousFire < maturityThreshold)
                     {
-                        //PlugIn.ModelCore.UI.WriteLine("   Seedbank germination blocked for {0} at site {1}: Time since fire ({2}) < Sexual maturity ({3})",
-                        //    species.Name, site.Location, timeSincePreviousFire, sexualMaturity);
-                        continue; // Skip germination for this species
+                     if(OtherData.CalibrateMode)  PlugIn.ModelCore.UI.WriteLine("   Seedbank germination blocked for {0} at site {1}: Time since fire ({2}) < Maturity threshold ({3:F1})",
+                            species.Name, site.Location, timeSincePreviousFire, maturityThreshold);
+                        continue;
                     }
-
+                    
                     bool sufficientResources = Reproduction.SufficientResources(species, site);
                     bool canEstablish = Reproduction.Establish(species, site);
-                    //double siteLAI = SiteVars.LAI[site];
-
-                    //PlugIn.ModelCore.UI.WriteLine($"Species: {species.Name}, Site LAI: {siteLAI:F2}, SufficientResources: {sufficientResources}, Establish: {canEstablish}");
-
+                   
                     if (sufficientResources && canEstablish)
                     {
                         PlugIn.AddNewCohort(species, site, "seedbank", 1.0);

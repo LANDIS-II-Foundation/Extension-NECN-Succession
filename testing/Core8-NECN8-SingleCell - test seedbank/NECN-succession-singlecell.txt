@@ -26,9 +26,13 @@ InitialSOM3CMapName			single300.tif<<300
 InitialSOM3NMapName			single15.tif<<15
 InitialDeadWoodSurfaceMapName	single110.tif <<New
 InitialDeadCoarseRootsMapName	single50.tif <<New
+SoilMoistureMapName			single0.07.tif
+InitialTimeSinceFireMapName		single15.tif
 
 CalibrateMode 	yes
 SmokeModelOutputs no
+Write_CWD_Maps yes
+
 WaterDecayFunction Ratio <<Linear or Ratio
 
 ProbabilityEstablishAdjust 	1.0
@@ -51,6 +55,8 @@ FireReductionParameters
 	1		0.0		0.5	0.05		0.85		0.1
 	2		0.5		0.75	0.15		0.95		0.5
 	3		1.0		1.0	0.35		1.0		0.75		
+	4		1.0		1.0	0.35		1.0		0.75		
+	5		1.0		1.0	0.35		1.0		0.75		
 
 HarvestReductionParameters
 >>	Name		WoodLitter	Litter	SOM		CohortWood	CohortLeaf

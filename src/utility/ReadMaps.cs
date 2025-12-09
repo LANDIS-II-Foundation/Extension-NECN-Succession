@@ -599,5 +599,28 @@ namespace Landis.Extension.Succession.NECN
                 }
             }
         }
+        public static void ReadInitialFireYearMap(string path)
+        {
+            IInputRaster<DoublePixel> map = MakeDoubleMap(path);
+
+            using (map)
+            {
+                DoublePixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                {
+                    map.ReadBufferPixel();
+                    int mapValue = (int)pixel.MapCode.Value;
+
+                    if (site.IsActive)
+                    {
+                        if (mapValue < 0 || mapValue > PlugIn.ModelCore.EndTime)
+                            throw new InputValueException(mapValue.ToString(),
+                                                          "Initial time since fire {0} is not between {1} and {2}. Site_Row={3:0}, Site_Column={4:0}",
+                                                          mapValue, 0, PlugIn.ModelCore.EndTime, site.Location.Row, site.Location.Column);
+                        SiteVars.FireDisturbedYear[site] = mapValue * -1;
+                    }
+                }
+            }
+        }
     }
 }

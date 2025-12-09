@@ -150,6 +150,36 @@ namespace Landis.Extension.Succession.NECN
                 ReadMaps.ReadSoilMoistureMap(Parameters.SoilMoistureMapName);
             }
 
+            // Optional time-since-fire map
+            if (Parameters.InitialFireYearMapName != null)
+            {
+                ReadMaps.ReadInitialFireYearMap(Parameters.InitialFireYearMapName);
+                
+                // Add diagnostic output to verify the map was read correctly
+                ModelCore.UI.WriteLine("   Initial Fire Year Map loaded successfully.");
+                int sitesWithFire = 0;
+                int minFireYear = int.MaxValue;
+                int maxFireYear = int.MinValue;
+                
+                foreach (ActiveSite site in ModelCore.Landscape)
+                {
+                    if (SiteVars.FireDisturbedYear[site] != 0)
+                    {
+                        sitesWithFire++;
+                        minFireYear = Math.Min(minFireYear, SiteVars.FireDisturbedYear[site]);
+                        maxFireYear = Math.Max(maxFireYear, SiteVars.FireDisturbedYear[site]);
+                    }
+                }
+                
+                ModelCore.UI.WriteLine("   Sites with initial fire history: {0}", sitesWithFire);
+                if (sitesWithFire > 0)
+                {
+                    ModelCore.UI.WriteLine("   Fire year range: {0} to {1}", minFireYear, maxFireYear);
+                    ModelCore.UI.WriteLine("   Current time: {0}, so time since fire ranges from {1} to {2} years", 
+                        ModelCore.CurrentTime, ModelCore.CurrentTime - maxFireYear, ModelCore.CurrentTime - minFireYear);
+                }
+            }
+
             //Initialize climate.
             Climate.Initialize(Parameters.ClimateConfigFile, false, modelCore);
             ClimateRegionData.Initialize(Parameters);
@@ -175,9 +205,17 @@ namespace Landis.Extension.Succession.NECN
 
             InitializeSites(Parameters.InitialCommunities, Parameters.InitialCommunitiesMap, modelCore);
 
-            if (DroughtMortality.UseDrought | DroughtMortality.OutputSoilWaterAvailable | DroughtMortality.OutputTemperature | DroughtMortality.OutputClimateWaterDeficit)
+            if (DroughtMortality.UseDrought)
             {
                 DroughtMortality.Initialize(Parameters);
+            }
+            else
+            {
+                // Set output flags directly without running full drought initialization
+                DroughtMortality.OutputSoilWaterAvailable = Parameters.OutputSoilWaterAvailable;
+                DroughtMortality.OutputClimateWaterDeficit = Parameters.OutputClimateWaterDeficit;
+                DroughtMortality.OutputTemperature = Parameters.OutputTemp;
+                DroughtMortality.WriteSpeciesDroughtMaps = Parameters.WriteSpeciesDroughtMaps;
             }
 
             foreach (ActiveSite site in ModelCore.Landscape)
