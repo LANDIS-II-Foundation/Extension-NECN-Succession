@@ -1245,7 +1245,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetTempCurve1(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            tempcurve1[species] = VerifyRange(newValue, 10.0, 40.0, "Tempcurve1");
+            tempcurve1[species] = VerifyRange(newValue, 5.0, 40.0, "Tempcurve1");
         }
         public void SetTempCurve2(ISpecies species, double newValue)
         {

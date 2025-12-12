@@ -62,6 +62,9 @@ namespace Landis.Extension.Succession.NECN
         [DataFieldAttribute(Unit = "cm", Desc = "Soil moisture, end-of-month/minimum", Format = "0.00")]
         public double SoilWater { get; set; }
 
+        [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Soil temperature", Format = "0.00")]
+        public double SoilTemperature { get; set; }
+
         [DataFieldAttribute(Unit = "unitless", Desc = "Anaerobic Effect", Format = "0.00")]
         public double AnaerobicEffect { get; set; }
     }

@@ -1,4 +1,4 @@
- //  Authors: Robert Scheller, Melissa Lucash
+//  Authors: Robert Scheller, Melissa Lucash
 
 using Landis.Utilities;
 using Landis.Core;
@@ -7,6 +7,7 @@ using Landis.Library.UniversalCohorts;
 using System;
 using System.Dynamic;
 using Landis.Library.Succession.DensitySeeding;
+using Landis.Library.Climate;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -885,7 +886,10 @@ namespace Landis.Extension.Succession.NECN
             //       Colorado State University
             //       Fort collins, Colorado  80523
 
-            double A1 = SiteVars.SoilTemperature[site];
+            //double A1 = SiteVars.SoilTemperature[site];
+
+            var A1 = ClimateRegionData.AnnualClimate[PlugIn.ModelCore.Ecoregion[site]].MonthlyTemp[Main.Month];
+            
             double A2 = SpeciesData.TempCurve1[species];
             double A3 = SpeciesData.TempCurve2[species];
             double A4 = SpeciesData.TempCurve3[species];
@@ -900,6 +904,7 @@ namespace Landis.Extension.Succession.NECN
 
             return U1;
         }
+
         //---------------------------------------------------------------------
         // Chihiro 2020.01.22
         public static double ComputeGrassBiomass(ActiveSite site)

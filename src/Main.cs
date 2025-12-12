@@ -68,6 +68,7 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyLAI_Grasses[site][Month] = 0.0; // Chihiro, 2020.03.30: tentative
                     SiteVars.MonthlySoilWater[site][Month] = 0.0;
                     SiteVars.MonthlyMeanSoilWaterContent[site][Month] = 0.0;
+                    SiteVars.MonthlySoilTemperature[site][Month] = 0.0;
                     SiteVars.MonthlyAnaerobicEffect[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = ComputeWoodBiomass((ActiveSite) site);
@@ -96,6 +97,19 @@ namespace Landis.Extension.Succession.NECN
 
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET;
+
+                    //if (site.Location.Row == 120)
+                    //{ 
+                    //    if (site.Location.Column == 4)
+                    //    {
+                    //        var t = 0;
+                    //    }
+
+                    //    if (Month == 6)
+                    //    {
+                    //        var t = 0;
+                    //    }
+                    //}
 
                     SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);
 
