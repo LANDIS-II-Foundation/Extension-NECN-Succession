@@ -415,11 +415,6 @@ namespace Landis.Extension.Succession.NECN
 
             isSufficientlight = modelCore.GenerateUniform() < lightProbability;
             
-            if (site.Location.Row == 120 && a > 0.0)
-            {
-                var t = 0;
-            }
-
             //if (modelCore.GenerateUniform() < lightProbability)
             //    isSufficientlight = true;
 
