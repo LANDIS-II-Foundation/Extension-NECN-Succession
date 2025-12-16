@@ -330,6 +330,7 @@ namespace Landis.Extension.Succession.NECN
             //        waterMax, soilWater, meanSoilWater); //debug
 
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
+            SiteVars.MonthlySoilTemperature[site][Main.Month] = SiteVars.SoilTemperature[site];
             SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPlantAvailableWaterPET, month);
             SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPlantAvailableWaterPET, PET, tave);
             SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11, to add as monthly output variable

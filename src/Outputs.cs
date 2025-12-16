@@ -435,6 +435,7 @@ namespace Landis.Extension.Succession.NECN
             double[] streamN = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] soilWater = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] meanSoilWaterContent = new double[PlugIn.ModelCore.Ecoregions.Count];
+            double[] soilTemperature = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] anaerobicEffect = new double[PlugIn.ModelCore.Ecoregions.Count];
 
 
@@ -453,6 +454,7 @@ namespace Landis.Extension.Succession.NECN
                 streamN[ecoregion.Index] = 0.0;
                 soilWater[ecoregion.Index] = 0.0;
                 meanSoilWaterContent[ecoregion.Index] = 0.0;
+                soilTemperature[ecoregion.Index] = 0.0;
                 anaerobicEffect[ecoregion.Index] = 0.0;
             }
 
@@ -477,6 +479,7 @@ namespace Landis.Extension.Succession.NECN
                 streamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
                 soilWater[ecoregion.Index] += SiteVars.MonthlySoilWater[site][month];
                 meanSoilWaterContent[ecoregion.Index] += SiteVars.MonthlyMeanSoilWaterContent[site][month]; //SF added mean
+                soilTemperature[ecoregion.Index] += SiteVars.MonthlySoilTemperature[site][month]; //ML added
                 anaerobicEffect[ecoregion.Index] += SiteVars.MonthlyAnaerobicEffect[site][month]; //SF added 2023-4-11
             }
 
@@ -508,6 +511,7 @@ namespace Landis.Extension.Succession.NECN
                     ml.StreamN = (streamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.SoilWater = (soilWater[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.meanSoilWaterContent = (meanSoilWaterContent[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
+                    ml.SoilTemperature = (soilTemperature[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AnaerobicEffect = (anaerobicEffect[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
 
                     monthlyLog.AddObject(ml);
