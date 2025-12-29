@@ -235,7 +235,7 @@ namespace Landis.Extension.Succession.NECN
                 PlugIn.ModelCore.UI.WriteLine("  Yr={0},Mo={1}.     Other Information: MaxB={2}, Bsite={3}, Bcohort={4:0.0}, SoilT={5:0.0}.", PlugIn.ModelCore.CurrentTime, Main.Month + 1, SpeciesData.Max_Biomass[cohort.Species], (int)siteBiomass, (additionalParameters.WoodBiomass + additionalParameters.LeafBiomass), SiteVars.SoilTemperature[site]);
 
                 double wilt_point = SiteVars.SoilWiltingPoint[site];
-                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWater[site][Main.Month];
 
                 PlugIn.ModelCore.UI.WriteLine("wilt_point = {0}, volumetric_water = {1}", wilt_point, volumetric_water);
 
@@ -746,7 +746,7 @@ namespace Landis.Extension.Succession.NECN
         {
             if (PlugIn.ModelCore.CurrentTime > 0 && OtherData.CalibrateMode)
             {
-                CalibrateLog.availableWater = SiteVars.PlantAvailableWater[site];
+                CalibrateLog.availableSW = SiteVars.PlantAvailableWater[site];
             }
 
             var A1 = SpeciesData.MoistureCurve1[species];
@@ -761,7 +761,7 @@ namespace Landis.Extension.Succession.NECN
             //SF this equation doesn't account for soil texture, like if soil water is below permanent wilt point
             {
                 double wilt_point = SiteVars.SoilWiltingPoint[site];
-                double volumetric_water = SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month];
+                double volumetric_water = SiteVars.MonthlyMeanSoilWater[site][Main.Month];
 
                 if (volumetric_water < 0.001) volumetric_water = 0.001;
 

@@ -66,8 +66,8 @@ namespace Landis.Extension.Succession.NECN
             // Needs to be updated to apply to a yearly measure of soil moisture
             /*if (OtherData.DGS_waterlimit)
             {
-                double volumetric_water = SiteVars.SoilWaterContent[site] / SiteVars.SoilDepth[site];
-                //double volumetric_water = SiteVars.MonthlySoilWaterContent[site][Main.Month] / 100; //this works better to separate wetlands
+                double volumetric_water = SiteVars.SoilWater[site] / SiteVars.SoilDepth[site];
+                //double volumetric_water = SiteVars.MonthlySoilWater[site][Main.Month] / 100; //this works better to separate wetlands
             
 
                 if (volumetric_water < 0.001) volumetric_water = 0.001;

@@ -125,7 +125,7 @@ namespace Landis.Extension.Succession.NECN
                         SiteVars.SoilWater10[site][SiteVars.Temp10[site].Count - 1] += SiteVars.MeanSoilWater[site];
                        
                         //PlugIn.ModelCore.UI.WriteLine("Adding monthly SoilWater to SoilWater10. Monthly value is {0}. " +
-                        //    "SoilWater10 for the year is = {1}", SiteVars.MeanSoilWaterContent[site], SiteVars.SoilWater10[site][year]);
+                        //    "SoilWater10 for the year is = {1}", SiteVars.MeanSoilWater[site], SiteVars.SoilWater10[site][year]);
                     }
                 }
 
@@ -377,7 +377,7 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.SoilWater[site] = soilWater; //lowest (end-of-month) soil water, after subtracting everything
             SiteVars.MeanSoilWater[site] = meanSoilWater; //mean of lowest soil water and highest soil water
             SiteVars.MonthlySoilWater[site][Main.Month] = soilWater;
-            SiteVars.MonthlyMeanSoilWaterContent[site][Main.Month] = meanSoilWater / soilDepth; //Convert to volumetric water content
+            SiteVars.MonthlyMeanSoilWater[site][Main.Month] = meanSoilWater / soilDepth; //Convert to volumetric water content
 
             //PlugIn.ModelCore.UI.WriteLine("Spinup climate: Month={0}, PET={1}, AET={2}, max soil water = {3}," +
             //   "end soil water = {4}.", month, PET, AET, waterMax, soilWater); //debug

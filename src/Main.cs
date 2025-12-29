@@ -67,7 +67,7 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.MonthlyLAI_Trees[site][Month] = 0.0;
                     SiteVars.MonthlyLAI_Grasses[site][Month] = 0.0; // Chihiro, 2020.03.30: tentative
                     SiteVars.MonthlySoilWater[site][Month] = 0.0;
-                    SiteVars.MonthlyMeanSoilWaterContent[site][Month] = 0.0;
+                    SiteVars.MonthlyMeanSoilWater[site][Month] = 0.0;
                     SiteVars.MonthlyAnaerobicEffect[site][Month] = 0.0;
                     SiteVars.SourceSink[site].Carbon = 0.0;
                     SiteVars.TotalWoodBiomass[site] = ComputeWoodBiomass((ActiveSite) site);
@@ -99,7 +99,7 @@ namespace Landis.Extension.Succession.NECN
                     //TODO check here
                     double liveBiomass = (double) ComputeLivingBiomass(siteCohorts);
                     double baseFlow, stormFlow, AET; //needed to calculate leaching
-                    //double availableWaterMax, soilWaterContent;
+                    //double availableWaterMax, soilWater;
 
                     //SF NEW originally, run regular soil water
                     SoilWater.Run(y, Month, liveBiomass, site, out baseFlow, out stormFlow, out AET);

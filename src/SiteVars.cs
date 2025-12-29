@@ -37,7 +37,6 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyLAI_Grasses; // Chihiro, 2021.03.30: tentative
         public static ISiteVar<double> MonthlyLAI_GrassesLastMonth; // Chihiro, 2021.03.30: tentative
         public static ISiteVar<double[]> MonthlyHeteroResp;
-        public static ISiteVar<double[]> MonthlySoilWaterContent;
 
         //TODO clean this up!
         public static ISiteVar<double> AnnualTranspiration;
@@ -52,13 +51,10 @@ namespace Landis.Extension.Succession.NECN
         public static ISiteVar<double[]> MonthlyEvaporatedSnow;
         public static ISiteVar<double[]> MonthlyStormflow;
         public static ISiteVar<double[]> MonthlyMaxWaterUse;
-        //private static ISiteVar<double> availableWater;  //TODO make these public?
         private static ISiteVar<double> availableWaterTranspiration;
         private static ISiteVar<double> capWater;
         private static ISiteVar<double> og_et;
         private static ISiteVar<double> maxWaterUse;
-        private static ISiteVar<double> soilWaterContent;
-        private static ISiteVar<double> meanSoilWaterContent;
         private static ISiteVar<double> availableWaterMin;
         public static ISiteVar<double[]> MonthlyMeanSoilMoistureVolumetric;//SF added
         public static ISiteVar<double[]> MonthlyAnaerobicEffect;//SF added 2023-4-11
@@ -167,7 +163,7 @@ namespace Landis.Extension.Succession.NECN
             availableWater      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             
             liquidSnowPack      = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
-            soilWaterContent    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
+            soilWater    = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             
             decayFactor         = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
             soilTemperature     = PlugIn.ModelCore.Landscape.NewSiteVar<double>();
@@ -202,7 +198,7 @@ namespace Landis.Extension.Succession.NECN
             MonthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlySoilWater = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            MonthlyMeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyMeanSoilWater = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyAnaerobicEffect = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyClimaticWaterDeficit = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyActualEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
@@ -302,7 +298,7 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyLAI_Trees[site] = new double[12];
                 MonthlyLAI_Grasses[site] = new double[12];
                 MonthlySoilWater[site]       = new double[12];
-                MonthlyMeanSoilWaterContent[site] = new double[12];
+                MonthlyMeanSoilWater[site] = new double[12];
                 MonthlyAnaerobicEffect[site] = new double[12];
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
@@ -581,12 +577,17 @@ namespace Landis.Extension.Succession.NECN
         /// </summary>
         public static ISiteVar<double> SoilWater { get; set; }
 
+        //---------------------------------------------------------------------
+
         /// <summary>
         /// Mean soil water [cm]
         /// </summary>
+        public static ISiteVar<double> MeanSoilWater { get; set; }
+
+        //---------------------------------------------------------------------
 
         /// <summary>
-        /// TODO fix name
+        /// Available water for transpiration [cm]
         /// </summary>
         public static ISiteVar<double> AvailableWaterTranspiration
         {
@@ -597,11 +598,11 @@ namespace Landis.Extension.Succession.NECN
                 availableWaterTranspiration = value;
             }
         }
+
         //---------------------------------------------------------------------
-        public static ISiteVar<double> MeanSoilWater { get; set; }
 
         /// <summary>
-        /// Monthly end-of-month soil water [cm]
+        /// Cap water [cm]
         /// </summary>
         public static ISiteVar<double> CapWater
         {
@@ -612,10 +613,11 @@ namespace Landis.Extension.Succession.NECN
                 capWater = value;
             }
         }
+
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// TODO fix name
+        /// Original ET calculation [cm]
         /// </summary>
         public static ISiteVar<double> OG_ET
         {
@@ -626,9 +628,11 @@ namespace Landis.Extension.Succession.NECN
                 og_et = value;
             }
         }
+
         //---------------------------------------------------------------------
+
         /// <summary>
-        /// TODO fix name
+        /// Maximum water use [cm]
         /// </summary>
         public static ISiteVar<double> MaxWaterUse
         {
@@ -639,46 +643,11 @@ namespace Landis.Extension.Succession.NECN
                 maxWaterUse = value;
             }
         }
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Water loss -- TODO fix name
-        /// </summary>
-        public static ISiteVar<double> SoilWaterContent
-        {
-            get {
-                return soilWaterContent;
-            }
-            set {
-                soilWaterContent = value;
-            }
-        }
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Mean volumetric water content (proportion) -- TODO which one is this?
-        /// </summary>
-        public static ISiteVar<double> MeanSoilWaterContent
-        {
-            get
-            {
-                return meanSoilWaterContent;
-            }
-            set
-            {
-                meanSoilWaterContent = value;
-            }
-        }
 
         //---------------------------------------------------------------------
-        public static ISiteVar<double[]> MonthlySoilWater { get; set; }
 
         /// <summary>
-        /// Monthly mean soil water content [fract]
-        /// </summary>
-        public static ISiteVar<double[]> MonthlyMeanSoilWaterContent { get; set; }  //SF added
-        /// <summary>
-        /// Water loss
+        /// Minimum available water [cm]
         /// </summary>
         public static ISiteVar<double> AvailableWaterMin
         {
@@ -689,6 +658,20 @@ namespace Landis.Extension.Succession.NECN
                 availableWaterMin = value;
             }
         }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Monthly end-of-month soil water [cm]
+        /// </summary>
+        public static ISiteVar<double[]> MonthlySoilWater { get; set; }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Monthly mean soil water content [fract]
+        /// </summary>
+        public static ISiteVar<double[]> MonthlyMeanSoilWater { get; set; }
 
         /// <summary>
         /// Liquid Snowpack [cm]
