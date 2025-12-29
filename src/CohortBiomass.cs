@@ -1,4 +1,4 @@
- //  Authors: Robert Scheller, Melissa Lucash
+//  Authors: Robert Scheller, Melissa Lucash
 
 using Landis.Utilities;
 using Landis.Core;
@@ -6,6 +6,8 @@ using Landis.SpatialModeling;
 using Landis.Library.UniversalCohorts;
 using System;
 using System.Dynamic;
+using Landis.Library.Succession.DensitySeeding;
+using Landis.Library.Climate;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -693,7 +695,7 @@ namespace Landis.Extension.Succession.NECN
 
         private static double calculate_LAI_Competition(ICohort cohort, ActiveSite site)
         {
-            double k = -0.14;
+            //double k = -0.14;
             // This is the value given for all temperature ecosystems. 
             // The model is relatively insensitive to this parameter ZR 06/01/2021
 
@@ -722,7 +724,10 @@ namespace Landis.Extension.Succession.NECN
                 monthly_cumulative_LAI = SiteVars.MonthlyLAI_Trees[site][Main.Month] + SiteVars.MonthlyLAI_GrassesLastMonth[site]; // Chihiro, 2021.03.30: tentative. trees + grass layer
             }
 
-            double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
+            var k = SpeciesData.CompetitionIndex[cohort.Species];
+            //double competition_limit = Math.Max(0.0, Math.Exp(k * monthly_cumulative_LAI));
+            double competition_limit = Math.Max(0.0, Math.Exp(-k * monthly_cumulative_LAI));
+
 
             return competition_limit;
 
@@ -854,7 +859,10 @@ namespace Landis.Extension.Succession.NECN
             //       Colorado State University
             //       Fort collins, Colorado  80523
 
-            double A1 = SiteVars.SoilTemperature[site];
+            //double A1 = SiteVars.SoilTemperature[site];
+
+            var A1 = ClimateRegionData.AnnualClimate[PlugIn.ModelCore.Ecoregion[site]].MonthlyTemp[Main.Month];
+            
             double A2 = SpeciesData.TempCurve1[species];
             double A3 = SpeciesData.TempCurve2[species];
             double A4 = SpeciesData.TempCurve3[species];
@@ -869,6 +877,7 @@ namespace Landis.Extension.Succession.NECN
 
             return U1;
         }
+
         //---------------------------------------------------------------------
         // Chihiro 2020.01.22
         public static double ComputeGrassBiomass(ActiveSite site)

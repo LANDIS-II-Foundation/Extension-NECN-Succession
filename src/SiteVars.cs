@@ -198,8 +198,10 @@ namespace Landis.Extension.Succession.NECN
             MonthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlySoilWater = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlySoilTemperature = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyMeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMeanSoilWater = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            MonthlyAnaerobicEffect = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyAnaerobicEffect = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();          
             MonthlyClimaticWaterDeficit = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyActualEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyPotentialEvapotranspiration = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
@@ -298,8 +300,10 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyLAI_Trees[site] = new double[12];
                 MonthlyLAI_Grasses[site] = new double[12];
                 MonthlySoilWater[site]       = new double[12];
-                MonthlyMeanSoilWater[site] = new double[12];
+                MonthlyMeanSoilWaterContent[site] = new double[12];
+                MonthlySoilTemperature[site] = new double[12];
                 MonthlyAnaerobicEffect[site] = new double[12];
+                MonthlyMeanSoilWater[site] = new double[12];
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
                 MonthlyPotentialEvapotranspiration[site] = new double[12];
@@ -701,6 +705,12 @@ namespace Landis.Extension.Succession.NECN
         /// Soil temperature (C)
         /// </summary>
         public static ISiteVar<double> SoilTemperature { get; set; }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Monthly Soil temperature (C)
+        /// </summary>
+        public static ISiteVar<double[]> MonthlySoilTemperature { get; set; }   // ML added 2025-12
         //---------------------------------------------------------------------
 
         /// <summary>
