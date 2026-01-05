@@ -453,7 +453,7 @@ namespace Landis.Extension.Succession.NECN
             double[] soilTemperature = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] transpiration = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] evaporation = new double[PlugIn.ModelCore.Ecoregions.Count];
-            double[] vpd = new double[PlugIn.ModelCore.Ecoregions.Count]
+            double[] vpd = new double[PlugIn.ModelCore.Ecoregions.Count];
             double[] anaerobicEffect = new double[PlugIn.ModelCore.Ecoregions.Count];
 
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
@@ -500,7 +500,6 @@ namespace Landis.Extension.Succession.NECN
                 nitrogenDeposition[ecoregion.Index] = ClimateRegionData.MonthlyNDeposition[ecoregion][month];
                 streamN[ecoregion.Index] += SiteVars.MonthlyStreamN[site][month];
                 soilWater[ecoregion.Index] += SiteVars.MonthlySoilWater[site][month];
-                meanSoilWaterContent[ecoregion.Index] += SiteVars.MonthlyMeanSoilWaterContent[site][month]; //SF added mean
                 soilTemperature[ecoregion.Index] += SiteVars.MonthlySoilTemperature[site][month]; //ML added
                 meanSoilWater[ecoregion.Index] += SiteVars.MonthlyMeanSoilWater[site][month]; //SF added mean
                 transpiration[ecoregion.Index] += SiteVars.monthlyTranspiration[site][month];  
@@ -537,7 +536,6 @@ namespace Landis.Extension.Succession.NECN
                     ml.Ndep = nitrogenDeposition[ecoregion.Index];
                     ml.StreamN = (streamN[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.SoilWater = (soilWater[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
-                    ml.meanSoilWaterContent = (meanSoilWaterContent[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.SoilTemperature = (soilTemperature[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.SoilWater = (soilWater[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);
                     ml.AvgTranspiration = (transpiration[ecoregion.Index] / (double)ClimateRegionData.ActiveSiteCount[ecoregion]);  // Katie M.

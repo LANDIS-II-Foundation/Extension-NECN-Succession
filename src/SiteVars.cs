@@ -199,7 +199,6 @@ namespace Landis.Extension.Succession.NECN
             MonthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlySoilWater = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlySoilTemperature = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
-            MonthlyMeanSoilWaterContent = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMeanSoilWater = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyAnaerobicEffect = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();          
             MonthlyClimaticWaterDeficit = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
@@ -300,7 +299,6 @@ namespace Landis.Extension.Succession.NECN
                 MonthlyLAI_Trees[site] = new double[12];
                 MonthlyLAI_Grasses[site] = new double[12];
                 MonthlySoilWater[site]       = new double[12];
-                MonthlyMeanSoilWaterContent[site] = new double[12];
                 MonthlySoilTemperature[site] = new double[12];
                 MonthlyAnaerobicEffect[site] = new double[12];
                 MonthlyMeanSoilWater[site] = new double[12];

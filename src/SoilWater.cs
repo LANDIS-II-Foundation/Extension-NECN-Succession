@@ -25,7 +25,7 @@ namespace Landis.Extension.Succession.NECN
         private static int beginGrowing;
         private static int endGrowing;
 
-        public static void Run(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET) 
+        public static void Run(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
         {
             //Originally from h2olos.f of CENTURY model
             //Water Submodel for Century - written by Bill Parton
@@ -95,6 +95,7 @@ namespace Landis.Extension.Succession.NECN
             double waterEmpty = wiltingPoint * soilDepth;  // cm
 
             //start with an average amount of water instead of bone-dry
+            //TODO SF do this at model start when initializing soil water
             if (year == 0 & month == 6)
             {
                 soilWater = (waterFull + waterEmpty) / 2;
@@ -215,15 +216,15 @@ namespace Landis.Extension.Succession.NECN
 
                 //Subtract soil evaporation from soil water content
                 soilWater = Math.Max(soilWater - soilEvaporation, 0.0); // Do not allow to go negative
-                AET += soilEvaporation;  
-                remainingPET = Math.Max(remainingPET - soilEvaporation, 0.0); 
+                AET += soilEvaporation;
+                remainingPET = Math.Max(remainingPET - soilEvaporation, 0.0);
 
             }
 
             //Calculate the max amout of water available to trees, an over-estimate of the water available to trees.  It only reflects precip and melting of precip.
             availableWaterMax = Math.Max(soilWater - waterEmpty, 0.0);
             waterMax = soilWater;
-            
+
             SiteVars.MonthlyEvaporation[site][month] = AET; //set evaporation -- we'll use this in SoilWater.AdjustSoilWaterWithTranspiration
             SiteVars.Evaporation[site] = AET; //set evaporation -- we'll use this in SoilWater.AdjustSoilWaterWithTranspiration
             SiteVars.MonthlySoilWaterMax[site][month] = waterMax;
@@ -239,14 +240,14 @@ namespace Landis.Extension.Succession.NECN
             if (soilWater > waterFull)
             {
                 // How much water should move during a storm event, which is based on how much water the soil can hold.
-                waterMovement = Math.Max((soilWater - waterFull), 0.0); 
+                waterMovement = Math.Max((soilWater - waterFull), 0.0);
 
                 //...Compute storm flow.
                 stormFlow = waterMovement * stormFlowFraction;
 
                 //Subtract stormflow from soil water
                 // Remove excess water (above field capacity) as stormflow; the rest remains available until end of month. SWC can still be greater than FC at this point
-                soilWater = Math.Max(soilWater - stormFlow, 0.0); 
+                soilWater = Math.Max(soilWater - stormFlow, 0.0);
 
                 //PlugIn.ModelCore.UI.WriteLine("Water Runs Off. stormflow={0}. soilWater = {1}", stormFlow, soilWater); //debug
             }
@@ -286,7 +287,7 @@ namespace Landis.Extension.Succession.NECN
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, soilWater = {1}, waterEmpty = {2}, waterFull = {3}.", month, soilWater, waterEmpty, waterFull);
             //
             //Subtract ET from soil water content
-            soilWater = Math.Max(soilWater - tempAET, 0.0); 
+            soilWater = Math.Max(soilWater - tempAET, 0.0);
             AET = Math.Max(AET + tempAET, 0.0);
             remainingPET = Math.Max(remainingPET - tempAET, 0.0);
             //PlugIn.ModelCore.UI.WriteLine("tempAET = {0}, AET = {1}, remainingPET = {2}, soilWater = {3}", 
@@ -310,11 +311,11 @@ namespace Landis.Extension.Succession.NECN
             soilWater = Math.Max(soilWater - surplus, 0.0); //reduce soil water to field capacity if it's higher than FC
 
             // Calculate the final amount of available water to the trees, which is the average of the max and min 
-            plantAvailableWater = (availableWaterMax + availableWaterMin)/ 2.0;//availableWaterMax is the initial soilWater after precip, interception, and bare-soil evaporation  
+            plantAvailableWater = (availableWaterMax + availableWaterMin) / 2.0;//availableWaterMax is the initial soilWater after precip, interception, and bare-soil evaporation  
 
             // SF added meanSoilWater as variable to calculate volumetric water to compare to empirical sources
             // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture is tracked in SoilWater.
-            double meanSoilWater = (waterMax + soilWater) / 2.0;          
+            double meanSoilWater = (waterMax + soilWater) / 2.0;
             //PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWater = {2}", 
             //   availableWaterMax, availableWaterMin, soilWater);
 
@@ -346,29 +347,10 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.MonthlySoilWater[site][Main.Month] = soilWater; //lowest soil water value //stay -- overwrite
             SiteVars.MonthlyMeanSoilMoistureVolumetric[site][Main.Month] = meanSoilWater / soilDepth; //Convert to volumetric water content //stay -- overwrite
 
-            SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month);
-            SiteVars.MonthlySoilTemperature[site][Main.Month] = SiteVars.SoilTemperature[site];
-            SiteVars.DecayFactor[site] = CalculateDecayFactor((int)OtherData.WaterDecayFunction, SiteVars.SoilTemperature[site], meanSoilWater, ratioPlantAvailableWaterPET, month);
-            SiteVars.AnaerobicEffect[site] = CalculateAnaerobicEffect(drain, ratioPlantAvailableWaterPET, PET, tave);
-            SiteVars.MonthlyAnaerobicEffect[site][Main.Month] = SiteVars.AnaerobicEffect[site]; //SF added 2023-4-11, to add as monthly output variable
-
-            SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, soilWater, waterMax);
-            return;
-        }
-/*
-        public static void Run_Henne(int year, int month, double liveBiomass, Site site, out double baseFlow, out double stormFlow, out double AET)
-        {
-            //     Original Water Submodel for Century - written by Bill Parton
-            //     Updated from Fortran 4 - rm 2/92
-            //     Rewritten by Bill Pulliam - 9/94
-            //     Rewritten by Melissa Lucash - 11/2014
-            //     Rewritten by Paul Henne, USGS - 6/2020
-
-            //SF removed this mode for NECN v7. It can be replicated by setting baseflow = 0 and stormflow = 0.
 
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWater);
-            
-        
+
+
             //if (OtherData.CalibrateMode)
             //PlugIn.ModelCore.UI.WriteLine("   Month={0}, PET={1}, remainingPET = {2}, Evaporation = {6}, AET={3}, monthly CWD = {4}, cumulative CWD = {5}.",
             // month, PET, remainingPET, AET, (remainingPET - AET), SiteVars.AnnualClimaticWaterDeficit[site], SiteVars.Evaporation[site]);
@@ -380,7 +362,7 @@ namespace Landis.Extension.Succession.NECN
             //        tmin, tmax, liveBiomass, litterBiomass, month); //debug
 
             SiteVars.SoilTemperature[site] = CalculateSoilTemp(tmin, tmax, liveBiomass, litterBiomass, month); //stay
-           
+
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWater); //stay
 
             SiteVars.AvailableWaterTranspiration[site] = plantAvailableWater; //TODO remove as sitevar, replace with PlantAvailableWater
@@ -394,6 +376,9 @@ namespace Landis.Extension.Succession.NECN
             return;
         }
 
+        public static void AdjustSoilWaterWithET(int year, int month, double liveBiomass, Site site, out double AET)
+        {
+
             double wiltingPoint = SiteVars.SoilWiltingPoint[site];
             double soilDepth = SiteVars.SoilDepth[site];
             double fieldCapacity = SiteVars.SoilFieldCapacity[site];
@@ -406,23 +391,23 @@ namespace Landis.Extension.Succession.NECN
 
             double remainingPET = SiteVars.MonthlyPotentialEvapotranspiration[site][month]; //assigned in first soil water function -- this is PET adjusted by topography, without any subtractions taken yet
             double PET = remainingPET;
-            double waterContentMax= SiteVars.MonthlySoilWaterMax[site][month];
+            double waterContentMax = SiteVars.MonthlySoilWaterMax[site][month];
             double availableWaterMax = Math.Max(waterContentMax - waterEmpty, 0.0);
 
             AET = SiteVars.Evaporation[site] + SiteVars.Transpiration[site]; //using evaporation calculated in SoilWater.Run and transpiration calculated in CohortBiomass.Calculate_Cohort_Transpiration
 
             //PlugIn.ModelCore.UI.WriteLine("Month={0}, waterEmpty = {1}, waterFull = {2}., waterContentMax = {6}, PET = {7}, AET = {3}. Evaporation = {4}, Transpiration = {5}", 
             //    month, waterEmpty, waterFull, AET, SiteVars.Evaporation[site], SiteVars.Transpiration[site], waterContentMax, PET);
-            
+
             //Subtract ET from soil water content
             if (AET > waterContentMax)
             {
                 throw new ApplicationException(string.Format("AET exceeds maximum water content. AET = {0}, waterContentMax = {1}. Site is at row {2}, column {3}.",
                     AET, waterContentMax, site.Location.Row, site.Location.Column));
             }
-            
 
-            double soilWater = Math.Max(waterContentMax - AET, 0.0); 
+
+            double soilWater = Math.Max(waterContentMax - AET, 0.0);
             remainingPET = Math.Max(remainingPET - AET, 0.0);
             //PlugIn.ModelCore.UI.WriteLine("tempAET = {0}, AET = {1}, remainingPET = {2}, soilWater = {3}", 
             //    tempAET, AET, remainingPET, soilWater); //debug
@@ -450,8 +435,8 @@ namespace Landis.Extension.Succession.NECN
             // SF added meanSoilWater as variable to calculate volumetric water to compare to empirical sources
             // such as FluxNet or Climate Reference Network data. Actual end-of-month soil moisture is tracked in SoilWater.
             double meanSoilWater = (waterContentMax + soilWater) / 2.0;
-           // PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWater = {2}", 
-           //    availableWaterMax, availableWaterMin, soilWater);
+            // PlugIn.ModelCore.UI.WriteLine("   availableWaterMax = {0}, availableWaterMin = {1}, soilWater = {2}", 
+            //    availableWaterMax, availableWaterMin, soilWater);
             // Compute the ratio of precipitation to PET
             double ratioPlantAvailableWaterPET = 0.0;
             if (PET > 0.0) ratioPlantAvailableWaterPET = plantAvailableWater / PET;
@@ -486,11 +471,6 @@ namespace Landis.Extension.Succession.NECN
             SiteVars.DryDays[site] += CalculateDryDays(month, beginGrowing, endGrowing, waterEmpty, availableWaterMax, soilWater);
 
         }
-
-
-    
-
-
         public static double CalculateSlopeAspectEffect(double slope, double aspect)
         {
             double x = 0.0;
