@@ -44,6 +44,8 @@ namespace Landis.Extension.Succession.NECN
         private string slopeMapName;
         private string aspectMapName;
 
+        private string initialFireYearMapName;
+
         //private bool calibrateMode;
         //private bool smokeModelOutputs;
         //private bool henne_watermode;
@@ -830,6 +832,18 @@ namespace Landis.Extension.Succession.NECN
             }
         }
 
+        public string InitialFireYearMapName
+        {
+            get
+            {
+                return initialFireYearMapName;
+            }
+            set
+            {
+                initialFireYearMapName = value;
+            }
+        }
+
         public void SetGDDmin(ISpecies species,int newValue)
         {
             Debug.Assert(species != null);
@@ -1409,16 +1423,5 @@ namespace Landis.Extension.Succession.NECN
                                               path);
         }
 
-        private string initialFireYearMapName;
-
-        public string InitialFireYearMapName
-        {
-            get {
-                return initialFireYearMapName;
-            }
-            set {
-                initialFireYearMapName = value;
-            }
-        }
     }
 }

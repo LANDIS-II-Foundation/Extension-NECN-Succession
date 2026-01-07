@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using Landis.Library.Succession;
 using Landis.Library.Succession.DemographicSeeding;
+using System.Linq;
 
 namespace Landis.Extension.Succession.NECN
 {
@@ -57,7 +58,7 @@ namespace Landis.Extension.Succession.NECN
             var maturePresentList = new List<ISpecies>();
             foreach (ISpeciesCohorts cohort in SiteVars.Cohorts[site])
             {
-                if (SpeciesData.SeedbankLongevity[cohort.Species] > 0 & cohort.IsMaturePresent) //only for seedbanking species with mature cohorts
+                if (SpeciesData.SeedbankLongevity[cohort.Species] > 0 && cohort.IsMaturePresent) //only for seedbanking species with mature cohorts (use logical &&)
                 {
                     if (!maturePresentList.Contains(cohort.Species))
                     {
@@ -80,37 +81,38 @@ namespace Landis.Extension.Succession.NECN
 
         public static void PostfireGerminate(ActiveSite site)
         {
-            foreach (var speciesEntry in SiteVars.SeedbankAge[site])
+            // Iterate over a snapshot of the keys to avoid collection-modified issues and to safely check viability
+            foreach (ISpecies species in SiteVars.SeedbankAge[site].Keys.ToList())
             {
-                ISpecies species = speciesEntry.Key; // Extract the species from the dictionary entry
-                if (SiteVars.SeedbankViability[site][species])
+                bool isViable;
+                if (!SiteVars.SeedbankViability[site].TryGetValue(species, out isViable) || !isViable)
+                    continue;
+
+                // Only allow germination if time since fire exceeds species sexual maturity
+                int timeSincePreviousFire = PlugIn.ModelCore.CurrentTime - SiteVars.PreviousFireYear[site];
+                int sexualMaturity = species.Maturity;
+
+                // Check if this species had mature cohorts before the fire
+                bool hadMatureCohorts = SiteVars.SpeciesWithMatureCohortPreFire[site].Contains(species);
+                
+                // If mature cohorts were present, no maturity penalty for seedbank germination
+                // Otherwise, apply the maturity multiplier for seed-dispersed species
+                double maturityScalar = hadMatureCohorts ? 1.0 : SpeciesData.SeedbankMaturityMultiplier[species];
+                double maturityThreshold = sexualMaturity * maturityScalar;
+
+                if (timeSincePreviousFire < maturityThreshold)
                 {
-                    // Only allow germination if time since fire exceeds species sexual maturity
-                    int timeSincePreviousFire = PlugIn.ModelCore.CurrentTime - SiteVars.PreviousFireYear[site];
-                    int sexualMaturity = species.Maturity;
-
-                    // Check if this species had mature cohorts before the fire
-                    bool hadMatureCohorts = SiteVars.SpeciesWithMatureCohortPreFire[site].Contains(species);
-                    
-                    // If mature cohorts were present, no maturity penalty for seedbank germination
-                    // Otherwise, apply the maturity multiplier for seed-dispersed species
-                    double maturityScalar = hadMatureCohorts ? 1.0 : SpeciesData.SeedbankMaturityMultiplier[species];
-                    double maturityThreshold = sexualMaturity * maturityScalar;
-
-                    if (timeSincePreviousFire < maturityThreshold)
-                    {
-                     if(OtherData.CalibrateMode)  PlugIn.ModelCore.UI.WriteLine("   Seedbank germination blocked for {0} at site {1}: Time since fire ({2}) < Maturity threshold ({3:F1})",
-                            species.Name, site.Location, timeSincePreviousFire, maturityThreshold);
-                        continue;
-                    }
-                    
-                    bool sufficientResources = Reproduction.SufficientResources(species, site);
-                    bool canEstablish = Reproduction.Establish(species, site);
-                   
-                    if (sufficientResources && canEstablish)
-                    {
-                        PlugIn.AddNewCohort(species, site, "seedbank", 1.0);
-                    }
+                 if(OtherData.CalibrateMode)  PlugIn.ModelCore.UI.WriteLine("   Seedbank germination blocked for {0} at site {1}: Time since fire ({2}) < Maturity threshold ({3:F1})",
+                        species.Name, site.Location, timeSincePreviousFire, maturityThreshold);
+                    continue;
+                }
+                
+                bool sufficientResources = Reproduction.SufficientResources(species, site);
+                bool canEstablish = Reproduction.Establish(species, site);
+               
+                if (sufficientResources && canEstablish)
+                {
+                    PlugIn.AddNewCohort(species, site, "seedbank", 1.0);
                 }
             }
         }
