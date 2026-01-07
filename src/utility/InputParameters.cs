@@ -132,6 +132,7 @@ namespace Landis.Extension.Succession.NECN
         private Landis.Library.Parameters.Species.AuxParm<double> coarseRootFraction;
         private Landis.Library.Parameters.Species.AuxParm<double> fineRootFraction;
         private Landis.Library.Parameters.Species.AuxParm<double> minLAI;
+        private Landis.Library.Parameters.Species.AuxParm<double> competitionIndex;
         private Landis.Library.Parameters.Species.AuxParm<double> maxLAI;
         private Landis.Library.Parameters.Species.AuxParm<double> fractionANPPtoLeaf;
 
@@ -370,6 +371,7 @@ namespace Landis.Extension.Succession.NECN
         public Landis.Library.Parameters.Species.AuxParm<double> BiomassToLAI { get { return btoLAI; } }
         public Landis.Library.Parameters.Species.AuxParm<double> K_LAI { get { return kLAI; } }
         public Landis.Library.Parameters.Species.AuxParm<double> MinLAI { get { return minLAI; } }
+        public Landis.Library.Parameters.Species.AuxParm<double> CompetitionIndex { get { return competitionIndex; } }
         public Landis.Library.Parameters.Species.AuxParm<double> MaxLAI { get { return maxLAI; } }
         public Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve1 { get { return moisturecurve1; } }
         public Landis.Library.Parameters.Species.AuxParm<double> Moisturecurve2 { get { return moisturecurve2; } }
@@ -1243,7 +1245,7 @@ namespace Landis.Extension.Succession.NECN
         public void SetTempCurve1(ISpecies species, double newValue)
         {
             Debug.Assert(species != null);
-            tempcurve1[species] = VerifyRange(newValue, 10.0, 40.0, "Tempcurve1");
+            tempcurve1[species] = VerifyRange(newValue, 5.0, 40.0, "Tempcurve1");
         }
         public void SetTempCurve2(ISpecies species, double newValue)
         {
@@ -1290,6 +1292,12 @@ namespace Landis.Extension.Succession.NECN
         {
             Debug.Assert(species != null);
             minLAI[species] = VerifyRange(newValue, 0.0, 5.0, "MinLAI");
+        }
+
+        public void SetCompetitionIndex(ISpecies species, double newValue)
+        {
+            Debug.Assert(species != null);
+            competitionIndex[species] = VerifyRange(newValue, 0.0, 1.0, "CompetitionIndex");
         }
 
         public void SetMoistureCurve1(ISpecies species, double newValue)
@@ -1414,6 +1422,7 @@ namespace Landis.Extension.Succession.NECN
             kLAI = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             minLAI = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             maxLAI = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
+            competitionIndex = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             moisturecurve1 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             moisturecurve2 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);
             moisturecurve3 = new Landis.Library.Parameters.Species.AuxParm<double>(speciesDataset);

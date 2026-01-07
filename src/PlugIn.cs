@@ -92,8 +92,8 @@ namespace Landis.Extension.Succession.NECN
         {
             ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
 
-            //Console.WriteLine("Attach process to Visual Studio for debugging and hit return.");
-            //Console.ReadLine();
+            Console.WriteLine("Attach process to Visual Studio for debugging and hit return.");
+            Console.ReadLine();
 
             Timestep = Parameters.Timestep;
             SuccessionTimeStep = Timestep;
@@ -412,10 +412,11 @@ namespace Landis.Extension.Succession.NECN
             lightProbability = adjust * (((a / b) * Math.Pow((lai / b), (a - 1)) * Math.Exp(-Math.Pow((lai / b), a))) + c); //3-parameter Weibull PDF equation
             lightProbability = Math.Min(lightProbability, 1.0);
             //if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:0.000}, at LAI = {2:0.00}", species.Name, lightProbability, SiteVars.LAI[site]);
-            
 
-            if (modelCore.GenerateUniform() < lightProbability)
-                isSufficientlight = true;
+            isSufficientlight = modelCore.GenerateUniform() < lightProbability;
+            
+            //if (modelCore.GenerateUniform() < lightProbability)
+            //    isSufficientlight = true;
 
             // ------------------------------------------------------------------------
             // Modify light probability modified by the amount of nursery log on the site
@@ -597,7 +598,8 @@ namespace Landis.Extension.Succession.NECN
         {
             double establishProbability = Establishment.Calculate(species, site);
 
-            return modelCore.GenerateUniform() < establishProbability;
+            var establishment = modelCore.GenerateUniform() < establishProbability;
+            return establishment;
         }
 
         //---------------------------------------------------------------------

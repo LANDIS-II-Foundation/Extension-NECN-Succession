@@ -6,7 +6,7 @@
     <AssemblyTitle>Landis.Extension.Succession.NECN-v8</AssemblyTitle>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
     <AssemblyVersion>8.1</AssemblyVersion>
-    <Version>8.1</Version>
+    <Version>8.1.2</Version>
     <FileVersion>8.1</FileVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
