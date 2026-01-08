@@ -92,9 +92,6 @@ namespace Landis.Extension.Succession.NECN
         {
             ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
 
-            Console.WriteLine("Attach process to Visual Studio for debugging and hit return.");
-            Console.ReadLine();
-
             Timestep = Parameters.Timestep;
             SuccessionTimeStep = Timestep;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
