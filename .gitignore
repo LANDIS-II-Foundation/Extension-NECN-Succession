@@ -3084,3 +3084,8 @@ testing/Core8-NECN8-Landscape/NECN/AnaerobicEffect-25.tif
 testing/Core8-NECN8-Landscape/NECN/SoilWater-15.tif
 testing/Core8-NECN8-Landscape/NECN/SoilWater-20.tif
 testing/Core8-NECN8-Landscape/NECN/SoilWater-25.tif
+testing/Core8-NECN8-SingleCell/Climate-future-annual-input-log.csv
+testing/Core8-NECN8-SingleCell/Climate-future-daily-input-log.csv
+testing/Core8-NECN8-SingleCell/Climate-future-monthly-input-log.csv
+testing/Core8-NECN8-SingleCell/Climate-spinup-annual-input-log.csv
+testing/Core8-NECN8-SingleCell/Climate-spinup-monthly-input-log.csv
