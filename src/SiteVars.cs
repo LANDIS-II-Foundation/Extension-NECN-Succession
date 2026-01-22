@@ -1,8 +1,8 @@
 //  Author: Robert Scheller, Melissa Lucash
 
 using Landis.Core;
-using Landis.SpatialModeling;
 using Landis.Library.UniversalCohorts;  
+using Landis.SpatialModeling;
 using System.Collections.Generic;
 
 namespace Landis.Extension.Succession.NECN
@@ -198,6 +198,7 @@ namespace Landis.Extension.Succession.NECN
             MonthlyStreamN      = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyHeteroResp         = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlySoilWater = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
+            MonthlyMeanSoilMoistureVolumetric = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlySoilTemperature = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyMeanSoilWater = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();
             MonthlyAnaerobicEffect = PlugIn.ModelCore.Landscape.NewSiteVar<double[]>();          
@@ -302,6 +303,7 @@ namespace Landis.Extension.Succession.NECN
                 MonthlySoilTemperature[site] = new double[12];
                 MonthlyAnaerobicEffect[site] = new double[12];
                 MonthlyMeanSoilWater[site] = new double[12];
+                MonthlyMeanSoilMoistureVolumetric[site] = new double[12]; //Initialize array for monthly mean soil moisture volumetric
                 MonthlyClimaticWaterDeficit[site] = new double[12];
                 MonthlyActualEvapotranspiration[site] = new double[12];
                 MonthlyPotentialEvapotranspiration[site] = new double[12];
