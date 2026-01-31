@@ -35,8 +35,7 @@
     <Reference Include="Landis.Library.Climate-v5">
       <HintPath>lib\Landis.Library.Climate-v5.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.InitialCommunity.Universal">
-      <HintPath>lib\Landis.Library.InitialCommunity.Universal.dll</HintPath>
+    <Reference Include="Landis.Library.InitialCommunity.Universal-v2">
     </Reference>
     <Reference Include="Landis.Library.Metadata-v2">
       <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>
@@ -44,8 +43,7 @@
     <Reference Include="Landis.Library.Parameters-v2">
       <HintPath>lib\Landis.Library.Parameters-v2.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Succession-v9">
-      <HintPath>lib\Landis.Library.Succession-v9.dll</HintPath>
+    <Reference Include="Landis.Library.Succession-v10">
     </Reference>
     <Reference Include="Landis.Library.UniversalCohorts-v2">
     </Reference>

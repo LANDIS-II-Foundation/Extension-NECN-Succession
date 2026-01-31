@@ -10,8 +10,8 @@ $dlls = "Landis.Library.UniversalCohorts-v2.dll",
 "Landis.Library.Metadata-v2.dll",
 "Landis.Library.Parameters-v2.dll",
 "Landis.Library.Climate-v5.dll",
-"Landis.Library.Succession-v9.dll",
-"Landis.Library.InitialCommunity.Universal.dll",
+"Landis.Library.Succession-v10.dll",
+"Landis.Library.InitialCommunity.Universal-v2.dll",
 "MathNet.Numerics.dll"
 #************************************************
 
