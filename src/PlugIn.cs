@@ -92,6 +92,9 @@ namespace Landis.Extension.Succession.NECN
         {
             ModelCore.UI.WriteLine("Initializing {0} ...", ExtensionName);
 
+            //Console.WriteLine("Attach process to Visual Studio for debugging and hit return.");
+            //Console.ReadLine();
+
             Timestep = Parameters.Timestep;
             SuccessionTimeStep = Timestep;
             ProbEstablishAdjust = Parameters.ProbEstablishAdjustment;
@@ -265,7 +268,7 @@ namespace Landis.Extension.Succession.NECN
 
             ICohort cohort = (Landis.Library.UniversalCohorts.ICohort) eventArgs.Cohort;
 
-            double fractionPartialMortality = (double)eventArgs.Reduction;
+            double fractionPartialMortality = eventArgs.FractionBiomassReduction;
 
             double foliarInput = cohort.Data.AdditionalParameters.LeafBiomass * fractionPartialMortality;
             double woodInput = cohort.Data.AdditionalParameters.WoodBiomass * fractionPartialMortality;
@@ -358,7 +361,6 @@ namespace Landis.Extension.Succession.NECN
             if (SpeciesData.Grass[cohort.Species])
             {
                 ForestFloor.AddFoliageLitter(woodInput + foliarInput, cohort.Species, site);  //  Wood biomass of grass species is transfered to non wood litter. (W.Hotta 2021.12.16)
-
                 Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, (cohort.Data.AdditionalParameters.WoodBiomass + cohort.Data.AdditionalParameters.LeafBiomass) * fractionPartialMortality), cohort, cohort.Species, site);
             }
             else
