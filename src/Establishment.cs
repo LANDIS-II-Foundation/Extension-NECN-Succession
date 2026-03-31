@@ -2,11 +2,7 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Utilities;
-using Landis.Library.Succession;
-
 using System;
-using System.IO;
 using Landis.Library.Climate;
 
 namespace Landis.Extension.Succession.NECN
@@ -14,7 +10,6 @@ namespace Landis.Extension.Succession.NECN
     public class Establishment
     {
 
-        //private static StreamWriter log;
         private static double[,] avgSoilMoisturelimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgDryDayslimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
         private static double[,] avgMATlimit = new double[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count]; 
@@ -93,7 +88,6 @@ namespace Landis.Extension.Succession.NECN
             minMultiplier = Math.Min(minJanTempMultiplier, minMultiplier);
             minMultiplier = Math.Min(cwdMultiplier, minMultiplier);
             minMultiplier = Math.Min(soilDrainMultiplier, minMultiplier);
-            //if (OtherData.DGS_waterlimit) 
             minMultiplier = Math.Min(minMultiplier, soilwaterMultiplier);
 
             establishProbability += minMultiplier;
@@ -179,14 +173,15 @@ namespace Landis.Extension.Succession.NECN
             double Soil_Moist_GF = 0.0;
 
             growDays = weather.EndGrowingDay - weather.BeginGrowingDay + 1.0;
+            maxDrought = sppAllowableDrought * growDays;
             if (growDays < 2.0)
             {
-                PlugIn.ModelCore.UI.WriteLine($"Begin Grow = {weather.BeginGrowingDay}, End Grow = {weather.EndGrowingDay}");
-                throw new System.ApplicationException("Error: Too few growing days.");
+                //PlugIn.ModelCore.UI.WriteLine($"Begin Grow = {weather.BeginGrowingDay}, End Grow = {weather.EndGrowingDay}");
+                PlugIn.ModelCore.UI.WriteLine("WARNING: BeginGrow={0}, EndGrow={1}, dryDays={2}, maxDrought={3}", weather.BeginGrowingDay, weather.EndGrowingDay, dryDays, maxDrought); 
+                //throw new System.ApplicationException("Error: Too few growing days.");
             }
+
             //Calc species soil moisture multipliers
-            maxDrought = sppAllowableDrought * growDays;
-            
             if (maxDrought < dryDays) 
             {
                 Soil_Moist_GF = 0.0;
@@ -196,7 +191,6 @@ namespace Landis.Extension.Succession.NECN
                 Soil_Moist_GF = Math.Sqrt((double)(maxDrought - dryDays) / maxDrought);
             }
 
-            //PlugIn.ModelCore.UI.WriteLine("BeginGrow={0}, EndGrow={1}, dryDays={2}, maxDrought={3}", weather.BeginGrowing, weather.EndGrowing, dryDays, maxDrought); //debug
 
             return Soil_Moist_GF;
         }

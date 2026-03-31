@@ -6,9 +6,9 @@ LandisData  "Biomass Harvest"
 >>-----------------
 Timestep		1
 
-ManagementAreas 	./biomass-harvest_Management_s2e1.gis
+ManagementAreas 	biomass-harvest_Management.gis
 
-Stands     		./biomass-harvest_Stand_s2e1.gis
+Stands     		biomass-harvest_Stand.gis
 
 
 
@@ -27,7 +27,7 @@ Prescription PatchCutting
     StandRanking	MaxCohortAge
     MinimumAge  	60
     SiteSelection 	Complete 
-	MinTimeSinceDamage	20
+    MinTimeSinceDamage	20
 
     CohortsRemoved SpeciesList 
 
@@ -42,10 +42,10 @@ Prescription PatchCutting
     HarvestImplementations
 >>	Mgmt Area	Prescription		Harvest Area	BeginTime	EndTime
 >> 	---------   	------------   		------------   	---------- 	--------
-	1		PatchCutting	20%	0	   	50
-	2		PatchCutting	20%	0	   	50
->>	1		MaxAgeClearcut			20%	0	   	50
->>	2		MaxAgeClearcut			20%	0	    	50
+	1		PatchCutting		20%		0	   	50
+	2		PatchCutting		20%		0	   	50
+>>	1		MaxAgeClearcut		20%		0	   	50
+>>	2		MaxAgeClearcut		20%		0	    	50
 
 
 	
@@ -53,8 +53,8 @@ Prescription PatchCutting
 >> OUTPUTS
 >> ----------
 
-PrescriptionMaps    harvest/biomass-harvest-prescripts-{timestep}.img
-BiomassMaps         harvest/biomass-removed-{timestep}.img
+PrescriptionMaps    harvest/biomass-harvest-prescripts-{timestep}.tif
+BiomassMaps         harvest/biomass-removed-{timestep}.tif
 EventLog            harvest/biomass-harvest-event-log.csv
 SummaryLog	    harvest/biomass-harvest-summary-log.csv
 
