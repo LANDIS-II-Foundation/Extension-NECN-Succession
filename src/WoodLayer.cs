@@ -46,7 +46,7 @@ namespace Landis.Extension.Succession.NECN
                     SiteVars.CurrentDeadWoodC[site][i] *= (1 - decayRate); // Apply the same decayRate
                 }
 
-                // Decompose large wood into SOM1 and SOM2 with CO2 loss.
+                // Decompose large wood into SOM1 (surface or soil depending on whether above or belowground) and SOM2 with CO2 loss.
                 // The assumption from Century is that decayed wood is equivalent to SOM1 or SOM2.  It does not disaggregate into smaller pieces.
                 SiteVars.SurfaceDeadWood[site].DecomposeLignin(totalCFlow, site);
             }
@@ -71,7 +71,7 @@ namespace Landis.Extension.Succession.NECN
                     throw new ApplicationException(mesg);
                 }
 
-                // Decompose coarse roots into SOM1 and SOM2 with CO2 loss.
+                // Decompose coarse roots into SOM1 (surface or soil depending on whether above or belowground) and SOM2 with CO2 loss.
                 // The assumption from Century is that decayed wood is equivalent to SOM1 or SOM2.  It does not disaggregate into smaller pieces.
                 SiteVars.SoilDeadWood[site].DecomposeLignin(totalCFlow, site);
             }
