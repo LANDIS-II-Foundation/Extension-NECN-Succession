@@ -8,8 +8,7 @@ using Landis.SpatialModeling;
 
 namespace Landis.Extension.Succession.NECN
 {
-    /// <summary>
-    /// </summary>
+    
     public class WoodLayer
     {
 
@@ -21,7 +20,7 @@ namespace Landis.Extension.Succession.NECN
 
             double anerb = SiteVars.AnaerobicEffect[site];
 
-            //....LARGE WOOD....
+            //LARGE WOOD decay
             if (wood2c > 0.0000001)
             {
 
@@ -38,26 +37,21 @@ namespace Landis.Extension.Succession.NECN
                 if (totalCFlow > wood2c)
                 {
                     string mesg = string.Format("Error: Wood decay > wood mass. WoodC={0}, DecayFactor={1}, DecayValue={2}, LigninFactor={3}", wood2c, SiteVars.DecayFactor[site], SiteVars.SurfaceDeadWood[site].DecayValue, ligninFactor);
+                    throw new ApplicationException(mesg);
                 }
-
                 
                 // Decompose dead wood C according to the decayRate
-                // TODO: need psudocode here!
-                // Chihiro 2020.01.14
-                // Console.WriteLine(SiteVars.CurrentDeadWoodC[site].Length);
                 for (int i = 0; i < SiteVars.CurrentDeadWoodC[site].Length; i++)
                 {
                     SiteVars.CurrentDeadWoodC[site][i] *= (1 - decayRate); // Apply the same decayRate
                 }
-                
-
 
                 // Decompose large wood into SOM1 and SOM2 with CO2 loss.
+                // The assumption from Century is that decayed wood is equivalent to SOM1 or SOM2.  It does not disaggregate into smaller pieces.
                 SiteVars.SurfaceDeadWood[site].DecomposeLignin(totalCFlow, site);
             }
-
             
-                //....COARSE ROOTS (SoilDeadWood)....
+            //COARSE ROOTS (aka SoilDeadWood) decay
             double wood3c = SiteVars.SoilDeadWood[site].Carbon;
 
             if (wood3c > 0.0000001)
@@ -77,6 +71,8 @@ namespace Landis.Extension.Succession.NECN
                     throw new ApplicationException(mesg);
                 }
 
+                // Decompose coarse roots into SOM1 and SOM2 with CO2 loss.
+                // The assumption from Century is that decayed wood is equivalent to SOM1 or SOM2.  It does not disaggregate into smaller pieces.
                 SiteVars.SoilDeadWood[site].DecomposeLignin(totalCFlow, site);
             }
         }
@@ -100,18 +96,13 @@ namespace Landis.Extension.Succession.NECN
             if (totalC < 0.0000001)
                 return;
 
-            // ...For each mineral element..
-            // ...Compute amount of element in residue.
+            // Compute amount of Nitrogen in residue.
             double Npart = totalC / inputCNratio;
 
             //PlugIn.ModelCore.UI.WriteLine("                totalCadded={0:0.00}, inputCNratio={1}, name={2}, type={3}.", totalC, inputCNratio, name, type);
 
-            // ...Direct absorption of mineral element by residue
-            //      (mineral will be transferred to donor compartment
-            //      and then partitioned into structural and metabolic
-            //      using flow routines.)
-
-            // ...If minerl(SRFC,iel) is negative then directAbsorb = zero.
+            // Direct absorption of Nitrogen by residue: will be transferred to donor compartment and then partitioned into structural and metabolic using flow routines.
+            // ...If Nitrogen is zero or negative then directAbsorb = zero.
             if (SiteVars.MineralN[site] <=  0.0)
                 directAbsorb  = 0.0;
             else
@@ -120,8 +111,7 @@ namespace Landis.Extension.Succession.NECN
                                 * Math.Max(totalC / OtherData.ResidueMaxDirectAbsorb, 1.0);
 
 
-            // ...If C/N ratio is too low, transfer just enough to make
-            //       C/N of residue = damrmn
+            // ...If C/N ratio is too low, transfer just enough to make C/N of residue = OtherData.MinResidueCN
             if (Npart + directAbsorb  <= 0.0)
                 ratioCNtotal = 0.0;
             else
@@ -142,13 +132,13 @@ namespace Landis.Extension.Succession.NECN
 
             //PlugIn.ModelCore.UI.WriteLine("                totalNadded={0:0.00}, totalC={1:0.0}, inputCNratio={2}, name={3}, type={4}.", totalNitrogen, totalC, inputCNratio, name, type);
 
-
             if ((int)name == (int)LayerName.Wood)
             {
                 SiteVars.SurfaceDeadWood[site].Carbon += totalC;
                 SiteVars.SurfaceDeadWood[site].Nitrogen += totalNitrogen;
                 SiteVars.SurfaceDeadWood[site].AdjustLignin(totalC, fracLignin);
                 SiteVars.SurfaceDeadWood[site].AdjustDecayRate(totalC, inputDecayValue);
+                
                 // Update dead wood carbon
                 // Chihiro 2020.01.14
                 SiteVars.OriginalDeadWoodC[site][PlugIn.ModelCore.CurrentTime - 1] += totalC;
@@ -162,7 +152,7 @@ namespace Landis.Extension.Succession.NECN
                 SiteVars.SoilDeadWood[site].AdjustDecayRate(totalC, inputDecayValue);
             }
 
-                        return;
+             return;
 
         }
 
