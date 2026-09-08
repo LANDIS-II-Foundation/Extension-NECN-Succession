@@ -6,8 +6,6 @@ using Landis.SpatialModeling;
 using Landis.Library.UniversalCohorts;
 using System;
 using System.Dynamic;
-using Landis.Library.Succession.DensitySeeding;
-using Landis.Library.Climate;
 
 namespace Landis.Extension.Succession.NECN
 {
