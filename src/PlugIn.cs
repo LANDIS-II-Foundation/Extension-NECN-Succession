@@ -372,8 +372,11 @@ namespace Landis.Extension.Succession.NECN
                 Roots.AddFineRootLitter(Roots.CalculateFineRoot(cohort, cohort.Data.AdditionalParameters.LeafBiomass * fractionPartialMortality), cohort, cohort.Species, site);
                 
             }
-            
-           return;
+
+            cohort.Data.AdditionalParameters.WoodBiomass *= 1.0 - fractionPartialMortality;
+            cohort.Data.AdditionalParameters.LeafBiomass *= 1.0 - fractionPartialMortality;
+
+            return;
         }
         //---------------------------------------------------------------------
         //Grows the cohorts for future climate
