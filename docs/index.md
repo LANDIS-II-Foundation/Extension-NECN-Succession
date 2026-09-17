@@ -1,6 +1,6 @@
 # What is the NECN Succession Extension?
 
-The NECN Succession extension was designed to provide total ecosystem accounting of Carbon and Nitrogen and to allow species to respond dynamically to a changing climate via establishment and growth.  NECN calculates how cohorts grow, reproduce, age, and die.  Dead biomass is tracked over time, divided into four pools:  surface wood, soil wood (dead coarse roots), surface litter (dead leaves), and soil litter (dead fine roots).  In addition, three principle soil pools:  fast (soil organic matter (SOM) 1), slow (SOM2), and passive (SOM3) are simulated, following the Century soil model.
+The Net Ecosystem Carbon and Nitrogen (NECN) Succession extension was designed to provide total ecosystem accounting of Carbon and Nitrogen and to allow species to respond dynamically to a changing climate via establishment and growth.  NECN calculates how cohorts grow, reproduce, age, and die.  Dead biomass is tracked over time, divided into four pools:  surface wood, soil wood (dead coarse roots), surface litter (dead leaves), and soil litter (dead fine roots).  In addition, three principle soil pools:  fast (soil organic matter (SOM) 1), slow (SOM2), and passive (SOM3) are simulated, following the Century soil model.
 
 # Recent Additions
 
@@ -16,8 +16,7 @@ The NECN Succession extension was designed to provide total ecosystem accounting
   * \[ ] Optionally capacity to modify PET according to topography
   * \[ ] Establishment can now optionally be reduced according to climatic water deficit and/or soil drainage
   * \[ ] Growth as a function of soil water now has an optional functional form that is more flexible, better able to account for wet soils
-
-* \[x] New with v6.7 - simulates grass species and their interactions with regeneration.
+  * \[ ] Simulates grass species and their interactions with regeneration.
 
 # Standard Features
 
@@ -33,9 +32,9 @@ Scheller, R.M., D. Hua, P.V. Bolstad, R. Birdsey, D.J. Mladenoff. 2011. The effe
 
 # Release Notes
 
-* Latest official release: Version 8.2.1 — June 2026
+* Latest official release: Version 8.3.1 — June 2026
 * [NECN User Guide](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/docs/LANDIS-II%20Net%20Ecosystem%20CN%20Succession%20v8%20User%20Guide.pdf).
-* [User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/v8.0/docs/LANDIS-II%20Climate%20Library%20v5.0%20User%20Guide.pdf)
+* [User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/v8.0/docs/LANDIS-II%20Climate%20Library%20v6.0%20User%20Guide.pdf)
 * Full release details found in the NECN User Guide and on GitHub.
 * This extension was formerly named Century Succession.
 
@@ -48,7 +47,7 @@ To use NECN, you need:
 
 # Download and Install the Extension
 
-* The latest version can be [downloaded from GitHub](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/installer/LANDIS-II-V8%20NECN%20Succession%208.2.1-setup.exe). (Look for the download icon in the upper right corner.)
+* The latest version can be [downloaded from GitHub](https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/blob/master/deploy/installer/LANDIS-II-V8%20NECN%20Succession%208.3.1-setup.exe). (Look for the download icon in the upper right corner.)
 * Launch the installer.
 
 # Example Files
@@ -58,7 +57,6 @@ LANDIS-II requires a global parameter file for your scenario, and then different
 Landscape example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core8-NECN8-Landscape).
 
 Single-cell example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-NECN-Succession/tree/master/testing/Core8-NECN8-SingleCell).
-
 
 
 # Support
