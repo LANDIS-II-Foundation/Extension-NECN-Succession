@@ -332,20 +332,12 @@ namespace Landis.Extension.Succession.NECN
                         SiteVars.LitterfallC[site] += foliarInput * 0.47;
                         foliarInput = foliarInput * 0.1;                     //most carbon is respired
 
-                        //N content of feces is approximately 1.6% for deer(Asada and Ochiai 1999), between 1.45% and 2.26% for deer (Howery and Pfister, 1990), 2.5%  for deer (Euan et al. 2020),
-                        //1.33% in winter, 2.44% for moose in summer (Persson et al. 2000), 2.4% for moose (Kuijper et al. 2016)
-                        //Feces N = 5.7 kg per moose per year (Persson et al. 2000)
-                        //N in urine is 0.5% in summer (Persson et al. 2000), 3675 L urine per moose per year (Persson et al. 2000)
-                        //Urine is 0.5% N = 18.375 kg N per year per moose (assuming summer and winter N content is the same)
-                        //Total N for moose waste = 24 kg per moose per year; Each moose eats 2738 kg biomass per year
-                        //Foliar inputs are 2738 * 0.47 * 0.1 kg C  = 128.67 kg C per moose; CN ratio = 128/24 = 5.33
-
                         LitterLayer.PartitionResidue(
                                     foliarInput,
                                     inputDecayValue,
-                                    5.33, //CN ratio for browse waste -- metabolic
+                                    5.33, //CN ratio for browse waste -- metabolic; See Flake et al., manuscript in review.
                                     1, //"lignin" content of waste
-                                    5.33, //CN ratio for browse waste -- structural
+                                    5.33, //CN ratio for browse waste -- structural; See Flake et al., manuscript in review
                                     LayerName.Leaf,
                                     LayerType.Surface,
                                     site);
@@ -416,10 +408,7 @@ namespace Landis.Extension.Succession.NECN
             //if(OtherData.CalibrateMode) PlugIn.ModelCore.UI.WriteLine("Estimated Weibull light probability for species {0} = {1:0.000}, at LAI = {2:0.00}", species.Name, lightProbability, SiteVars.LAI[site]);
 
             isSufficientlight = modelCore.GenerateUniform() < lightProbability;
-            
-            //if (modelCore.GenerateUniform() < lightProbability)
-            //    isSufficientlight = true;
-
+                        
             // ------------------------------------------------------------------------
             // Modify light probability modified by the amount of nursery log on the site
             // W.Hotta 2020.01.22
@@ -472,14 +461,10 @@ namespace Landis.Extension.Succession.NECN
         // W.Hotta & Chihiro;
         //
         // Description: 
-        //     - Every SiteVars.CurrentDeadWoodC[site] is downed logs.
-        //     - Only the downed logs (SiteVars.CurrentDeadWoodC[site]) which decay class is between 3 to 5 
-        //       are suitable for establishment and treated as nursery logs.
-        //     - The carbon stocks of the nursery logs are converted to volume 
-        //       using a wood density of each decay class.
-        //     - Then, the volume is converted to the projected area (occupation area) 
-        //       using the mean height of downed logs derived from field data.
-        //         - The shape of downed logs were assumed to be an elliptical cylinder
+        //     - SiteVars.CurrentDeadWoodC[site] is downed logs. Only decay class between 3 to 5 are suitable for establishment and treated as nursery logs.
+        //     - The carbon stocks of the nursery logs are converted to volume using a wood density of each decay class.
+        //     - Then, the volume is converted to the projected area (occupation area) using the mean height of downed logs derived from field data.
+        //     - The shape of downed logs were assumed to be an elliptical cylinder
         // </summary>
 
         private static double ComputeNurseryLogAreaRatio(ISpecies species, ActiveSite site)
@@ -666,9 +651,7 @@ namespace Landis.Extension.Succession.NECN
                     initialCommunity = communities.Find(mapCode);
                     if (initialCommunity == null)
                     {
-                        //ModelCore.UI.WriteLine("   Map Code {0} does not have an initial community", mapCode);
                         SiteVars.Cohorts[site] = new SiteCohorts();
-                        //throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
                     }
                     else
                     {
