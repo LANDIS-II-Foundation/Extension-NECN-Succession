@@ -42,6 +42,14 @@ namespace Landis.Extension.Succession.NECN
         public static bool OutputTemperature;
         public static bool WriteSpeciesDroughtMaps;
 
+        public static bool TrackClimateMetrics
+        {
+            get
+            {
+                return UseDrought || OutputSoilWaterAvailable || OutputClimateWaterDeficit || OutputTemperature;
+            }
+        }
+
         public static double[][] speciesTotalBiomassMortalityEcoregion;
         public static double[][] speciesProbabiltyMortalityEcoregion;
 
